@@ -1,0 +1,10 @@
+export { default as Home } from './home';
+export { default as HomeSolid } from './home-solid';
+export { default as Moon } from './moon';
+export { default as Sun } from './sun';
+export { default as User } from './user';
+export { default as UserSolid } from './user-solid';
+export { default as Projects } from './projects';
+export { default as ProjectsSolid } from './projects-solid';
+export { default as Contact } from './contact';
+export { default as ContactSolid } from './contact-solid';
