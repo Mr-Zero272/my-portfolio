@@ -58,6 +58,7 @@ export default {
             },
             animation: {
                 'bg-shine': 'bg-shine 2.2s linear infinite',
+                blink: 'blink 1s step-end infinite',
             },
             keyframes: {
                 'bg-shine': {
@@ -66,6 +67,17 @@ export default {
                     },
                     to: {
                         backgroundPosition: '-200% 0',
+                    },
+                },
+                blink: {
+                    '0%': {
+                        'border-color': 'transparent',
+                    },
+                    '50%': {
+                        'border-color': '#fff',
+                    },
+                    '100%': {
+                        'border-color': 'transparent',
                     },
                 },
             },

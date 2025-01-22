@@ -44,7 +44,7 @@ const Navigation = () => {
     }, [containerControls]);
 
     const containerVariants = useMemo(() => {
-        if (windowWidth === 0) {
+        if (debounceWindowWidth === 0) {
             return {
                 close: {
                     width: '5rem',
@@ -67,7 +67,7 @@ const Navigation = () => {
                 },
             };
         }
-        if (windowWidth <= 768) {
+        if (debounceWindowWidth <= 768) {
             return {
                 close: {
                     width: '5rem',
@@ -111,17 +111,19 @@ const Navigation = () => {
                 },
             };
         }
-    }, [windowWidth]);
+    }, [debounceWindowWidth]);
 
     useEffect(() => {
         if (containerControls) {
             if (debounceWindowWidth <= 768) {
                 containerControls.start('close');
+                svgControls.start('close');
             } else {
                 containerControls.start('close');
+                svgControls.start('close');
             }
         }
-    }, [containerControls, debounceWindowWidth]);
+    }, [containerControls, svgControls, debounceWindowWidth]);
 
     useEffect(() => {
         if (isOpen) {
@@ -141,6 +143,7 @@ const Navigation = () => {
         if (windowWidth <= 768) {
             containerControls.start('close');
             svgControls.start('close');
+            toggle();
         }
     };
 

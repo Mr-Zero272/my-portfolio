@@ -10,8 +10,8 @@ export const navbarRoutesInfo = [
     {
         icon: User,
         iconSolid: UserSolid,
-        route: '/resume',
-        label: 'Resume',
+        route: '/about-me',
+        label: 'About me',
     },
     {
         icon: Projects,

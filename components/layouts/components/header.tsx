@@ -12,7 +12,7 @@ const Header = () => {
                     <ToggleNavButton />
                 </li>
                 <li className="md:hidden">
-                    <Link href="/" className="inline-block rounded-md p-1.5 hover:bg-accent">
+                    <Link href="/" className="block rounded-md p-1.5 hover:bg-accent">
                         <Home className="size-5" />
                     </Link>
                 </li>
@@ -20,13 +20,15 @@ const Header = () => {
                     <ThemeButton />
                 </li>
                 <li className="min-[1440px]:hidden">
-                    <Image
-                        className="m-0.5 size-6 cursor-pointer rounded-full border border-transparent hover:border-black"
-                        src="/images/profile-img.jpg"
-                        width={44}
-                        height={44}
-                        alt="profile image"
-                    />
+                    <div className="m-0.5 size-6 cursor-pointer rounded-full border border-transparent hover:border-black">
+                        <Image
+                            className="size-6 rounded-full"
+                            src="/images/profile-img.jpg"
+                            width={44}
+                            height={44}
+                            alt="profile image"
+                        />
+                    </div>
                 </li>
             </ul>
         </div>

@@ -12,7 +12,7 @@ export default function Home() {
         <section className="flex flex-col xl:flex-row">
             <div className="mb-7 flex flex-1 justify-evenly xl:mb-0 xl:w-5/12 xl:justify-center">
                 <Image
-                    className="size-80 rounded-full shadow-md min-[500px]:size-96 xl:h-[40rem] xl:w-full xl:rounded-none xl:shadow-none"
+                    className="size-80 shadow-sm min-[500px]:size-96 xl:h-[40rem] xl:w-full"
                     src="/images/profile-img-no-bg.png"
                     width={500}
                     height={500}
@@ -44,7 +44,11 @@ export default function Home() {
                         <div className="flex h-16 w-full items-end justify-between">
                             <div className="flex size-16 items-center justify-center rounded-b-[4rem] bg-slate-200/30"></div>
                             <div className="flex h-16 w-[21rem] items-center gap-x-5 rounded-tl-[2rem] bg-white p-4 sm:w-[26rem]">
-                                <AnimatedDownloadButton variant="outline" className="rounded-full" />
+                                <AnimatedDownloadButton
+                                    variant="outline"
+                                    className="rounded-full"
+                                    urlDownload="/api/download/cv"
+                                />
                                 <div className="flex items-center gap-x-2">
                                     <Button className="rounded-full active:scale-90">
                                         <Handshake className="size-6" />

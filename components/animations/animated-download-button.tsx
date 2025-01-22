@@ -7,10 +7,11 @@ import { Circle, CircleCheck, CircleX, Download } from 'lucide-react';
 import axios from 'axios';
 
 interface MyButtonProps extends ButtonProps {
+    urlDownload: string;
     label?: string;
 }
 
-const AnimatedDownloadButton = ({ label = 'Download My CV', ...rest }: MyButtonProps) => {
+const AnimatedDownloadButton = ({ urlDownload, label = 'Download My CV', ...rest }: MyButtonProps) => {
     const [status, setStatus] = useState('idle');
     const variants = useMemo(
         () => ({
@@ -25,7 +26,7 @@ const AnimatedDownloadButton = ({ label = 'Download My CV', ...rest }: MyButtonP
         try {
             setStatus('loading');
             await new Promise((res) => setTimeout(res, 2000));
-            const response = await axios.get('/api/download/cv', {
+            const response = await axios.get(urlDownload, {
                 responseType: 'blob', // Important for binary data
             });
 
