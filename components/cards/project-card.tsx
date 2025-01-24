@@ -17,10 +17,10 @@ const ProjectCard = (props: Props) => {
                     quality={100}
                 />
             </div>
-            <div className="group flex h-80 w-64 flex-col justify-center bg-white p-10 transition-all duration-300 ease-in-out hover:bg-black/75 hover:text-white">
+            <div className="group flex h-80 w-64 flex-col justify-center bg-white p-10 transition-all duration-300 ease-in-out hover:bg-black/75 hover:text-white dark:bg-[#0A0E15] dark:text-white dark:hover:bg-white/30 dark:hover:text-black">
                 <p className="mb-3 text-xs">Lorem, ipsum dolor.</p>
                 <h1 className="mb-3 text-3xl font-bold">Lorem, ipsum dolor.</h1>
-                <div className="mb-3 h-0.5 w-full bg-black group-hover:bg-white"></div>
+                <div className="mb-3 h-0.5 w-full bg-black group-hover:bg-white dark:bg-white dark:group-hover:bg-black"></div>
                 <p className="flex items-center justify-between text-xs hover:underline">
                     More detail{' '}
                     <span>

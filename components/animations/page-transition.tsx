@@ -7,7 +7,7 @@ import PageTransitionAnimation from './page-transition-animation';
 const PageTransition = ({ children }: { children: React.ReactNode }) => {
     const pathname = usePathname();
     return (
-        <div className="h-screen w-full">
+        <div className="w-full">
             <PageTransitionAnimation />
             <motion.div
                 key={pathname + 'ani'}

@@ -6,6 +6,8 @@ import SidebarProvider from '@/components/contexts/sidebar-context';
 import { ThemeProvider } from '@/components/contexts/theme-provider';
 import Header from '@/components/layouts/components/header';
 import '../globals.css';
+import { Toaster } from '@/components/ui/sonner';
+import Footer from '@/components/layouts/footer';
 
 // const geistSans = Geist({
 //     variable: '--font-geist-sans',
@@ -37,10 +39,12 @@ export default function RootLayout({
                             <section className="mt-16 flex w-full flex-col gap-5 md:ml-20">
                                 <Header />
                                 <PageTransition>{children}</PageTransition>
+                                <Footer />
                             </section>
                         </main>
                     </SidebarProvider>
                 </ThemeProvider>
+                <Toaster />
             </body>
         </html>
     );

@@ -14,3 +14,6 @@ export { default as Angular } from './angular';
 export { default as Spring } from './spring';
 export { default as SpringSecurity } from './spring-secu';
 export { default as Tailwindcss } from './tailwindcss';
+export { default as Linkedin } from './linkedin';
+export { default as Youtube } from './youtube';
+export { default as Github } from './github';

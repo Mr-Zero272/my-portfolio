@@ -12,12 +12,12 @@ const ProjectPage = () => {
                         quam excepturi blanditiis eius inventore nisi assumenda!
                     </p>
                 </div>
-                <div className="flex min-h-60 flex-1 flex-col justify-between bg-black p-10 text-white xl:min-h-0">
+                <div className="flex min-h-60 flex-1 flex-col justify-between bg-black p-10 dark:bg-white xl:min-h-0">
                     <div className="flex flex-col items-start">
-                        <div className="h-0.5 w-36 bg-white"></div>
-                        <h1 className="text-3xl font-medium text-white">Project Summary</h1>
+                        <div className="h-0.5 w-36 bg-white dark:bg-black"></div>
+                        <h1 className="text-3xl font-medium text-white dark:text-black">Project Summary</h1>
                     </div>
-                    <div className="flex items-center gap-x-2">
+                    <div className="flex items-center gap-x-2 text-white dark:text-black">
                         <p className="w-20 text-center">Lorem, ipsum dolor.</p>
                         <p className="w-20 text-center">Lorem, ipsum dolor.</p>
                         <p className="w-20 text-center">Lorem, ipsum dolor.</p>

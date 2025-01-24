@@ -1,6 +1,6 @@
 'use client';
 import { motion, useAnimationControls } from 'framer-motion';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 
 import { navbarRoutesInfo } from '@/constants/nav-routes';
 import Link from 'next/link';
@@ -22,8 +22,9 @@ const svgVariants = {
 const Navigation = () => {
     const pathname = usePathname();
     const [windowWidth, setWindowWidth] = useState(0);
+    const sidebarRef = useRef<HTMLElement>(null);
 
-    const { isOpen, toggle } = useSidebar();
+    const { isOpen, toggle, close } = useSidebar();
 
     const containerControls = useAnimationControls();
     const svgControls = useAnimationControls();
@@ -135,6 +136,22 @@ const Navigation = () => {
         }
     }, [isOpen, containerControls, svgControls]);
 
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (sidebarRef.current && !sidebarRef.current.contains(event.target as Node)) {
+                containerControls.start('close');
+                svgControls.start('close');
+                close();
+            }
+        };
+
+        document.addEventListener('mousedown', handleClickOutside);
+
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, [sidebarRef, containerControls, svgControls, close]);
+
     const handleOpenClose = () => {
         toggle();
     };
@@ -143,17 +160,18 @@ const Navigation = () => {
         if (windowWidth <= 768) {
             containerControls.start('close');
             svgControls.start('close');
-            toggle();
+            close();
         }
     };
 
     return (
         <>
             <motion.nav
+                ref={sidebarRef}
                 variants={containerVariants}
                 animate={containerControls}
                 initial="close"
-                className="absolute left-0 top-0 z-20 flex h-full flex-col gap-20 bg-white p-5 shadow-sm"
+                className="absolute left-0 top-0 z-20 flex h-full flex-col gap-20 bg-white p-5 shadow-sm dark:bg-[#0A0E15]"
             >
                 <div className="relative flex w-full flex-row place-items-center justify-between">
                     <Link href="/" className="flex justify-center overflow-hidden">
@@ -165,7 +183,7 @@ const Navigation = () => {
 
                     <button
                         className={cn(
-                            'absolute -right-8 top-0 flex rounded-full bg-black p-1 transition-all ease-in-out',
+                            'absolute -right-8 top-0 flex rounded-full bg-black p-1 transition-all ease-in-out dark:bg-white',
                             {
                                 'right-0': isOpen,
                             },
@@ -178,9 +196,12 @@ const Navigation = () => {
                             viewBox="0 0 24 24"
                             strokeWidth={1.5}
                             stroke="currentColor"
-                            className={cn('size-4 stroke-neutral-200 transition-all duration-700 ease-in-out', {
-                                'size-8': isOpen,
-                            })}
+                            className={cn(
+                                'size-4 stroke-[#E0E4EB] transition-all duration-700 ease-in-out dark:stroke-[#373F4E]',
+                                {
+                                    'size-8': isOpen,
+                                },
+                            )}
                         >
                             <motion.path
                                 strokeLinecap="round"
