@@ -3,11 +3,12 @@
 import { motion } from 'framer-motion';
 import { usePathname } from 'next/navigation';
 import PageTransitionAnimation from './page-transition-animation';
+import Footer from '../layouts/components/footer';
 
 const PageTransition = ({ children }: { children: React.ReactNode }) => {
     const pathname = usePathname();
     return (
-        <div className="w-full">
+        <div className="w-full overflow-y-auto bg-background">
             <PageTransitionAnimation />
             <motion.div
                 key={pathname + 'ani'}
@@ -18,6 +19,7 @@ const PageTransition = ({ children }: { children: React.ReactNode }) => {
             >
                 {children}
             </motion.div>
+            <Footer />
         </div>
     );
 };

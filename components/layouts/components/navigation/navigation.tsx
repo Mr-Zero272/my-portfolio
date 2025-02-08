@@ -42,7 +42,7 @@ const Navigation = () => {
         window.addEventListener('resize', updateSize);
 
         return () => window.removeEventListener('resize', updateSize);
-    }, [containerControls]);
+    }, []);
 
     const containerVariants = useMemo(() => {
         if (debounceWindowWidth === 0) {

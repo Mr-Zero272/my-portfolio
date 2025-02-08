@@ -1,30 +1,18 @@
-import ProjectCard from '@/components/cards/project-card';
+import ProjectCard from '@/components/cards/project-card/project-card';
 
 const ProjectPage = () => {
     return (
         <section className="p-5">
-            <article className="mb-8 flex flex-col justify-between gap-10 px-5 xl:flex-row">
-                <div className="mb-5 flex flex-1 flex-col">
-                    <h4 className="mb-3 font-semibold">MY PROJECTS</h4>
-                    <h1 className="mb-5 w-[23rem] text-6xl font-bold">What have I done?</h1>
-                    <p className="text-gray-500">
-                        Lorem, ipsum dolor sit amet consectetur adipisicing elit. Saepe voluptate facere vitae autem
-                        quam excepturi blanditiis eius inventore nisi assumenda!
-                    </p>
-                </div>
-                <div className="flex min-h-60 flex-1 flex-col justify-between bg-black p-10 dark:bg-white xl:min-h-0">
-                    <div className="flex flex-col items-start">
-                        <div className="h-0.5 w-36 bg-white dark:bg-black"></div>
-                        <h1 className="text-3xl font-medium text-white dark:text-black">Project Summary</h1>
-                    </div>
-                    <div className="flex items-center gap-x-2 text-white dark:text-black">
-                        <p className="w-20 text-center">Lorem, ipsum dolor.</p>
-                        <p className="w-20 text-center">Lorem, ipsum dolor.</p>
-                        <p className="w-20 text-center">Lorem, ipsum dolor.</p>
-                    </div>
-                </div>
-            </article>
-            <article className="grid grid-cols-1 place-items-center gap-5 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5">
+            <div className="mb-10 flex flex-col items-center justify-center">
+                <h4 className="mb-3 font-semibold">MY PROJECTS</h4>
+                <h1 className="mb-3 text-center text-2xl font-bold md:mb-5 md:text-5xl">What have I done?</h1>
+                <p className="text-center text-sm text-muted-foreground md:w-2/3 md:text-base">
+                    I&apos;m not just a developer, I&apos;m a digital dream weaver. Crafting immersive online
+                    experiences is not just a job but my calling. Discover below how I can help you.
+                </p>
+            </div>
+
+            <article className="space-y-10 px-4 md:px-10">
                 <ProjectCard />
                 <ProjectCard />
                 <ProjectCard />
