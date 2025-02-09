@@ -41,11 +41,11 @@ const ProjectCard = (props: Props) => {
     }, [windowWidthDebounce]);
 
     return (
-        <figure className="l flex flex-col gap-4 border-b pb-16 md:gap-8 lg:flex-row lg:px-10">
-            <div className="lg:w-4/12">
+        <figure className="flex flex-col gap-4 border-b pb-16 md:gap-8 lg:flex-row lg:px-0 xl:px-5 2xl:px-10">
+            <div className="flex-none lg:w-5/12 xl:w-4/12">
                 <SliderProjectImages />
             </div>
-            <div className="flex flex-1 flex-col justify-between md:p-16">
+            <div className="flex flex-1 flex-col justify-between lg:p-8 2xl:p-16">
                 <Collapsible open={isCollapsible} className="w-full" onOpenChange={setIsCollapsible}>
                     <h5 className="text-sm font-medium text-muted-foreground">Project name</h5>
                     <CollapsibleTrigger asChild>

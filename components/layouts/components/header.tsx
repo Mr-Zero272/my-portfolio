@@ -2,7 +2,6 @@ import Home from '@/components/icons/home';
 import AvatarMenu from '@/components/shared/avatar-menu';
 import ThemeButton from '@/components/shared/theme-button';
 import ToggleNavButton from '@/components/shared/toggle-nav-button';
-import Image from 'next/image';
 import Link from 'next/link';
 
 const Header = () => {
@@ -21,15 +20,6 @@ const Header = () => {
                     <ThemeButton />
                 </li>
                 <li className="min-[1440px]:hidden">
-                    {/* <div className="m-0.5 size-6 cursor-pointer rounded-full border border-transparent hover:border-black">
-                        <Image
-                            className="size-6 rounded-full"
-                            src="/images/profile-img.jpg"
-                            width={44}
-                            height={44}
-                            alt="profile image"
-                        />
-                    </div> */}
                     <AvatarMenu />
                 </li>
             </ul>

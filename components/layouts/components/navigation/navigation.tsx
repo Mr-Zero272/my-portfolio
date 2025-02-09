@@ -233,7 +233,7 @@ const Navigation = () => {
                                 onClick={handleRoutePage}
                             >
                                 {isActive ? (
-                                    <IconSolid className="w-8 min-w-8 stroke-black" strokeWidth={1.5} />
+                                    <IconSolid className="w-8 min-w-8 stroke-transparent" strokeWidth={1.5} />
                                 ) : (
                                     <Icon className="w-8 min-w-8 stroke-inherit" strokeWidth={1.5} />
                                 )}{' '}
