@@ -6,33 +6,34 @@ import DigitalClock from '@/components/shared/digital-clock';
 import { Button } from '@/components/ui/button';
 import { Clock, Handshake } from 'lucide-react';
 import Image from 'next/image';
+import Link from 'next/link';
 
 export default function Home() {
     return (
         <section className="flex flex-col xl:flex-row">
-            <div className="mb-7 flex flex-1 justify-evenly xl:mb-0 xl:w-5/12 xl:justify-center">
+            <div className="relative mb-7 flex flex-1 justify-evenly xl:mb-0 xl:w-5/12 xl:justify-center">
                 <Image
-                    className="size-80 shadow-sm min-[500px]:size-96 xl:h-[40rem] xl:w-full"
+                    className="size-80 min-[500px]:size-96 xl:h-[40rem] xl:w-full"
                     src="/images/profile-img-no-bg.png"
                     width={500}
                     height={500}
                     quality={100}
                     alt="profile image no bg"
                 />
-                <div className="z-[1] mb-5 hidden flex-col items-center justify-between gap-5 rounded-3xl p-5 sm:flex xl:absolute xl:bottom-0 xl:h-56 xl:w-[26rem] xl:flex-row xl:gap-0 xl:bg-white/30 xl:backdrop-blur-sm">
+                <div className="z-[1] mb-5 hidden flex-col items-center justify-between gap-5 rounded-3xl p-5 sm:flex xl:absolute xl:bottom-0 xl:h-56 xl:w-[26rem] xl:flex-row xl:gap-0 xl:bg-slate-200/30 xl:backdrop-blur-sm xl:dark:bg-card/50">
                     <InfoCard title="YOE" content="6" sub="months of experiences" arrow={false} />
                     <InfoCard title="Tech" content="5" sub="Technologies mastered" arrow={false} />
                 </div>
             </div>
             <div className="flex-1 p-5">
                 <div className="mb-8 flex justify-center p-2 sm:justify-around sm:p-0">
-                    <div className="relative mt-0 h-80 w-[25rem] sm:w-[30rem]">
-                        <div className="h-64 w-full rounded-t-[4rem] rounded-br-[4rem] bg-slate-200/30 py-6 pl-8 pr-5 backdrop-blur-sm">
+                    <div className="relative mt-0 h-80 w-[22rem] sm:w-[30rem]">
+                        <div className="h-64 w-full rounded-t-[4rem] rounded-br-[4rem] bg-slate-200/30 py-6 pl-8 pr-5 backdrop-blur-sm dark:bg-card">
                             <RotateWords text="developer" words={['Web', 'Software', 'Mainframe']} position="behind" />
-                            <AnimatedWords text="Hello I'm " className="text-left text-2xl sm:text-3xl" />
+                            <AnimatedWords text="Hello I'm " className="text-left text-xl sm:text-3xl" />
                             <AnimatedWords
                                 text="Thuong Phan Thanh"
-                                className="text-left text-3xl text-primary sm:text-4xl"
+                                className="text-left text-2xl text-primary sm:text-4xl"
                             />
                             <p className="text-sm sm:text-base">
                                 I am a developer skilled in front-end and back-end technologies, specializing in dynamic
@@ -40,16 +41,16 @@ export default function Home() {
                                 high-quality web experiences.
                             </p>
                         </div>
-                        <div className="absolute bottom-0 right-0 -z-10 h-[4rem] w-[21rem] bg-slate-200/30 sm:w-[26rem]"></div>
+                        <div className="absolute bottom-0 right-0 z-0 h-[4rem] w-[19rem] bg-slate-200/30 dark:bg-card sm:w-[26rem]"></div>
                         <div className="flex h-16 w-full items-end justify-between">
-                            <div className="flex size-16 items-center justify-center rounded-b-[4rem] bg-slate-200/30"></div>
-                            <div className="flex h-16 w-[21rem] items-center gap-x-5 rounded-tl-[2rem] bg-white p-4 sm:w-[26rem]">
+                            <div className="flex h-[4rem] w-[3rem] items-center justify-center rounded-b-[4rem] bg-slate-200/30 dark:bg-card sm:h-16 sm:w-16"></div>
+                            <div className="z-[1] flex h-16 w-[19rem] items-center gap-x-5 rounded-tl-[2rem] bg-background p-4 sm:w-[26rem]">
                                 <AnimatedDownloadButton
                                     variant="outline"
                                     className="rounded-full"
                                     urlDownload="/api/download/cv"
                                 />
-                                <div className="flex items-center gap-x-2">
+                                <Link href="/contact" className="hidden items-center gap-x-2 sm:flex">
                                     <Button className="rounded-full active:scale-90">
                                         <Handshake className="size-6" />
                                         <p className="sm:hidden">Hire me</p>
@@ -57,7 +58,7 @@ export default function Home() {
                                     <p className="hidden cursor-pointer font-bold hover:underline sm:inline-block">
                                         Hire me!
                                     </p>
-                                </div>
+                                </Link>
                             </div>
                         </div>
                     </div>
@@ -117,27 +118,27 @@ export default function Home() {
                     </div>
                 </div>
                 <div className="flex items-center justify-center gap-5 min-[1440px]:justify-between">
-                    <div className="flex h-56 flex-1 items-center justify-around rounded-[3rem] bg-slate-200/30 px-4 py-5 sm:w-10/12 sm:flex-shrink-0 sm:flex-grow-0 sm:px-7 min-[1440px]:flex-1">
+                    <div className="flex h-56 flex-1 items-center justify-around rounded-[3rem] bg-slate-200/30 px-4 py-5 dark:bg-card sm:w-10/12 sm:flex-shrink-0 sm:flex-grow-0 sm:px-7 min-[1440px]:flex-1">
                         <InfoCard title="Github" content="265" sub="Total Contri -butions" />
                         <InfoCard className="sm:hidden" title="Tech" content="5" sub="Technologies mastered" />
                         <div className="hidden sm:flex">
                             <div className="flex w-60 flex-col">
-                                <div className="flex h-16 w-full items-center justify-center rounded-l-full bg-white p-4">
+                                <div className="flex h-16 w-full items-center justify-center rounded-l-full bg-background p-4">
                                     <DigitalClock />
                                 </div>
                                 <div className="relative flex">
-                                    <div className="h-20 w-48 bg-white"></div>
-                                    <div className="absolute left-0 top-0 z-[1] h-20 w-48 rounded-tr-2xl bg-slate-200/30">
-                                        <div className="m-3 flex items-center gap-x-2 rounded-2xl bg-white p-3">
+                                    <div className="h-20 w-48 bg-background"></div>
+                                    <div className="absolute left-0 top-0 z-[1] h-20 w-48 rounded-tr-2xl bg-slate-200/30 dark:bg-card">
+                                        <div className="m-3 flex items-center gap-x-2 rounded-2xl bg-background p-3">
                                             <span className="text-4xl text-red-400">10</span>
                                             <p className="text-xs">typical projects</p>
                                         </div>
                                     </div>
-                                    <div className="h-20 w-12 rounded-b-full bg-white"></div>
+                                    <div className="h-20 w-12 rounded-b-full bg-background"></div>
                                 </div>
                             </div>
                             <div className="w-20">
-                                <div className="h-20 w-full rounded-r-full bg-white p-4">
+                                <div className="h-20 w-full rounded-r-full bg-background p-4">
                                     <div className="flex w-fit items-center rounded-full bg-black p-3">
                                         <Clock className="size-6 text-white" />
                                     </div>
@@ -145,11 +146,11 @@ export default function Home() {
                             </div>
                         </div>
                     </div>
-                    <div className="hidden items-center gap-x-2 rounded-full bg-black min-[1440px]:flex">
-                        <p className="ms-2 font-semibold text-white">@piti</p>
+                    <div className="hidden items-center gap-x-2 rounded-full bg-black dark:bg-white min-[1440px]:flex">
+                        <p className="ms-2 font-semibold text-white dark:text-black">@piti</p>
                         <Image
                             className="m-0.5 size-10 rounded-full"
-                            src="/images/profile-img.jpg"
+                            src="/images/profile-img-with-bg.jpg"
                             width={44}
                             height={44}
                             alt="profile image"

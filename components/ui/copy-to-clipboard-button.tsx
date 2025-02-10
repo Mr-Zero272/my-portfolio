@@ -1,3 +1,4 @@
+'use client';
 import React, { useEffect, useState } from 'react';
 import copy from 'copy-to-clipboard';
 import { Check, Copy } from 'lucide-react';

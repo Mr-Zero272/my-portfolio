@@ -13,6 +13,6 @@ export const aboutTabs = [
     },
     {
         label: 'Experience',
-        value: 'experience',
+        value: 'experiences',
     },
 ];

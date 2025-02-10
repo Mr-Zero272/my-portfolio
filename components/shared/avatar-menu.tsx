@@ -1,4 +1,6 @@
-import React from 'react';
+import { Cloud, LifeBuoy, User } from 'lucide-react';
+import Link from 'next/link';
+import { Github } from '../icons';
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -6,54 +8,45 @@ import {
     DropdownMenuItem,
     DropdownMenuLabel,
     DropdownMenuSeparator,
-    DropdownMenuShortcut,
     DropdownMenuTrigger,
 } from '../ui/dropdown-menu';
 import MyAvatar from '../ui/my-avatar';
-import { Cloud, Keyboard, LifeBuoy, Settings, User } from 'lucide-react';
-import { Github } from '../icons';
 
 const AvatarMenu = () => {
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild className="block">
-                <button>
+                <button className="size-7">
                     <MyAvatar className="size-6" />
                 </button>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-56">
-                <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                <DropdownMenuLabel>@pitithuong</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup>
-                    <DropdownMenuItem>
-                        <User />
-                        <span>Profile</span>
-                        <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
-                    </DropdownMenuItem>
-
-                    <DropdownMenuItem>
-                        <Settings />
-                        <span>Settings</span>
-                        <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem>
-                        <Keyboard />
-                        <span>Keyboard shortcuts</span>
-                        <DropdownMenuShortcut>⌘K</DropdownMenuShortcut>
-                    </DropdownMenuItem>
+                    <Link href="/about-me">
+                        <DropdownMenuItem>
+                            <User />
+                            <span>Profile</span>
+                        </DropdownMenuItem>
+                    </Link>
                 </DropdownMenuGroup>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem>
-                    <Github />
-                    <span>GitHub</span>
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                    <LifeBuoy />
-                    <span>Support</span>
-                </DropdownMenuItem>
+                <Link href="https://github.com/Mr-Zero272">
+                    <DropdownMenuItem>
+                        <Github />
+                        <span>GitHub</span>
+                    </DropdownMenuItem>
+                </Link>
+                <Link href="/contact">
+                    <DropdownMenuItem>
+                        <LifeBuoy />
+                        <span>Support</span>
+                    </DropdownMenuItem>
+                </Link>
                 <DropdownMenuItem disabled>
                     <Cloud />
-                    <span>API</span>
+                    <span>Website</span>
                 </DropdownMenuItem>
             </DropdownMenuContent>
         </DropdownMenu>

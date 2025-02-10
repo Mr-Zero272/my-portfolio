@@ -18,8 +18,8 @@ const PageTransition = ({ children }: { children: React.ReactNode }) => {
                 transition={{ duration: 0.5, when: 'afterChildren', delay: 1.5 }}
             >
                 {children}
+                <Footer />
             </motion.div>
-            <Footer />
         </div>
     );
 };

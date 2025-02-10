@@ -40,7 +40,7 @@ const MyAvatar = ({ onClick = () => {}, className = '' }: Props) => {
                     'ring-muted-foreground': active,
                 },
             )}
-            src="/images/profile-img.png"
+            src="/images/profile-img-with-bg.jpg"
             width={44}
             height={44}
             alt="profile image"

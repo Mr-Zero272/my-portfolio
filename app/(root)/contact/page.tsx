@@ -1,24 +1,31 @@
 import ContactForm from '@/components/forms/contact-form';
 import { Github, Linkedin, Youtube } from '@/components/icons';
 import { Mail, MapPin, PhoneCall } from 'lucide-react';
+import { Metadata } from 'next';
 import Link from 'next/link';
+
+export const metadata: Metadata = {
+    title: 'Contact - @pitithuong',
+    description: "Contact page contain pitithuong's contact information",
+};
 
 const ContactPage = () => {
     return (
         <section className="flex flex-col gap-x-5 lg:flex-row">
-            <article className="flex-1 p-10">
+            <article className="relative flex-1 p-5 lg:p-10">
                 <h4 className="mb-2 text-sm font-semibold">CONTACT</h4>
-                <h1 className="mb-2 text-3xl font-bold md:text-6xl">Let&apos;s start a project together</h1>
+                <h1 className="z-20 mb-2 block w-full text-3xl font-bold md:text-6xl">
+                    Let&apos;s start a project together
+                </h1>
                 <p className="mb-10 text-gray-500">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Reiciendis, debitis. Quod commodi porro nam
-                    ad est?
+                    You can contact me through the form beside, I look forward to cooperating and working with you.
                 </p>
                 <ul className="space-y-3">
                     <li className="flex items-center gap-x-3 border-b pb-3">
                         <div className="p-2">
                             <Mail className="size-7" strokeWidth={1} />
                         </div>
-                        <div>
+                        <div className="group">
                             <p className="text-gray-500">Email me</p>
                             <p className="font-semibold">pitithuong@gmail.com</p>
                         </div>
@@ -43,7 +50,7 @@ const ContactPage = () => {
                     </li>
                 </ul>
             </article>
-            <article className="flex-1 px-10 md:px-20 lg:mt-12 lg:p-5">
+            <article className="flex-1 px-5 md:px-20 lg:mt-12 lg:p-5 lg:px-10">
                 <ContactForm className="mb-20" />
                 <div className="mb-10 flex flex-wrap items-center gap-x-5">
                     <div className="h-0.5 w-20 bg-black dark:bg-white"></div>

@@ -2,13 +2,14 @@
 import { motion, useAnimationControls } from 'framer-motion';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
+import { useSidebar } from '@/components/contexts/sidebar-context';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { navbarRoutesInfo } from '@/constants/nav-routes';
+import useDebounce from '@/hooks/use-debounce';
+import { cn } from '@/lib/utils';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import NavigationLink from './navigation-link';
-import { useSidebar } from '@/components/contexts/sidebar-context';
-import useDebounce from '@/hooks/use-debounce';
-import { cn } from '@/lib/utils';
 
 const svgVariants = {
     close: {
@@ -24,7 +25,7 @@ const Navigation = () => {
     const [windowWidth, setWindowWidth] = useState(0);
     const sidebarRef = useRef<HTMLElement>(null);
 
-    const { isOpen, toggle, close } = useSidebar();
+    const { isOpen, toggle, close, setHiddenState, isHidden } = useSidebar();
 
     const containerControls = useAnimationControls();
     const svgControls = useAnimationControls();
@@ -46,6 +47,7 @@ const Navigation = () => {
 
     const containerVariants = useMemo(() => {
         if (debounceWindowWidth === 0) {
+            setHiddenState(false);
             return {
                 close: {
                     width: '5rem',
@@ -69,6 +71,7 @@ const Navigation = () => {
             };
         }
         if (debounceWindowWidth <= 768) {
+            setHiddenState(true);
             return {
                 close: {
                     width: '5rem',
@@ -91,6 +94,7 @@ const Navigation = () => {
                 },
             };
         } else {
+            setHiddenState(false);
             return {
                 close: {
                     width: '5rem',
@@ -112,7 +116,7 @@ const Navigation = () => {
                 },
             };
         }
-    }, [debounceWindowWidth]);
+    }, [debounceWindowWidth, setHiddenState]);
 
     useEffect(() => {
         if (containerControls) {
@@ -171,7 +175,7 @@ const Navigation = () => {
                 variants={containerVariants}
                 animate={containerControls}
                 initial="close"
-                className="absolute left-0 top-0 z-20 flex h-full flex-col gap-20 bg-white p-5 shadow-sm dark:bg-[#0A0E15]"
+                className="absolute left-0 top-0 z-20 flex h-full flex-col gap-20 bg-card p-5 shadow-sm"
             >
                 <div className="relative flex w-full flex-row place-items-center justify-between">
                     <Link href="/" className="flex justify-center overflow-hidden">
@@ -218,28 +222,43 @@ const Navigation = () => {
                     </button>
                 </div>
                 <div className="flex flex-col gap-3">
-                    {navbarRoutesInfo.map((navLink) => {
-                        const isActive =
-                            (pathname.includes(navLink.route) && navLink.route.length > 1) ||
-                            pathname === navLink.route;
-                        const Icon = navLink.icon;
-                        const IconSolid = navLink.iconSolid;
-                        return (
-                            <NavigationLink
-                                key={navLink.label}
-                                name={navLink.label}
-                                href={navLink.route}
-                                active={isActive}
-                                onClick={handleRoutePage}
-                            >
-                                {isActive ? (
-                                    <IconSolid className="w-8 min-w-8 stroke-transparent" strokeWidth={1.5} />
-                                ) : (
-                                    <Icon className="w-8 min-w-8 stroke-inherit" strokeWidth={1.5} />
-                                )}{' '}
-                            </NavigationLink>
-                        );
-                    })}
+                    <TooltipProvider>
+                        {navbarRoutesInfo.map((navLink) => {
+                            const isActive =
+                                (pathname.includes(navLink.route) && navLink.route.length > 1) ||
+                                pathname === navLink.route;
+                            const Icon = navLink.icon;
+                            const IconSolid = navLink.iconSolid;
+                            return (
+                                <Tooltip key={navLink.label}>
+                                    <TooltipTrigger asChild>
+                                        <div>
+                                            <NavigationLink
+                                                name={navLink.label}
+                                                href={navLink.route}
+                                                active={isActive}
+                                                onClick={handleRoutePage}
+                                            >
+                                                {isActive ? (
+                                                    <IconSolid
+                                                        className="w-8 min-w-8 stroke-transparent dark:fill-white"
+                                                        strokeWidth={1.5}
+                                                    />
+                                                ) : (
+                                                    <Icon className="w-8 min-w-8 stroke-inherit" strokeWidth={1.5} />
+                                                )}{' '}
+                                            </NavigationLink>
+                                        </div>
+                                    </TooltipTrigger>
+                                    {!isOpen && !isHidden && (
+                                        <TooltipContent side="right">
+                                            <p className="text-sm">{navLink.label}</p>
+                                        </TooltipContent>
+                                    )}
+                                </Tooltip>
+                            );
+                        })}
+                    </TooltipProvider>
                 </div>
             </motion.nav>
         </>

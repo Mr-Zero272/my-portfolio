@@ -1,4 +1,11 @@
 import ProjectCard from '@/components/cards/project-card/project-card';
+import { projects } from '@/constants/projects-info';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+    title: 'Projects - @pitithuong',
+    description: 'Detail about my projects',
+};
 
 const ProjectPage = () => {
     return (
@@ -13,11 +20,9 @@ const ProjectPage = () => {
             </div>
 
             <article className="space-y-10 px-4 md:px-10">
-                <ProjectCard />
-                <ProjectCard />
-                <ProjectCard />
-                <ProjectCard />
-                <ProjectCard />
+                {projects.map((project) => (
+                    <ProjectCard key={project.id} {...project} />
+                ))}
             </article>
         </section>
     );

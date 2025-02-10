@@ -20,7 +20,7 @@ import '../globals.css';
 
 export const metadata: Metadata = {
     title: '@pitithuong',
-    description: 'This is a website about me',
+    description: 'This is a website about pitithuong',
 };
 
 export default function RootLayout({
