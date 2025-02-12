@@ -35,7 +35,7 @@ export default function RootLayout({
                     <SidebarProvider>
                         <main className="relative flex h-screen w-full">
                             <Navigation />
-                            <section className="mt-16 flex w-full flex-col gap-5 md:ml-20">
+                            <section className="flex w-full flex-col gap-5 md:ml-20">
                                 <Header />
                                 <PageTransition>{children}</PageTransition>
                             </section>

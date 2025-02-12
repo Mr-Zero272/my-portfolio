@@ -26,3 +26,8 @@ export { default as Microsoftsqlserver } from './sqlserver';
 export { default as Java } from './java';
 export { default as Typescript } from './typescript';
 export { default as Cobol } from './cobol';
+export { default as Music } from './music';
+export { default as MusicSolid } from './music-solid';
+export { default as MusicPlaying } from './music-playing';
+export { default as Play } from './play';
+export { default as Pause } from './pause';

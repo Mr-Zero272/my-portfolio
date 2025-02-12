@@ -1,4 +1,15 @@
-import { Contact, ContactSolid, Home, HomeSolid, Projects, ProjectsSolid, User, UserSolid } from '@/components/icons';
+import {
+    Contact,
+    ContactSolid,
+    Home,
+    HomeSolid,
+    Music,
+    MusicSolid,
+    Projects,
+    ProjectsSolid,
+    User,
+    UserSolid,
+} from '@/components/icons';
 
 export const navbarRoutesInfo = [
     {
@@ -24,5 +35,11 @@ export const navbarRoutesInfo = [
         iconSolid: ContactSolid,
         route: '/contact',
         label: 'Contact',
+    },
+    {
+        icon: Music,
+        iconSolid: MusicSolid,
+        route: '/favorite',
+        label: 'My favorite',
     },
 ];

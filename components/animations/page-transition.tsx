@@ -8,7 +8,7 @@ import Footer from '../layouts/components/footer';
 const PageTransition = ({ children }: { children: React.ReactNode }) => {
     const pathname = usePathname();
     return (
-        <div className="w-full overflow-y-auto bg-background">
+        <div className="w-full overflow-y-auto bg-background pt-16">
             <PageTransitionAnimation />
             <motion.div
                 key={pathname + 'ani'}
