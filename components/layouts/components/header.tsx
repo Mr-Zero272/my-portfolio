@@ -1,5 +1,6 @@
 import Home from '@/components/icons/home';
 import AvatarMenu from '@/components/shared/avatar-menu';
+import MusicButton from '@/components/shared/music-button';
 import ThemeButton from '@/components/shared/theme-button';
 import ToggleNavButton from '@/components/shared/toggle-nav-button';
 import Link from 'next/link';
@@ -18,6 +19,9 @@ const Header = () => {
                 </li>
                 <li>
                     <ThemeButton />
+                </li>
+                <li>
+                    <MusicButton />
                 </li>
                 <li className="min-[1440px]:hidden">
                     <AvatarMenu />

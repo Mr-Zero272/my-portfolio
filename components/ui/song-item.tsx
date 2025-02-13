@@ -1,22 +1,41 @@
-import { ChevronDown, ChevronUp, Ellipsis, EllipsisVertical, Play, Trash } from 'lucide-react';
-import React from 'react';
+'use client';
+import { cn, formatSecondsToTime } from '@/lib/utils';
+import { ChevronDown, ChevronUp, EllipsisVertical, Play, Trash } from 'lucide-react';
 import { MusicPlaying } from '../icons';
-import { cn } from '@/lib/utils';
 import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuSeparator,
     DropdownMenuShortcut,
     DropdownMenuTrigger,
 } from './dropdown-menu';
+import { useMusicPlayer } from '../contexts/music-context';
 
 type Props = {
+    trackName: string;
+    index: number;
     active?: boolean;
 };
 
-const SongItem = ({ active = false }: Props) => {
+const SongItem = ({ index, trackName, active = false }: Props) => {
+    const { isPlaying, progress, tracks, duration, deleteTrack, currentTrackIndex, updateTrackPosition, setTrack } =
+        useMusicPlayer();
+
+    const handleMove = (oldPosition: number, newPosition: number) => {
+        if (oldPosition === newPosition) {
+            return;
+        }
+
+        if (newPosition < 0) {
+            return;
+        }
+
+        if (newPosition >= tracks.length) {
+            return;
+        }
+
+        updateTrackPosition(oldPosition, newPosition);
+    };
     return (
         <div
             className={cn('group flex cursor-pointer items-center justify-between rounded-lg px-5 py-3', {
@@ -24,21 +43,26 @@ const SongItem = ({ active = false }: Props) => {
             })}
         >
             <div className="flex items-center gap-x-3">
-                <div className="flex size-5 items-center justify-center">
-                    <p className="group-hover:hidden">1</p>
+                <div className="flex size-5 items-center justify-center" onClick={() => setTrack(index)}>
+                    <p className={cn('group-hover:hidden', { hidden: isPlaying && currentTrackIndex === index })}>
+                        {index + 1}
+                    </p>
                     <Play
                         className={cn('hidden size-5 fill-black group-hover:block dark:fill-white', {
                             'fill-white dark:fill-black': active,
+                            block: isPlaying && currentTrackIndex === index,
                         })}
                     />
                 </div>
                 <div>
-                    <h2 className="capitalize">Let&apos;s See What The Night Can Do</h2>
+                    <h2 className="max-w-96 overflow-hidden text-ellipsis text-nowrap capitalize">{trackName}</h2>
                 </div>
             </div>
             <div className="flex items-center gap-x-2">
-                {active && <MusicPlaying className="size-5" />}
-                <p>4:01</p>
+                {active && isPlaying && currentTrackIndex === index && <MusicPlaying className="size-5" />}
+                {currentTrackIndex === index && (
+                    <p className="w-10">{formatSecondsToTime(Math.round(duration - progress))}</p>
+                )}
                 <DropdownMenu>
                     <DropdownMenuTrigger className="size-7" asChild>
                         <button className="flex items-center justify-between rounded-full p-1.5 hover:bg-accent/50">
@@ -46,19 +70,22 @@ const SongItem = ({ active = false }: Props) => {
                         </button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent>
-                        <DropdownMenuItem>
+                        <DropdownMenuItem disabled={index - 1 < 0} onClick={() => handleMove(index, index - 1)}>
                             <span>Move Up</span>
                             <DropdownMenuShortcut>
                                 <ChevronUp className="size-5" />
                             </DropdownMenuShortcut>
                         </DropdownMenuItem>
-                        <DropdownMenuItem>
-                            <span>Move Down</span>{' '}
+                        <DropdownMenuItem
+                            disabled={index + 1 >= tracks.length}
+                            onClick={() => handleMove(index, index + 1)}
+                        >
+                            <span>Move Down</span>
                             <DropdownMenuShortcut>
                                 <ChevronDown className="size-5" />
                             </DropdownMenuShortcut>
                         </DropdownMenuItem>
-                        <DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => deleteTrack(index)}>
                             <span>Delete</span>
                             <DropdownMenuShortcut>
                                 <Trash className="size-5" />

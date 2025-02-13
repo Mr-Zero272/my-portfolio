@@ -31,3 +31,5 @@ export { default as MusicSolid } from './music-solid';
 export { default as MusicPlaying } from './music-playing';
 export { default as Play } from './play';
 export { default as Pause } from './pause';
+export { default as Forward10Sharp } from './forward-10-sharp';
+export { default as Replay10 } from './replay-10';

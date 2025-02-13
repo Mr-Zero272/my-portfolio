@@ -7,6 +7,7 @@ import { ThemeProvider } from '@/components/contexts/theme-provider';
 import Header from '@/components/layouts/components/header';
 import { Toaster } from '@/components/ui/sonner';
 import '../globals.css';
+import { MusicPlayerProvider } from '@/components/contexts/music-context';
 
 // const geistSans = Geist({
 //     variable: '--font-geist-sans',
@@ -32,15 +33,17 @@ export default function RootLayout({
         <html lang="en">
             <body className={`antialiased`}>
                 <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
-                    <SidebarProvider>
-                        <main className="relative flex h-screen w-full">
-                            <Navigation />
-                            <section className="flex w-full flex-col gap-5 md:ml-20">
-                                <Header />
-                                <PageTransition>{children}</PageTransition>
-                            </section>
-                        </main>
-                    </SidebarProvider>
+                    <MusicPlayerProvider>
+                        <SidebarProvider>
+                            <main className="relative flex h-screen w-full">
+                                <Navigation />
+                                <section className="flex w-full flex-col gap-5 md:ml-20">
+                                    <Header />
+                                    <PageTransition>{children}</PageTransition>
+                                </section>
+                            </main>
+                        </SidebarProvider>
+                    </MusicPlayerProvider>
                 </ThemeProvider>
                 <Toaster />
             </body>

@@ -1,6 +1,6 @@
 'use client';
 import { CloudUpload } from 'lucide-react';
-import React, { ChangeEvent, useEffect, useState } from 'react';
+import React, { ChangeEvent, useCallback, useState } from 'react';
 import SongFileItem from '../ui/song-file-item';
 
 type Props = {
@@ -15,6 +15,7 @@ const DragNDrop = ({ onFilesSelected }: Props) => {
         if (selectedFiles && selectedFiles.length > 0) {
             const newFiles = Array.from(selectedFiles);
             setFiles((prevFiles) => [...prevFiles, ...newFiles]);
+            onFilesSelected([...files, ...newFiles]);
         }
     };
     const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
@@ -22,17 +23,18 @@ const DragNDrop = ({ onFilesSelected }: Props) => {
         const validFiles = Array.from(files).filter((file) => file.type === 'audio/mpeg');
         if (validFiles.length > 0) {
             setFiles((prevFiles) => [...prevFiles, ...validFiles]);
+            onFilesSelected([...files, ...validFiles]);
         }
         event.preventDefault();
     };
 
-    const handleRemoveFile = (index: number) => {
+    const handleRemoveFile = useCallback((index: number) => {
         setFiles((prevFiles) => prevFiles.filter((_, i) => i !== index));
-    };
+    }, []);
 
-    useEffect(() => {
-        onFilesSelected(files);
-    }, [files, onFilesSelected]);
+    // useEffect(() => {
+    //     onFilesSelected(files);
+    // }, [files, onFilesSelected]);
 
     return (
         <section>
