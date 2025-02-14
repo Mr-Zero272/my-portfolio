@@ -7,7 +7,7 @@ import Link from 'next/link';
 
 const Header = () => {
     return (
-        <div className="absolute left-1/2 top-0 mt-2 flex -translate-x-1/2 items-center justify-center">
+        <div className="absolute left-1/2 top-0 z-20 mt-2 flex -translate-x-1/2 items-center justify-center">
             <ul className="flex w-fit items-center justify-center gap-4 rounded-2xl bg-neutral-100/30 px-3 py-2 backdrop-blur-sm">
                 <li className="md:hidden">
                     <ToggleNavButton />

@@ -55,7 +55,9 @@ const SongItem = ({ index, trackName, active = false }: Props) => {
                     />
                 </div>
                 <div>
-                    <h2 className="max-w-96 overflow-hidden text-ellipsis text-nowrap capitalize">{trackName}</h2>
+                    <h2 className="max-w-60 overflow-hidden text-ellipsis text-nowrap capitalize md:max-w-96">
+                        {trackName}
+                    </h2>
                 </div>
             </div>
             <div className="flex items-center gap-x-2">

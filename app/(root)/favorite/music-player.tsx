@@ -15,6 +15,7 @@ const MusicPlayer = () => {
         tracks,
         trackNames,
         currentTrackIndex,
+        musicBackgroundSrc,
         isPlaying,
         duration,
         progress,
@@ -30,13 +31,13 @@ const MusicPlayer = () => {
     } = useMusicPlayer();
     const currentTrack = trackNames[currentTrackIndex];
     return (
-        <section className="flex items-center p-5">
-            <article className="flex-1 space-y-10">
-                <div className="flex items-center justify-center">
+        <section className="flex flex-col items-center p-5 lg:flex-row">
+            <article className="mb-10 w-full flex-1 space-y-10 xl:mb-0">
+                <div className="z-0 flex items-center justify-center">
                     <div className="relative">
                         <Image
-                            src="/images/music-bg.jpg"
-                            className="size-96 rounded-xl object-cover drop-shadow-xl"
+                            src={musicBackgroundSrc}
+                            className="z-0 size-[23rem] rounded-xl object-cover drop-shadow-xl"
                             width={400}
                             height={400}
                             quality={100}
@@ -57,7 +58,7 @@ const MusicPlayer = () => {
                     />
                     <p className="w-10">{formatSecondsToTime(Math.round(duration - progress))}</p>
                 </div>
-                <div className="flex items-center justify-between px-32">
+                <div className="flex w-full items-center justify-between px-2 sm:px-5 md:px-10 lg:px-32">
                     <button className="group rounded-md p-2 hover:bg-accent/40" onClick={shuffle}>
                         <Shuffle
                             className={cn('size-6 group-active:scale-90', {
@@ -66,17 +67,20 @@ const MusicPlayer = () => {
                         />
                     </button>
                     <button className="group rounded-md p-2 hover:bg-accent/40" onClick={() => previousTrack()}>
-                        <SkipBack className="size-6 fill-black group-active:scale-90" />
+                        <SkipBack className="size-6 fill-black group-active:scale-90 dark:fill-white" />
                     </button>
-                    <button className="group rounded-full border-2 border-black p-3 hover:bg-accent/40">
+                    <button className="group rounded-full border-2 border-black p-3 hover:bg-accent/40 dark:border-white">
                         {isPlaying ? (
-                            <Pause className="size-5 fill-black group-active:scale-90" onClick={pause} />
+                            <Pause
+                                className="size-5 fill-black group-active:scale-90 dark:fill-white"
+                                onClick={pause}
+                            />
                         ) : (
-                            <Play className="size-5 fill-black group-active:scale-90" onClick={play} />
+                            <Play className="size-5 fill-black group-active:scale-90 dark:fill-white" onClick={play} />
                         )}
                     </button>
                     <button className="group rounded-md p-2 hover:bg-accent/40" onClick={() => nextTrack()}>
-                        <SkipForward className="size-6 fill-black group-active:scale-90" />
+                        <SkipForward className="size-6 fill-black group-active:scale-90 dark:fill-white" />
                     </button>
                     <button className="group rounded-md p-2 hover:bg-accent/40" onClick={toggleRepeat}>
                         <Repeat
@@ -87,16 +91,17 @@ const MusicPlayer = () => {
                     </button>
                 </div>
             </article>
-            <article className="flex-1">
+            <article className="w-full flex-1">
                 {tab === 'list' ? (
                     <>
-                        <div className="mb-5 flex items-center justify-between pl-5">
-                            <div>
+                        <div className="mb-5 flex flex-col justify-between sm:flex-row sm:items-center sm:pl-5">
+                            <div className="mb-2 sm:mb-0">
                                 <p className="mb-1 text-4xl font-bold">
-                                    List music<span className="text-primary">.</span>
+                                    {currentTrack ?? 'Music Track'}
+                                    <span className="text-primary">.</span>
                                 </p>
                                 <div className="flex items-center gap-x-1">
-                                    <p>Design by Piti</p> <Dot /> <p>2025</p> <Dot /> <p>10 songs</p>
+                                    <p>List music</p> <Dot /> <p>2025</p> <Dot /> <p>{tracks.length} songs</p>
                                 </div>
                             </div>
                             <div>

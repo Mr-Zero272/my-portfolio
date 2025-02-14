@@ -11,6 +11,7 @@ const MusicButton = () => {
     const {
         trackNames,
         currentTrackIndex,
+        musicBackgroundSrc,
         isPlaying,
         duration,
         progress,
@@ -33,7 +34,7 @@ const MusicButton = () => {
                     <div className="flex gap-x-2">
                         <div>
                             <Image
-                                src="/images/music-bg.jpg"
+                                src={musicBackgroundSrc}
                                 className="size-28 rounded-xl object-cover drop-shadow-xl"
                                 width={400}
                                 height={400}
@@ -58,13 +59,13 @@ const MusicButton = () => {
                 </div>
                 <div className="flex items-center justify-center gap-x-4 p-5">
                     <button className="group rounded-full p-0.5 hover:bg-accent/40" onClick={() => previousTrack()}>
-                        <SkipBack className="size-4 text-muted-foreground hover:text-black group-active:scale-90" />
+                        <SkipBack className="size-4 text-muted-foreground hover:text-black group-active:scale-90 dark:hover:text-white" />
                     </button>
                     <button
                         className="group rounded-full p-0.5 hover:bg-accent/40"
                         onClick={() => seek(progress - 10 < 0 ? 0 : progress - 10)}
                     >
-                        <Replay10 className="size-5 text-muted-foreground hover:text-black group-active:scale-90" />
+                        <Replay10 className="size-5 text-muted-foreground hover:text-black group-active:scale-90 dark:hover:text-white" />
                     </button>
                     <Slider
                         value={[progress]}
@@ -76,10 +77,10 @@ const MusicButton = () => {
                         className="group rounded-full p-0.5 hover:bg-accent/40"
                         onClick={() => seek(progress + 10 > duration ? duration : progress + 10)}
                     >
-                        <Forward10Sharp className="size-5 text-muted-foreground hover:text-black group-active:scale-90" />
+                        <Forward10Sharp className="size-5 text-muted-foreground hover:text-black group-active:scale-90 dark:hover:text-white" />
                     </button>
                     <button className="group rounded-full p-0.5 hover:bg-accent/40" onClick={() => nextTrack()}>
-                        <SkipForward className="size-4 text-muted-foreground hover:text-black group-active:scale-90" />
+                        <SkipForward className="size-4 text-muted-foreground hover:text-black group-active:scale-90 dark:hover:text-white" />
                     </button>
                 </div>
             </DropdownMenuContent>

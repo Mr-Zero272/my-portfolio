@@ -1,5 +1,6 @@
 'use client';
 
+import { musicImages } from '@/constants/music-images';
 import { moveElementInArray } from '@/lib/utils';
 import { Howl } from 'howler';
 import React, { createContext, useCallback, useContext, useEffect, useRef, useState } from 'react';
@@ -26,6 +27,9 @@ interface MusicPlayerContextType {
     isShuffle: boolean;
     toggleRepeat: () => void;
     seek: (time: number) => void;
+    musicBackgroundSrc: string;
+    volume: number;
+    setVolume: (volume: number) => void;
 }
 
 const MusicPlayerContext = createContext<MusicPlayerContextType | null>(null);
@@ -40,30 +44,40 @@ export const useMusicPlayer = () => {
 
 export const MusicPlayerProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const [tracks, setTracks] = useState<string[]>([]);
-    const [trackNames, setTrackNames] = useState<string[]>(['empty']);
+    const [trackNames, setTrackNames] = useState<string[]>([]);
     const [currentTrackIndex, setCurrentTrackIndex] = useState<number>(-1);
     const [isPlaying, setIsPlaying] = useState<boolean>(false);
     const [progress, setProgress] = useState<number>(0);
     const [duration, setDuration] = useState<number>(0);
     const [repeat, setRepeat] = useState<boolean>(false);
     const [isShuffle, setIsShuffle] = useState<boolean>(false);
+    const [musicBackgroundSrc, setMusicBackgroundSrc] = useState<string>(musicImages[0]);
+    const [volume, setVolume] = useState(1.0);
     const soundRef = useRef<Howl | null>(null);
+    const currentTrackSrcRef = useRef<string | null>(null);
 
-    // console.log('tracks :' + tracks);
-    // console.log('trackNames :' + trackNames);
-    // console.log('currentTrackIndex :' + currentTrackIndex);
-    // console.log('isPlaying :' + isPlaying);
-    // console.log('progress :' + progress);
-    // console.log('duration :' + duration);
-    // console.log('repeat :' + repeat);
-    // console.log(soundRef);
+    const randomMusicBackground = () => {
+        const randomIndex = Math.floor(Math.random() * musicImages.length);
+        setMusicBackgroundSrc(musicImages[randomIndex]);
+    };
 
     const nextTrack = useCallback(() => {
         setCurrentTrackIndex((prevIndex) => (prevIndex + 1) % tracks.length);
+        randomMusicBackground();
     }, [tracks]);
+
+    const previousTrack = useCallback(() => {
+        if (progress > 2) {
+            soundRef.current?.seek(0);
+            return;
+        }
+        setCurrentTrackIndex((prevIndex) => (prevIndex - 1 + tracks.length) % tracks.length);
+        randomMusicBackground();
+    }, [tracks, progress]);
 
     const setTrack = useCallback((index: number) => {
         setCurrentTrackIndex(index);
+        randomMusicBackground();
     }, []);
 
     const play = useCallback(() => {
@@ -71,60 +85,11 @@ export const MusicPlayerProvider: React.FC<{ children: React.ReactNode }> = ({ c
             toast.info('You need to add some music files to play');
             return;
         }
+
         if (soundRef.current) {
-            if (soundRef.current.playing()) {
-                return; // Prevent duplicate play calls
-            }
             soundRef.current.play();
         }
     }, [tracks]);
-
-    const loadTrack = useCallback(
-        (index: number) => {
-            if (index === -1) {
-                return;
-            }
-
-            // TODO this block code have a bug need to solve
-            if (soundRef.current && soundRef.current.playing()) {
-                return;
-            }
-
-            if (soundRef.current) {
-                soundRef.current.unload();
-            }
-
-            soundRef.current = new Howl({
-                src: [tracks[index]],
-                html5: true,
-                onplay: () => setIsPlaying(true),
-                onpause: () => setIsPlaying(false),
-                onend: () => {
-                    if (repeat) {
-                        play();
-                    } else {
-                        if (tracks.length === 1) {
-                            play();
-                        } else {
-                            nextTrack();
-                        }
-                    }
-                },
-                onseek: () => {
-                    const seek = soundRef.current?.seek() || 0;
-                    setProgress(seek);
-                },
-                onload: () => {
-                    setDuration(soundRef.current?.duration() || 0);
-                },
-            });
-
-            if (isPlaying) {
-                soundRef.current.play();
-            }
-        },
-        [tracks, repeat, isPlaying, play, nextTrack],
-    );
 
     const deleteTrack = useCallback(
         (index: number) => {
@@ -172,10 +137,6 @@ export const MusicPlayerProvider: React.FC<{ children: React.ReactNode }> = ({ c
         }
     }, []);
 
-    const previousTrack = useCallback(() => {
-        setCurrentTrackIndex((prevIndex) => (prevIndex - 1 + tracks.length) % tracks.length);
-    }, [tracks]);
-
     const shuffle = useCallback(() => {
         setIsShuffle((prev) => !prev);
         const shuffledTracks = [...tracks].sort(() => Math.random() - 0.5);
@@ -190,7 +151,7 @@ export const MusicPlayerProvider: React.FC<{ children: React.ReactNode }> = ({ c
     const seek = useCallback((time: number) => {
         if (soundRef.current) {
             soundRef.current.seek(time);
-            setProgress(time);
+            // setProgress(time);
         }
     }, []);
 
@@ -203,13 +164,63 @@ export const MusicPlayerProvider: React.FC<{ children: React.ReactNode }> = ({ c
         setTrackNames(trackNames);
     }, []);
 
+    const updateVolume = useCallback((volume: number) => {
+        setVolume(volume);
+        if (soundRef.current) {
+            soundRef.current.volume(volume);
+        }
+    }, []);
+
     useEffect(() => {
         if (tracks.length > 0 && currentTrackIndex >= 0 && currentTrackIndex < tracks.length) {
-            loadTrack(currentTrackIndex);
-        }
-    }, [tracks, currentTrackIndex, loadTrack]);
+            const currentTrackSrc = tracks[currentTrackIndex];
+            if (currentTrackIndex === -1) {
+                return;
+            }
 
-    console.log(currentTrackIndex);
+            if (soundRef.current && currentTrackSrcRef.current !== currentTrackSrc) {
+                soundRef.current.unload();
+                soundRef.current = null;
+            }
+
+            if (!soundRef.current) {
+                soundRef.current = new Howl({
+                    src: [currentTrackSrc],
+                    html5: true,
+                    volume: volume,
+                    onplay: () => setIsPlaying(true),
+                    onpause: () => setIsPlaying(false),
+                    onstop: () => {
+                        setIsPlaying(false);
+                        setProgress(0);
+                    },
+                    onend: () => {
+                        if (repeat) {
+                            play();
+                        } else {
+                            if (tracks.length === 1) {
+                                play();
+                            } else {
+                                nextTrack();
+                            }
+                        }
+                    },
+                    onseek: () => {
+                        const seek = soundRef.current?.seek() || 0;
+                        setProgress(seek);
+                    },
+                    onload: () => {
+                        setDuration(soundRef.current?.duration() || 0);
+                    },
+                });
+
+                // Update the ref to track the current track's source
+                currentTrackSrcRef.current = currentTrackSrc;
+
+                soundRef.current.play();
+            }
+        }
+    }, [tracks, currentTrackIndex, isPlaying, nextTrack, play, repeat, volume]);
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -222,6 +233,55 @@ export const MusicPlayerProvider: React.FC<{ children: React.ReactNode }> = ({ c
         return () => clearInterval(interval);
     }, [isPlaying]);
 
+    useEffect(() => {
+        const handleKeyPress = (e: KeyboardEvent) => {
+            if (e.code === 'Space') {
+                if (isPlaying) {
+                    pause();
+                } else {
+                    play();
+                }
+            } else if (e.code === 'ArrowRight') {
+                e.preventDefault();
+                const seek = soundRef.current?.seek() || 0;
+                soundRef.current?.seek(seek + 10 > duration ? duration : seek + 10);
+            } else if (e.code === 'ArrowLeft') {
+                e.preventDefault();
+                const seek = soundRef.current?.seek() || 0;
+                soundRef.current?.seek(seek - 10 > 0 ? 0 : seek - 10);
+            } else if (e.code === 'ArrowUp') {
+                e.preventDefault();
+                updateVolume(Math.min(volume + 0.1, 1));
+            } else if (e.code === 'ArrowDown') {
+                e.preventDefault();
+                updateVolume(Math.max(volume - 0.1, 0));
+            } else if (e.code === 'KeyM') {
+                if (volume > 0) {
+                    updateVolume(0);
+                } else {
+                    updateVolume(1);
+                }
+            }
+        };
+
+        window.addEventListener('keypress', handleKeyPress);
+        return () => window.removeEventListener('keypress', handleKeyPress);
+    }, [isPlaying, seek, duration, progress, updateVolume, play, pause, volume]);
+
+    useEffect(() => {
+        const handleBeforeUnload = (event: BeforeUnloadEvent) => {
+            event.preventDefault();
+            tracks.forEach((trackUrl) => URL.revokeObjectURL(trackUrl));
+        };
+
+        window.addEventListener('beforeunload', handleBeforeUnload);
+
+        // Cleanup the event listener when the component is unmounted
+        return () => {
+            window.removeEventListener('beforeunload', handleBeforeUnload);
+        };
+    }, [tracks]);
+
     return (
         <MusicPlayerContext.Provider
             value={{
@@ -230,6 +290,7 @@ export const MusicPlayerProvider: React.FC<{ children: React.ReactNode }> = ({ c
                 setTrackNames: updateTrackNames,
                 setTracks: updateTracks,
                 currentTrackIndex,
+                musicBackgroundSrc,
                 isPlaying,
                 progress,
                 duration,
@@ -245,6 +306,8 @@ export const MusicPlayerProvider: React.FC<{ children: React.ReactNode }> = ({ c
                 repeat,
                 toggleRepeat,
                 seek,
+                volume,
+                setVolume: updateVolume,
             }}
         >
             {children}
