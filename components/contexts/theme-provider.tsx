@@ -5,7 +5,7 @@ const NextThemesProvider = dynamic(() => import('next-themes').then((e) => e.The
     ssr: false,
 });
 
-import { type ThemeProviderProps } from 'next-themes/dist/types';
+import { ThemeProviderProps } from 'next-themes';
 import dynamic from 'next/dynamic';
 
 export function ThemeProvider({ children, ...props }: ThemeProviderProps) {
