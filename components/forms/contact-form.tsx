@@ -52,7 +52,7 @@ const ContactForm = ({ className = '' }: Props) => {
         });
 
         if (response?.messageId) {
-            toast.success('Thank you for contacting us, we will reply as soon as possible!');
+            toast.success('Thank you for contacting me, I will reply as soon as possible!');
             form.reset();
         } else {
             toast.error('Some thing went wrong, try again later!');

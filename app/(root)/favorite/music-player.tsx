@@ -127,8 +127,8 @@ const MusicPlayer = () => {
                                 ))
                             ) : (
                                 <div className="ml-5 text-sm text-muted-foreground">
-                                    There are no songs available at the moment, you can add a file and start listening
-                                    right away.
+                                    If you share my taste in music, just add an mp3 file then enjoy your relaxing time
+                                    while continuing to learn about me.
                                 </div>
                             )}
                         </ul>

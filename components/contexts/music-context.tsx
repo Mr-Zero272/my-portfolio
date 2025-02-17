@@ -3,6 +3,7 @@
 import { musicImages } from '@/constants/music-images';
 import { moveElementInArray } from '@/lib/utils';
 import { Howl } from 'howler';
+import { usePathname } from 'next/navigation';
 import React, { createContext, useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { toast } from 'sonner';
 
@@ -59,6 +60,7 @@ export const MusicPlayerProvider: React.FC<{ children: React.ReactNode }> = ({ c
     const [volume, setVolume] = useState(1.0);
     const soundRef = useRef<Howl | null>(null);
     const currentTrackSrcRef = useRef<string | null>(null);
+    const pathname = usePathname();
 
     const randomMusicBackground = () => {
         const randomIndex = Math.floor(Math.random() * musicImages.length);
@@ -239,27 +241,27 @@ export const MusicPlayerProvider: React.FC<{ children: React.ReactNode }> = ({ c
 
     useEffect(() => {
         const handleKeyPress = (e: KeyboardEvent) => {
-            if (e.code === 'Space' && !isEditingTrackName) {
+            if (e.code === 'Space' && !isEditingTrackName && pathname.includes('favorite')) {
                 if (isPlaying) {
                     pause();
                 } else {
                     play();
                 }
-            } else if (e.code === 'ArrowRight') {
+            } else if (e.code === 'ArrowRight' && pathname.includes('favorite')) {
                 e.preventDefault();
                 const seek = soundRef.current?.seek() || 0;
                 soundRef.current?.seek(seek + 10 > duration ? duration : seek + 10);
-            } else if (e.code === 'ArrowLeft') {
+            } else if (e.code === 'ArrowLeft' && pathname.includes('favorite')) {
                 e.preventDefault();
                 const seek = soundRef.current?.seek() || 0;
                 soundRef.current?.seek(seek - 10 > 0 ? 0 : seek - 10);
-            } else if (e.code === 'ArrowUp') {
+            } else if (e.code === 'ArrowUp' && pathname.includes('favorite')) {
                 e.preventDefault();
                 updateVolume(Math.min(volume + 0.1, 1));
-            } else if (e.code === 'ArrowDown') {
+            } else if (e.code === 'ArrowDown' && pathname.includes('favorite')) {
                 e.preventDefault();
                 updateVolume(Math.max(volume - 0.1, 0));
-            } else if (e.code === 'KeyM') {
+            } else if (e.code === 'KeyM' && pathname.includes('favorite')) {
                 if (volume > 0) {
                     updateVolume(0);
                 } else {
@@ -270,7 +272,7 @@ export const MusicPlayerProvider: React.FC<{ children: React.ReactNode }> = ({ c
 
         window.addEventListener('keypress', handleKeyPress);
         return () => window.removeEventListener('keypress', handleKeyPress);
-    }, [isPlaying, seek, duration, progress, updateVolume, play, pause, volume, isEditingTrackName]);
+    }, [isPlaying, seek, duration, progress, updateVolume, play, pause, volume, isEditingTrackName, pathname]);
 
     useEffect(() => {
         const handleBeforeUnload = (event: BeforeUnloadEvent) => {

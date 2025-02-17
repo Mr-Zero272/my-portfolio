@@ -4,7 +4,30 @@ import { Metadata } from 'next';
 
 export const metadata: Metadata = {
     title: 'Projects - @pitithuong',
-    description: 'Detail about my projects',
+    description: 'Browse my projects, including React, Next.js, and full-stack applications.',
+    keywords: ['projects', 'portfolio', 'React', 'Next.js', 'web development'],
+    openGraph: {
+        title: 'Projects - @pitithuong',
+        description: 'Browse my projects, including React, Next.js, and full-stack applications.',
+        url: 'https://my-portfolio-rust-gamma-52.vercel.app/projects',
+        images: [
+            {
+                url: 'https://github.com/Mr-Zero272/my-portfolio/blob/32ba6ed2b7af035ecb53669f2e3ad44845c546ca/public/images/projects/portfolio/my-portfolio-h-4.png',
+                width: 1200,
+                height: 630,
+                alt: 'Projects Showcase',
+            },
+        ],
+        type: 'website',
+    },
+    twitter: {
+        card: 'summary_large_image',
+        title: 'Projects - @pitithuong',
+        description: 'Browse my projects, including React, Next.js, and full-stack applications.',
+        images: [
+            'https://github.com/Mr-Zero272/my-portfolio/blob/32ba6ed2b7af035ecb53669f2e3ad44845c546ca/public/images/projects/portfolio/my-portfolio-h-4.png',
+        ],
+    },
 };
 
 const ProjectPage = () => {

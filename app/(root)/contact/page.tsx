@@ -6,7 +6,30 @@ import Link from 'next/link';
 
 export const metadata: Metadata = {
     title: 'Contact - @pitithuong',
-    description: "Contact page contain pitithuong's contact information",
+    description: 'Reach out for collaborations, job opportunities, or web development inquiries.',
+    keywords: ['contact', 'hire me', 'freelance', 'developer'],
+    openGraph: {
+        title: 'Contact - @pitithuong',
+        description: 'Reach out for collaborations, job opportunities, or web development inquiries.',
+        url: 'https://my-portfolio-rust-gamma-52.vercel.app/contact',
+        images: [
+            {
+                url: 'https://github.com/Mr-Zero272/my-portfolio/blob/32ba6ed2b7af035ecb53669f2e3ad44845c546ca/public/images/projects/portfolio/my-portfolio-h-3.png',
+                width: 1200,
+                height: 630,
+                alt: 'Contact Me',
+            },
+        ],
+        type: 'website',
+    },
+    twitter: {
+        card: 'summary_large_image',
+        title: 'Contact - @pitithuong',
+        description: 'Reach out for collaborations, job opportunities, or web development inquiries.',
+        images: [
+            'https://github.com/Mr-Zero272/my-portfolio/blob/32ba6ed2b7af035ecb53669f2e3ad44845c546ca/public/images/projects/portfolio/my-portfolio-h-3.png',
+        ],
+    },
 };
 
 const ContactPage = () => {

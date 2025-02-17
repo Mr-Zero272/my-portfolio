@@ -117,6 +117,7 @@ export const projects = [
             { asset: '/images/projects/portfolio/my-portfolio-h-1.png', width: 3840, height: 2880 },
             { asset: '/images/projects/portfolio/my-portfolio-h-2.png', width: 3840, height: 2880 },
             { asset: '/images/projects/portfolio/my-portfolio-h-3.png', width: 3840, height: 2880 },
+            { asset: '/images/projects/portfolio/my-portfolio-h-4.png', width: 3840, height: 2880 },
         ].map(({ asset, width, height }) => ({
             src: asset,
             width,

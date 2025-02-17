@@ -20,8 +20,50 @@ import { MusicPlayerProvider } from '@/components/contexts/music-context';
 // });
 
 export const metadata: Metadata = {
-    title: '@pitithuong',
-    description: 'This is a website about pitithuong',
+    title: 'Software Development Portfolio - @pitithuong',
+    description: 'Explore my projects, programming skills, and experience in web development.',
+    keywords: [
+        'portfolio',
+        'developer',
+        'Next.js',
+        'React',
+        'web development',
+        'frontend',
+        'frontend developer',
+        'backend developer',
+    ],
+    authors: [{ name: 'Pitithuong', url: 'https://my-portfolio-rust-gamma-52.vercel.app/' }],
+    openGraph: {
+        title: 'Software Development Portfolio - @pitithuong',
+        description: 'Explore my projects, programming skills, and experience in web development.',
+        url: 'https://my-portfolio-rust-gamma-52.vercel.app/',
+        siteName: 'Pitithuong Portfolio',
+        images: [
+            {
+                url: 'https://github.com/Mr-Zero272/my-portfolio/blob/32ba6ed2b7af035ecb53669f2e3ad44845c546ca/public/images/projects/portfolio/my-portfolio-h-1.png',
+                width: 1200,
+                height: 630,
+                alt: 'Pitithuong Portfolio',
+            },
+        ],
+        locale: 'en_US',
+        type: 'website',
+    },
+    twitter: {
+        card: 'summary_large_image',
+        title: 'Software Development Portfolio - @pitithuong',
+        description: 'Explore my projects, programming skills, and experience in web development.',
+        images: [
+            'https://github.com/Mr-Zero272/my-portfolio/blob/32ba6ed2b7af035ecb53669f2e3ad44845c546ca/public/images/projects/portfolio/my-portfolio-h-1.png',
+        ],
+    },
+    robots: {
+        index: true,
+        follow: true,
+    },
+    alternates: {
+        canonical: 'https://my-portfolio-rust-gamma-52.vercel.app/', // Set canonical URL to prevent duplicate content issues
+    },
 };
 
 export default function RootLayout({
