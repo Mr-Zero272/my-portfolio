@@ -48,6 +48,47 @@ export const projects = [
     },
     {
         id: '002',
+        name: 'Chat app realtime',
+        images: {
+            vertical: [
+                '/images/projects/chat-app/chat-v-1.png',
+                '/images/projects/chat-app/chat-v-2.png',
+                '/images/projects/chat-app/chat-v-3.png',
+            ],
+            horizontal: [
+                '/images/projects/chat-app/chat-h-1.png',
+                '/images/projects/chat-app/chat-h-2.png',
+                '/images/projects/chat-app/chat-h-3.png',
+            ],
+        },
+        type: 'website',
+        status: 'deployed',
+        description:
+            'This project focuses on building a real-time messaging app to understand how real-time applications function while practicing ReactJS and Express. The key feature is the integration of Socket.IO, enabling real-time message sending and receiving to meet user communication needs.',
+        responsibilities: 'design and implement the entire project yourself',
+        technologies: ['ReactJS', 'Tailwindcss', 'Express', 'Socket.IO', 'Cloudinary'],
+        database: ['MongoDB'],
+        sourceCode: 'Source code: https://github.com/Mr-Zero272/chat-app',
+        slides: [
+            { asset: '/images/projects/chat-app/chat-v-1.png', width: 3840, height: 5760 },
+            { asset: '/images/projects/chat-app/chat-v-2.png', width: 3840, height: 5760 },
+            { asset: '/images/projects/chat-app/chat-v-3.png', width: 3840, height: 5760 },
+            { asset: '/images/projects/chat-app/chat-h-1.png', width: 3840, height: 2880 },
+            { asset: '/images/projects/chat-app/chat-h-2.png', width: 3840, height: 2880 },
+            { asset: '/images/projects/chat-app/chat-h-3.png', width: 3840, height: 2880 },
+        ].map(({ asset, width, height }) => ({
+            src: asset,
+            width,
+            height,
+            srcSet: breakpoints.map((breakpoint) => ({
+                src: asset,
+                width: breakpoint,
+                height: Math.round((height / width) * breakpoint),
+            })),
+        })),
+    },
+    {
+        id: '003',
         name: 'My portfolio',
         images: {
             vertical: [
@@ -67,7 +108,7 @@ export const projects = [
             'My portfolio is my personal project, the project basically provides full information about my profile including basic information, the skills I have, the technologies I use,...',
         responsibilities: 'design and implement the entire project yourself',
         technologies: ['Next.js', 'Typescript'],
-        database: [],
+        database: ['None'],
         sourceCode: 'https://github.com/Mr-Zero272/my-portfolio',
         slides: [
             { asset: '/images/projects/portfolio/my-portfolio-v-1.png', width: 3840, height: 5760 },
@@ -88,7 +129,7 @@ export const projects = [
         })),
     },
     {
-        id: '003',
+        id: '004',
         name: 'Thread app clone',
         images: {
             vertical: [
