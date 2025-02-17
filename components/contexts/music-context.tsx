@@ -18,6 +18,9 @@ interface MusicPlayerContextType {
     duration: number;
     deleteTrack: (index: number) => void;
     updateTrackPosition: (oldPosition: number, newPosition: number) => void;
+    updateTrackName: (newName: string, position: number) => void;
+    isEditingTrackName: boolean;
+    updateEditingTrackNameState: (state: boolean) => void;
     play: () => void;
     pause: () => void;
     nextTrack: () => void;
@@ -51,6 +54,7 @@ export const MusicPlayerProvider: React.FC<{ children: React.ReactNode }> = ({ c
     const [duration, setDuration] = useState<number>(0);
     const [repeat, setRepeat] = useState<boolean>(false);
     const [isShuffle, setIsShuffle] = useState<boolean>(false);
+    const [isEditingTrackName, setIsEditingTrackName] = useState<boolean>(false);
     const [musicBackgroundSrc, setMusicBackgroundSrc] = useState<string>(musicImages[0]);
     const [volume, setVolume] = useState(1.0);
     const soundRef = useRef<Howl | null>(null);
@@ -91,31 +95,20 @@ export const MusicPlayerProvider: React.FC<{ children: React.ReactNode }> = ({ c
         }
     }, [tracks]);
 
-    const deleteTrack = useCallback(
-        (index: number) => {
-            setTracks((prevTracks) => {
-                URL.revokeObjectURL(prevTracks[index]);
-                const updatedTracks = prevTracks.filter((_, i) => i !== index);
+    const deleteTrack = useCallback((index: number) => {
+        setTracks((prevTracks) => {
+            URL.revokeObjectURL(prevTracks[index]);
+            const updatedTracks = prevTracks.filter((_, i) => i !== index);
 
-                if (updatedTracks.length === 0) {
-                    setCurrentTrackIndex(-1);
-                } else {
-                    // If the deleted track is the current one, move to the next track
-                    if (index === currentTrackIndex) {
-                        nextTrack();
-                    } else if (index < currentTrackIndex) {
-                        // Adjust index if a previous track is deleted
-                        setCurrentTrackIndex((prevIndex) => prevIndex - 1);
-                    }
-                }
+            if (updatedTracks.length === 0) {
+                setCurrentTrackIndex(-1);
+            }
 
-                return updatedTracks;
-            });
+            return updatedTracks;
+        });
 
-            setTrackNames((prevNames) => prevNames.filter((_, i) => i !== index));
-        },
-        [currentTrackIndex, nextTrack],
-    );
+        setTrackNames((prevNames) => prevNames.filter((_, i) => i !== index));
+    }, []);
 
     const updateTrackPosition = useCallback((oldPosition: number, newPosition: number) => {
         setTracks((prevTracks) => {
@@ -151,7 +144,6 @@ export const MusicPlayerProvider: React.FC<{ children: React.ReactNode }> = ({ c
     const seek = useCallback((time: number) => {
         if (soundRef.current) {
             soundRef.current.seek(time);
-            // setProgress(time);
         }
     }, []);
 
@@ -162,6 +154,18 @@ export const MusicPlayerProvider: React.FC<{ children: React.ReactNode }> = ({ c
 
     const updateTrackNames = useCallback((trackNames: string[]) => {
         setTrackNames(trackNames);
+    }, []);
+
+    const updateTrackName = useCallback((newName: string, position: number) => {
+        setTrackNames((prevNames) => {
+            const updatedNames = [...prevNames];
+            updatedNames[position] = newName;
+            return updatedNames;
+        });
+    }, []);
+
+    const updateEditingTrackNameState = useCallback((state: boolean) => {
+        setIsEditingTrackName(state);
     }, []);
 
     const updateVolume = useCallback((volume: number) => {
@@ -235,7 +239,7 @@ export const MusicPlayerProvider: React.FC<{ children: React.ReactNode }> = ({ c
 
     useEffect(() => {
         const handleKeyPress = (e: KeyboardEvent) => {
-            if (e.code === 'Space') {
+            if (e.code === 'Space' && !isEditingTrackName) {
                 if (isPlaying) {
                     pause();
                 } else {
@@ -266,7 +270,7 @@ export const MusicPlayerProvider: React.FC<{ children: React.ReactNode }> = ({ c
 
         window.addEventListener('keypress', handleKeyPress);
         return () => window.removeEventListener('keypress', handleKeyPress);
-    }, [isPlaying, seek, duration, progress, updateVolume, play, pause, volume]);
+    }, [isPlaying, seek, duration, progress, updateVolume, play, pause, volume, isEditingTrackName]);
 
     useEffect(() => {
         const handleBeforeUnload = (event: BeforeUnloadEvent) => {
@@ -288,6 +292,9 @@ export const MusicPlayerProvider: React.FC<{ children: React.ReactNode }> = ({ c
                 tracks,
                 trackNames,
                 setTrackNames: updateTrackNames,
+                updateTrackName,
+                isEditingTrackName,
+                updateEditingTrackNameState,
                 setTracks: updateTracks,
                 currentTrackIndex,
                 musicBackgroundSrc,

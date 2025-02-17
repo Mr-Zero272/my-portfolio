@@ -45,78 +45,27 @@ const Navigation = () => {
         return () => window.removeEventListener('resize', updateSize);
     }, []);
 
-    const containerVariants = useMemo(() => {
+    useEffect(() => {
         if (debounceWindowWidth === 0) {
             setHiddenState(false);
-            return {
-                close: {
-                    width: '5rem',
-                    x: '-5rem',
-                    transition: {
-                        type: 'spring',
-                        damping: 15,
-                        duration: 0.5,
-                    },
-                },
-                open: {
-                    width: '16rem',
-                    x: '0',
-                    transition: {
-                        x: 0,
-                        type: 'spring',
-                        damping: 15,
-                        duration: 0.5,
-                    },
-                },
-            };
-        }
-        if (debounceWindowWidth <= 768) {
+        } else if (debounceWindowWidth <= 768) {
             setHiddenState(true);
-            return {
-                close: {
-                    width: '5rem',
-                    x: '-5rem',
-                    transition: {
-                        type: 'spring',
-                        damping: 15,
-                        duration: 0.5,
-                    },
-                },
-                open: {
-                    width: '16rem',
-                    x: '0',
-                    transition: {
-                        x: 0,
-                        type: 'spring',
-                        damping: 15,
-                        duration: 0.5,
-                    },
-                },
-            };
         } else {
             setHiddenState(false);
-            return {
-                close: {
-                    width: '5rem',
-                    x: '0',
-                    transition: {
-                        type: 'spring',
-                        damping: 15,
-                        duration: 0.5,
-                    },
-                },
-                open: {
-                    width: '16rem',
-                    x: '0',
-                    transition: {
-                        type: 'spring',
-                        damping: 15,
-                        duration: 0.5,
-                    },
-                },
-            };
         }
     }, [debounceWindowWidth, setHiddenState]);
+
+    const containerVariants = useMemo(() => {
+        return debounceWindowWidth <= 768
+            ? {
+                  close: { width: '5rem', x: '-5rem', transition: { type: 'spring', damping: 15, duration: 0.5 } },
+                  open: { width: '16rem', x: '0', transition: { x: 0, type: 'spring', damping: 15, duration: 0.5 } },
+              }
+            : {
+                  close: { width: '5rem', x: '0', transition: { type: 'spring', damping: 15, duration: 0.5 } },
+                  open: { width: '16rem', x: '0', transition: { x: 0, type: 'spring', damping: 15, duration: 0.5 } },
+              };
+    }, [debounceWindowWidth]);
 
     useEffect(() => {
         if (containerControls) {
@@ -175,7 +124,7 @@ const Navigation = () => {
                 variants={containerVariants}
                 animate={containerControls}
                 initial="close"
-                className="absolute left-0 top-0 z-20 flex h-full flex-col gap-20 bg-card p-5 shadow-sm"
+                className="absolute left-0 top-0 z-50 flex h-full flex-col gap-20 bg-card p-5 shadow-sm"
             >
                 <div className="relative flex w-full flex-row place-items-center justify-between">
                     <Link href="/" className="flex justify-center overflow-hidden">

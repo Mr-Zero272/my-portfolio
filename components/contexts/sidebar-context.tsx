@@ -1,5 +1,5 @@
 'use client';
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useCallback, useContext, useState } from 'react';
 
 type Props = {
     children: React.ReactNode;
@@ -29,20 +29,20 @@ const SidebarProvider = ({ children }: Props) => {
     const [isOpen, setIsOpen] = useState(false);
     const [isHidden, setHiddenState] = useState(false);
 
-    const close = () => {
+    const close = useCallback(() => {
         setIsOpen(false);
-    };
-    const open = () => {
+    }, []);
+    const open = useCallback(() => {
         setIsOpen(true);
-    };
+    }, []);
 
-    const setState = (state: boolean) => {
+    const setState = useCallback((state: boolean) => {
         setIsOpen(state);
-    };
+    }, []);
 
-    const toggle = () => {
+    const toggle = useCallback(() => {
         setIsOpen((prev) => !prev);
-    };
+    }, []);
 
     return (
         <SidebarContext value={{ isOpen, isHidden, setHiddenState, close, open, setState, toggle }}>

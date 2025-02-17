@@ -10,26 +10,6 @@ body {
     font-style: normal;
 }
 
-/* custom scrollbar */
-::-webkit-scrollbar {
-    width: 20px;
-}
-
-::-webkit-scrollbar-track {
-    background-color: transparent;
-}
-
-::-webkit-scrollbar-thumb {
-    background-color: #d6dee1;
-    border-radius: 20px;
-    border: 6px solid transparent;
-    background-clip: content-box;
-}
-
-::-webkit-scrollbar-thumb:hover {
-    background-color: #a8bbbf;
-}
-
 @layer base {
     :root {
         --background: 0 0% 100%;
@@ -85,6 +65,10 @@ body {
         --chart-4: 280 65% 60%;
         --chart-5: 340 75% 55%;
     }
+}
+
+.no-focus {
+    @apply focus-visible:ring-0 focus-visible:ring-transparent focus-visible:ring-offset-0 !important;
 }
 
 @layer base {

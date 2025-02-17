@@ -1,13 +1,14 @@
 'use client';
-import React, { useState } from 'react';
-import ImportSongsTab from './import-songs-tab';
-import { Dot, Heart, Pause, Play, Plus, Repeat, Shuffle, SkipBack, SkipForward } from 'lucide-react';
-import Image from 'next/image';
+import { useMusicPlayer } from '@/components/contexts/music-context';
+import MarqueeText from '@/components/shared/marquee-text';
+import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
 import SongItem from '@/components/ui/song-item';
-import { Button } from '@/components/ui/button';
-import { useMusicPlayer } from '@/components/contexts/music-context';
 import { cn, formatSecondsToTime } from '@/lib/utils';
+import { Dot, Heart, Pause, Play, Plus, Repeat, Shuffle, SkipBack, SkipForward } from 'lucide-react';
+import Image from 'next/image';
+import { useState } from 'react';
+import ImportSongsTab from './import-songs-tab';
 
 const MusicPlayer = () => {
     const [tab, setTab] = useState<'add' | 'list'>('list');
@@ -31,13 +32,13 @@ const MusicPlayer = () => {
     } = useMusicPlayer();
     const currentTrack = trackNames[currentTrackIndex];
     return (
-        <section className="flex flex-col items-center p-5 lg:flex-row">
+        <section className="flex flex-col items-center p-1 md:p-5 lg:flex-row">
             <article className="mb-10 w-full flex-1 space-y-10 xl:mb-0">
                 <div className="z-0 flex items-center justify-center">
                     <div className="relative">
                         <Image
                             src={musicBackgroundSrc}
-                            className="z-0 size-[23rem] rounded-xl object-cover drop-shadow-xl"
+                            className="z-0 size-72 rounded-xl object-cover drop-shadow-xl md:size-[23rem]"
                             width={400}
                             height={400}
                             quality={100}
@@ -96,10 +97,13 @@ const MusicPlayer = () => {
                     <>
                         <div className="mb-5 flex flex-col justify-between sm:flex-row sm:items-center sm:pl-5">
                             <div className="mb-2 sm:mb-0">
-                                <p className="mb-1 text-4xl font-bold">
-                                    {currentTrack ?? 'Music Track'}
+                                <div className="mb-1 flex w-[21rem] text-4xl font-bold sm:w-96">
+                                    <MarqueeText
+                                        text={currentTrack ?? 'Music Track'}
+                                        duration={currentTrack ? currentTrack.length : 'Music Track'.length}
+                                    />
                                     <span className="text-primary">.</span>
-                                </p>
+                                </div>
                                 <div className="flex items-center gap-x-1">
                                     <p>List music</p> <Dot /> <p>2025</p> <Dot /> <p>{tracks.length} songs</p>
                                 </div>

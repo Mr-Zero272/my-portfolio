@@ -46,7 +46,11 @@ const AnimatedLetters = ({ text, className, delay = 1.5 }: Props) => {
         <AnimatePresence mode="wait">
             <motion.div key={text} variants={container} initial="hidden" animate="visible" exit="exit" className="flex">
                 {letters.map((letter, index) => (
-                    <motion.span key={index} variants={item} className={`text-center ${className ? className : ''}`}>
+                    <motion.span
+                        key={index}
+                        variants={item}
+                        className={`whitespace-pre-wrap text-center ${className ? className : ''}`}
+                    >
                         {letter}
                     </motion.span>
                 ))}

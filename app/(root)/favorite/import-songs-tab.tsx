@@ -21,8 +21,9 @@ const ImportSongsTab = ({ onBack }: Props) => {
             const fileUrls = Array.from(files).map((file) => URL.createObjectURL(file));
             setTracks(fileUrls);
             setTrackNames(files.map((file) => file.name.slice(0, file.name.length - 4)));
+            onBack();
         },
-        [setTracks, tracks, setTrackNames],
+        [setTracks, tracks, setTrackNames, onBack],
     );
 
     return (
@@ -33,10 +34,6 @@ const ImportSongsTab = ({ onBack }: Props) => {
                 </button>
                 <h1 className="font-medium">Add songs</h1>
             </div>
-            {/* <input
-                type="file"
-                onChange={(e) => handleSelectFileChange(e.target.files ? Array.from(e.target.files) : [])}
-            /> */}
             <DragNDrop onFilesSelected={handleSelectFileChange} />
         </div>
     );
