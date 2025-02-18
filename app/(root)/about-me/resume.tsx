@@ -3,6 +3,7 @@ import {
     Angular,
     Apachekafka,
     Cobol,
+    Express,
     Java,
     Javascript,
     Microsoftsqlserver,
@@ -152,7 +153,7 @@ function Resume() {
                                     </div>
                                 </li>
                                 <li className="group flex cursor-pointer gap-10 rounded-xl border border-transparent p-4 shadow-md hover:border-slate-100 hover:shadow-lg">
-                                    <p className="transition-all duration-300 ease-in-out group-hover:text-gray-900">
+                                    <p className="transition-all duration-300 ease-in-out group-hover:text-gray-900 dark:group-hover:text-white">
                                         <Nextjs className="size-10" />
                                     </p>
                                     <div>
@@ -180,7 +181,16 @@ function Resume() {
                                 </li>
                                 <li className="group flex cursor-pointer gap-10 rounded-xl border border-transparent p-4 shadow-md hover:border-slate-100 hover:shadow-lg">
                                     <p className="transition-all duration-300 ease-in-out group-hover:text-gray-900">
-                                        <Apachekafka className="size-10" />
+                                        <Express className="size-10 dark:text-white" />
+                                    </p>
+                                    <div>
+                                        <h3 className="text-xl font-bold">Express</h3>
+                                        <p className="">Intermediate.</p>
+                                    </div>
+                                </li>
+                                <li className="group flex cursor-pointer gap-10 rounded-xl border border-transparent p-4 shadow-md hover:border-slate-100 hover:shadow-lg">
+                                    <p className="transition-all duration-300 ease-in-out group-hover:text-gray-900">
+                                        <Apachekafka className="size-10 dark:text-white" />
                                     </p>
                                     <div>
                                         <h3 className="text-xl font-bold">Apache Kafka</h3>

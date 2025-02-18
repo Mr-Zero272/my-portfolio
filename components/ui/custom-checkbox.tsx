@@ -26,7 +26,7 @@ const CustomCheckbox = ({ label, value, active = false, onCheck = () => {} }: Pr
             className={cn(
                 'flex w-fit cursor-pointer items-center justify-between rounded-md border border-transparent px-5 py-3 shadow-md hover:border-slate-100 md:w-full',
                 {
-                    'bg-black text-white shadow-none': active,
+                    'bg-black text-white shadow-none dark:bg-white dark:text-black': active,
                 },
             )}
             onClick={() => onCheck(value)}

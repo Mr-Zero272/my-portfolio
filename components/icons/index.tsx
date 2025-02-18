@@ -33,3 +33,4 @@ export { default as Play } from './play';
 export { default as Pause } from './pause';
 export { default as Forward10Sharp } from './forward-10-sharp';
 export { default as Replay10 } from './replay-10';
+export { default as Express } from './express';

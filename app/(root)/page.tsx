@@ -21,8 +21,8 @@ export default function Home() {
                     alt="profile image no bg"
                 />
                 <div className="z-[1] mb-5 hidden flex-col items-center justify-between gap-5 rounded-3xl p-5 sm:flex xl:absolute xl:bottom-0 xl:h-56 xl:w-[26rem] xl:flex-row xl:gap-0 xl:bg-slate-200/30 xl:backdrop-blur-sm xl:dark:bg-card/50">
-                    <InfoCard title="YOE" content="6" sub="months of experiences" arrow={false} />
-                    <InfoCard title="Tech" content="5" sub="Technologies mastered" arrow={false} />
+                    <InfoCard title="MOE" content="6" sub="Months of experiences" arrow={false} />
+                    <InfoCard title="Repo" content="17" sub="Public repositories" arrow={false} />
                 </div>
             </div>
             <div className="flex-1 p-5">
@@ -119,8 +119,8 @@ export default function Home() {
                 </div>
                 <div className="flex items-center justify-center gap-5 min-[1440px]:justify-between">
                     <div className="flex h-56 flex-1 items-center justify-around rounded-[3rem] bg-slate-200/30 px-4 py-5 dark:bg-card sm:w-10/12 sm:flex-shrink-0 sm:flex-grow-0 sm:px-7 min-[1440px]:flex-1">
-                        <InfoCard title="Github" content="265" sub="Total Contri -butions" />
-                        <InfoCard className="sm:hidden" title="Tech" content="5" sub="Technologies mastered" />
+                        <InfoCard title="Github" content="103" sub="Total commits (2025)" />
+                        <InfoCard className="sm:hidden" title="Repo" content="17" sub="Public repositories" />
                         <div className="hidden sm:flex">
                             <div className="flex w-60 flex-col">
                                 <div className="flex h-16 w-full items-center justify-center rounded-l-full bg-background p-4">
@@ -130,8 +130,8 @@ export default function Home() {
                                     <div className="h-20 w-48 bg-background"></div>
                                     <div className="absolute left-0 top-0 z-[1] h-20 w-48 rounded-tr-2xl bg-slate-200/30 dark:bg-card">
                                         <div className="m-3 flex items-center gap-x-2 rounded-2xl bg-background p-3">
-                                            <span className="text-4xl text-red-400">10</span>
-                                            <p className="text-xs">typical projects</p>
+                                            <span className="text-4xl text-red-400">7</span>
+                                            <p className="text-xs">Total stars earned</p>
                                         </div>
                                     </div>
                                     <div className="h-20 w-12 rounded-b-full bg-background"></div>
