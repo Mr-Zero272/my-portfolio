@@ -40,7 +40,7 @@ export const metadata: Metadata = {
         siteName: 'Pitithuong Portfolio',
         images: [
             {
-                url: 'https://github.com/Mr-Zero272/my-portfolio/blob/32ba6ed2b7af035ecb53669f2e3ad44845c546ca/public/images/projects/portfolio/my-portfolio-h-1.png',
+                url: '/images/projects/portfolio/my-portfolio-h-1.png',
                 width: 1200,
                 height: 630,
                 alt: 'Pitithuong Portfolio',
@@ -53,9 +53,7 @@ export const metadata: Metadata = {
         card: 'summary_large_image',
         title: 'Software Development Portfolio - @pitithuong',
         description: 'Explore my projects, programming skills, and experience in web development.',
-        images: [
-            'https://github.com/Mr-Zero272/my-portfolio/blob/32ba6ed2b7af035ecb53669f2e3ad44845c546ca/public/images/projects/portfolio/my-portfolio-h-1.png',
-        ],
+        images: ['/images/projects/portfolio/my-portfolio-h-1.png'],
     },
     robots: {
         index: true,

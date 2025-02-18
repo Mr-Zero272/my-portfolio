@@ -11,7 +11,7 @@ export const metadata: Metadata = {
         url: 'https://my-portfolio-rust-gamma-52.vercel.app/about',
         images: [
             {
-                url: 'https://github.com/Mr-Zero272/my-portfolio/blob/32ba6ed2b7af035ecb53669f2e3ad44845c546ca/public/images/projects/portfolio/my-portfolio-h-2.png',
+                url: '/images/projects/portfolio/my-portfolio-h-2.png',
                 width: 1200,
                 height: 630,
                 alt: 'About Me',
@@ -23,9 +23,7 @@ export const metadata: Metadata = {
         card: 'summary_large_image',
         title: 'About Me - @pitithuong',
         description: 'Learn more about my background, skills, and experience in web development.',
-        images: [
-            'https://github.com/Mr-Zero272/my-portfolio/blob/32ba6ed2b7af035ecb53669f2e3ad44845c546ca/public/images/projects/portfolio/my-portfolio-h-2.png',
-        ],
+        images: ['/images/projects/portfolio/my-portfolio-h-2.png'],
     },
 };
 

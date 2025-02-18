@@ -12,7 +12,7 @@ export const metadata: Metadata = {
         url: 'https://my-portfolio-rust-gamma-52.vercel.app/projects',
         images: [
             {
-                url: 'https://github.com/Mr-Zero272/my-portfolio/blob/32ba6ed2b7af035ecb53669f2e3ad44845c546ca/public/images/projects/portfolio/my-portfolio-h-4.png',
+                url: '/images/projects/portfolio/my-portfolio-h-4.png',
                 width: 1200,
                 height: 630,
                 alt: 'Projects Showcase',
@@ -24,9 +24,7 @@ export const metadata: Metadata = {
         card: 'summary_large_image',
         title: 'Projects - @pitithuong',
         description: 'Browse my projects, including React, Next.js, and full-stack applications.',
-        images: [
-            'https://github.com/Mr-Zero272/my-portfolio/blob/32ba6ed2b7af035ecb53669f2e3ad44845c546ca/public/images/projects/portfolio/my-portfolio-h-4.png',
-        ],
+        images: ['/images/projects/portfolio/my-portfolio-h-4.png'],
     },
 };
 

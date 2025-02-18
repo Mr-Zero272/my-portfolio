@@ -19,6 +19,7 @@ import CopyToClipBoardButton from '@/components/ui/copy-to-clipboard-button';
 import CustomCheckbox from '@/components/ui/custom-checkbox';
 import { aboutTabs } from '@/constants/about-tabs';
 import { Dot } from 'lucide-react';
+import Link from 'next/link';
 import { useState } from 'react';
 
 type TabType = 'about' | 'education' | 'skills' | 'experiences';
@@ -75,16 +76,24 @@ function Resume() {
                             </li>
                             <li className="group mb-2 flex">
                                 <p className="w-28 text-gray-600 md:w-40">Email</p>
-                                <p className="text-base font-semibold md:text-xl">pitithuong@gmail.com</p>
+                                <p className="overflow-hidden text-ellipsis text-base font-semibold md:text-xl">
+                                    pitithuong@gmail.com
+                                </p>
                                 <CopyToClipBoardButton text="pitithuong@gmail.com" />
                             </li>
                             <li className="mb-2 flex">
                                 <p className="w-28 text-gray-600 md:w-40">Freelance</p>
                                 <p className="text-base font-semibold md:text-xl">Available</p>
                             </li>
-                            <li className="mb-2 flex">
+                            <li className="group mb-2 flex">
                                 <p className="w-28 text-gray-600 md:w-40">LinkedIn</p>
-                                <p className="text-base font-semibold md:text-xl">...</p>
+                                <Link
+                                    href="https://www.linkedin.com/in/mr-zero272/"
+                                    className="text-base font-semibold text-primary hover:underline md:text-xl"
+                                >
+                                    Go to my LinkedIn
+                                </Link>
+                                <CopyToClipBoardButton text="https://www.linkedin.com/in/mr-zero272/" />
                             </li>
                             <li className="mb-2 flex">
                                 <p className="w-28 text-gray-600 md:w-40">Language</p>

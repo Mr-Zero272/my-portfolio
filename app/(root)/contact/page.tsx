@@ -14,7 +14,7 @@ export const metadata: Metadata = {
         url: 'https://my-portfolio-rust-gamma-52.vercel.app/contact',
         images: [
             {
-                url: 'https://github.com/Mr-Zero272/my-portfolio/blob/32ba6ed2b7af035ecb53669f2e3ad44845c546ca/public/images/projects/portfolio/my-portfolio-h-3.png',
+                url: '/images/projects/portfolio/my-portfolio-h-3.png',
                 width: 1200,
                 height: 630,
                 alt: 'Contact Me',
@@ -26,9 +26,7 @@ export const metadata: Metadata = {
         card: 'summary_large_image',
         title: 'Contact - @pitithuong',
         description: 'Reach out for collaborations, job opportunities, or web development inquiries.',
-        images: [
-            'https://github.com/Mr-Zero272/my-portfolio/blob/32ba6ed2b7af035ecb53669f2e3ad44845c546ca/public/images/projects/portfolio/my-portfolio-h-3.png',
-        ],
+        images: ['/images/projects/portfolio/my-portfolio-h-3.png'],
     },
 };
 
@@ -75,7 +73,7 @@ const ContactPage = () => {
             </article>
             <article className="flex-1 px-5 md:px-20 lg:mt-12 lg:p-5 lg:px-10">
                 <ContactForm className="mb-20" />
-                <div className="mb-10 flex flex-wrap items-center gap-x-5">
+                <div className="mb-10 hidden flex-wrap items-center gap-x-5 xl:flex">
                     <div className="h-0.5 w-20 bg-black dark:bg-white"></div>
                     <p className="text-xl font-bold">Follow me</p>
                     <ul className="flex items-center">
