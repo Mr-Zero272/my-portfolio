@@ -109,6 +109,8 @@ export const MusicPlayerProvider: React.FC<{ children: React.ReactNode }> = ({ c
             return updatedTracks;
         });
 
+        soundRef.current?.unload();
+
         setTrackNames((prevNames) => prevNames.filter((_, i) => i !== index));
     }, []);
 

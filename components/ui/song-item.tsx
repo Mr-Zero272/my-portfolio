@@ -92,7 +92,6 @@ const SongItem = ({ index, trackName, active = false }: Props) => {
                                 onChange={(e) => setCurrentTrackName(e.target.value)}
                                 placeholder="New track name"
                             />
-
                             <div className="flex items-center">
                                 <button type="submit" className="rounded-md p-1 hover:bg-accent">
                                     <Check className="size-4 text-green-500" />

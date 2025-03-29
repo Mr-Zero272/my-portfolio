@@ -10,22 +10,29 @@ type Props = {
 const DragNDrop = ({ onFilesSelected }: Props) => {
     const [files, setFiles] = useState<File[]>([]);
 
-    const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
-        const selectedFiles = event.target.files;
-        if (selectedFiles && selectedFiles.length > 0) {
-            const newFiles = Array.from(selectedFiles);
-            setFiles((prevFiles) => [...prevFiles, ...newFiles]);
-            onFilesSelected([...files, ...newFiles]);
-        }
-    };
     const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
         const files = event.dataTransfer.files;
         const validFiles = Array.from(files).filter((file) => file.type === 'audio/mpeg');
         if (validFiles.length > 0) {
-            setFiles((prevFiles) => [...prevFiles, ...validFiles]);
-            onFilesSelected([...files, ...validFiles]);
+            setFiles((prevFiles) => {
+                const updatedFiles = [...prevFiles, ...validFiles];
+                onFilesSelected(updatedFiles); // Gọi với danh sách file mới nhất
+                return updatedFiles;
+            });
         }
         event.preventDefault();
+    };
+
+    const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
+        const selectedFiles = event.target.files;
+        if (selectedFiles && selectedFiles.length > 0) {
+            const newFiles = Array.from(selectedFiles);
+            setFiles((prevFiles) => {
+                const updatedFiles = [...prevFiles, ...newFiles];
+                onFilesSelected(updatedFiles); // Gọi với danh sách file mới nhất
+                return updatedFiles;
+            });
+        }
     };
 
     const handleRemoveFile = useCallback((index: number) => {
