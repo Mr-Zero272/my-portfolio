@@ -2,8 +2,8 @@
 
 import { motion } from 'framer-motion';
 import { usePathname } from 'next/navigation';
-import PageTransitionAnimation from './page-transition-animation';
 import Footer from '../layouts/components/footer';
+import PageTransitionAnimation from './page-transition-animation';
 
 const PageTransition = ({ children }: { children: React.ReactNode }) => {
     const pathname = usePathname();
@@ -17,7 +17,7 @@ const PageTransition = ({ children }: { children: React.ReactNode }) => {
                 // exit={{ opacity: 0, y: -50 }}
                 transition={{ duration: 0.5, when: 'afterChildren', delay: 1.5 }}
             >
-                {children}
+                <div className="container mx-auto">{children}</div>
                 <Footer />
             </motion.div>
         </div>

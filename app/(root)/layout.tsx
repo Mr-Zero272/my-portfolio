@@ -2,12 +2,12 @@ import PageTransition from '@/components/animations/page-transition';
 import Navigation from '@/components/layouts/components/navigation/navigation';
 import type { Metadata } from 'next';
 // import { Geist, Geist_Mono } from 'next/font/google';
+import { MusicPlayerProvider } from '@/components/contexts/music-context';
 import SidebarProvider from '@/components/contexts/sidebar-context';
 import { ThemeProvider } from '@/components/contexts/theme-provider';
 import Header from '@/components/layouts/components/header';
 import { Toaster } from '@/components/ui/sonner';
 import '../globals.css';
-import { MusicPlayerProvider } from '@/components/contexts/music-context';
 
 // const geistSans = Geist({
 //     variable: '--font-geist-sans',
@@ -19,31 +19,77 @@ import { MusicPlayerProvider } from '@/components/contexts/music-context';
 //     subsets: ['latin'],
 // });
 
-export const metadata: Metadata = {
-    title: 'Software Development Portfolio - @pitithuong',
-    description: 'Explore my projects, programming skills, and experience in web development.',
-    keywords: [
-        'portfolio',
-        'developer',
+// JSON-LD Structured Data
+const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Person',
+    name: 'Thuong Phan Thanh',
+    jobTitle: 'Full Stack Developer',
+    description:
+        'Full Stack Developer specialized in Next.js, React, Angular, Java Spring. 6+ months experience building modern web applications.',
+    url: 'https://pitithuong.vercel.app/',
+    image: 'https://pitithuong.vercel.app/images/profile-img-no-bg.png',
+    sameAs: ['https://github.com/pitithuong', 'https://linkedin.com/in/pitithuong', 'https://youtube.com/@pitithuong'],
+    worksFor: {
+        '@type': 'Organization',
+        name: 'Freelance',
+    },
+    knowsAbout: [
         'Next.js',
         'React',
-        'web development',
-        'frontend',
-        'frontend developer',
-        'backend developer',
+        'Angular',
+        'Java',
+        'Spring Framework',
+        'JavaScript',
+        'TypeScript',
+        'Web Development',
+        'Full Stack Development',
+        'Frontend Development',
+        'Backend Development',
     ],
-    authors: [{ name: 'Pitithuong', url: 'https://my-portfolio-rust-gamma-52.vercel.app/' }],
+    alumniOf: {
+        '@type': 'EducationalOrganization',
+        name: 'Your University/School Name', // Update this with actual education
+    },
+};
+
+export const metadata: Metadata = {
+    metadataBase: new URL('https://pitithuong.vercel.app'),
+    title: {
+        default: 'Thuong Phan Thanh - Full Stack Developer Portfolio',
+        template: '%s | Thuong Phan Thanh',
+    },
+    description:
+        'Full Stack Developer specialized in Next.js, React, Angular, Java Spring. 6+ months experience building modern web applications. Available for hire.',
+    keywords: [
+        'Thuong Phan Thanh',
+        'Full Stack Developer',
+        'Next.js Developer',
+        'React Developer',
+        'Angular Developer',
+        'Java Spring Developer',
+        'Portfolio',
+        'Web Development',
+        'Frontend Developer',
+        'Backend Developer',
+        'JavaScript',
+        'TypeScript',
+        'Vietnam Developer',
+        'Hire Developer',
+    ],
+    authors: [{ name: 'Pitithuong', url: 'https://pitithuong.vercel.app/' }],
     openGraph: {
-        title: 'Software Development Portfolio - @pitithuong',
-        description: 'Explore my projects, programming skills, and experience in web development.',
-        url: 'https://my-portfolio-rust-gamma-52.vercel.app/',
-        siteName: 'Pitithuong Portfolio',
+        title: 'Thuong Phan Thanh - Full Stack Developer Portfolio',
+        description:
+            'Full Stack Developer specialized in Next.js, React, Angular, Java Spring. 6+ months experience building modern web applications. Available for hire.',
+        url: 'https://pitithuong.vercel.app/',
+        siteName: 'Thuong Phan Thanh Portfolio',
         images: [
             {
                 url: '/images/projects/portfolio/my-portfolio-h-1.png',
                 width: 1200,
                 height: 630,
-                alt: 'Pitithuong Portfolio',
+                alt: 'Thuong Phan Thanh - Full Stack Developer Portfolio',
             },
         ],
         locale: 'en_US',
@@ -51,16 +97,18 @@ export const metadata: Metadata = {
     },
     twitter: {
         card: 'summary_large_image',
-        title: 'Software Development Portfolio - @pitithuong',
-        description: 'Explore my projects, programming skills, and experience in web development.',
+        title: 'Thuong Phan Thanh - Full Stack Developer Portfolio',
+        description:
+            'Full Stack Developer specialized in Next.js, React, Angular, Java Spring. 6+ months experience building modern web applications. Available for hire.',
         images: ['/images/projects/portfolio/my-portfolio-h-1.png'],
+        creator: '@pitithuong',
     },
     robots: {
         index: true,
         follow: true,
     },
     alternates: {
-        canonical: 'https://my-portfolio-rust-gamma-52.vercel.app/', // Set canonical URL to prevent duplicate content issues
+        canonical: 'https://pitithuong.vercel.app/', // Set canonical URL to prevent duplicate content issues
     },
 };
 
@@ -71,6 +119,9 @@ export default function RootLayout({
 }>) {
     return (
         <html lang="en">
+            <head>
+                <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+            </head>
             <body className={`antialiased`}>
                 <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
                     <MusicPlayerProvider>

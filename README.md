@@ -1,6 +1,6 @@
 # ✨ My portfolio where you can find everything about me ✨
 
-[Demo app](https://my-portfolio-rust-gamma-52.vercel.app/)
+[Demo app](https://pitithuong.vercel.app/)
 ![Demo App](/public/images/projects/portfolio/my-portfolio-h-1.png)
 
 Highlights:
