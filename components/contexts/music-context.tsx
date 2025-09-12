@@ -62,15 +62,15 @@ export const MusicPlayerProvider: React.FC<{ children: React.ReactNode }> = ({ c
   const currentTrackSrcRef = useRef<string | null>(null);
   const pathname = usePathname();
 
-  const randomMusicBackground = () => {
+  const randomMusicBackground = useCallback(() => {
     const randomIndex = Math.floor(Math.random() * musicImages.length);
     setMusicBackgroundSrc(musicImages[randomIndex]);
-  };
+  }, []);
 
   const nextTrack = useCallback(() => {
     setCurrentTrackIndex((prevIndex) => (prevIndex + 1) % tracks.length);
     randomMusicBackground();
-  }, [tracks]);
+  }, [tracks.length, randomMusicBackground]);
 
   const previousTrack = useCallback(() => {
     if (progress > 2) {
@@ -79,12 +79,15 @@ export const MusicPlayerProvider: React.FC<{ children: React.ReactNode }> = ({ c
     }
     setCurrentTrackIndex((prevIndex) => (prevIndex - 1 + tracks.length) % tracks.length);
     randomMusicBackground();
-  }, [tracks, progress]);
+  }, [tracks.length, progress, randomMusicBackground]);
 
-  const setTrack = useCallback((index: number) => {
-    setCurrentTrackIndex(index);
-    randomMusicBackground();
-  }, []);
+  const setTrack = useCallback(
+    (index: number) => {
+      setCurrentTrackIndex(index);
+      randomMusicBackground();
+    },
+    [randomMusicBackground],
+  );
 
   const play = useCallback(() => {
     if (tracks.length === 0) {
@@ -136,10 +139,24 @@ export const MusicPlayerProvider: React.FC<{ children: React.ReactNode }> = ({ c
 
   const shuffle = useCallback(() => {
     setIsShuffle((prev) => !prev);
-    const shuffledTracks = [...tracks].sort(() => Math.random() - 0.5);
+
+    if (tracks.length <= 1) return;
+
+    // Create array of indices to maintain track-trackName relationship
+    const indices = Array.from({ length: tracks.length }, (_, i) => i);
+    const shuffledIndices = [...indices].sort(() => Math.random() - 0.5);
+
+    // Shuffle both tracks and trackNames using the same order
+    const shuffledTracks = shuffledIndices.map((i) => tracks[i]);
+    const shuffledTrackNames = shuffledIndices.map((i) => trackNames[i]);
+
     setTracks(shuffledTracks);
-    setCurrentTrackIndex(0);
-  }, [tracks]);
+    setTrackNames(shuffledTrackNames);
+
+    // Find new position of current track
+    const currentTrackNewIndex = shuffledIndices.indexOf(currentTrackIndex);
+    setCurrentTrackIndex(currentTrackNewIndex >= 0 ? currentTrackNewIndex : 0);
+  }, [tracks, trackNames, currentTrackIndex]);
 
   const toggleRepeat = useCallback(() => {
     setRepeat((prev) => !prev);
@@ -153,11 +170,13 @@ export const MusicPlayerProvider: React.FC<{ children: React.ReactNode }> = ({ c
 
   const updateTracks = useCallback((newTracks: string[]) => {
     setTracks(newTracks);
-    setCurrentTrackIndex(0);
+    if (newTracks.length > 0) {
+      setCurrentTrackIndex(0);
+    }
   }, []);
 
-  const updateTrackNames = useCallback((trackNames: string[]) => {
-    setTrackNames(trackNames);
+  const updateTrackNames = useCallback((newTrackNames: string[]) => {
+    setTrackNames(newTrackNames);
   }, []);
 
   const updateTrackName = useCallback((newName: string, position: number) => {
@@ -243,38 +262,38 @@ export const MusicPlayerProvider: React.FC<{ children: React.ReactNode }> = ({ c
 
   useEffect(() => {
     const handleKeyPress = (e: KeyboardEvent) => {
-      if (e.code === 'Space' && !isEditingTrackName && pathname.includes('favorite')) {
+      if (!pathname.includes('favorite')) return;
+
+      if (e.code === 'Space' && !isEditingTrackName) {
+        e.preventDefault();
         if (isPlaying) {
           pause();
         } else {
           play();
         }
-      } else if (e.code === 'ArrowRight' && pathname.includes('favorite')) {
+      } else if (e.code === 'ArrowRight') {
         e.preventDefault();
         const seek = soundRef.current?.seek() || 0;
-        soundRef.current?.seek(seek + 10 > duration ? duration : seek + 10);
-      } else if (e.code === 'ArrowLeft' && pathname.includes('favorite')) {
+        soundRef.current?.seek(Math.min(seek + 10, duration));
+      } else if (e.code === 'ArrowLeft') {
         e.preventDefault();
         const seek = soundRef.current?.seek() || 0;
-        soundRef.current?.seek(seek - 10 > 0 ? 0 : seek - 10);
-      } else if (e.code === 'ArrowUp' && pathname.includes('favorite')) {
+        soundRef.current?.seek(Math.max(seek - 10, 0));
+      } else if (e.code === 'ArrowUp') {
         e.preventDefault();
         updateVolume(Math.min(volume + 0.1, 1));
-      } else if (e.code === 'ArrowDown' && pathname.includes('favorite')) {
+      } else if (e.code === 'ArrowDown') {
         e.preventDefault();
         updateVolume(Math.max(volume - 0.1, 0));
-      } else if (e.code === 'KeyM' && pathname.includes('favorite')) {
-        if (volume > 0) {
-          updateVolume(0);
-        } else {
-          updateVolume(1);
-        }
+      } else if (e.code === 'KeyM') {
+        e.preventDefault();
+        updateVolume(volume > 0 ? 0 : 1);
       }
     };
 
-    window.addEventListener('keypress', handleKeyPress);
-    return () => window.removeEventListener('keypress', handleKeyPress);
-  }, [isPlaying, seek, duration, progress, updateVolume, play, pause, volume, isEditingTrackName, pathname]);
+    window.addEventListener('keydown', handleKeyPress);
+    return () => window.removeEventListener('keydown', handleKeyPress);
+  }, [isPlaying, duration, volume, isEditingTrackName, pathname, play, pause, updateVolume]);
 
   useEffect(() => {
     const handleBeforeUnload = (event: BeforeUnloadEvent) => {
