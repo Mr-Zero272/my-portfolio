@@ -2,10 +2,8 @@ import PageTransition from '@/components/animations/page-transition';
 import Navigation from '@/components/layouts/components/navigation/navigation';
 import type { Metadata } from 'next';
 // import { Geist, Geist_Mono } from 'next/font/google';
-import { MusicPlayerProvider } from '@/components/contexts/music-context';
-import SidebarProvider from '@/components/contexts/sidebar-context';
-import { ThemeProvider } from '@/components/contexts/theme-provider';
 import Header from '@/components/layouts/components/header';
+import AppProvider from '@/components/providers/app-provider';
 import { Toaster } from '@/components/ui/sonner';
 import '../globals.css';
 
@@ -123,19 +121,16 @@ export default function RootLayout({
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       </head>
       <body className={`antialiased`}>
-        <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
-          <MusicPlayerProvider>
-            <SidebarProvider>
-              <main className="relative flex h-screen w-full">
-                <Navigation />
-                <section className="flex w-full flex-col gap-5 md:ml-20">
-                  <Header />
-                  <PageTransition>{children}</PageTransition>
-                </section>
-              </main>
-            </SidebarProvider>
-          </MusicPlayerProvider>
-        </ThemeProvider>
+        <AppProvider>
+          <main className="relative flex h-screen w-full">
+            <Navigation />
+            <section className="flex w-full flex-col gap-5 md:ml-20">
+              <Header />
+              <PageTransition>{children}</PageTransition>
+            </section>
+          </main>
+        </AppProvider>
+
         <Toaster />
       </body>
     </html>
