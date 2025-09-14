@@ -1,11 +1,15 @@
-import React from 'react';
+import PageTransition from '@/components/animations/page-transition';
 
-type DashboardLayoutProps = {
+export default function DashboardLayout({
+  children,
+}: Readonly<{
   children: React.ReactNode;
-};
-
-const DashboardLayout = ({ children }: DashboardLayoutProps) => {
-  return <div>{children}</div>;
-};
-
-export default DashboardLayout;
+}>) {
+  return (
+    <main className="relative flex h-screen w-full">
+      <section className="flex w-full flex-col gap-5">
+        <PageTransition>{children}</PageTransition>
+      </section>
+    </main>
+  );
+}

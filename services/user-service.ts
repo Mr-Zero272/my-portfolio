@@ -3,11 +3,11 @@ import User, { IUser } from '@/models/User';
 import bcrypt from 'bcryptjs';
 
 export class UserService {
-  static async findUserByCredentials(username: string, password: string): Promise<IUser | null> {
+  static async findUserByCredentials(email: string, password: string): Promise<IUser | null> {
     try {
       await connectDB();
 
-      const user = await User.findOne({ username }).select('+password');
+      const user = await User.findOne({ email }).select('+password');
       if (!user) {
         return null;
       }

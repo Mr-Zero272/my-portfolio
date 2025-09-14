@@ -10,17 +10,19 @@ export const authConfig: AuthOptions = {
     CredentialsProvider({
       name: 'Credentials',
       credentials: {
-        username: { label: 'Username', type: 'text' },
+        email: { label: 'Email', type: 'text' },
         password: { label: 'Password', type: 'password' },
       },
       async authorize(credentials) {
-        if (!credentials?.username || !credentials?.password) {
+        if (!credentials?.email || !credentials?.password) {
           return null;
         }
 
         try {
           // Tìm user trong database
-          const user = await UserService.findUserByCredentials(credentials.username, credentials.password);
+          const user = await UserService.findUserByCredentials(credentials.email, credentials.password);
+
+          console.log('Found user:', user);
 
           if (user) {
             return {
@@ -87,8 +89,8 @@ export const authConfig: AuthOptions = {
     },
   },
   pages: {
-    signIn: '/onboarding',
-    error: '/auth/error',
+    signIn: '/auth/signin',
+    error: '/auth/signin', // Redirect về signin page thay vì error page
   },
   session: {
     strategy: 'jwt',

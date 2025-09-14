@@ -1,7 +1,7 @@
 // app/api/auth/[...nextauth]/auth.ts
 import NextAuth from 'next-auth';
-import { authOptions } from './auth-options';
+import { authConfig } from './auth-config';
 
-const { auth, handlers } = NextAuth(await authOptions());
+const { auth, handlers } = NextAuth(authConfig);
 
 export { auth, handlers };

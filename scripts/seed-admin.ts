@@ -30,7 +30,7 @@ async function seedAdminUser() {
   console.log('\n👤 Creating admin user...');
 
   const adminData = {
-    username: 'admin',
+    username: process.env.ADMIN_USERNAME || 'pitithuong',
     email: process.env.ADMIN_EMAIL || 'pitithuong@gmail.com',
     password: process.env.ADMIN_PASSWORD || 'admin123456',
     name: 'Administrator',
