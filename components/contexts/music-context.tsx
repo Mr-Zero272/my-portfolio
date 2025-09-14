@@ -295,17 +295,22 @@ export const MusicPlayerProvider: React.FC<{ children: React.ReactNode }> = ({ c
     return () => window.removeEventListener('keydown', handleKeyPress);
   }, [isPlaying, duration, volume, isEditingTrackName, pathname, play, pause, updateVolume]);
 
+  // only check if list track have items
   useEffect(() => {
-    const handleBeforeUnload = (event: BeforeUnloadEvent) => {
+    const handleUnload = (event: BeforeUnloadEvent) => {
       event.preventDefault();
       tracks.forEach((trackUrl) => URL.revokeObjectURL(trackUrl));
     };
 
-    window.addEventListener('beforeunload', handleBeforeUnload);
+    if (tracks.length !== 0) {
+      window.addEventListener('unload', handleUnload);
+    }
 
     // Cleanup the event listener when the component is unmounted
     return () => {
-      window.removeEventListener('beforeunload', handleBeforeUnload);
+      if (tracks.length !== 0) {
+        window.removeEventListener('unload', handleUnload);
+      }
     };
   }, [tracks]);
 

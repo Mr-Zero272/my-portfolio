@@ -3,6 +3,7 @@ import { motion, useAnimationControls } from 'framer-motion';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
 import { useSidebar } from '@/components/contexts/sidebar-context';
+import AppLogo from '@/components/shared/logo';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { navbarRoutesInfo } from '@/constants/nav-routes';
 import useDebounce from '@/hooks/use-debounce';
@@ -128,10 +129,16 @@ const Navigation = () => {
       >
         <div className="relative flex w-full flex-row place-items-center justify-between">
           <Link href="/" className="flex justify-center overflow-hidden">
-            <p className={cn('text-xl font-bold transition-all ease-in-out', { 'text-4xl': isOpen })}>
+            <AppLogo
+              withText
+              className={cn('transition-all ease-in-out', {
+                'h-10 w-20': isOpen,
+              })}
+            />
+            {/* <p className={cn('text-xl font-bold transition-all ease-in-out', { 'text-4xl': isOpen })}>
               Piti
               <span className="text-primary">.</span>
-            </p>
+            </p> */}
           </Link>
 
           <button

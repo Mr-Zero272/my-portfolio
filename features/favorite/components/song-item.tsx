@@ -1,18 +1,19 @@
 'use client';
 
+import { Button } from '@/components/ui/button';
 import { cn, formatSecondsToTime } from '@/lib/utils';
 import { Check, ChevronDown, ChevronUp, EllipsisVertical, Play, SquarePen, Trash, X } from 'lucide-react';
 import { FormEvent, useRef, useState } from 'react';
-import { useMusicPlayer } from '../contexts/music-context';
-import { MusicPlaying } from '../icons';
+import { useMusicPlayer } from '../../../components/contexts/music-context';
+import { MusicPlaying } from '../../../components/icons';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuShortcut,
   DropdownMenuTrigger,
-} from './dropdown-menu';
-import { Input } from './input';
+} from '../../../components/ui/dropdown-menu';
+import { Input } from '../../../components/ui/input';
 
 type Props = {
   trackName: string;
@@ -66,7 +67,7 @@ const SongItem = ({ index, trackName, active = false }: Props) => {
         'bg-black text-white dark:bg-white dark:text-black': active,
       })}
     >
-      <div className="flex items-center gap-x-3">
+      <div className="flex flex-1 items-center gap-x-3">
         <div className="flex size-5 items-center justify-center" onClick={() => setTrack(index)}>
           <p className={cn('group-hover:hidden', { hidden: isPlaying && currentTrackIndex === index })}>{index + 1}</p>
 
@@ -77,12 +78,12 @@ const SongItem = ({ index, trackName, active = false }: Props) => {
             })}
           />
         </div>
-        <div>
+        <div className="flex-1 overflow-hidden">
           {isEditing ? (
             <form className="flex w-full items-center justify-between gap-x-2" onSubmit={handleUpdateTrackName}>
               <Input
                 ref={inputEditRef}
-                className="no-focus h-7 rounded-none border-transparent border-b-green-700 bg-transparent px-0 outline-none focus:border-b-green-500"
+                className="h-7 w-full flex-1 rounded-none border-transparent border-b-green-700 bg-transparent px-0 outline-none focus:border-b-green-500 focus-visible:border-x-transparent focus-visible:border-t-transparent focus-visible:ring-0"
                 type="text"
                 value={currentTrackName}
                 onChange={(e) => setCurrentTrackName(e.target.value)}
@@ -105,22 +106,20 @@ const SongItem = ({ index, trackName, active = false }: Props) => {
               </div>
             </form>
           ) : (
-            <h2 className="max-w-32 overflow-hidden text-nowrap text-ellipsis capitalize sm:max-w-65 md:max-w-72 lg:max-w-96">
-              {trackName}
-            </h2>
+            <h2 className="line-clamp-1 capitalize">{trackName}</h2>
           )}
         </div>
       </div>
-      <div className="flex items-center gap-x-2">
+      <div className="flex items-center justify-end gap-x-2">
         {active && isPlaying && currentTrackIndex === index && <MusicPlaying className="size-5" />}
         {currentTrackIndex === index && <p className="w-10">{formatSecondsToTime(Math.round(duration - progress))}</p>}
         <DropdownMenu>
           <DropdownMenuTrigger className="size-7" asChild>
-            <button className="hover:bg-accent/50 flex items-center justify-between rounded-full p-1.5">
-              <EllipsisVertical className="size-5" />
-            </button>
+            <Button variant="ghost" size="icon">
+              <EllipsisVertical className="size-4" />
+            </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent>
+          <DropdownMenuContent align="end">
             <DropdownMenuItem disabled={index - 1 < 0} onClick={() => handleMove(index, index - 1)}>
               <span>Move Up</span>
               <DropdownMenuShortcut>
