@@ -3,9 +3,9 @@ import { PostService } from '@/services/post-service';
 import { NextRequest, NextResponse } from 'next/server';
 
 // GET /api/posts/[slug]/comments - Lấy tất cả comments của post theo slug
-export async function GET(request: NextRequest, { params }: { params: { slug: string } }) {
+export async function GET(request: NextRequest, { params }: { params: Promise<{ slug: string }> }) {
   try {
-    const { slug } = params;
+    const { slug } = await params;
     const { searchParams } = new URL(request.url);
     const search = searchParams.get('search');
 
@@ -74,9 +74,9 @@ export async function GET(request: NextRequest, { params }: { params: { slug: st
 }
 
 // POST /api/posts/[slug]/comments - Tạo comment mới cho post theo slug
-export async function POST(request: NextRequest, { params }: { params: { slug: string } }) {
+export async function POST(request: NextRequest, { params }: { params: Promise<{ slug: string }> }) {
   try {
-    const { slug } = params;
+    const { slug } = await params;
     const body = await request.json();
 
     if (!slug) {

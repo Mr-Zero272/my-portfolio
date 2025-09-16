@@ -3,9 +3,9 @@ import { PostService } from '@/services/post-service';
 import { NextRequest, NextResponse } from 'next/server';
 
 // GET /api/posts/[slug] - Lấy post theo slug
-export async function GET(request: NextRequest, { params }: { params: { slug: string } }) {
+export async function GET(request: NextRequest, { params }: { params: Promise<{ slug: string }> }) {
   try {
-    const { slug } = params;
+    const { slug } = await params;
 
     if (!slug) {
       return NextResponse.json(
@@ -52,9 +52,9 @@ export async function GET(request: NextRequest, { params }: { params: { slug: st
 }
 
 // PUT /api/posts/[slug] - Cập nhật post
-export async function PUT(request: NextRequest, { params }: { params: { slug: string } }) {
+export async function PUT(request: NextRequest, { params }: { params: Promise<{ slug: string }> }) {
   try {
-    const { slug } = params;
+    const { slug } = await params;
     const body = await request.json();
 
     if (!slug) {
@@ -148,9 +148,9 @@ export async function PUT(request: NextRequest, { params }: { params: { slug: st
 }
 
 // DELETE /api/posts/[slug] - Xóa post
-export async function DELETE(request: NextRequest, { params }: { params: { slug: string } }) {
+export async function DELETE(request: NextRequest, { params }: { params: Promise<{ slug: string }> }) {
   try {
-    const { slug } = params;
+    const { slug } = await params;
 
     if (!slug) {
       return NextResponse.json(
