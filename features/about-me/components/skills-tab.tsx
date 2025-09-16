@@ -23,7 +23,7 @@ const SkillsTab = () => {
       <p className="mb-7 text-gray-500">
         Below are the skills, technologies and programming languages ​​I am proficient in.
       </p>
-      <div className="max-h-[380px] overflow-y-auto pb-10">
+      <div className="max-h-[365px] overflow-y-auto pb-10">
         <ul className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
           <li className="group flex cursor-pointer gap-10 rounded-xl border border-transparent p-4 shadow-md hover:border-slate-100 hover:shadow-lg">
             <p className="transition-all duration-300 ease-in-out group-hover:text-[#087ea4]">

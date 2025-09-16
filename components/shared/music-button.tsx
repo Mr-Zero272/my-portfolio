@@ -5,6 +5,7 @@ import { Music, Pause, Play, SkipBack, SkipForward } from 'lucide-react';
 import Image from 'next/image';
 import { useMusicPlayer } from '../contexts/music-context';
 import { Forward10Sharp, Replay10 } from '../icons';
+import { AnimatedButton } from '../ui/animated-button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from '../ui/dropdown-menu';
 import { Slider } from '../ui/slider';
 
@@ -26,35 +27,35 @@ const MusicButton = () => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <button className="hover:bg-accent block rounded-md p-1.5">
+        <AnimatedButton size="icon" variant="ghost">
           <Music className="size-5" />
-        </button>
+        </AnimatedButton>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-96">
         <div className="mb-2 flex items-center justify-between p-5">
           <div className="flex gap-x-2">
-            <div>
+            <div className="w-20">
               <Image
                 src={musicBackgroundSrc}
-                className="size-28 rounded-xl object-cover drop-shadow-xl"
+                className="h-full w-20 rounded-xl object-cover drop-shadow-xl"
                 width={400}
                 height={400}
                 quality={100}
                 alt="music background"
               />
             </div>
-            <div className="py-2">
+            <div className="flex-1 py-2">
               <h1 className="text-lg">{trackNames[currentTrackIndex] ?? 'Song name'}</h1>
               <p className="text-muted-foreground">{formatSecondsToTime(Math.round(duration - progress))}</p>
             </div>
           </div>
-          <button className="group bg-accent rounded-full p-4">
+          <AnimatedButton variant="ghost" size="icon" className="bg-accent size-12 rounded-full p-4">
             {isPlaying ? (
               <Pause className="size-5 fill-black group-active:scale-90" onClick={pause} />
             ) : (
               <Play className="size-5 fill-black group-active:scale-90" onClick={play} />
             )}
-          </button>
+          </AnimatedButton>
         </div>
         <div className="flex items-center justify-center gap-x-4 p-5">
           <button className="group hover:bg-accent/40 rounded-full p-0.5" onClick={() => previousTrack()}>

@@ -1,5 +1,6 @@
-import { motion, type Variants } from 'framer-motion';
+'use client';
 
+import { motion, type Variants } from 'framer-motion';
 import { Button, type ButtonProps } from './button';
 
 // Animation variants for the button

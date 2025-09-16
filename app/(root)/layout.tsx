@@ -10,7 +10,7 @@ export default function RootLayout({
   return (
     <main className="relative flex h-screen w-full">
       <Navigation />
-      <section className="flex w-full flex-col gap-5 pt-16 md:ml-20">
+      <section className="flex w-full flex-col gap-5 overflow-y-auto md:ml-20">
         <Header />
         <PageTransition>{children}</PageTransition>
       </section>

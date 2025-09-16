@@ -8,7 +8,7 @@ import PageTransitionAnimation from './page-transition-animation';
 const PageTransition = ({ children, noFooter = false }: { children: React.ReactNode; noFooter?: boolean }) => {
   const pathname = usePathname();
   return (
-    <div className="bg-background w-full overflow-y-auto">
+    <div className="bg-background w-full overflow-y-auto pt-16">
       <PageTransitionAnimation />
       <motion.div
         key={pathname + 'ani'}

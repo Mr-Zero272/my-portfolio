@@ -1,15 +1,15 @@
 'use client';
 import { motion, useAnimationControls } from 'framer-motion';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 
 import { useSidebar } from '@/components/contexts/sidebar-context';
 import AppLogo from '@/components/shared/logo';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { navbarRoutesInfo } from '@/constants/nav-routes';
-import useDebounce from '@/hooks/use-debounce';
 import { cn } from '@/lib/utils';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useOnClickOutside } from 'usehooks-ts';
 import NavigationLink from './navigation-link';
 
 const svgVariants = {
@@ -23,100 +23,71 @@ const svgVariants = {
 
 const Navigation = () => {
   const pathname = usePathname();
-  const [windowWidth, setWindowWidth] = useState(0);
-  const sidebarRef = useRef<HTMLElement>(null);
+  const sidebarRef = useRef<HTMLElement>(null!);
 
-  const { isOpen, toggle, close, setHiddenState, isHidden } = useSidebar();
+  const { state, isExpanded, isCollapsed, isHidden, isMobile, toggle, collapse } = useSidebar();
 
   const containerControls = useAnimationControls();
   const svgControls = useAnimationControls();
 
-  const debounceWindowWidth = useDebounce(windowWidth, 400);
-
-  useEffect(() => {
-    setWindowWidth(window.innerWidth);
-  }, []);
-
-  useEffect(() => {
-    const updateSize = () => {
-      setWindowWidth(window.innerWidth);
-    };
-    window.addEventListener('resize', updateSize);
-
-    return () => window.removeEventListener('resize', updateSize);
-  }, []);
-
-  useEffect(() => {
-    if (debounceWindowWidth === 0) {
-      setHiddenState(false);
-    } else if (debounceWindowWidth <= 768) {
-      setHiddenState(true);
-    } else {
-      setHiddenState(false);
-    }
-  }, [debounceWindowWidth, setHiddenState]);
-
+  // Variants cho animation dựa trên trạng thái và screen size
   const containerVariants = useMemo(() => {
-    return debounceWindowWidth <= 768
-      ? {
-          close: { width: '5rem', x: '-5rem', transition: { type: 'spring' as const, damping: 15, duration: 0.5 } },
-          open: { width: '16rem', x: '0', transition: { x: 0, type: 'spring' as const, damping: 15, duration: 0.5 } },
-        }
-      : {
-          close: { width: '5rem', x: '0', transition: { type: 'spring' as const, damping: 15, duration: 0.5 } },
-          open: { width: '16rem', x: '0', transition: { x: 0, type: 'spring' as const, damping: 15, duration: 0.5 } },
-        };
-  }, [debounceWindowWidth]);
+    const baseVariants = {
+      collapsed: {
+        width: '5rem',
+        x: '0',
+        transition: { type: 'spring' as const, damping: 15, duration: 0.5 },
+      },
+      expanded: {
+        width: '16rem',
+        x: '0',
+        transition: { type: 'spring' as const, damping: 15, duration: 0.5 },
+      },
+    };
 
-  useEffect(() => {
-    if (containerControls) {
-      if (debounceWindowWidth <= 768) {
-        containerControls.start('close');
-        svgControls.start('close');
-      } else {
-        containerControls.start('close');
-        svgControls.start('close');
-      }
+    if (isMobile) {
+      return {
+        ...baseVariants,
+        hidden: {
+          width: '16rem',
+          x: '-16rem',
+          transition: { type: 'spring' as const, damping: 15, duration: 0.5 },
+        },
+      };
     }
-  }, [containerControls, svgControls, debounceWindowWidth]);
 
+    return baseVariants;
+  }, [isMobile]);
+
+  // Sync animation với state
   useEffect(() => {
-    if (isOpen) {
-      containerControls.start('open');
+    if (isHidden) {
+      containerControls.start('hidden');
+      svgControls.start('close');
+    } else if (isExpanded) {
+      containerControls.start('expanded');
       svgControls.start('open');
-    } else {
-      containerControls.start('close');
+    } else if (isCollapsed) {
+      containerControls.start('collapsed');
       svgControls.start('close');
     }
-  }, [isOpen, containerControls, svgControls]);
+  }, [state, containerControls, svgControls, isHidden, isExpanded, isCollapsed]);
 
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (sidebarRef.current && !sidebarRef.current.contains(event.target as Node)) {
-        containerControls.start('close');
-        svgControls.start('close');
-        close();
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [sidebarRef, containerControls, svgControls, close]);
-
-  const handleOpenClose = () => {
-    toggle();
+  // Click outside để đóng sidebar trên mobile
+  const handleClickOutside = () => {
+    if (isExpanded) {
+      collapse();
+    }
   };
 
+  // Handle route navigation trên mobile
   const handleRoutePage = () => {
-    if (windowWidth <= 768) {
-      containerControls.start('close');
-      svgControls.start('close');
-      close();
+    if (isMobile && isExpanded) {
+      collapse();
     }
   };
+
+  useOnClickOutside(sidebarRef, handleClickOutside);
 
   return (
     <>
@@ -124,7 +95,7 @@ const Navigation = () => {
         ref={sidebarRef}
         variants={containerVariants}
         animate={containerControls}
-        initial="close"
+        initial={isMobile ? 'hidden' : 'collapsed'}
         className="bg-card absolute top-0 left-0 z-50 flex h-full flex-col gap-20 p-5 shadow-sm"
       >
         <div className="relative flex w-full flex-row place-items-center justify-between">
@@ -132,23 +103,19 @@ const Navigation = () => {
             <AppLogo
               withText
               className={cn('transition-all ease-in-out', {
-                'h-10 w-20': isOpen,
+                'h-10 w-20': isExpanded,
               })}
             />
-            {/* <p className={cn('text-xl font-bold transition-all ease-in-out', { 'text-4xl': isOpen })}>
-              Piti
-              <span className="text-primary">.</span>
-            </p> */}
           </Link>
 
           <button
             className={cn(
               'absolute top-0 -right-8 flex rounded-full bg-black p-1 transition-all ease-in-out dark:bg-white',
               {
-                'right-0': isOpen,
+                'right-0': isExpanded,
               },
             )}
-            onClick={() => handleOpenClose()}
+            onClick={toggle}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -157,7 +124,7 @@ const Navigation = () => {
               strokeWidth={1.5}
               stroke="currentColor"
               className={cn('size-4 stroke-[#E0E4EB] transition-all duration-700 ease-in-out dark:stroke-[#373F4E]', {
-                'size-8': isOpen,
+                'size-8': isExpanded,
               })}
             >
               <motion.path
@@ -198,7 +165,7 @@ const Navigation = () => {
                     </NavigationLink>
                   </div>
                 </TooltipTrigger>
-                {!isOpen && !isHidden && (
+                {!isExpanded && !isHidden && (
                   <TooltipContent side="right">
                     <p className="text-sm">{navLink.label}</p>
                   </TooltipContent>
