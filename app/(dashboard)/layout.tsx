@@ -1,4 +1,6 @@
 import PageTransition from '@/components/animations/page-transition';
+import { DashboardNav } from '@/components/layouts/components/dashboard-navigation/dashboard-nav';
+import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar';
 
 export default function DashboardLayout({
   children,
@@ -6,10 +8,20 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <main className="relative flex h-screen w-full">
-      <section className="flex w-full flex-col gap-5">
-        <PageTransition>{children}</PageTransition>
-      </section>
+    <main>
+      <SidebarProvider
+        style={
+          {
+            '--sidebar-width': 'calc(var(--spacing) * 72)',
+            '--header-height': 'calc(var(--spacing) * 12)',
+          } as React.CSSProperties
+        }
+      >
+        <DashboardNav variant="inset" />
+        <SidebarInset>
+          <PageTransition noFooter>{children}</PageTransition>
+        </SidebarInset>
+      </SidebarProvider>
     </main>
   );
 }
