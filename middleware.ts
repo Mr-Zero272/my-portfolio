@@ -5,7 +5,7 @@ import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
 
 // Định nghĩa các route cần bảo vệ
-const protectedPaths = ['/dashboard', '/dashboard/**', '/api/admin/**'];
+const protectedPaths = ['/piti/dashboard', '/piti/dashboard/**', '/api/admin/**'];
 
 // Các route public không cần authentication
 const publicPaths = ['/', '/about-me', '/projects', '/contact', '/favorite', '/api/auth/**', '/auth/**'];
