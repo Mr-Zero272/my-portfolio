@@ -129,3 +129,31 @@
     transform: rotate(360deg);
   }
 }
+
+/* Override RichTextEditor styles */
+.my-editor .richtext-shadow {
+  box-shadow: none !important;
+}
+
+.my-editor .richtext-outline {
+  outline: none !important;
+}
+
+.my-editor .richtext-outline-1 {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+@media (max-width: 768px) {
+  .my-editor .reactjs-tiptap-editor.reactjs-tiptap-editor .ProseMirror.ProseMirror.ProseMirror {
+    min-height: 180px;
+    padding: 0;
+  }
+
+  .my-editor .reactjs-tiptap-editor.reactjs-tiptap-editor .ProseMirror.ProseMirror.ProseMirror {
+    padding: 0;
+    z-index: 0;
+    caret-color: #000;
+    outline-width: 0;
+  }
+}

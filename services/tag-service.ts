@@ -18,7 +18,7 @@ export class TagService {
   }: {
     limit?: number;
     page?: number;
-  }): Promise<{ tags: ITag[]; total: number; totalPages: number } | []> {
+  }): Promise<{ data: ITag[]; total: number; totalPages: number; page: number; limit: number } | []> {
     try {
       await connectDB();
       const skip = (page - 1) * limit;
@@ -31,7 +31,9 @@ export class TagService {
       const totalPages = Math.ceil(total / limit);
 
       return {
-        tags,
+        data: tags,
+        page: page,
+        limit: limit,
         total,
         totalPages,
       };

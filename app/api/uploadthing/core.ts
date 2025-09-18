@@ -7,36 +7,76 @@ const auth = () => ({ id: 'fakeId' }); // Fake auth function
 
 // FileRouter for your app, can contain multiple FileRoutes
 export const ourFileRouter = {
-  // Define as many FileRoutes as you like, each with a unique routeSlug
+  // Image uploader for images, gifs, etc.
   imageUploader: f({
     image: {
-      /**
-       * For full list of options and defaults, see the File Route API reference
-       * @see https://docs.uploadthing.com/file-routes#route-config
-       */
       maxFileSize: '4MB',
       maxFileCount: 1,
     },
   })
-    // Set permissions and file types for this FileRoute
     .middleware(async ({}) => {
-      // This code runs on your server before upload
       const user = await auth();
-
-      // If you throw, the user will not be able to upload
       if (!user) throw new UploadThingError('Unauthorized');
-
-      // Whatever is returned here is accessible in onUploadComplete as `metadata`
       return { userId: user.id };
     })
     .onUploadComplete(async ({ metadata, file }) => {
-      // This code RUNS ON YOUR SERVER after upload
-      console.log('Upload complete for userId:', metadata.userId);
-
+      console.log('Image upload complete for userId:', metadata.userId);
       console.log('file url', file.ufsUrl);
+      return { uploadedBy: metadata.userId, url: file.ufsUrl };
+    }),
 
-      // !!! Whatever is returned here is sent to the clientside `onClientUploadComplete` callback
-      return { uploadedBy: metadata.userId };
+  // Video uploader
+  videoUploader: f({
+    video: {
+      maxFileSize: '32MB',
+      maxFileCount: 1,
+    },
+  })
+    .middleware(async ({}) => {
+      const user = await auth();
+      if (!user) throw new UploadThingError('Unauthorized');
+      return { userId: user.id };
+    })
+    .onUploadComplete(async ({ metadata, file }) => {
+      console.log('Video upload complete for userId:', metadata.userId);
+      console.log('file url', file.ufsUrl);
+      return { uploadedBy: metadata.userId, url: file.ufsUrl };
+    }),
+
+  // Attachment uploader for documents, pdfs, etc.
+  attachmentUploader: f({
+    pdf: { maxFileSize: '4MB', maxFileCount: 1 },
+    text: { maxFileSize: '2MB', maxFileCount: 1 },
+    blob: { maxFileSize: '8MB', maxFileCount: 1 },
+  })
+    .middleware(async ({}) => {
+      const user = await auth();
+      if (!user) throw new UploadThingError('Unauthorized');
+      return { userId: user.id };
+    })
+    .onUploadComplete(async ({ metadata, file }) => {
+      console.log('Attachment upload complete for userId:', metadata.userId);
+      console.log('file url', file.ufsUrl);
+      return { uploadedBy: metadata.userId, url: file.ufsUrl };
+    }),
+
+  // Media uploader for mixed content (images, videos, documents)
+  mediaUploader: f({
+    image: { maxFileSize: '4MB', maxFileCount: 10 },
+    video: { maxFileSize: '32MB', maxFileCount: 5 },
+    pdf: { maxFileSize: '4MB', maxFileCount: 5 },
+    text: { maxFileSize: '2MB', maxFileCount: 5 },
+    blob: { maxFileSize: '8MB', maxFileCount: 5 },
+  })
+    .middleware(async ({}) => {
+      const user = await auth();
+      if (!user) throw new UploadThingError('Unauthorized');
+      return { userId: user.id };
+    })
+    .onUploadComplete(async ({ metadata, file }) => {
+      console.log('Media upload complete for userId:', metadata.userId);
+      console.log('file url', file.ufsUrl);
+      return { uploadedBy: metadata.userId, url: file.ufsUrl };
     }),
 } satisfies FileRouter;
 

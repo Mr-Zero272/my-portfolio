@@ -66,7 +66,6 @@ export const authConfig: AuthOptions = {
       // Khi đăng nhập lần đầu
       if (user) {
         token.id = user.id;
-        token.role = user.role || 'admin';
         token.email = user.email;
         token.name = user.name;
         token.image = user.image;

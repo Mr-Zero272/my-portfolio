@@ -3,8 +3,10 @@ import mongoose, { Document, Schema } from 'mongoose';
 export interface IPost extends Document {
   title: string;
   slug: string;
+  excerpt: string;
   content: string;
   featureImage?: string;
+  imageCaption?: string;
   likes: number;
   tags: mongoose.Types.ObjectId[];
   comments: mongoose.Types.ObjectId[];
@@ -23,6 +25,7 @@ const PostSchema: Schema = new Schema(
     title: { type: String, required: true },
     slug: { type: String, required: true },
     content: { type: String, required: true },
+    excerpt: { type: String },
     featureImage: { type: String },
     likes: { type: Number, default: 0 },
     tags: [{ type: Schema.Types.ObjectId, ref: 'Tag' }],
