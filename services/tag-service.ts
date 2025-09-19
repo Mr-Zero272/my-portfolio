@@ -1,14 +1,16 @@
 import connectDB from '@/lib/mongodb';
 import Tag, { ITag } from '@/models/Tag';
+import { BasePaginationResponse, BaseResponse } from '@/types/response';
 
 export class TagService {
-  static async getTagById(id: string): Promise<ITag | null> {
+  static async getTagById(id: string): Promise<BaseResponse<ITag | null>> {
     try {
       await connectDB();
-      return await Tag.findById(id);
+      const tag = await Tag.findById(id);
+      return { status: 'success', data: tag };
     } catch (error) {
       console.error('Error getting tag by ID:', error);
-      return null;
+      return { status: 'error', message: 'Error getting tag by ID', data: null as never };
     }
   }
 
@@ -18,7 +20,7 @@ export class TagService {
   }: {
     limit?: number;
     page?: number;
-  }): Promise<{ data: ITag[]; total: number; totalPages: number; page: number; limit: number } | []> {
+  }): Promise<BasePaginationResponse<ITag>> {
     try {
       await connectDB();
       const skip = (page - 1) * limit;
@@ -31,6 +33,7 @@ export class TagService {
       const totalPages = Math.ceil(total / limit);
 
       return {
+        status: 'success',
         data: tags,
         page: page,
         limit: limit,
@@ -39,40 +42,41 @@ export class TagService {
       };
     } catch (error) {
       console.error('Error getting all tags:', error);
-      return [];
+      return { status: 'error', message: 'Error getting all tags', data: [], page: 1, limit, total: 0, totalPages: 0 };
     }
   }
 
-  static async createTag({ name, slug }: Partial<ITag>): Promise<ITag | null> {
+  static async createTag({ name, slug }: Partial<ITag>): Promise<BaseResponse<ITag>> {
     try {
       await connectDB();
       const newTag = new Tag({ name, slug });
-      return await newTag.save();
+      const result = await newTag.save();
+      return { status: 'success', data: result };
     } catch (error) {
       console.error('Error creating tag:', error);
-      return null;
+      return { status: 'error', message: 'Error creating tag', data: null as never };
     }
   }
 
-  static async deleteTag(id: string): Promise<boolean> {
+  static async deleteTag(id: string): Promise<BaseResponse<boolean>> {
     try {
       await connectDB();
       const result = await Tag.findByIdAndDelete(id);
-      return result !== null;
+      return { status: 'success', data: result ? true : false };
     } catch (error) {
       console.error('Error deleting tag:', error);
-      return false;
+      return { status: 'error', message: 'Error deleting tag', data: false };
     }
   }
 
-  static async updateTag({ id, name, slug }: Partial<ITag>): Promise<ITag | null> {
+  static async updateTag({ id, name, slug }: Partial<ITag>): Promise<BaseResponse<ITag>> {
     try {
       await connectDB();
       const updatedTag = await Tag.findByIdAndUpdate(id, { name, slug }, { new: true });
-      return updatedTag;
+      return { status: 'success', data: updatedTag! };
     } catch (error) {
       console.error('Error updating tag:', error);
-      return null;
+      return { status: 'error', message: 'Error updating tag', data: null as never };
     }
   }
 }

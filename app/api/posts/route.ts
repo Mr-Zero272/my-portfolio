@@ -12,18 +12,18 @@ export async function GET(request: NextRequest) {
     const tag = searchParams.get('tag');
     const search = searchParams.get('search');
 
-    let posts: IPost[];
+    let result;
 
     if (search) {
       // Tìm kiếm posts theo title hoặc content
-      posts = await PostService.searchPosts(search, {
+      result = await PostService.searchPosts(search, {
         published: published === 'true' ? true : published === 'false' ? false : undefined,
         tag: tag || undefined,
         page,
         limit,
       });
     } else {
-      posts = await PostService.getAllPosts({
+      result = await PostService.getAllPosts({
         published: published === 'true' ? true : published === 'false' ? false : undefined,
         tag: tag || undefined,
         page,
@@ -31,9 +31,28 @@ export async function GET(request: NextRequest) {
       });
     }
 
+    if (result.status === 'error') {
+      return NextResponse.json(
+        {
+          success: false,
+          error: result.message,
+          data: null,
+        },
+        { status: 500 },
+      );
+    }
+
     return NextResponse.json({
       success: true,
-      data: posts,
+      data: {
+        posts: result.data,
+        pagination: {
+          total: result.total,
+          page: result.page,
+          limit: result.limit,
+          totalPages: result.totalPages,
+        },
+      },
       message: 'Posts retrieved successfully',
     });
   } catch (error: unknown) {
@@ -83,32 +102,42 @@ export async function POST(request: NextRequest) {
       published: body.published || false,
     };
 
-    const newPost = await PostService.createPost(postData);
+    const result = await PostService.createPost(postData);
+
+    if (result.status === 'error') {
+      // Handle specific errors
+      if (result.message && result.message.includes('already exists')) {
+        return NextResponse.json(
+          {
+            success: false,
+            error: result.message,
+            data: null,
+          },
+          { status: 409 }, // Conflict
+        );
+      }
+
+      return NextResponse.json(
+        {
+          success: false,
+          error: result.message,
+          data: null,
+        },
+        { status: 400 },
+      );
+    }
 
     return NextResponse.json(
       {
         success: true,
-        data: newPost,
+        data: result.data,
         message: 'Post created successfully',
       },
       { status: 201 },
     );
   } catch (error: unknown) {
     console.error('Error in POST /api/posts:', error);
-
     const errorMessage = error instanceof Error ? error.message : 'Failed to create post';
-
-    // Handle specific errors
-    if (errorMessage.includes('already exists')) {
-      return NextResponse.json(
-        {
-          success: false,
-          error: errorMessage,
-          data: null,
-        },
-        { status: 409 }, // Conflict
-      );
-    }
 
     return NextResponse.json(
       {

@@ -1,13 +1,18 @@
 import connectDB from '@/lib/mongodb';
 import Comment, { IComment } from '@/models/Comment';
 import Post from '@/models/Post';
+import { BasePaginationResponse, BaseResponse } from '@/types/response';
 import mongoose from 'mongoose';
 
 export class CommentService {
   /**
    * Tạo comment mới
    */
-  static async createComment(data: { postId: string; content: string; author: string }): Promise<IComment> {
+  static async createComment(data: {
+    postId: string;
+    content: string;
+    author: string;
+  }): Promise<BaseResponse<IComment>> {
     try {
       await connectDB();
 
@@ -39,17 +44,28 @@ export class CommentService {
       // Add comment to post's comments array
       await Post.findByIdAndUpdate(data.postId, { $push: { comments: savedComment._id } }, { new: true });
 
-      return savedComment;
+      return {
+        status: 'success',
+        data: savedComment,
+      };
     } catch (error) {
       console.error('Error creating comment:', error);
-      throw error;
+      return { status: 'error', message: (error as Error).message || 'Error creating comment', data: null as never };
     }
   }
 
   /**
    * Lấy tất cả comment của một post
    */
-  static async getCommentsByPostId(postId: string): Promise<IComment[]> {
+  static async getCommentsByPostId({
+    postId,
+    page = 1,
+    limit = 10,
+  }: {
+    postId: string;
+    page?: number;
+    limit?: number;
+  }): Promise<BasePaginationResponse<IComment>> {
     try {
       await connectDB();
 
@@ -57,19 +73,41 @@ export class CommentService {
         throw new Error('Invalid postId format');
       }
 
-      return await Comment.find({ postId })
-        .sort({ createdAt: -1 }) // Newest first
-        .lean();
+      const skip = (page - 1) * limit;
+
+      const [comments, total] = await Promise.all([
+        Comment.find({ postId }).sort({ createdAt: -1 }).skip(skip).limit(limit).lean(),
+        Comment.countDocuments({ postId }),
+      ]);
+
+      const totalPages = Math.ceil(total / limit);
+
+      return {
+        status: 'success',
+        data: comments,
+        total,
+        page,
+        limit,
+        totalPages,
+      };
     } catch (error) {
       console.error('Error fetching comments:', error);
-      throw error;
+      return {
+        status: 'error',
+        message: (error as Error).message || 'Error fetching comments',
+        data: [],
+        total: 0,
+        page: 1,
+        limit,
+        totalPages: 0,
+      };
     }
   }
 
   /**
    * Lấy comment theo ID
    */
-  static async getCommentById(commentId: string): Promise<IComment | null> {
+  static async getCommentById(commentId: string): Promise<BaseResponse<IComment | null>> {
     try {
       await connectDB();
 
@@ -77,17 +115,21 @@ export class CommentService {
         throw new Error('Invalid commentId format');
       }
 
-      return await Comment.findById(commentId).populate('postId', 'title slug');
+      const comment = await Comment.findById(commentId).populate('postId', 'title slug');
+      return { status: 'success', data: comment };
     } catch (error) {
       console.error('Error fetching comment:', error);
-      throw error;
+      return { status: 'error', message: (error as Error).message || 'Error fetching comment', data: null as never };
     }
   }
 
   /**
    * Cập nhật comment
    */
-  static async updateComment(commentId: string, data: { content?: string; author?: string }): Promise<IComment | null> {
+  static async updateComment(
+    commentId: string,
+    data: { content?: string; author?: string },
+  ): Promise<BaseResponse<IComment | null>> {
     try {
       await connectDB();
 
@@ -103,17 +145,18 @@ export class CommentService {
       if (data.content) updateData.content = data.content.trim();
       if (data.author) updateData.author = data.author.trim();
 
-      return await Comment.findByIdAndUpdate(commentId, updateData, { new: true, runValidators: true });
+      const updatedComment = await Comment.findByIdAndUpdate(commentId, updateData, { new: true, runValidators: true });
+      return { status: 'success', data: updatedComment };
     } catch (error) {
       console.error('Error updating comment:', error);
-      throw error;
+      return { status: 'error', message: (error as Error).message || 'Error updating comment', data: null as never };
     }
   }
 
   /**
    * Xóa comment
    */
-  static async deleteComment(commentId: string): Promise<boolean> {
+  static async deleteComment(commentId: string): Promise<BaseResponse<boolean>> {
     try {
       await connectDB();
 
@@ -133,20 +176,17 @@ export class CommentService {
       // Remove comment from post's comments array
       await Post.findByIdAndUpdate(comment.postId, { $pull: { comments: commentId } });
 
-      return true;
+      return { status: 'success', data: true };
     } catch (error) {
       console.error('Error deleting comment:', error);
-      throw error;
+      return { status: 'error', message: (error as Error).message || 'Error deleting comment', data: false };
     }
   }
 
   /**
    * Lấy tất cả comment với phân trang
    */
-  static async getAllComments(
-    page: number = 1,
-    limit: number = 10,
-  ): Promise<{ comments: IComment[]; total: number; totalPages: number }> {
+  static async getAllComments(page: number = 1, limit: number = 10): Promise<BasePaginationResponse<IComment>> {
     try {
       await connectDB();
 
@@ -160,20 +200,31 @@ export class CommentService {
       const totalPages = Math.ceil(total / limit);
 
       return {
-        comments,
+        status: 'success',
+        data: comments,
         total,
+        page,
+        limit,
         totalPages,
       };
     } catch (error) {
       console.error('Error fetching all comments:', error);
-      throw error;
+      return {
+        status: 'error',
+        message: (error as Error).message || 'Error fetching all comments',
+        data: [],
+        total: 0,
+        page: 1,
+        limit,
+        totalPages: 0,
+      };
     }
   }
 
   /**
    * Đếm số comment của một post
    */
-  static async getCommentCount(postId: string): Promise<number> {
+  static async getCommentCount(postId: string): Promise<BaseResponse<{ count: number }>> {
     try {
       await connectDB();
 
@@ -181,19 +232,32 @@ export class CommentService {
         throw new Error('Invalid postId format');
       }
 
-      return await Comment.countDocuments({ postId });
+      const count = await Comment.countDocuments({ postId });
+      return { status: 'success', data: { count } };
     } catch (error) {
       console.error('Error counting comments:', error);
-      throw error;
+      return { status: 'error', message: (error as Error).message || 'Error counting comments', data: { count: 0 } };
     }
   }
 
   /**
    * Tìm kiếm comment theo nội dung
    */
-  static async searchComments(searchTerm: string, postId?: string): Promise<IComment[]> {
+  static async searchComments({
+    searchTerm,
+    postId,
+    page = 1,
+    limit = 10,
+  }: {
+    searchTerm: string;
+    postId?: string;
+    page?: number;
+    limit?: number;
+  }): Promise<BasePaginationResponse<IComment>> {
     try {
       await connectDB();
+
+      const skip = (page - 1) * limit;
 
       const query: { content: { $regex: string; $options: string }; postId?: string } = {
         content: { $regex: searchTerm, $options: 'i' },
@@ -206,10 +270,32 @@ export class CommentService {
         query.postId = postId;
       }
 
-      return await Comment.find(query).populate('postId', 'title slug').sort({ createdAt: -1 }).lean();
+      const [comments, total] = await Promise.all([
+        Comment.find(query).populate('postId', 'title slug').sort({ createdAt: -1 }).skip(skip).limit(limit).lean(),
+        Comment.countDocuments(query),
+      ]);
+
+      const totalPages = Math.ceil(total / limit);
+
+      return {
+        status: 'success',
+        data: comments,
+        total,
+        page,
+        limit,
+        totalPages,
+      };
     } catch (error) {
       console.error('Error searching comments:', error);
-      throw error;
+      return {
+        status: 'error',
+        message: (error as Error).message || 'Error searching comments',
+        data: [],
+        total: 0,
+        page: 1,
+        limit: 0,
+        totalPages: 0,
+      };
     }
   }
 }

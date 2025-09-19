@@ -14,29 +14,24 @@ export async function GET(request: NextRequest) {
 
     if (search) {
       // Tìm kiếm comments
-      const comments = await CommentService.searchComments(search, postId || undefined);
-      result = {
-        comments,
-        total: comments.length,
-        totalPages: 1,
-      };
+      const commentsRes = await CommentService.searchComments({
+        searchTerm: search,
+        postId: postId || undefined,
+        page,
+        limit,
+      });
+      result = commentsRes;
     } else if (postId) {
       // Lấy comments của post cụ thể
-      const comments = await CommentService.getCommentsByPostId(postId);
-      result = {
-        comments,
-        total: comments.length,
-        totalPages: 1,
-      };
+      const commentsRes = await CommentService.getCommentsByPostId({ postId });
+      result = commentsRes;
     } else {
       // Lấy tất cả comments với phân trang
       result = await CommentService.getAllComments(page, limit);
     }
 
     return NextResponse.json({
-      success: true,
-      data: result,
-      message: 'Comments retrieved successfully',
+      result,
     });
   } catch (error: unknown) {
     console.error('Error in GET /api/comments:', error);

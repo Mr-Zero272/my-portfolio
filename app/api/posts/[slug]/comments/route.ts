@@ -1,3 +1,4 @@
+import { IPost } from '@/models/Post';
 import { CommentService } from '@/services/comment-service';
 import { PostService } from '@/services/post-service';
 import { NextRequest, NextResponse } from 'next/server';
@@ -8,6 +9,8 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
     const { slug } = await params;
     const { searchParams } = new URL(request.url);
     const search = searchParams.get('search');
+    const page = parseInt(searchParams.get('page') || '1');
+    const limit = parseInt(searchParams.get('limit') || '10');
 
     if (!slug) {
       return NextResponse.json(
@@ -21,8 +24,8 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
     }
 
     // Kiểm tra post có tồn tại không
-    const post = await PostService.getPostBySlug(slug);
-    if (!post) {
+    const postResult = await PostService.getPostBySlug(slug);
+    if (postResult.status === 'error' || !postResult.data) {
       return NextResponse.json(
         {
           success: false,
@@ -33,30 +36,52 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
       );
     }
 
-    let comments;
+    const post = postResult.data as IPost;
+    let result;
     if (search) {
       // Tìm kiếm comments trong post này
-      comments = await CommentService.searchComments(search, post.id.toString());
+      result = await CommentService.searchComments({
+        searchTerm: search,
+        postId: post.id.toString(),
+        page,
+        limit,
+      });
     } else {
       // Lấy tất cả comments của post
-      comments = await CommentService.getCommentsByPostId(post.id.toString());
+      result = await CommentService.getCommentsByPostId({
+        postId: post.id.toString(),
+        page,
+        limit,
+      });
+    }
+
+    if (result.status === 'error') {
+      return NextResponse.json(
+        {
+          success: false,
+          error: result.message,
+          data: null,
+        },
+        { status: 500 },
+      );
     }
 
     // Lấy số lượng comments
-    const commentCount = await CommentService.getCommentCount(post.id.toString());
+    const commentCountResult = await CommentService.getCommentCount(post.id.toString());
+    const commentCount = commentCountResult.status === 'success' ? commentCountResult.data.count : 0;
 
     return NextResponse.json({
       success: true,
       data: {
-        comments,
-        total: commentCount,
-        post: {
-          id: post._id,
-          title: post.title,
-          slug: post.slug,
+        comments: result.data,
+        pagination: {
+          total: result.total,
+          page: result.page,
+          limit: result.limit,
+          totalPages: result.totalPages,
         },
+        commentCount,
       },
-      message: 'Comments retrieved successfully',
     });
   } catch (error: unknown) {
     console.error('Error in GET /api/posts/[slug]/comments:', error);
@@ -104,8 +129,8 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
     }
 
     // Kiểm tra post có tồn tại không
-    const post = await PostService.getPostBySlug(slug);
-    if (!post) {
+    const postResult = await PostService.getPostBySlug(slug);
+    if (postResult.status === 'error' || !postResult.data) {
       return NextResponse.json(
         {
           success: false,
@@ -116,21 +141,33 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
       );
     }
 
+    const post = postResult.data as IPost;
     const commentData = {
       postId: post.id.toString(),
       content: content.trim(),
       author: author.trim(),
     };
 
-    const newComment = await CommentService.createComment(commentData);
+    const result = await CommentService.createComment(commentData);
+
+    if (result.status === 'error') {
+      return NextResponse.json(
+        {
+          success: false,
+          error: result.message,
+          data: null,
+        },
+        { status: 400 },
+      );
+    }
 
     return NextResponse.json(
       {
         success: true,
         data: {
-          comment: newComment,
+          comment: result.data,
           post: {
-            id: post._id,
+            id: post.id,
             title: post.title,
             slug: post.slug,
           },

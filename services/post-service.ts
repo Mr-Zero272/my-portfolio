@@ -1,5 +1,6 @@
 import connectDB from '@/lib/mongodb';
 import Post, { IPost } from '@/models/Post';
+import { BasePaginationResponse, BaseResponse } from '@/types/response';
 import mongoose from 'mongoose';
 
 export interface PostQueryOptions {
@@ -10,7 +11,7 @@ export interface PostQueryOptions {
 }
 
 export class PostService {
-  static async createPost(data: Partial<IPost>): Promise<IPost> {
+  static async createPost(data: Partial<IPost>): Promise<BaseResponse<IPost | null>> {
     try {
       await connectDB();
 
@@ -26,14 +27,15 @@ export class PostService {
       }
 
       const newPost = new Post(data);
-      return await newPost.save();
+      const result = await newPost.save();
+      return { status: 'success', data: result };
     } catch (error) {
       console.error('Error creating post:', error);
-      throw error; // Re-throw để caller có thể handle
+      return { status: 'error', message: (error as Error).message || 'Error creating post', data: null as never };
     }
   }
 
-  static async getAllPosts(options: PostQueryOptions = {}): Promise<IPost[]> {
+  static async getAllPosts(options: PostQueryOptions = {}): Promise<BasePaginationResponse<IPost>> {
     try {
       await connectDB();
 
@@ -52,24 +54,29 @@ export class PostService {
         }
       }
 
-      return await Post.find(query).populate('tags').sort({ createdAt: -1 }).skip(skip).limit(limit);
+      const posts = await Post.find(query).populate('tags').sort({ createdAt: -1 }).skip(skip).limit(limit);
+      const total = await Post.countDocuments(query);
+      const totalPages = Math.ceil(total / limit);
+
+      return { status: 'success', data: posts, total, page, limit, totalPages };
     } catch (error) {
       console.error('Error fetching posts:', error);
       throw error;
     }
   }
 
-  static async getPostBySlug(slug: string): Promise<IPost | null> {
+  static async getPostBySlug(slug: string): Promise<BaseResponse<IPost | null>> {
     try {
       await connectDB();
-      return await Post.findOne({ slug }).populate('tags comments');
+      const post = await Post.findOne({ slug }).populate('tags comments');
+      return { status: 'success', data: post };
     } catch (error) {
       console.error('Error fetching post:', error);
-      throw error;
+      return { status: 'error', message: 'Error fetching post', data: null as never };
     }
   }
 
-  static async updatePost(slug: string, data: Partial<IPost>): Promise<IPost | null> {
+  static async updatePost(slug: string, data: Partial<IPost>): Promise<BaseResponse<IPost | null>> {
     try {
       await connectDB();
 
@@ -81,25 +88,28 @@ export class PostService {
         }
       }
 
-      return await Post.findOneAndUpdate({ slug }, data, { new: true, runValidators: true }).populate('tags');
+      const updatedPost = await Post.findOneAndUpdate({ slug }, data, { new: true, runValidators: true }).populate(
+        'tags',
+      );
+      return { status: 'success', data: updatedPost };
     } catch (error) {
       console.error('Error updating post:', error);
-      throw error;
+      return { status: 'error', message: (error as Error).message || 'Error updating post', data: null as never };
     }
   }
 
-  static async deletePost(slug: string): Promise<boolean> {
+  static async deletePost(slug: string): Promise<BaseResponse<boolean>> {
     try {
       await connectDB();
       const result = await Post.findOneAndDelete({ slug });
-      return !!result;
+      return { status: 'success', data: result ? true : false };
     } catch (error) {
       console.error('Error deleting post:', error);
-      throw error;
+      return { status: 'error', message: 'Error deleting post', data: false };
     }
   }
 
-  static async searchPosts(searchTerm: string, options: PostQueryOptions = {}): Promise<IPost[]> {
+  static async searchPosts(searchTerm: string, options: PostQueryOptions = {}): Promise<BasePaginationResponse<IPost>> {
     try {
       await connectDB();
 
@@ -124,14 +134,28 @@ export class PostService {
         query.tags = tag;
       }
 
-      return await Post.find(query).populate('tags').sort({ createdAt: -1 }).skip(skip).limit(limit);
+      const posts = await Post.find(query).populate('tags').sort({ createdAt: -1 }).skip(skip).limit(limit);
+      const total = await Post.countDocuments(query);
+      const totalPages = Math.ceil(total / limit);
+
+      return { status: 'success', data: posts, total, page, limit, totalPages };
     } catch (error) {
       console.error('Error searching posts:', error);
-      throw error;
+      return {
+        status: 'error',
+        message: 'Error searching posts',
+        data: [],
+        total: 0,
+        page: 1,
+        limit: 0,
+        totalPages: 0,
+      };
     }
   }
 
-  static async getPostCount(options: { published?: boolean; tag?: string } = {}): Promise<number> {
+  static async getPostCount(
+    options: { published?: boolean; tag?: string } = {},
+  ): Promise<BaseResponse<{ count: number }>> {
     try {
       await connectDB();
 
@@ -145,10 +169,11 @@ export class PostService {
         query.tags = options.tag;
       }
 
-      return await Post.countDocuments(query);
+      const count = await Post.countDocuments(query);
+      return { status: 'success', data: { count } };
     } catch (error) {
       console.error('Error counting posts:', error);
-      throw error;
+      return { status: 'error', message: 'Error counting posts', data: { count: 0 } };
     }
   }
 }
