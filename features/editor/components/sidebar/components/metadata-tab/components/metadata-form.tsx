@@ -55,7 +55,7 @@ export const GoogleSearchPreview = ({
   return (
     <div className="border-border w-full rounded-lg border p-4">
       <div className="flex max-w-2xl items-center gap-3">
-        <GoogleWordMark className="size-20" />
+        <GoogleWordMark className="size-5" />
 
         <div className="relative h-8 flex-1 rounded-full bg-[#f1f3f4] p-1 dark:bg-[#2e3338]">
           <Search className="absolute top-1/2 right-2 size-5 -translate-x-1/2 -translate-y-1/2 text-gray-500" />

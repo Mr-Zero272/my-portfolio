@@ -1,4 +1,4 @@
-import { IPost } from '@/models/Post';
+import { type IPost } from '@/models';
 import { PostService } from '@/services/post-service';
 import { NextRequest, NextResponse } from 'next/server';
 
@@ -43,17 +43,7 @@ export async function GET(request: NextRequest) {
     }
 
     return NextResponse.json({
-      success: true,
-      data: {
-        posts: result.data,
-        pagination: {
-          total: result.total,
-          page: result.page,
-          limit: result.limit,
-          totalPages: result.totalPages,
-        },
-      },
-      message: 'Posts retrieved successfully',
+      ...result,
     });
   } catch (error: unknown) {
     console.error('Error in GET /api/posts:', error);

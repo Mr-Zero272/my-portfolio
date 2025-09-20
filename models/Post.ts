@@ -1,6 +1,7 @@
 import mongoose, { Document, Schema } from 'mongoose';
 
 export interface IPost extends Document {
+  _id: Schema.Types.ObjectId;
   title: string;
   slug: string;
   excerpt: string;
@@ -40,4 +41,4 @@ const PostSchema: Schema = new Schema(
   { timestamps: true },
 );
 
-export default mongoose.model<IPost>('Post', PostSchema);
+export default mongoose.models.Post || mongoose.model<IPost>('Post', PostSchema);

@@ -1,4 +1,4 @@
-import { IPost } from '@/models/Post';
+import { type IPost } from '@/models';
 import { create } from 'zustand';
 
 interface PostErrors {
@@ -10,7 +10,7 @@ interface PostErrors {
 }
 
 interface PostState {
-  id: string;
+  _id: string;
   title: string;
   slug: string;
   excerpt: string;
@@ -48,7 +48,7 @@ interface PostActions {
 }
 
 const initialPostState: PostState = {
-  id: '',
+  _id: '',
   title: '',
   slug: '',
   excerpt: '',
@@ -136,7 +136,7 @@ export const usePostStorage = create<PostState & PostActions>((set, get) => ({
         return true;
       },
       // Other fields don't need validation
-      id: () => true,
+      _id: () => true,
       excerpt: () => true,
       featureImage: () => true,
       featureImageFile: () => true,
@@ -182,7 +182,7 @@ export const usePostStorage = create<PostState & PostActions>((set, get) => ({
     const state = get();
     // Return only the post data, excluding actions and errors
     return {
-      id: state.id,
+      _id: state._id,
       title: state.title,
       slug: state.slug,
       excerpt: state.excerpt,
@@ -225,7 +225,7 @@ export const usePostStorage = create<PostState & PostActions>((set, get) => ({
 // helper function to convert Post to PostInterface
 export const mapPostToPostInterface = (post: IPost): PostState => {
   return {
-    id: post.id,
+    _id: post._id.toString(),
     tags: post.tags.map((tag) => tag._id.toString()) || [],
     excerpt: post.excerpt || '',
     title: post.title,

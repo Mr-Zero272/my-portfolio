@@ -1,5 +1,5 @@
 import axiosInstance from '@/lib/axios';
-import { ITag } from '@/models/Tag';
+import { type ITag } from '@/models';
 import { BasePaginationResponse, BaseResponse } from '@/types/response';
 
 export const tagApi = {

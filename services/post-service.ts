@@ -1,5 +1,6 @@
 import connectDB from '@/lib/mongodb';
-import Post, { IPost } from '@/models/Post';
+
+import { Post, type IPost } from '@/models';
 import { BasePaginationResponse, BaseResponse } from '@/types/response';
 import mongoose from 'mongoose';
 
@@ -58,7 +59,7 @@ export class PostService {
       const total = await Post.countDocuments(query);
       const totalPages = Math.ceil(total / limit);
 
-      return { status: 'success', data: posts, total, page, limit, totalPages };
+      return { status: 'success', data: posts, pagination: { total, page, limit, totalPages } };
     } catch (error) {
       console.error('Error fetching posts:', error);
       throw error;
@@ -68,6 +69,7 @@ export class PostService {
   static async getPostBySlug(slug: string): Promise<BaseResponse<IPost | null>> {
     try {
       await connectDB();
+
       const post = await Post.findOne({ slug }).populate('tags comments');
       return { status: 'success', data: post };
     } catch (error) {
@@ -138,17 +140,19 @@ export class PostService {
       const total = await Post.countDocuments(query);
       const totalPages = Math.ceil(total / limit);
 
-      return { status: 'success', data: posts, total, page, limit, totalPages };
+      return { status: 'success', data: posts, pagination: { total, page, limit, totalPages } };
     } catch (error) {
       console.error('Error searching posts:', error);
       return {
         status: 'error',
         message: 'Error searching posts',
         data: [],
-        total: 0,
-        page: 1,
-        limit: 0,
-        totalPages: 0,
+        pagination: {
+          total: 0,
+          page: 1,
+          limit: 0,
+          totalPages: 0,
+        },
       };
     }
   }

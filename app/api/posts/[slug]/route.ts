@@ -1,4 +1,4 @@
-import { IPost } from '@/models/Post';
+import { type IPost } from '@/models';
 import { PostService } from '@/services/post-service';
 import { NextRequest, NextResponse } from 'next/server';
 

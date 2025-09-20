@@ -1,5 +1,5 @@
 import connectDB from '@/lib/mongodb';
-import Tag, { ITag } from '@/models/Tag';
+import { Tag, type ITag } from '@/models';
 import { BasePaginationResponse, BaseResponse } from '@/types/response';
 
 export class TagService {
@@ -26,7 +26,7 @@ export class TagService {
       const skip = (page - 1) * limit;
 
       const [tags, total] = await Promise.all([
-        Tag.find().sort({ createdAt: -1 }).skip(skip).limit(limit).lean(),
+        Tag.find().sort({ createdAt: -1 }).skip(skip).limit(limit),
         Tag.countDocuments(),
       ]);
 
@@ -35,14 +35,21 @@ export class TagService {
       return {
         status: 'success',
         data: tags,
-        page: page,
-        limit: limit,
-        total,
-        totalPages,
+        pagination: {
+          page: page,
+          limit: limit,
+          total,
+          totalPages,
+        },
       };
     } catch (error) {
       console.error('Error getting all tags:', error);
-      return { status: 'error', message: 'Error getting all tags', data: [], page: 1, limit, total: 0, totalPages: 0 };
+      return {
+        status: 'error',
+        message: 'Error getting all tags',
+        data: [],
+        pagination: { total: 0, page: 1, limit: 10, totalPages: 0 },
+      };
     }
   }
 

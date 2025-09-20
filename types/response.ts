@@ -10,8 +10,10 @@ export interface BasePaginationResponse<T> {
   message?: string;
   error?: string;
   data: T[];
-  total: number;
-  page: number;
-  limit: number;
-  totalPages: number;
+  pagination: {
+    total: number;
+    page: number;
+    limit: number;
+    totalPages: number;
+  };
 }

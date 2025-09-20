@@ -2,16 +2,25 @@
 
 import * as React from 'react';
 
+import AppLogo from '@/components/shared/logo';
 import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
   SidebarHeader,
   SidebarMenu,
-  SidebarMenuButton,
   SidebarMenuItem,
 } from '@/components/ui/sidebar';
-import { CameraIcon, ChevronDown, CogIcon, FolderIcon, LayoutGrid, SearchIcon, Users2Icon } from 'lucide-react';
+import {
+  CameraIcon,
+  CogIcon,
+  GalleryHorizontalIcon,
+  LayoutGrid,
+  SearchIcon,
+  SquarePenIcon,
+  TagIcon,
+} from 'lucide-react';
+import Link from 'next/link';
 import DashboardNavDocuments from './dashboard-nav-document';
 import DashboardNavMain from './dashboard-nav-main';
 import DashboardNavSecondary from './dashboard-nav-secondary';
@@ -26,28 +35,23 @@ const data = {
   navMain: [
     {
       title: 'Dashboard',
-      url: '#',
+      url: '/piti/dashboard',
       icon: LayoutGrid,
     },
     {
-      title: 'Lifecycle',
-      url: '#',
-      icon: LayoutGrid,
+      title: 'Posts',
+      url: '/piti/posts',
+      icon: SquarePenIcon,
     },
     {
-      title: 'Analytics',
-      url: '#',
-      icon: LayoutGrid,
+      title: 'Tag',
+      url: '/piti/tags',
+      icon: TagIcon,
     },
     {
-      title: 'Projects',
-      url: '#',
-      icon: FolderIcon,
-    },
-    {
-      title: 'Team',
-      url: '#',
-      icon: Users2Icon,
+      title: 'Gallery',
+      url: '/piti/gallery',
+      icon: GalleryHorizontalIcon,
     },
   ],
   navClouds: [
@@ -140,12 +144,9 @@ export function DashboardNav({ ...props }: React.ComponentProps<typeof Sidebar>)
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton asChild className="data-[slot=sidebar-menu-button]:!p-1.5">
-              <a href="#">
-                <ChevronDown className="!size-5" />
-                <span className="text-base font-semibold">Acme Inc.</span>
-              </a>
-            </SidebarMenuButton>
+            <Link href="/piti/dashboard" className="h-10 w-full">
+              <AppLogo withText className="h-8 w-16" />
+            </Link>
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>

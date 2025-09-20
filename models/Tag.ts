@@ -1,6 +1,7 @@
-import { Document, Schema, model } from 'mongoose';
+import { Document, Schema, model, models } from 'mongoose';
 
 export interface ITag extends Document {
+  _id: Schema.Types.ObjectId;
   name: string;
   slug: string;
   createdAt: Date;
@@ -15,4 +16,4 @@ const TagSchema: Schema = new Schema(
   { timestamps: true },
 );
 
-export default model<ITag>('Tag', TagSchema);
+export default models.Tag || model<ITag>('Tag', TagSchema);

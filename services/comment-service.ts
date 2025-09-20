@@ -1,6 +1,5 @@
 import connectDB from '@/lib/mongodb';
-import Comment, { IComment } from '@/models/Comment';
-import Post from '@/models/Post';
+import { Comment, Post, type IComment } from '@/models';
 import { BasePaginationResponse, BaseResponse } from '@/types/response';
 import mongoose from 'mongoose';
 
@@ -76,7 +75,7 @@ export class CommentService {
       const skip = (page - 1) * limit;
 
       const [comments, total] = await Promise.all([
-        Comment.find({ postId }).sort({ createdAt: -1 }).skip(skip).limit(limit).lean(),
+        Comment.find({ postId }).sort({ createdAt: -1 }).skip(skip).limit(limit),
         Comment.countDocuments({ postId }),
       ]);
 
@@ -193,7 +192,7 @@ export class CommentService {
       const skip = (page - 1) * limit;
 
       const [comments, total] = await Promise.all([
-        Comment.find().populate('postId', 'title slug').sort({ createdAt: -1 }).skip(skip).limit(limit).lean(),
+        Comment.find().populate('postId', 'title slug').sort({ createdAt: -1 }).skip(skip).limit(limit),
         Comment.countDocuments(),
       ]);
 
@@ -271,7 +270,7 @@ export class CommentService {
       }
 
       const [comments, total] = await Promise.all([
-        Comment.find(query).populate('postId', 'title slug').sort({ createdAt: -1 }).skip(skip).limit(limit).lean(),
+        Comment.find(query).populate('postId', 'title slug').sort({ createdAt: -1 }).skip(skip).limit(limit),
         Comment.countDocuments(query),
       ]);
 

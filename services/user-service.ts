@@ -1,5 +1,5 @@
 import connectDB from '@/lib/mongodb';
-import User, { IUser } from '@/models/User';
+import { User, type IUser } from '@/models';
 import bcrypt from 'bcryptjs';
 
 export class UserService {

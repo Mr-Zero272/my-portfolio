@@ -32,7 +32,7 @@ export const TagMultipleSelect = () => {
       setTagOptions(() => {
         return tags.data.map((tag) => ({
           label: tag.name,
-          value: tag.id,
+          value: tag._id.toString(),
           icon: Tag,
         }));
       });
@@ -51,7 +51,7 @@ export const TagMultipleSelect = () => {
 
       const newTag: MultiSelectOption = {
         label: res.data.name,
-        value: res.data.id,
+        value: res.data._id.toString(),
         icon: Tag,
       };
 

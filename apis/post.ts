@@ -1,4 +1,4 @@
-import { IPost } from '@/models/Post';
+import { type IPost } from '@/models';
 import { BasePaginationResponse, BaseResponse } from '@/types/response';
 import axiosInstance from '../lib/axios';
 
@@ -40,7 +40,7 @@ export const postApi = {
         lang: 'en-US',
       },
       headers: {
-        'Content-Type': 'multipart/form-data',
+        'Content-Type': 'application/json',
       },
     });
     return res.data;

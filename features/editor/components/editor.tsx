@@ -1,6 +1,5 @@
 'use client';
 
-import { Button } from '@/components/ui/button';
 import { uploadFile, uploadMultipleFiles } from '@/lib/uploadthing';
 import NextImage from 'next/image';
 import { ChangeEvent, useCallback, useEffect, useRef, useState } from 'react';
@@ -64,8 +63,8 @@ import 'prism-code-editor-lightweight/layout.css';
 import 'prism-code-editor-lightweight/themes/github-dark.css';
 import 'reactjs-tiptap-editor/style.css';
 
+import { AnimatedButton } from '@/components/ui/animated-button';
 import { Input } from '@/components/ui/input';
-import { Separator } from '@/components/ui/separator';
 import { Textarea } from '@/components/ui/textarea';
 import { useSmartPaste } from '@/hooks/use-smart-paste';
 import '@excalidraw/excalidraw/index.css';
@@ -204,9 +203,9 @@ const extensions = [
 
 function Editor() {
   const { theme } = useTheme();
-  const { id, title, content, featureImage: storeFeatureImage, imageCaption, setField } = usePostStorage();
+  const { _id, title, content, featureImage: storeFeatureImage, imageCaption, setField } = usePostStorage();
   const { handlePaste } = useSmartPaste();
-  const [editorKey, setEditorKey] = useState(`key-${id}`);
+  const [editorKey, setEditorKey] = useState(`key-${_id}`);
 
   const debouncedOnValueChange = useDebounceCallback((value: string) => {
     setField('content', value);
@@ -253,10 +252,10 @@ function Editor() {
 
   // if post id change mean new post, then set new key to reset editor
   useEffect(() => {
-    if (!editorKey.includes(id)) {
-      setEditorKey(`key-${id}-${Date.now()}`);
+    if (!editorKey.includes(_id)) {
+      setEditorKey(`key-${_id}-${Date.now()}`);
     }
-  }, [id, editorKey]);
+  }, [_id, editorKey]);
 
   return (
     <main
@@ -285,7 +284,7 @@ function Editor() {
                     value={imageCaption || ''}
                     onChange={(e) => setField('imageCaption', e.target.value)}
                   />
-                  <Button
+                  <AnimatedButton
                     onClick={() => {
                       if (featureImage) removePreview(featureImage.id);
                       if (storeFeatureImage) setField('featureImage', '');
@@ -295,16 +294,16 @@ function Editor() {
                     className="absolute top-2 right-2"
                   >
                     <XIcon className="h-4 w-4" />
-                  </Button>
+                  </AnimatedButton>
                 </div>
                 {featureImage && (
                   <div className="text-muted-foreground mt-2 text-sm">Feature image: {featureImage.file.name}</div>
                 )}
                 <div className="mt-2 flex gap-2">
-                  <Button onClick={handleUploadLocalImage} variant="outline" size="sm">
+                  <AnimatedButton onClick={handleUploadLocalImage} variant="outline" size="sm">
                     Change image
-                  </Button>
-                  <Button
+                  </AnimatedButton>
+                  <AnimatedButton
                     onClick={() => {
                       if (featureImage) removePreview(featureImage.id);
                       if (storeFeatureImage) setField('featureImage', '');
@@ -313,12 +312,12 @@ function Editor() {
                     size="sm"
                   >
                     Remove
-                  </Button>
+                  </AnimatedButton>
                 </div>
               </div>
             ) : (
               <div className="flex items-center gap-2">
-                <Button
+                <AnimatedButton
                   onClick={handleUploadLocalImage}
                   variant="ghost"
                   className="hover:text-foreground cursor-pointer pl-0 text-sm font-normal hover:bg-transparent"
@@ -326,8 +325,7 @@ function Editor() {
                 >
                   <Plus className="h-4 w-4" />
                   {imageLoading ? 'Uploading...' : 'Upload feature image'}
-                </Button>
-                <Separator orientation="vertical" className="data-[orientation=vertical]:h-4" />
+                </AnimatedButton>
               </div>
             )}
 
@@ -350,7 +348,7 @@ function Editor() {
               onPaste={(e) =>
                 handlePaste(e, {
                   onContentDetected: (detectedContent) => {
-                    setEditorKey(`key-${id}-${Date.now()}`); // Reset editor
+                    setEditorKey(`key-${_id}-${Date.now()}`); // Reset editor
                     setField('content', detectedContent);
                   },
                   onTitleDetected: (detectedTitle) => {

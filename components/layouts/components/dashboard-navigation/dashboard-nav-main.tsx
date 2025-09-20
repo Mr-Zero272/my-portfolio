@@ -1,6 +1,5 @@
 'use client';
 
-import AppLogo from '@/components/shared/logo';
 import { Button } from '@/components/ui/button';
 import {
   SidebarGroup,
@@ -9,7 +8,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from '@/components/ui/sidebar';
-import { LucideIcon, MailIcon } from 'lucide-react';
+import { LucideIcon, Plus, SquarePenIcon } from 'lucide-react';
 
 export default function DashboardNavMain({
   items,
@@ -29,11 +28,11 @@ export default function DashboardNavMain({
               tooltip="Quick Create"
               className="bg-primary text-primary-foreground hover:bg-primary/90 hover:text-primary-foreground active:bg-primary/90 active:text-primary-foreground min-w-8 duration-200 ease-linear"
             >
-              <AppLogo />
+              <Plus />
               <span>Quick Create</span>
             </SidebarMenuButton>
             <Button size="icon" className="size-8 group-data-[collapsible=icon]:opacity-0" variant="outline">
-              <MailIcon />
+              <SquarePenIcon />
               <span className="sr-only">Inbox</span>
             </Button>
           </SidebarMenuItem>

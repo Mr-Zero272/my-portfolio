@@ -8,6 +8,7 @@ import {
   ResponsiveDialogHeader,
   ResponsiveDialogTitle,
 } from '@/components/shared/responsive-dialog';
+import { AnimatedButton } from '@/components/ui/animated-button';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { SidebarInset, SidebarProvider, SidebarTrigger, useSidebar } from '@/components/ui/sidebar';
@@ -65,7 +66,7 @@ const PostEditorContent = ({ mode = 'create' }: PostEditorProps) => {
   });
 
   const {
-    id: postId,
+    _id: postId,
     tags,
     title,
     content,
@@ -92,7 +93,7 @@ const PostEditorContent = ({ mode = 'create' }: PostEditorProps) => {
       // Validate form before proceeding
       if (!validateForm()) {
         toast.error('Please fill in all required fields before submitting.');
-        if (isMobile && !open) {
+        if (!open) {
           setIsSaveDialogOpen(false);
           setTimeout(() => setOpen(true), 0);
         }
@@ -250,10 +251,10 @@ const PostEditorContent = ({ mode = 'create' }: PostEditorProps) => {
       <SidebarInset>
         <header className="bg-background sticky top-0 z-10 flex h-16 shrink-0 items-center justify-between gap-2 border-b px-4">
           <div className="flex items-center gap-2">
-            <Button onClick={handleBack} variant="ghost" disabled={isLoading}>
+            <AnimatedButton onClick={handleBack} variant="ghost" disabled={isLoading}>
               <ArrowLeft size={16} />
               <span className="ml-2">Back</span>
-            </Button>
+            </AnimatedButton>
             <Separator orientation="vertical" className="data-[orientation=vertical]:h-4" />
             <Button variant="ghost" disabled={isSavingDraft || isLoading}>
               {isSavingDraft ? <RefreshCcw className="animate-spin" /> : null}
@@ -261,13 +262,13 @@ const PostEditorContent = ({ mode = 'create' }: PostEditorProps) => {
             </Button>
           </div>
           <div className="flex items-center gap-2">
-            <Button
+            <AnimatedButton
               className="max-md:size-1o fixed right-4 bottom-4 z-50 max-md:rounded-full md:static"
               disabled={isLoading}
               onClick={handleMainButtonClick}
             >
               {isLoading ? 'Processing' : mode === 'create' ? 'Create' : 'Save'}
-            </Button>
+            </AnimatedButton>
 
             <SidebarTrigger className="-mr-1 ml-auto rotate-180" />
           </div>
@@ -280,7 +281,7 @@ const PostEditorContent = ({ mode = 'create' }: PostEditorProps) => {
       <PostSidebar side="right" />
 
       <ResponsiveDialog open={isSaveDialogOpen} onOpenChange={setIsSaveDialogOpen}>
-        <ResponsiveDialogContent className="border-none shadow-none max-md:px-5 max-md:pb-5 sm:grid-cols-1 sm:grid-rows-1 md:h-screen md:max-w-screen">
+        <ResponsiveDialogContent className="rounded-none border-none shadow-none max-md:px-5 max-md:pb-5 sm:grid-cols-1 sm:grid-rows-1 md:h-screen md:max-w-screen">
           <ResponsiveDialogHeader className="sr-only">
             <ResponsiveDialogTitle>Publish</ResponsiveDialogTitle>
           </ResponsiveDialogHeader>

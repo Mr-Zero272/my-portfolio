@@ -1,14 +1,23 @@
 'use client';
 
+import { cn } from '@/lib/utils';
 import { motion } from 'framer-motion';
 import { usePathname } from 'next/navigation';
 import Footer from '../layouts/components/footer';
 import PageTransitionAnimation from './page-transition-animation';
 
-const PageTransition = ({ children, noFooter = false }: { children: React.ReactNode; noFooter?: boolean }) => {
+const PageTransition = ({
+  children,
+  noFooter = false,
+  className = '',
+}: {
+  children: React.ReactNode;
+  noFooter?: boolean;
+  className?: string;
+}) => {
   const pathname = usePathname();
   return (
-    <div className="bg-background w-full overflow-y-auto pt-16">
+    <div className={cn('bg-background w-full overflow-y-auto pt-16', className)}>
       <PageTransitionAnimation />
       <motion.div
         key={pathname + 'ani'}

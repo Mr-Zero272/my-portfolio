@@ -1,11 +1,8 @@
 import { Separator } from '@/components/ui/separator';
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
 
-import { cn } from '@/lib/utils';
+import { ChevronRight, Globe, XIcon } from 'lucide-react';
 
-import { ChevronRight, Globe, Star, XIcon } from 'lucide-react';
-
-import { Switch } from '@/components/ui/switch';
 import { usePostStorage } from '@/features/editor/store/use-post-storge';
 import ExcerptInput from './components/excerpt-input';
 import PostSlugInput from './components/post-slug-input';
@@ -27,21 +24,6 @@ const MainTab = ({ onTabChange }: MainTabProps) => {
 
       {/* Excerpt Section */}
       <ExcerptInput />
-
-      <Separator />
-
-      {/* Published */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <Star
-            className={cn('h-4 w-4', {
-              'fill-yellow-500 text-yellow-500': !!published,
-            })}
-          />
-          <span className="text-sm font-medium">Published this post</span>
-        </div>
-        <Switch checked={!!published} onCheckedChange={(checked) => setField('published', checked)} />
-      </div>
 
       <Separator />
 
