@@ -1,16 +1,14 @@
-import PostCard from './components/post-card';
+import { IPost, ITag } from '@/models';
+import TopPosts from './components/top-posts';
 
-const BlogFeature = () => {
+interface BlogFeatureProps {
+  posts: Array<IPost & { tags: ITag[] }>;
+}
+
+const BlogFeature = ({ posts }: BlogFeatureProps) => {
   return (
-    <div className="grid grid-cols-2 space-y-2">
-      <PostCard className="col-span-2" isMainPost />
-      <PostCard />
-      <PostCard />
-      <div className="col-span-2 grid grid-cols-3 gap-4">
-        <PostCard variant="vertical" isDisplayExcerpt isHasHoverEffect />
-        <PostCard variant="vertical" isDisplayExcerpt />
-        <PostCard variant="vertical" isDisplayExcerpt />
-      </div>
+    <div className="container mx-auto p-4">
+      <TopPosts posts={posts} />
     </div>
   );
 };

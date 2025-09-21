@@ -84,10 +84,12 @@ export class CommentService {
       return {
         status: 'success',
         data: comments,
-        total,
-        page,
-        limit,
-        totalPages,
+        pagination: {
+          total,
+          page,
+          limit,
+          totalPages,
+        },
       };
     } catch (error) {
       console.error('Error fetching comments:', error);
@@ -95,10 +97,7 @@ export class CommentService {
         status: 'error',
         message: (error as Error).message || 'Error fetching comments',
         data: [],
-        total: 0,
-        page: 1,
-        limit,
-        totalPages: 0,
+        pagination: { total: 0, page: 1, limit, totalPages: 0 },
       };
     }
   }
@@ -201,10 +200,12 @@ export class CommentService {
       return {
         status: 'success',
         data: comments,
-        total,
-        page,
-        limit,
-        totalPages,
+        pagination: {
+          total,
+          page,
+          limit,
+          totalPages,
+        },
       };
     } catch (error) {
       console.error('Error fetching all comments:', error);
@@ -212,10 +213,7 @@ export class CommentService {
         status: 'error',
         message: (error as Error).message || 'Error fetching all comments',
         data: [],
-        total: 0,
-        page: 1,
-        limit,
-        totalPages: 0,
+        pagination: { total: 0, page: 1, limit, totalPages: 0 },
       };
     }
   }
@@ -279,10 +277,7 @@ export class CommentService {
       return {
         status: 'success',
         data: comments,
-        total,
-        page,
-        limit,
-        totalPages,
+        pagination: { total, page, limit, totalPages },
       };
     } catch (error) {
       console.error('Error searching comments:', error);
@@ -290,10 +285,7 @@ export class CommentService {
         status: 'error',
         message: (error as Error).message || 'Error searching comments',
         data: [],
-        total: 0,
-        page: 1,
-        limit: 0,
-        totalPages: 0,
+        pagination: { total: 0, page: 1, limit, totalPages: 0 },
       };
     }
   }

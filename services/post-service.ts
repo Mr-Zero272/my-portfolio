@@ -78,21 +78,28 @@ export class PostService {
     }
   }
 
-  static async updatePost(slug: string, data: Partial<IPost>): Promise<BaseResponse<IPost | null>> {
+  static async updatePost(slugOrId: string, data: Partial<IPost>): Promise<BaseResponse<IPost | null>> {
     try {
       await connectDB();
 
+      // First, find the current post to get its current slug
+      const isObjectId = mongoose.Types.ObjectId.isValid(slugOrId);
+      const query = isObjectId ? { _id: slugOrId } : { slug: slugOrId };
+
+      const currentPost = await Post.findOne(query);
+      if (!currentPost) {
+        throw new Error('Post not found');
+      }
+
       // If updating slug, check for conflicts
-      if (data.slug && data.slug !== slug) {
+      if (data.slug && data.slug !== currentPost.slug) {
         const existingPost = await Post.findOne({ slug: data.slug });
         if (existingPost) {
           throw new Error('Post with this slug already exists');
         }
       }
 
-      const updatedPost = await Post.findOneAndUpdate({ slug }, data, { new: true, runValidators: true }).populate(
-        'tags',
-      );
+      const updatedPost = await Post.findOneAndUpdate(query, data, { new: true, runValidators: true }).populate('tags');
       return { status: 'success', data: updatedPost };
     } catch (error) {
       console.error('Error updating post:', error);

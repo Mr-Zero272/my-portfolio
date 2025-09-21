@@ -3,7 +3,7 @@ import { SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui
 
 import { ChevronRight, Globe, XIcon } from 'lucide-react';
 
-import { usePostStorage } from '@/features/editor/store/use-post-storge';
+import { usePostStorage } from '@/features/editor/store/use-post-storage';
 import ExcerptInput from './components/excerpt-input';
 import PostSlugInput from './components/post-slug-input';
 import TagMultipleSelect from './components/tag-multiple-select';

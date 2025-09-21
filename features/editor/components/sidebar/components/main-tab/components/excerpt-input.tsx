@@ -1,7 +1,7 @@
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { cn } from '@/lib/utils';
-import { usePostStorage } from '../../../../../store/use-post-storge';
+import { usePostStorage } from '../../../../../store/use-post-storage';
 
 const ExcerptInput = () => {
   const { excerpt, setField } = usePostStorage();

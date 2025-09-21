@@ -52,12 +52,12 @@ export const postApi = {
   },
 
   updatePost: async ({ postId, data }: { postId: string; data: unknown }) => {
-    const res = await axiosInstance.patch<BaseResponse<IPost>>(`/api/posts/${postId}`, data, {
+    const res = await axiosInstance.put<BaseResponse<IPost>>(`/api/posts/${postId}`, data, {
       params: {
         lang: 'en-US',
       },
       headers: {
-        'Content-Type': 'multipart/form-data',
+        'Content-Type': 'application/json',
       },
     });
     return res.data;

@@ -22,7 +22,7 @@ import { toast } from 'sonner';
 import { useLocalStorage } from 'usehooks-ts';
 import Editor from './components/editor';
 import PostSidebar from './components/sidebar';
-import { usePostStorage } from './store/use-post-storge';
+import { usePostStorage } from './store/use-post-storage';
 
 interface PostEditorProps {
   mode?: 'create' | 'edit';
@@ -45,7 +45,7 @@ const PostEditorContent = ({ mode = 'create' }: PostEditorProps) => {
   const [isSaveDialogOpen, setIsSaveDialogOpen] = useState(false);
   const [isLeaveDialogOpen, setIsLeaveDialogOpen] = useState(false);
   const [currentAction, setCurrentAction] = useState<SubmitOption>('save');
-  const { open, setOpen, isMobile } = useSidebar();
+  const { open, setOpen } = useSidebar();
 
   const { mutateAsync: createPost, isPending: isCreatingPost } = useMutation({
     mutationFn: postApi.createPost,
@@ -70,6 +70,7 @@ const PostEditorContent = ({ mode = 'create' }: PostEditorProps) => {
     tags,
     title,
     content,
+    excerpt,
     featureImage,
     featureImageFile,
     slug,
@@ -125,6 +126,7 @@ const PostEditorContent = ({ mode = 'create' }: PostEditorProps) => {
           slug,
           content,
           tags,
+          excerpt,
           featureImage: finalFeatureImage,
           imageCaption,
           metaTitle,
@@ -139,6 +141,7 @@ const PostEditorContent = ({ mode = 'create' }: PostEditorProps) => {
         if (action === 'create') {
           await createPost({ data: postBody });
           if (!noToast) toast.success('Post created successfully');
+          router.push('/piti/posts');
         } else {
           await updatePost({
             postId: postId,
@@ -158,6 +161,8 @@ const PostEditorContent = ({ mode = 'create' }: PostEditorProps) => {
       }
     },
     [
+      router,
+      excerpt,
       createPost,
       updatePost,
       uploadFileAsync,
@@ -177,7 +182,6 @@ const PostEditorContent = ({ mode = 'create' }: PostEditorProps) => {
       xMetaImageFile,
       postId,
       setField,
-      isMobile,
       open,
       setOpen,
       getCurrentState,

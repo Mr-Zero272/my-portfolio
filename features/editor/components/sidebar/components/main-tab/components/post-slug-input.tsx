@@ -5,7 +5,7 @@ import { API_URL } from '@/configs/env';
 import { generateSlug } from '@/lib/slug';
 import { LinkIcon } from 'lucide-react';
 import { useEffect } from 'react';
-import { usePostStorage } from '../../../../../store/use-post-storge';
+import { usePostStorage } from '../../../../../store/use-post-storage';
 
 const PostSlugInput = () => {
   const { title, slug, setField, errors } = usePostStorage();

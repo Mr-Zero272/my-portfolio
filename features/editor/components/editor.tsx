@@ -64,6 +64,7 @@ import 'prism-code-editor-lightweight/themes/github-dark.css';
 import 'reactjs-tiptap-editor/style.css';
 
 import { AnimatedButton } from '@/components/ui/animated-button';
+import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { useSmartPaste } from '@/hooks/use-smart-paste';
@@ -74,7 +75,7 @@ import { Plus, XIcon } from 'lucide-react';
 import { useTheme } from 'next-themes';
 import 'react-image-crop/dist/ReactCrop.css';
 import { useDebounceCallback } from 'usehooks-ts';
-import { usePostStorage } from '../store/use-post-storge';
+import { usePostStorage } from '../store/use-post-storage';
 
 const extensions = [
   BaseKit.configure({
@@ -284,17 +285,17 @@ function Editor() {
                     value={imageCaption || ''}
                     onChange={(e) => setField('imageCaption', e.target.value)}
                   />
-                  <AnimatedButton
+                  <Button
                     onClick={() => {
                       if (featureImage) removePreview(featureImage.id);
                       if (storeFeatureImage) setField('featureImage', '');
                     }}
                     variant="destructive"
                     size="sm"
-                    className="absolute top-2 right-2"
+                    className="absolute top-2 right-2 cursor-pointer"
                   >
                     <XIcon className="h-4 w-4" />
-                  </AnimatedButton>
+                  </Button>
                 </div>
                 {featureImage && (
                   <div className="text-muted-foreground mt-2 text-sm">Feature image: {featureImage.file.name}</div>
@@ -369,6 +370,7 @@ function Editor() {
                     }
                     setField('metaDescription', metaDescription);
                     setField('xMetaDescription', metaDescription);
+                    setField('excerpt', metaDescription);
                   },
                 })
               }

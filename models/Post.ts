@@ -28,6 +28,7 @@ const PostSchema: Schema = new Schema(
     content: { type: String, required: true },
     excerpt: { type: String },
     featureImage: { type: String },
+    imageCaption: { type: String },
     likes: { type: Number, default: 0 },
     tags: [{ type: Schema.Types.ObjectId, ref: 'Tag' }],
     comments: [{ type: Schema.Types.ObjectId, ref: 'Comment' }],

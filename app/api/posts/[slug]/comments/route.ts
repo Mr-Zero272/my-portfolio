@@ -75,10 +75,10 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
       data: {
         comments: result.data,
         pagination: {
-          total: result.total,
-          page: result.page,
-          limit: result.limit,
-          totalPages: result.totalPages,
+          total: result.pagination.total,
+          page: result.pagination.page,
+          limit: result.pagination.limit,
+          totalPages: result.pagination.totalPages,
         },
         commentCount,
       },

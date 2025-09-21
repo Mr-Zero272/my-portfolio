@@ -18,9 +18,9 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
       );
     }
 
-    const post = await PostService.getPostBySlug(slug);
+    const postRes = await PostService.getPostBySlug(slug);
 
-    if (!post) {
+    if (!postRes.data) {
       return NextResponse.json(
         {
           success: false,
@@ -32,9 +32,7 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
     }
 
     return NextResponse.json({
-      success: true,
-      data: post,
-      message: 'Post retrieved successfully',
+      ...postRes,
     });
   } catch (error: unknown) {
     console.error('Error in GET /api/posts/[slug]:', error);
@@ -104,7 +102,7 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
 
     const updatedPost = await PostService.updatePost(slug, updateData);
 
-    if (!updatedPost) {
+    if (!updatedPost.data) {
       return NextResponse.json(
         {
           success: false,
@@ -116,9 +114,7 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
     }
 
     return NextResponse.json({
-      success: true,
-      data: updatedPost,
-      message: 'Post updated successfully',
+      ...updatedPost,
     });
   } catch (error: unknown) {
     console.error('Error in PUT /api/posts/[slug]:', error);

@@ -2,7 +2,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { API_URL } from '@/configs/env';
-import { usePostStorage } from '@/features/editor/store/use-post-storge';
+import { usePostStorage } from '@/features/editor/store/use-post-storage';
 import { Search } from 'lucide-react';
 import { SVGProps } from 'react';
 

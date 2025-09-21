@@ -11,7 +11,7 @@ import { isAxiosError } from 'axios';
 import { Tag } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
-import { usePostStorage } from '../../../../../store/use-post-storge';
+import { usePostStorage } from '../../../../../store/use-post-storage';
 
 export const TagMultipleSelect = () => {
   const { tags: tagsFromStorage, setField, errors } = usePostStorage();
