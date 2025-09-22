@@ -1,14 +1,9 @@
 import { API_URL } from '@/configs/env';
-import EditPostFeature from '@/features/edit-post';
+import PostPreviewFeature from '@/features/preview-post';
 import { IPost, ITag } from '@/models';
 import { BaseResponse } from '@/types/response';
 
-// Force dynamic rendering để tránh lỗi build
 export const dynamic = 'force-dynamic';
-
-type EditPostPageProps = {
-  params: Promise<{ slug: string }>;
-};
 
 const getPostBySlug = async (slug: string) => {
   try {
@@ -31,11 +26,14 @@ const getPostBySlug = async (slug: string) => {
   }
 };
 
-const EditPostPage = async ({ params }: EditPostPageProps) => {
+type BlogDetailPageProps = {
+  params: Promise<{ slug: string }>;
+};
+
+const BlogDetailPage = async ({ params }: BlogDetailPageProps) => {
   const { slug } = await params;
   const postResponse = await getPostBySlug(slug);
 
-  // Nếu không có data, hiển thị thông báo lỗi
   if (!postResponse.data) {
     return (
       <div>
@@ -44,11 +42,7 @@ const EditPostPage = async ({ params }: EditPostPageProps) => {
     );
   }
 
-  return (
-    <div>
-      <EditPostFeature post={postResponse.data} />
-    </div>
-  );
+  return <PostPreviewFeature post={postResponse.data} />;
 };
 
-export default EditPostPage;
+export default BlogDetailPage;

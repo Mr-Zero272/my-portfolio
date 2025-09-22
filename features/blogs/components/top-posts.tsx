@@ -2,7 +2,7 @@ import { IPost, ITag } from '@/models';
 import PostCard from './post-card';
 
 interface TopPostsProps {
-  posts: Array<IPost & { tags: ITag[] }>;
+  posts: Array<Omit<IPost, 'tags'> & { tags: ITag[] }>;
 }
 
 const TopPosts = ({ posts }: TopPostsProps) => {

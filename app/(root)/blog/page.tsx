@@ -62,7 +62,7 @@ const getListPosts = async () => {
       throw new Error('Failed to fetch posts');
     }
 
-    return res.json() as Promise<BasePaginationResponse<IPost & { tags: ITag[] }>>;
+    return res.json() as Promise<BasePaginationResponse<Omit<IPost, 'tags'> & { tags: ITag[] }>>;
   } catch (error) {
     console.warn('Failed to fetch posts during build:', error);
     // Trả về dữ liệu rỗng khi không thể fetch

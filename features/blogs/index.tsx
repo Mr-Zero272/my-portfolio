@@ -2,7 +2,7 @@ import { IPost, ITag } from '@/models';
 import TopPosts from './components/top-posts';
 
 interface BlogFeatureProps {
-  posts: Array<IPost & { tags: ITag[] }>;
+  posts: Array<Omit<IPost, 'tags'> & { tags: ITag[] }>;
 }
 
 const BlogFeature = ({ posts }: BlogFeatureProps) => {

@@ -43,7 +43,7 @@ interface PostActions {
   validateField: (field: keyof PostState) => boolean;
   validateForm: () => boolean;
   getCurrentState: () => PostState;
-  setInitialState: (post: IPost & { tags: ITag[] }) => void;
+  setInitialState: (post: Omit<IPost, 'tags'> & { tags: ITag[] }) => void;
   resetState: () => void;
 }
 
@@ -205,7 +205,7 @@ export const usePostStorage = create<PostState & PostActions>((set, get) => ({
     };
   },
 
-  setInitialState: (post: IPost & { tags: ITag[] }) => {
+  setInitialState: (post: Omit<IPost, 'tags'> & { tags: ITag[] }) => {
     const postState = mapPostToPostInterface(post);
     set((state) => ({
       ...state,
@@ -223,7 +223,7 @@ export const usePostStorage = create<PostState & PostActions>((set, get) => ({
 }));
 
 // helper function to convert Post to PostInterface
-export const mapPostToPostInterface = (post: IPost & { tags: ITag[] }): PostState => {
+export const mapPostToPostInterface = (post: Omit<IPost, 'tags'> & { tags: ITag[] }): PostState => {
   return {
     _id: post._id.toString(),
     tags: post.tags.map((tag) => tag._id.toString()) || [],

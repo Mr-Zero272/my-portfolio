@@ -6,7 +6,7 @@ import PostEditor from '../editor';
 import { usePostStorage } from '../editor/store/use-post-storage';
 
 type EditPostFeatureProps = {
-  post: IPost & { tags: ITag[] };
+  post: Omit<IPost, 'tags'> & { tags: ITag[] };
 };
 
 const EditPostFeature = ({ post }: EditPostFeatureProps) => {
@@ -19,11 +19,7 @@ const EditPostFeature = ({ post }: EditPostFeatureProps) => {
   }, [post, setInitialState]);
 
   if (!post) return null;
-  return (
-    <div>
-      <PostEditor mode="edit" />
-    </div>
-  );
+  return <PostEditor mode="edit" />;
 };
 
 export default EditPostFeature;

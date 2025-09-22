@@ -7,9 +7,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 type Props = {
-  post: IPost & {
-    tags: ITag[];
-  };
+  post: Omit<IPost, 'tags'> & { tags: ITag[] };
   variant?: 'horizontal' | 'vertical';
   isMainPost?: boolean;
   isDisplayExcerpt?: boolean;
