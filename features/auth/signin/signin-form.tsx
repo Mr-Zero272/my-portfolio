@@ -37,11 +37,11 @@ export default function SignInForm() {
         email: data.email,
         password: data.password,
         redirect: false,
-        callbackUrl: searchParams.get('callbackUrl') || '/',
+        callbackUrl: searchParams.get('callbackUrl') || '/piti/posts',
       });
 
       if (res?.ok && !res?.error) {
-        const callbackUrl = searchParams.get('callbackUrl') || '/';
+        const callbackUrl = searchParams.get('callbackUrl') || '/piti/posts';
         router.push(callbackUrl);
       } else {
         console.log('SignIn response:', res);

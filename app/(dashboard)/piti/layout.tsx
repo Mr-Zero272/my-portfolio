@@ -1,3 +1,4 @@
+import DashboardHeader from '@/components/layouts/components/dashboard-header';
 import { DashboardNav } from '@/components/layouts/components/dashboard-navigation/dashboard-nav';
 import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar';
 
@@ -19,7 +20,10 @@ export default function DashboardLayout({
         <DashboardNav variant="inset" />
         <SidebarInset>
           {/* <PageTransition noFooter className="pt-0"> */}
-          <div>{children}</div>
+          <div>
+            <DashboardHeader />
+            {children}
+          </div>
           {/* </PageTransition> */}
         </SidebarInset>
       </SidebarProvider>

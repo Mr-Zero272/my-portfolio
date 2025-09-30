@@ -22,8 +22,6 @@ export const authConfig: AuthOptions = {
           // Tìm user trong database
           const user = await UserService.findUserByCredentials(credentials.email, credentials.password);
 
-          console.log('Found user:', user);
-
           if (user) {
             return {
               id: user._id.toString(),
@@ -69,6 +67,7 @@ export const authConfig: AuthOptions = {
         token.email = user.email;
         token.name = user.name;
         token.image = user.image;
+        token.role = 'admin';
       }
       return token;
     },

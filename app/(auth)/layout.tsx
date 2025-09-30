@@ -8,7 +8,9 @@ export default function AuthLayout({
   return (
     <main className="relative flex h-screen w-full">
       <section className="flex w-full flex-col gap-5">
-        <PageTransition noFooter>{children}</PageTransition>
+        <PageTransition noFooter className="pt-0">
+          {children}
+        </PageTransition>
       </section>
     </main>
   );

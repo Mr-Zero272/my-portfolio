@@ -1,15 +1,15 @@
-import ListPostFeature from '@/features/list-posts';
+import ListTagFeature from '@/features/list-tag';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Posts',
-  description: 'Manage your blog posts in the dashboard',
+  title: 'Tags',
+  description: 'Manage tags in the dashboard',
 };
 
 const PostPage = () => {
   return (
     <div>
-      <ListPostFeature />
+      <ListTagFeature />
     </div>
   );
 };

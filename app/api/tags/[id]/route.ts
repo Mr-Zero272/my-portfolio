@@ -12,6 +12,14 @@ export async function GET(request: Request, { params }: { params: Promise<{ id: 
   return new Response(JSON.stringify(tag), { status: 200 });
 }
 
+export async function PATCH(request: Request, { params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  const data = await request.json();
+  const updated = await TagService.updateTag({ id, name: data.name, slug: data.slug });
+
+  return new Response(JSON.stringify(updated), { status: updated.status === 'success' ? 200 : 400 });
+}
+
 export async function DELETE(request: Request, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
 

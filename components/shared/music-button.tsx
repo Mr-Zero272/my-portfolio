@@ -9,7 +9,7 @@ import { AnimatedButton } from '../ui/animated-button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from '../ui/dropdown-menu';
 import { Slider } from '../ui/slider';
 
-const MusicButton = () => {
+const MusicButton = ({ className }: { className?: string }) => {
   const {
     trackNames,
     currentTrackIndex,
@@ -27,7 +27,7 @@ const MusicButton = () => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <AnimatedButton size="icon" variant="ghost">
+        <AnimatedButton size="icon" variant="ghost" className={className}>
           <Music className="size-5" />
         </AnimatedButton>
       </DropdownMenuTrigger>

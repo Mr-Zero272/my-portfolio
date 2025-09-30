@@ -5,7 +5,7 @@ import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
 
 // Định nghĩa các route cần bảo vệ
-const protectedPaths = ['/piti/dashboard', '/piti/dashboard/**', '/api/admin/**'];
+const protectedPaths = ['/piti/**', '/api/admin/**'];
 
 // Các route public không cần authentication
 const publicPaths = ['/', '/about-me', '/projects', '/contact', '/favorite', '/api/auth/**', '/auth/**'];
@@ -33,7 +33,7 @@ export async function middleware(request: NextRequest) {
     }
 
     // Nếu có token nhưng không phải admin
-    if (token.role !== 'admin') {
+    if (token.email !== process.env.ADMIN_EMAIL) {
       return NextResponse.redirect(new URL('/unauthorized', request.url));
     }
   }

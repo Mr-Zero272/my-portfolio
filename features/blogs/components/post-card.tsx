@@ -29,7 +29,7 @@ const PostCard = ({
   const firstTag = tags && tags.length > 0 ? tags[0].name : 'Uncategorized';
   return (
     <Link
-      href={`/piti/blog/${slug}`}
+      href={`/blog/${slug}`}
       className={cn(
         'group flex',
         {
@@ -41,7 +41,8 @@ const PostCard = ({
     >
       <div className="flex-1">
         <Image
-          src="https://i.pinimg.com/1200x/69/f1/b6/69f1b694abb303ffb5ae7bfccef465c5.jpg"
+          // src="https://i.pinimg.com/1200x/69/f1/b6/69f1b694abb303ffb5ae7bfccef465c5.jpg"
+          src={featureImage || 'https://via.placeholder.com/400x300?text=No+Image'}
           alt="Post Image"
           width={400}
           height={300}
