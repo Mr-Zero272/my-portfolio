@@ -1,8 +1,10 @@
 import { API_URL } from '@/configs/env';
 import BlogFeature from '@/features/blogs';
+import BlogsSkeleton from '@/features/blogs/components/blogs-skeleton';
 import { IPost, ITag } from '@/models';
 import { BasePaginationResponse } from '@/types/response';
 import { Metadata } from 'next';
+import { Suspense } from 'react';
 
 // Force dynamic rendering để tránh lỗi build
 export const dynamic = 'force-dynamic';
@@ -81,9 +83,9 @@ const getListPosts = async () => {
 const BlogPage = async () => {
   const postsData = await getListPosts();
   return (
-    <div>
+    <Suspense fallback={<BlogsSkeleton />}>
       <BlogFeature posts={postsData.data} />
-    </div>
+    </Suspense>
   );
 };
 

@@ -34,7 +34,7 @@ const PostCard = ({
         'group flex',
         {
           'flex-col': variant === 'vertical',
-          'flex-row': variant === 'horizontal',
+          'flex-col md:flex-row': variant === 'horizontal',
         },
         className,
       )}
@@ -90,7 +90,7 @@ const PostCard = ({
           <div className="flex items-center gap-4">
             {isMainPost ? (
               <Image
-                src="https://i.pinimg.com/1200x/69/f1/b6/69f1b694abb303ffb5ae7bfccef465c5.jpg"
+                src="/images/profile-img-with-bg.jpg"
                 alt="Author Avatar"
                 width={24}
                 height={24}
@@ -99,7 +99,7 @@ const PostCard = ({
             ) : (
               isDisplayAuthorAvatar && (
                 <Image
-                  src="https://i.pinimg.com/1200x/69/f1/b6/69f1b694abb303ffb5ae7bfccef465c5.jpg"
+                  src="/images/profile-img-with-bg.jpg"
                   alt="Author Avatar"
                   width={24}
                   height={24}
@@ -130,20 +130,28 @@ const PostCard = ({
 
 export default PostCard;
 
+interface PostCardSkeletonProps {
+  variant?: 'horizontal' | 'vertical';
+  isMainPost?: boolean;
+  isDisplayExcerpt?: boolean;
+  isDisplayAuthorAvatar?: boolean;
+  className?: string;
+}
+
 export const PostCardSkeleton = ({
   variant = 'horizontal',
   isMainPost = false,
   isDisplayExcerpt = false,
   isDisplayAuthorAvatar = false,
   className = '',
-}: Props) => {
+}: PostCardSkeletonProps) => {
   return (
     <div
       className={cn(
         'group flex',
         {
           'flex-col': variant === 'vertical',
-          'flex-row': variant === 'horizontal',
+          'flex-col md:flex-row': variant === 'horizontal',
         },
         className,
       )}

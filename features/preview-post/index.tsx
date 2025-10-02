@@ -1,5 +1,6 @@
 'use client';
 
+import ScrollToTopButton from '@/components/shared/scroll-to-top-button';
 import { AnimatedButton } from '@/components/ui/animated-button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
@@ -29,7 +30,7 @@ export function PostPreviewFeature({ post, locale = 'en' }: PostPreviewFeaturePr
   };
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen">
       <div className="mx-auto max-w-4xl px-4 py-8">
         {/* Header */}
         <div className="mb-8">
@@ -41,10 +42,10 @@ export function PostPreviewFeature({ post, locale = 'en' }: PostPreviewFeaturePr
           )}
 
           {/* Title */}
-          <h1 className="mb-4 text-4xl leading-tight font-bold text-gray-900">{post.title}</h1>
+          <h1 className="mb-4 text-4xl leading-tight font-bold">{post.title}</h1>
 
           {/* Excerpt */}
-          {post.excerpt && <p className="mb-6 text-xl leading-relaxed text-gray-600">{post.excerpt}</p>}
+          {post.excerpt && <p className="text-muted-foreground mb-6 text-xl leading-relaxed">{post.excerpt}</p>}
 
           {/* Read button */}
           <ReadPost content={post.content || ''} showProgress={true} showEstimatedTime={true} className="mb-4" />
@@ -57,8 +58,8 @@ export function PostPreviewFeature({ post, locale = 'en' }: PostPreviewFeaturePr
               <AvatarFallback className="bg-gray-200 text-gray-700">P</AvatarFallback>
             </Avatar>
             <div>
-              <p className="font-semibold text-gray-900">Pitithuong</p>
-              <p className="text-sm text-gray-500">
+              <p className="font-semibold">Pitithuong</p>
+              <p className="text-muted-foreground text-sm">
                 {timeAgo} • {Math.ceil((post.content?.length || 0) / 1000)} min read
               </p>
             </div>
@@ -131,6 +132,7 @@ export function PostPreviewFeature({ post, locale = 'en' }: PostPreviewFeaturePr
           </AnimatedButton>
         </div>
       </div>
+      <ScrollToTopButton />
     </div>
   );
 }
