@@ -1,4 +1,6 @@
 export { default as Angular } from './angular';
+export { default as Blog } from './blog';
+export { default as BlogSolid } from './blog-solid';
 export { default as Cobol } from './cobol';
 export { default as Contact } from './contact';
 export { default as ContactSolid } from './contact-solid';
@@ -18,8 +20,6 @@ export { default as MusicPlaying } from './music-playing';
 export { default as MusicSolid } from './music-solid';
 export { default as Mysql } from './mysql';
 export { default as Nextjs } from './nextjs';
-export { default as NotebookOutline, default as NotebookOutlineIcon } from './notebook-outline';
-export { default as NotebookSolid, default as NotebookSolidIcon } from './notebook-solid';
 export { default as Pause } from './pause';
 export { default as Play } from './play';
 export { default as Projects } from './projects';

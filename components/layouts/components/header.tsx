@@ -19,7 +19,7 @@ const Header = () => {
   const isInBlogDetailPage = useMemo(() => micromatch.isMatch(pathname || '', '/blog/*'), [pathname]);
 
   return (
-    <div className="absolute top-0 left-1/2 z-20 mt-2 flex -translate-x-1/2 items-center justify-center bg-transparent">
+    <div className="fixed top-0 left-1/2 z-20 mt-2 flex -translate-x-1/2 items-center justify-center bg-transparent">
       <ul className="flex w-fit items-center justify-center gap-4 rounded-2xl bg-neutral-100/30 px-3 py-2 backdrop-blur-sm">
         <li className="md:hidden">
           <SidebarToggle />
@@ -37,19 +37,20 @@ const Header = () => {
         <li>
           <MusicButton />
         </li>
-        <li className="min-[1440px]:hidden">
-          {isInBlogDetailPage ? (
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <AnimatedButton size="icon" variant="ghost" onClick={() => router.back()}>
-                  <ArrowLeft className="size-5" />
-                </AnimatedButton>
-              </TooltipTrigger>
-              <TooltipContent>Back</TooltipContent>
-            </Tooltip>
-          ) : (
+        {!isInBlogDetailPage && (
+          <li className="min-[1440px]:hidden">
             <AvatarMenu />
-          )}
+          </li>
+        )}
+        <li>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <AnimatedButton size="icon" variant="ghost" onClick={() => router.back()}>
+                <ArrowLeft className="size-5" />
+              </AnimatedButton>
+            </TooltipTrigger>
+            <TooltipContent>Back</TooltipContent>
+          </Tooltip>
         </li>
       </ul>
     </div>

@@ -96,7 +96,7 @@ const Navigation = () => {
         variants={containerVariants}
         animate={containerControls}
         initial={isMobile ? 'hidden' : 'collapsed'}
-        className="bg-card absolute top-0 left-0 z-50 flex h-full flex-col gap-20 p-5 shadow-sm"
+        className="bg-card fixed top-0 left-0 z-50 flex h-full flex-col gap-20 p-5 shadow-sm"
       >
         <div className="relative flex w-full flex-row place-items-center justify-between">
           <Link href="/" className="flex justify-center overflow-hidden">

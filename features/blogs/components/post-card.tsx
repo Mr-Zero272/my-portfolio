@@ -31,7 +31,7 @@ const PostCard = ({
     <Link
       href={`/blog/${slug}`}
       className={cn(
-        'group flex',
+        'group flex gap-3',
         {
           'flex-col': variant === 'vertical',
           'flex-col md:flex-row': variant === 'horizontal',
@@ -46,15 +46,15 @@ const PostCard = ({
           alt="Post Image"
           width={400}
           height={300}
-          className={cn('w-full rounded-lg object-cover', {
-            'max-h-[180px]': variant === 'horizontal',
+          className={cn('h-full w-full rounded-lg object-cover', {
+            'max-h-[210px]': variant === 'horizontal',
             'max-h-[280px]': variant === 'vertical',
             'max-h-[320px]': isMainPost,
           })}
         />
       </div>
       <div
-        className={cn('line-clamp-2 flex flex-1 flex-col justify-between space-y-3 p-4', {
+        className={cn('flex flex-1 flex-col justify-between space-y-3 p-4', {
           'space-y-5 py-8': isMainPost,
         })}
       >
@@ -73,7 +73,7 @@ const PostCard = ({
             </div>
           )}
           <h2
-            className={cn('text-lg font-bold', {
+            className={cn('line-clamp-2 text-lg font-bold', {
               'text-2xl': isMainPost,
               'group-hover:underline': isHasHoverEffect,
             })}

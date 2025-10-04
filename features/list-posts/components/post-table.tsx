@@ -170,7 +170,7 @@ const columns: ColumnDef<PostType>[] = [
       <Badge variant={row.original.published ? 'default' : 'secondary'} className="px-1.5">
         {row.original.published ? (
           <>
-            <CheckIcon className="mr-1 h-3 w-3 fill-green-500 dark:fill-green-400" />
+            <CheckIcon className="mr-1 h-3 w-3 text-white dark:text-white" />
             Published
           </>
         ) : (

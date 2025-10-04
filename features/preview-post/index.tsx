@@ -30,7 +30,7 @@ export function PostPreviewFeature({ post, locale = 'en' }: PostPreviewFeaturePr
   };
 
   return (
-    <div className="min-h-screen">
+    <div className="relative min-h-screen">
       <div className="mx-auto max-w-4xl px-4 py-8">
         {/* Header */}
         <div className="mb-8">
@@ -118,16 +118,16 @@ export function PostPreviewFeature({ post, locale = 'en' }: PostPreviewFeaturePr
         <div className="flex items-center justify-between border-t border-gray-200 py-6">
           <div className="flex items-center gap-4">
             <AnimatedButton variant="outline" size="sm">
-              <MessageCircle className="mr-2 h-4 w-4" />
+              <MessageCircle className="h-4 w-4" />
               Comment
             </AnimatedButton>
             <AnimatedButton variant="outline" size="sm">
-              <Share2 className="mr-2 h-4 w-4" />
+              <Share2 className="h-4 w-4" />
               Share
             </AnimatedButton>
           </div>
           <AnimatedButton variant="outline" size="sm">
-            <Bookmark className="mr-2 h-4 w-4" />
+            <Bookmark className="h-4 w-4" />
             Save
           </AnimatedButton>
         </div>
