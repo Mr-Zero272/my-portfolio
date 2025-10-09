@@ -187,4 +187,16 @@ export class PostService {
       return { status: 'error', message: 'Error counting posts', data: { count: 0 } };
     }
   }
+
+  static async getAllPostSlugs(): Promise<BaseResponse<string[]>> {
+    try {
+      await connectDB();
+      const posts = await Post.find({}, 'slug');
+      const slugs = posts.map((post) => post.slug);
+      return { status: 'success', data: slugs };
+    } catch (error) {
+      console.error('Error fetching post slugs:', error);
+      return { status: 'error', message: 'Error fetching post slugs', data: [] };
+    }
+  }
 }

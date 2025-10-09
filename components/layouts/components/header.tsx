@@ -42,16 +42,18 @@ const Header = () => {
             <AvatarMenu />
           </li>
         )}
-        <li>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <AnimatedButton size="icon" variant="ghost" onClick={() => router.back()}>
-                <ArrowLeft className="size-5" />
-              </AnimatedButton>
-            </TooltipTrigger>
-            <TooltipContent>Back</TooltipContent>
-          </Tooltip>
-        </li>
+        {isInBlogDetailPage && (
+          <li>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <AnimatedButton size="icon" variant="ghost" onClick={() => router.back()}>
+                  <ArrowLeft className="size-5" />
+                </AnimatedButton>
+              </TooltipTrigger>
+              <TooltipContent>Back</TooltipContent>
+            </Tooltip>
+          </li>
+        )}
       </ul>
     </div>
   );

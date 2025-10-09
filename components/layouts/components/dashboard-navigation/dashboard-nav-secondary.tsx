@@ -9,6 +9,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from '@/components/ui/sidebar';
+import { useGlobalSearch } from '@/store/use-global-search';
 import { LucideIcon } from 'lucide-react';
 
 export default function DashboardNavSecondary({
@@ -21,12 +22,13 @@ export default function DashboardNavSecondary({
     icon: LucideIcon;
   }[];
 } & React.ComponentPropsWithoutRef<typeof SidebarGroup>) {
+  const { toggleSearch } = useGlobalSearch();
   return (
     <SidebarGroup {...props}>
       <SidebarGroupContent>
         <SidebarMenu>
           {items.map((item) => (
-            <SidebarMenuItem key={item.title}>
+            <SidebarMenuItem key={item.title} onClick={item.title === 'Search' ? toggleSearch : undefined}>
               <SidebarMenuButton asChild>
                 <a href={item.url}>
                   <item.icon />

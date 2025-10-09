@@ -8,7 +8,7 @@ import { NextResponse } from 'next/server';
 const protectedPaths = ['/piti/**', '/api/admin/**'];
 
 // Các route public không cần authentication
-const publicPaths = ['/', '/about-me', '/projects', '/contact', '/favorite', '/api/auth/**', '/auth/**'];
+const publicPaths = ['/', '/about-me', '/projects', '/contact', '/favorite', '/api/auth/**', '/auth/**', '/blog/**'];
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;

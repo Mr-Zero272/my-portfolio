@@ -4,18 +4,23 @@ import { Label } from '@/components/ui/label';
 import { API_URL } from '@/configs/env';
 import { generateSlug } from '@/lib/slug';
 import { LinkIcon } from 'lucide-react';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { usePostStorage } from '../../../../../store/use-post-storage';
 
 const PostSlugInput = () => {
   const { title, slug, setField, errors } = usePostStorage();
+  const prevTitleRef = useRef('');
 
   // Automatically generate slug from title
   useEffect(() => {
-    if (title && slug === '') {
+    const prevTitle = prevTitleRef.current;
+
+    if (slug === generateSlug(prevTitle)) {
       setField('slug', generateSlug(title));
     }
-  }, [title, setField, slug]);
+
+    prevTitleRef.current = title;
+  }, [title, slug, setField]);
 
   return (
     <div className="space-y-2">
