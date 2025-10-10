@@ -13,8 +13,8 @@ const DashboardHeader = () => {
             Welcome back, <span className="text-primary">Piti</span>
           </h2>
         </div>
-        <div className="flex items-center gap-3">
-          <GlobalSearch searchPlaceholder="Search all pages, features..." buttonClassName="block" />
+        <div className="relative flex items-center gap-3">
+          <GlobalSearch searchPlaceholder="Search all pages, features..." />
           <ThemeButton className="block" />
           <AvatarMenu />
         </div>

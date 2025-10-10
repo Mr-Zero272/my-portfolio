@@ -1,3 +1,4 @@
+import * as Portal from '@radix-ui/react-portal';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Search, XIcon } from 'lucide-react';
 import { ReactNode, useCallback, useEffect, useRef, useState } from 'react';
@@ -111,7 +112,7 @@ const SearchGeneric = <T extends DefaultSearchItem>({
   }, [isOpen, results, selectedIndex, onOpenChange, onValueChange, handleResultSelect]);
 
   return (
-    <>
+    <Portal.Root>
       {/* Search Modal */}
       <AnimatePresence>
         {isOpen && (
@@ -121,7 +122,7 @@ const SearchGeneric = <T extends DefaultSearchItem>({
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className='bg-opacity-50 fixed inset-0 z-40 bg-white/30 backdrop-blur-xs dark:bg-black/30'
+              className="bg-opacity-50 fixed inset-0 z-[99998] bg-white/30 backdrop-blur-xs dark:bg-black/30"
               onClick={() => onOpenChange(false)}
             />
 
@@ -131,25 +132,25 @@ const SearchGeneric = <T extends DefaultSearchItem>({
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: -20 }}
               transition={{ duration: 0.2, ease: 'easeOut' }}
-              className={`fixed top-20 left-1/2 z-50 w-full max-w-2xl -translate-x-1/2 transform px-4 ${className}`}
+              className={`fixed top-20 left-1/2 z-[99999] w-full max-w-2xl -translate-x-1/2 transform px-4 ${className}`}
             >
-              <div className='overflow-hidden rounded-xl border border-gray-200 bg-white shadow-2xl'>
+              <div className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-2xl">
                 {/* Search Input */}
-                <div className='border-b border-gray-100 p-4'>
-                  <div className='flex items-center gap-3'>
-                    <Search className='text-muted-foreground h-5 w-5' />
+                <div className="border-b border-gray-100 p-4">
+                  <div className="flex items-center gap-3">
+                    <Search className="text-muted-foreground h-5 w-5" />
                     <input
                       ref={inputRef}
-                      type='text'
+                      type="text"
                       placeholder={placeholder}
                       value={value}
                       onChange={(e) => onValueChange(e.target.value)}
-                      className='flex-1 border-none bg-transparent text-lg placeholder-gray-500 outline-none'
+                      className="flex-1 border-none bg-transparent text-lg placeholder-gray-500 outline-none"
                       {...searchInputProps}
                     />
-                    {value && <XIcon className='size-4' onClick={() => onValueChange('')} />}
-                    <div className='text-muted-foreground hidden items-center gap-2 text-sm md:flex'>
-                      <kbd className='rounded border border-gray-300 bg-gray-100 px-2 py-1 text-xs font-semibold'>
+                    {value && <XIcon className="size-4" onClick={() => onValueChange('')} />}
+                    <div className="text-muted-foreground hidden items-center gap-2 text-sm md:flex">
+                      <kbd className="rounded border border-gray-300 bg-gray-100 px-2 py-1 text-xs font-semibold">
                         Enter
                       </kbd>
                       <span>to select</span>
@@ -164,7 +165,7 @@ const SearchGeneric = <T extends DefaultSearchItem>({
                       initial={{ opacity: 0, height: 0 }}
                       animate={{ opacity: 1, height: 'auto' }}
                       exit={{ opacity: 0, height: 0 }}
-                      className='max-h-96 overflow-y-auto'
+                      className="max-h-96 overflow-y-auto"
                     >
                       {results.map((result, index) => (
                         <motion.button
@@ -188,11 +189,11 @@ const SearchGeneric = <T extends DefaultSearchItem>({
 
                 {/* No results */}
                 {value && results.length === 0 && (
-                  <div className='p-8 text-center'>
-                    <div className='mb-2 text-gray-400'>
-                      <Search className='mx-auto h-8 w-8' />
+                  <div className="p-8 text-center">
+                    <div className="mb-2 text-gray-400">
+                      <Search className="mx-auto h-8 w-8" />
                     </div>
-                    <p className='text-gray-500'>
+                    <p className="text-gray-500">
                       {noResultsMessage} &ldquo;{value}&rdquo;
                     </p>
                   </div>
@@ -200,30 +201,30 @@ const SearchGeneric = <T extends DefaultSearchItem>({
 
                 {/* Empty state */}
                 {!value && (
-                  <div className='p-8 text-center'>
-                    <div className='mb-4 text-gray-400'>
-                      <Search className='mx-auto h-8 w-8' />
+                  <div className="p-8 text-center">
+                    <div className="mb-4 text-gray-400">
+                      <Search className="mx-auto h-8 w-8" />
                     </div>
-                    <p className='mb-2 text-gray-500'>Search</p>
-                    <p className='text-sm text-gray-400'>{emptyStateMessage}</p>
+                    <p className="mb-2 text-gray-500">Search</p>
+                    <p className="text-sm text-gray-400">{emptyStateMessage}</p>
                   </div>
                 )}
 
                 {/* Footer */}
-                <div className='border-t border-gray-100 bg-gray-50 px-4 py-3'>
-                  <div className='flex items-center justify-between text-xs text-gray-500'>
-                    <div className='flex items-center gap-4'>
-                      <span className='flex items-center gap-1'>
-                        <kbd className='rounded border border-gray-300 bg-white px-1.5 py-0.5'>↑↓</kbd>
+                <div className="border-t border-gray-100 bg-gray-50 px-4 py-3">
+                  <div className="flex items-center justify-between text-xs text-gray-500">
+                    <div className="flex items-center gap-4">
+                      <span className="flex items-center gap-1">
+                        <kbd className="rounded border border-gray-300 bg-white px-1.5 py-0.5">↑↓</kbd>
                         navigate
                       </span>
-                      <span className='flex items-center gap-1'>
-                        <kbd className='rounded border border-gray-300 bg-white px-1.5 py-0.5'>Enter</kbd>
+                      <span className="flex items-center gap-1">
+                        <kbd className="rounded border border-gray-300 bg-white px-1.5 py-0.5">Enter</kbd>
                         select
                       </span>
                     </div>
-                    <span className='flex items-center gap-1'>
-                      <kbd className='rounded border border-gray-300 bg-white px-1.5 py-0.5'>Esc</kbd>
+                    <span className="flex items-center gap-1">
+                      <kbd className="rounded border border-gray-300 bg-white px-1.5 py-0.5">Esc</kbd>
                       close
                     </span>
                   </div>
@@ -233,7 +234,7 @@ const SearchGeneric = <T extends DefaultSearchItem>({
           </>
         )}
       </AnimatePresence>
-    </>
+    </Portal.Root>
   );
 };
 

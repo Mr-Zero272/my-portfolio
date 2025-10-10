@@ -229,7 +229,6 @@ const GlobalSearch = ({
         <AnimatedButton
           onClick={globalSearch.openSearch}
           title="Search (Ctrl+K)"
-          variant="ghost"
           size="icon"
           className={buttonClassName}
         >
