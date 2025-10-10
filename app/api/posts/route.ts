@@ -8,23 +8,23 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url);
     const page = parseInt(searchParams.get('page') || '1');
     const limit = parseInt(searchParams.get('limit') || '10');
-    const published = searchParams.get('published');
     const tag = searchParams.get('tag');
     const search = searchParams.get('search');
+    const status = searchParams.get('status');
 
     let result;
 
     if (search) {
       // Tìm kiếm posts theo title hoặc content
       result = await PostService.searchPosts(search, {
-        published: published === 'true' ? true : published === 'false' ? false : undefined,
+        published: status === 'published' ? true : status === 'drafts' ? false : undefined,
         tag: tag || undefined,
         page,
         limit,
       });
     } else {
       result = await PostService.getAllPosts({
-        published: published === 'true' ? true : published === 'false' ? false : undefined,
+        published: status === 'published' ? true : status === 'drafts' ? false : undefined,
         tag: tag || undefined,
         page,
         limit,

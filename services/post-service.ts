@@ -199,4 +199,16 @@ export class PostService {
       return { status: 'error', message: 'Error fetching post slugs', data: [] };
     }
   }
+
+  static async getStatisticsByStatus(): Promise<BaseResponse<{ published: number; unpublished: number }>> {
+    try {
+      await connectDB();
+      const publishedCount = await Post.countDocuments({ published: true });
+      const unpublishedCount = await Post.countDocuments({ published: false });
+      return { status: 'success', data: { published: publishedCount, unpublished: unpublishedCount } };
+    } catch (error) {
+      console.error('Error fetching post statistics:', error);
+      return { status: 'error', message: 'Error fetching post statistics', data: { published: 0, unpublished: 0 } };
+    }
+  }
 }

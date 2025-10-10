@@ -88,7 +88,7 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Separator } from '@/components/ui/separator';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import Link from 'next/link';
 
 // Schema for Post table data
@@ -258,22 +258,16 @@ function DraggableRow({ row }: { row: Row<PostType> }) {
   );
 }
 
-interface PostTableProps {
-  page?: number;
-  limit?: number;
-  tag?: string;
-  status?: string;
-}
-
-export function PostTable({ page = 1, limit = 10, tag, status }: PostTableProps) {
+export function PostTable() {
   const [data, setData] = React.useState<PostType[]>([]);
   const [rowSelection, setRowSelection] = React.useState({});
   const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
   const [sorting, setSorting] = React.useState<SortingState>([]);
+  const [tab, setTab] = React.useState<'posts' | 'drafts' | 'published'>('posts');
   const [pagination, setPagination] = React.useState({
-    pageIndex: page - 1,
-    pageSize: limit,
+    pageIndex: 0,
+    pageSize: 10,
   });
 
   const sortableId = React.useId();
@@ -292,14 +286,18 @@ export function PostTable({ page = 1, limit = 10, tag, status }: PostTableProps)
     error,
     refetch,
   } = useQuery({
-    queryKey: ['posts', { page, limit, tag, status }],
+    queryKey: ['posts', { pagination, tab }],
     queryFn: () =>
       postApi.getPosts({
-        page,
-        limit,
-        tag,
-        status,
+        page: pagination.pageIndex + 1,
+        limit: pagination.pageSize,
+        status: tab === 'posts' ? undefined : tab,
       }),
+  });
+
+  const { data: statsResponse, isLoading: statsLoading } = useQuery({
+    queryKey: ['post-stats-by-status'],
+    queryFn: () => postApi.getPostStatsByStatus(),
   });
 
   // Update local data when API response changes
@@ -374,15 +372,19 @@ export function PostTable({ page = 1, limit = 10, tag, status }: PostTableProps)
   }
 
   return (
-    <Tabs defaultValue="posts" className="w-full flex-col justify-start gap-6">
+    <Tabs
+      value={tab}
+      onValueChange={(tab) => setTab(tab as 'posts' | 'drafts' | 'published')}
+      className="w-full flex-col justify-start gap-6"
+    >
       <div className="flex items-center justify-between px-4 lg:px-6">
         <TabsList className="">
           <TabsTrigger value="posts">All Posts</TabsTrigger>
           <TabsTrigger value="drafts">
-            Drafts <Badge variant="secondary">{postsResponse?.data?.filter((p) => !p.published).length || 0}</Badge>
+            Drafts <Badge variant="secondary">{statsResponse?.data?.unpublished || 0}</Badge>
           </TabsTrigger>
           <TabsTrigger value="published">
-            Published <Badge variant="secondary">{postsResponse?.data?.filter((p) => p.published).length || 0}</Badge>
+            Published <Badge variant="secondary">{statsResponse?.data?.published || 0}</Badge>
           </TabsTrigger>
         </TabsList>
         <div className="flex items-center gap-2">
@@ -421,7 +423,7 @@ export function PostTable({ page = 1, limit = 10, tag, status }: PostTableProps)
           </Link>
         </div>
       </div>
-      <TabsContent value="posts" className="relative flex flex-col gap-4 overflow-auto px-4 lg:px-6">
+      <div className="relative flex flex-col gap-4 overflow-auto px-4 lg:px-6">
         <div className="overflow-hidden rounded-lg border">
           <DndContext
             collisionDetection={closestCenter}
@@ -544,8 +546,8 @@ export function PostTable({ page = 1, limit = 10, tag, status }: PostTableProps)
             </div>
           </div>
         </div>
-      </TabsContent>
-      <TabsContent value="drafts" className="flex flex-col px-4 lg:px-6">
+      </div>
+      {/* <TabsContent value="drafts" className="flex flex-col px-4 lg:px-6">
         <div className="flex aspect-video w-full flex-1 items-center justify-center rounded-lg border border-dashed">
           <p className="text-muted-foreground">Draft posts view - Coming soon</p>
         </div>
@@ -554,7 +556,7 @@ export function PostTable({ page = 1, limit = 10, tag, status }: PostTableProps)
         <div className="flex aspect-video w-full flex-1 items-center justify-center rounded-lg border border-dashed">
           <p className="text-muted-foreground">Published posts view - Coming soon</p>
         </div>
-      </TabsContent>
+      </TabsContent> */}
     </Tabs>
   );
 }

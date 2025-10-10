@@ -68,6 +68,12 @@ export const postApi = {
     return res.data;
   },
 
+  getPostStatsByStatus: async () => {
+    const res =
+      await axiosInstance.get<BaseResponse<{ published: number; unpublished: number }>>('/api/posts/stats/status');
+    return res.data;
+  },
+
   // Commented out post history functions as they don't exist in this project
   /*
   getPostHistory: async ({ postId }: { postId: string }) => {
