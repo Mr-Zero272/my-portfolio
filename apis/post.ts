@@ -1,4 +1,4 @@
-import { type IPost } from '@/models';
+import { ITag, type IPost } from '@/models';
 import { BasePaginationResponse, BaseResponse } from '@/types/response';
 import axiosInstance from '../lib/axios';
 
@@ -20,7 +20,7 @@ export const postApi = {
     approval_status?: string;
     sort_by?: string;
   } = {}) => {
-    const res = await axiosInstance.get<BasePaginationResponse<IPost>>('/api/posts', {
+    const res = await axiosInstance.get<BasePaginationResponse<IPost & { tags: ITag[] }>>('/api/posts', {
       params: {
         page,
         limit,

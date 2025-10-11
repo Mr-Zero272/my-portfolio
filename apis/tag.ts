@@ -33,4 +33,20 @@ export const tagApi = {
     const res = await axiosInstance.delete<BaseResponse<ITag>>(`/api/tags/${id}`, {});
     return res.data;
   },
+
+  getTagsWithMostPosts: async () => {
+    const res = await axiosInstance.get<
+      BaseResponse<
+        {
+          createdAt: string;
+          name: string;
+          postCount: number;
+          slug: string;
+          updatedAt: string;
+          _id: string;
+        }[]
+      >
+    >('/api/tags/with-count', {});
+    return res.data;
+  },
 };

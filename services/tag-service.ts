@@ -235,6 +235,9 @@ export class TagService {
           {
             $count: 'total',
           },
+          {
+            $sort: { total: -1 },
+          },
         ]),
       ]);
 

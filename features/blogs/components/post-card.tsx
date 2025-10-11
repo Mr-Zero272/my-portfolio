@@ -47,9 +47,10 @@ const PostCard = ({
           width={400}
           height={300}
           className={cn('h-full w-full rounded-lg object-cover', {
-            'max-h-[210px]': variant === 'horizontal',
-            'max-h-[280px]': variant === 'vertical',
-            'max-h-[320px]': isMainPost,
+            'max-h-[210px]': variant === 'horizontal' && isDisplayExcerpt,
+            'max-h-[175px]': variant === 'horizontal' && !isDisplayExcerpt,
+            'h-[210px]': variant === 'vertical',
+            'max-h-[280px]': isMainPost,
           })}
         />
       </div>
@@ -73,7 +74,7 @@ const PostCard = ({
             </div>
           )}
           <h2
-            className={cn('line-clamp-2 text-lg font-bold', {
+            className={cn('text-lg font-bold', {
               'text-2xl': isMainPost,
               'group-hover:underline': isHasHoverEffect,
             })}
