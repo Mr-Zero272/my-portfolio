@@ -3,7 +3,7 @@ import { SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui
 
 import { ChevronRight, Globe, XIcon } from 'lucide-react';
 
-import { usePostStorage } from '@/features/editor/store/use-post-storage';
+import AuthorMultipleSelect from './components/author-multiple-select';
 import ExcerptInput from './components/excerpt-input';
 import PostSlugInput from './components/post-slug-input';
 import TagMultipleSelect from './components/tag-multiple-select';
@@ -13,11 +13,13 @@ interface MainTabProps {
 }
 
 const MainTab = ({ onTabChange }: MainTabProps) => {
-  const { published, setField } = usePostStorage();
   return (
     <>
       {/* Post URL Section */}
       <PostSlugInput />
+
+      {/* Authors Section */}
+      <AuthorMultipleSelect />
 
       {/* Tags Section */}
       <TagMultipleSelect />

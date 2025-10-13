@@ -3,11 +3,30 @@
 import AvatarMenu from '@/components/shared/avatar-menu';
 import GlobalSearch from '@/components/shared/global-search';
 import ThemeButton from '@/components/shared/theme-button';
+import { cn } from '@/lib/utils';
+import { useState } from 'react';
+import { useEventListener } from 'usehooks-ts';
 
 const DashboardHeader = () => {
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEventListener('scroll', () => {
+    setIsScrolled(window.scrollY > 0);
+  });
+
+  console.log({
+    isScrolled,
+  });
   return (
     <>
-      <div className="bg-background fixed top-2 mt-1 flex h-16 w-[calc(100%-18rem)] flex-1 items-center justify-between px-8">
+      <div
+        className={cn(
+          'bg-background fixed top-2 mt-1 flex h-16 w-[calc(100%-18rem)] flex-1 items-center justify-between px-8',
+          {
+            'backdrop-blur-sm': isScrolled,
+          },
+        )}
+      >
         <div className="flex items-center gap-4">
           <h2 className="text-lg font-semibold">
             Welcome back, <span className="text-primary">Piti</span>

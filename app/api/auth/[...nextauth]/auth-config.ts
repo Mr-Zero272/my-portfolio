@@ -3,8 +3,6 @@ import { AuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import GoogleProvider from 'next-auth/providers/google';
 
-const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'pitithuong@gmail.com';
-
 export const authConfig: AuthOptions = {
   providers: [
     CredentialsProvider({
@@ -48,8 +46,28 @@ export const authConfig: AuthOptions = {
     async signIn({ user, account }) {
       // Nếu đăng nhập bằng Google
       if (account?.provider === 'google') {
-        // Chỉ cho phép email admin duy nhất
-        return user.email === ADMIN_EMAIL;
+        try {
+          // Tìm hoặc tạo user trong database
+          const dbUser = await UserService.findOrCreateGoogleUser({
+            email: user.email!,
+            name: user.name!,
+            image: user.image || undefined,
+          });
+
+          if (dbUser) {
+            // Cập nhật thông tin user từ database
+            user.id = dbUser._id.toString();
+            user.name = dbUser.name;
+            user.email = dbUser.email;
+            user.image = dbUser.avatar;
+            return true;
+          }
+
+          return false;
+        } catch (error) {
+          console.error('Error in Google sign in:', error);
+          return false;
+        }
       }
 
       // Nếu đăng nhập bằng credentials
@@ -60,14 +78,25 @@ export const authConfig: AuthOptions = {
       return false;
     },
 
-    async jwt({ token, user }) {
+    async jwt({ token, user, account }) {
       // Khi đăng nhập lần đầu
       if (user) {
         token.id = user.id;
         token.email = user.email;
         token.name = user.name;
         token.image = user.image;
-        token.role = 'admin';
+
+        // Nếu là Google OAuth, lấy thông tin từ database
+        if (account?.provider === 'google') {
+          const dbUser = await UserService.findUserByEmail(user.email!);
+          if (dbUser) {
+            token.role = dbUser.role;
+            token.name = dbUser.name;
+            token.image = dbUser.avatar;
+          }
+        } else {
+          token.role = 'admin';
+        }
       }
       return token;
     },
@@ -88,7 +117,7 @@ export const authConfig: AuthOptions = {
   },
   pages: {
     signIn: '/auth/signin',
-    error: '/auth/signin', // Redirect về signin page thay vì error page
+    error: '/auth/signin',
   },
   session: {
     strategy: 'jwt',

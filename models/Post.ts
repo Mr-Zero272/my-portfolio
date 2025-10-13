@@ -9,6 +9,7 @@ export interface IPost extends Document {
   featureImage?: string;
   imageCaption?: string;
   likes: number;
+  authors: mongoose.Types.ObjectId[];
   tags: mongoose.Types.ObjectId[];
   comments: mongoose.Types.ObjectId[];
   metaTitle?: string;
@@ -30,6 +31,7 @@ const PostSchema: Schema = new Schema(
     featureImage: { type: String },
     imageCaption: { type: String },
     likes: { type: Number, default: 0 },
+    authors: [{ type: Schema.Types.ObjectId, ref: 'User' }],
     tags: [{ type: Schema.Types.ObjectId, ref: 'Tag' }],
     comments: [{ type: Schema.Types.ObjectId, ref: 'Comment' }],
     metaTitle: { type: String },

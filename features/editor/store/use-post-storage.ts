@@ -1,4 +1,4 @@
-import { ITag, type IPost } from '@/models';
+import { ITag, IUser, type IPost } from '@/models';
 import { create } from 'zustand';
 
 interface PostErrors {
@@ -19,6 +19,7 @@ interface PostState {
   featureImageFile: File | null;
   imageCaption: string;
   likes: number;
+  authors: string[];
   tags: string[];
   comments: string[];
   metaTitle: string;
@@ -43,7 +44,7 @@ interface PostActions {
   validateField: (field: keyof PostState) => boolean;
   validateForm: () => boolean;
   getCurrentState: () => PostState;
-  setInitialState: (post: Omit<IPost, 'tags'> & { tags: ITag[] }) => void;
+  setInitialState: (post: Omit<IPost, 'tags' | 'authors'> & { tags: ITag[]; authors: IUser[] }) => void;
   resetState: () => void;
 }
 
@@ -57,6 +58,7 @@ const initialPostState: PostState = {
   featureImage: '',
   imageCaption: '',
   likes: 0,
+  authors: [],
   tags: [],
   comments: [],
   metaTitle: '',
@@ -135,6 +137,13 @@ export const usePostStorage = create<PostState & PostActions>((set, get) => ({
         }
         return true;
       },
+      authors: () => {
+        if (!state.authors?.length) {
+          state.setError('authors', 'At least one author is required');
+          return false;
+        }
+        return true;
+      },
       // Other fields don't need validation
       _id: () => true,
       excerpt: () => true,
@@ -164,7 +173,7 @@ export const usePostStorage = create<PostState & PostActions>((set, get) => ({
 
   validateForm: () => {
     const state = get();
-    const requiredFields: (keyof PostState)[] = ['title', 'slug', 'content', 'tags'];
+    const requiredFields: (keyof PostState)[] = ['title', 'slug', 'content', 'authors', 'tags'];
 
     let isFormValid = true;
 
@@ -191,6 +200,7 @@ export const usePostStorage = create<PostState & PostActions>((set, get) => ({
       featureImageFile: state.featureImageFile,
       imageCaption: state.imageCaption,
       likes: state.likes,
+      authors: state.authors,
       tags: state.tags,
       comments: state.comments,
       metaTitle: state.metaTitle,
@@ -205,7 +215,7 @@ export const usePostStorage = create<PostState & PostActions>((set, get) => ({
     };
   },
 
-  setInitialState: (post: Omit<IPost, 'tags'> & { tags: ITag[] }) => {
+  setInitialState: (post: Omit<IPost, 'tags' | 'authors'> & { tags: ITag[]; authors: IUser[] }) => {
     const postState = mapPostToPostInterface(post);
     set((state) => ({
       ...state,
@@ -223,9 +233,12 @@ export const usePostStorage = create<PostState & PostActions>((set, get) => ({
 }));
 
 // helper function to convert Post to PostInterface
-export const mapPostToPostInterface = (post: Omit<IPost, 'tags'> & { tags: ITag[] }): PostState => {
+export const mapPostToPostInterface = (
+  post: Omit<IPost, 'tags' | 'authors'> & { tags: ITag[]; authors: IUser[] },
+): PostState => {
   return {
     _id: post._id.toString(),
+    authors: post.authors.map((author) => author._id.toString()) || [],
     tags: post.tags.map((tag) => tag._id.toString()) || [],
     excerpt: post.excerpt || '',
     title: post.title,

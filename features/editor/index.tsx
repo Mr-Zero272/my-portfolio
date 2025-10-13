@@ -67,6 +67,7 @@ const PostEditorContent = ({ mode = 'create' }: PostEditorProps) => {
 
   const {
     _id: postId,
+    authors,
     tags,
     title,
     content,
@@ -125,6 +126,7 @@ const PostEditorContent = ({ mode = 'create' }: PostEditorProps) => {
           title,
           slug,
           content,
+          authors,
           tags,
           excerpt,
           featureImage: finalFeatureImage,
@@ -170,6 +172,7 @@ const PostEditorContent = ({ mode = 'create' }: PostEditorProps) => {
       title,
       slug,
       content,
+      authors,
       tags,
       featureImage,
       featureImageFile,

@@ -33,7 +33,7 @@ export default function DashboardNavMain({
             <Link href="/posts/create" className="flex-1">
               <SidebarMenuButton
                 tooltip="Quick Create"
-                className="bg-primary text-primary-foreground hover:bg-primary/90 hover:text-primary-foreground active:bg-primary/90 active:text-primary-foreground min-w-8 duration-200 ease-linear active:scale-90"
+                className="bg-primary text-primary-foreground hover:bg-primary/90 hover:text-primary-foreground active:bg-primary/90 active:text-primary-foreground min-w-8 duration-300 ease-in-out active:scale-90"
               >
                 <Plus />
                 <span>Quick Create Post</span>

@@ -55,7 +55,7 @@ export class PostService {
         }
       }
 
-      const posts = await Post.find(query).populate('tags').sort({ createdAt: -1 }).skip(skip).limit(limit);
+      const posts = await Post.find(query).populate('authors tags').sort({ createdAt: -1 }).skip(skip).limit(limit);
       const total = await Post.countDocuments(query);
       const totalPages = Math.ceil(total / limit);
 
@@ -70,7 +70,7 @@ export class PostService {
     try {
       await connectDB();
 
-      const post = await Post.findOne({ slug }).populate('tags comments');
+      const post = await Post.findOne({ slug }).populate('authors tags comments');
       return { status: 'success', data: post };
     } catch (error) {
       console.error('Error fetching post:', error);
@@ -99,7 +99,9 @@ export class PostService {
         }
       }
 
-      const updatedPost = await Post.findOneAndUpdate(query, data, { new: true, runValidators: true }).populate('tags');
+      const updatedPost = await Post.findOneAndUpdate(query, data, { new: true, runValidators: true }).populate(
+        'authors tags',
+      );
       return { status: 'success', data: updatedPost };
     } catch (error) {
       console.error('Error updating post:', error);
@@ -143,7 +145,7 @@ export class PostService {
         query.tags = tag;
       }
 
-      const posts = await Post.find(query).populate('tags').sort({ createdAt: -1 }).skip(skip).limit(limit);
+      const posts = await Post.find(query).populate('authors tags').sort({ createdAt: -1 }).skip(skip).limit(limit);
       const total = await Post.countDocuments(query);
       const totalPages = Math.ceil(total / limit);
 

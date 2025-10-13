@@ -117,7 +117,7 @@ export default function SignInForm() {
                 d="M8.75 92.4q10.37-8 20.73-16.08A39.3 39.3 0 0 0 44 95.74a37.2 37.2 0 0 0 14.08 6.08a41.3 41.3 0 0 0 15.1 0a36.2 36.2 0 0 0 13.93-5.5c6.69 5.22 13.41 10.4 20.1 15.62a57.13 57.13 0 0 1-25.9 13.47a67.6 67.6 0 0 1-32.36-.35a63 63 0 0 1-23-11.59A63.7 63.7 0 0 1 8.75 92.4"
               />
             </svg>
-            Login with GitHub
+            Login with Google
           </AnimatedButton>
         </div>
         <div className="text-center text-sm">Note: we only support login with admin account</div>

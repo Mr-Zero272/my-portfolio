@@ -1,6 +1,6 @@
 import { API_URL } from '@/configs/env';
 import EditPostFeature from '@/features/edit-post';
-import { IPost, ITag } from '@/models';
+import { IPost, ITag, IUser } from '@/models';
 import { BaseResponse } from '@/types/response';
 
 // Force dynamic rendering để tránh lỗi build
@@ -19,7 +19,7 @@ const getPostBySlug = async (slug: string) => {
     if (!res.ok) {
       throw new Error('Failed to fetch post data');
     }
-    return res.json() as Promise<BaseResponse<Omit<IPost, 'tags'> & { tags: ITag[] }>>;
+    return res.json() as Promise<BaseResponse<Omit<IPost, 'tags' | 'authors'> & { tags: ITag[]; authors: IUser[] }>>;
   } catch (error) {
     console.warn('Failed to fetch post during build:', error);
     // Trả về dữ liệu mặc định khi không thể fetch
@@ -46,7 +46,9 @@ const EditPostPage = async ({ params }: EditPostPageProps) => {
 
   return (
     <div>
-      <EditPostFeature post={postResponse.data} />
+      <EditPostFeature
+        post={postResponse.data as Omit<IPost, 'tags' | 'authors'> & { tags: ITag[]; authors: IUser[] }}
+      />
     </div>
   );
 };
