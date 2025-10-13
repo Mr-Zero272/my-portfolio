@@ -5,6 +5,7 @@ import { tagApi } from '@/apis/tag';
 import { AnimatedButton } from '@/components/ui/animated-button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
+import { Loader2 } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import PostCard, { PostCardSkeleton } from './post-card';
 
@@ -23,13 +24,13 @@ const ListPostByTag = () => {
     data: postsByTag,
     fetchNextPage,
     hasNextPage,
-    isFetchNextPageError,
+    isFetchingNextPage,
     isLoading: isLoadingPostsByTag,
   } = useInfiniteQuery({
     initialPageParam: 1,
     queryKey: ['posts-by-tag', tag],
     queryFn: ({ pageParam = 1 }) =>
-      postApi.getPosts({ page: pageParam, limit: 4, tag: tag === 'all' ? undefined : tag }),
+      postApi.getPosts({ page: pageParam, limit: 8, tag: tag === 'all' ? undefined : tag }),
     getNextPageParam: (lastPage) => {
       if (lastPage.pagination.page < lastPage.pagination.totalPages) {
         return lastPage.pagination.page + 1;
@@ -82,7 +83,7 @@ const ListPostByTag = () => {
       {/* List post */}
       <div className="space-y-5">
         <div className="grid grid-cols-1 md:grid-cols-2 md:gap-5 lg:grid-cols-3 xl:grid-cols-4">
-          {isLoadingPostsByTag && (
+          {(isLoadingPostsByTag || isLoading) && (
             <>
               {Array.from({ length: 4 }).map((_, index) => (
                 <PostCardSkeleton key={index} variant="vertical" />
@@ -96,8 +97,14 @@ const ListPostByTag = () => {
 
         {hasNextPage && (
           <div className="flex justify-center">
-            <AnimatedButton onClick={() => fetchNextPage()} disabled={!hasNextPage || isFetchNextPageError}>
-              {isFetchNextPageError ? 'Error loading more' : hasNextPage ? 'Load more' : 'Nothing more to load'}
+            <AnimatedButton
+              variant="outline"
+              onClick={() => fetchNextPage()}
+              className="border-primary dark:text-muted-foreground text-primary hover:text-primary rounded-full"
+              disabled={!hasNextPage || isFetchingNextPage}
+            >
+              {isFetchingNextPage && <Loader2 className="h-4 w-4 animate-spin" />}
+              {isFetchingNextPage ? 'Loading more' : hasNextPage ? 'Load more' : 'Nothing more to load'}
             </AnimatedButton>
           </div>
         )}

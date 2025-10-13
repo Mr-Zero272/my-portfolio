@@ -30,7 +30,7 @@ export function PostPreviewFeature({ post, locale = 'en' }: PostPreviewFeaturePr
   };
 
   return (
-    <div className="relative min-h-screen">
+    <div className="bg-background relative min-h-screen">
       <div className="mx-auto max-w-4xl px-4 py-8">
         {/* Header */}
         <div className="mb-8">
@@ -78,7 +78,11 @@ export function PostPreviewFeature({ post, locale = 'en' }: PostPreviewFeaturePr
             <AnimatedButton variant="ghost" size="sm" className="text-gray-600 hover:text-green-500">
               <Bookmark className="mr-2 h-5 w-5" />0
             </AnimatedButton>
-            <AnimatedButton variant="ghost" size="sm" className="text-gray-600 hover:text-gray-900">
+            <AnimatedButton
+              variant="ghost"
+              size="sm"
+              className="text-gray-600 hover:text-gray-900 dark:hover:text-white"
+            >
               <Share2 className="mr-2 h-5 w-5" />
               Share
             </AnimatedButton>
@@ -96,9 +100,9 @@ export function PostPreviewFeature({ post, locale = 'en' }: PostPreviewFeaturePr
         )}
 
         {/* Content */}
-        <article className="prose prose-lg prose-gray mb-8 max-w-none">
+        <article className="prose prose-lg prose-gray dark:prose-invert mb-8 max-w-none">
           <div
-            className="prose-headings:font-bold prose-headings:text-gray-900 prose-p:text-gray-700 prose-p:leading-relaxed prose-p:text-lg prose-a:text-blue-600 prose-a:no-underline hover:prose-a:underline prose-strong:text-gray-900 prose-strong:font-semibold prose-code:bg-gray-100 prose-code:px-2 prose-code:py-1 prose-code:rounded prose-blockquote:border-l-4 prose-blockquote:border-gray-300 prose-blockquote:pl-6 prose-blockquote:italic prose-ul:list-disc prose-ol:list-decimal prose-li:text-gray-700 prose-li:leading-relaxed prose-img:rounded-lg prose-img:shadow-sm prose-hr:border-gray-200 prose-hr:my-8"
+            className="prose-headings:font-bold prose-headings:text-gray-900 dark:prose-headings:text-gray-100 prose-p:text-gray-700 dark:prose-p:text-gray-300 prose-p:leading-relaxed prose-p:text-lg prose-a:text-blue-600 dark:prose-a:text-blue-400 prose-a:no-underline hover:prose-a:underline prose-strong:text-gray-900 dark:prose-strong:text-gray-100 prose-strong:font-semibold prose-code:bg-gray-100 dark:prose-code:bg-gray-800 prose-code:text-gray-800 dark:prose-code:text-gray-100 prose-code:px-2 prose-code:py-1 prose-code:rounded prose-blockquote:border-l-4 prose-blockquote:border-gray-300 dark:prose-blockquote:border-gray-600 prose-blockquote:pl-6 prose-blockquote:italic prose-ul:list-disc prose-ol:list-decimal prose-li:text-gray-700 dark:prose-li:text-gray-300 prose-li:leading-relaxed prose-img:rounded-lg prose-img:shadow-sm prose-hr:border-gray-200 dark:prose-hr:border-gray-700 prose-hr:my-8"
             dangerouslySetInnerHTML={createMarkup()}
           />
         </article>

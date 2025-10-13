@@ -96,8 +96,12 @@ const Navigation = () => {
         variants={containerVariants}
         animate={containerControls}
         initial={isMobile ? 'hidden' : 'collapsed'}
-        className="bg-card fixed top-0 left-0 z-50 flex h-full flex-col gap-20 p-5 shadow-sm"
+        className="bg-sidebar fixed top-0 left-0 z-50 flex h-full flex-col gap-20 p-5 shadow-sm"
       >
+        <div
+          onClick={toggle}
+          className="absolute top-0 right-0 h-full w-0.5 cursor-e-resize bg-transparent transition-all hover:bg-black/10 dark:hover:bg-white/10"
+        />
         <div className="relative flex w-full flex-row place-items-center justify-between">
           <Link href="/" className="flex justify-center overflow-hidden">
             <AppLogo

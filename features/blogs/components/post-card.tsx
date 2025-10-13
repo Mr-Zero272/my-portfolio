@@ -149,7 +149,7 @@ export const PostCardSkeleton = ({
   return (
     <div
       className={cn(
-        'group flex',
+        'group flex gap-3',
         {
           'flex-col': variant === 'vertical',
           'flex-col md:flex-row': variant === 'horizontal',
@@ -159,15 +159,16 @@ export const PostCardSkeleton = ({
     >
       <div className="flex-1">
         <Skeleton
-          className={cn('w-full rounded-lg object-cover', {
-            'max-h-[180px]': variant === 'horizontal',
-            'max-h-[280px]': variant === 'vertical',
-            'max-h-[320px]': isMainPost,
+          className={cn('h-full w-full rounded-lg object-cover', {
+            'max-h-[210px]': variant === 'horizontal' && isDisplayExcerpt,
+            'max-h-[175px]': variant === 'horizontal' && !isDisplayExcerpt,
+            'h-[210px]': variant === 'vertical',
+            'max-h-[280px]': isMainPost,
           })}
         />
       </div>
       <div
-        className={cn('line-clamp-2 flex flex-1 flex-col justify-between space-y-3 p-4', {
+        className={cn('flex flex-1 flex-col justify-between space-y-3 p-4', {
           'space-y-5 py-8': isMainPost,
         })}
       >
@@ -176,28 +177,25 @@ export const PostCardSkeleton = ({
             'space-y-5': isMainPost,
           })}
         >
-          {variant === 'horizontal' && (
-            <Skeleton
-              className={cn('h-6 w-24 rounded-full bg-green-100 px-4 py-0.5 text-sm text-green-700', {
-                'text-base': isMainPost,
-              })}
-            />
-          )}
-          <Skeleton
-            className={cn('h-6 rounded bg-gray-200', {
-              'h-8': isMainPost,
+          {variant === 'horizontal' && <Skeleton className="h-4 w-20" />}
+          <div
+            className={cn('space-y-1', {
+              'text-2xl': isMainPost,
             })}
-          />
+          >
+            <Skeleton className={isMainPost ? 'h-8 w-3/4' : 'h-6 w-full'} />
+            <Skeleton className={isMainPost ? 'h-8 w-5/6' : 'h-6 w-5/6'} />
+          </div>
           {isMainPost ? (
             <div className="space-y-1">
-              <Skeleton className="h-4 rounded bg-gray-200" />
-              <Skeleton className="h-4 w-5/6 rounded bg-gray-200" />
+              <Skeleton className="h-4 w-full" />
+              <Skeleton className="h-4 w-5/6" />
             </div>
           ) : (
             isDisplayExcerpt && (
               <div className="space-y-1">
-                <Skeleton className="h-4 rounded bg-gray-200" />
-                <Skeleton className="h-4 w-5/6 rounded bg-gray-200" />
+                <Skeleton className="h-4 w-full" />
+                <Skeleton className="h-4 w-5/6" />
               </div>
             )
           )}
@@ -210,18 +208,12 @@ export const PostCardSkeleton = ({
               isDisplayAuthorAvatar && <Skeleton className="size-8 rounded-full" />
             )}
             <div className="flex items-center">
-              <Skeleton className="h-4 w-20 rounded bg-gray-200" />
+              <Skeleton className="h-4 w-20" />
               <Dot className="text-muted-foreground" />
-              <Skeleton className="ml-2 h-4 w-20 rounded bg-gray-200" />
+              <Skeleton className="h-4 w-16" />
             </div>
           </div>
-          {variant === 'vertical' && (
-            <Skeleton
-              className={cn('h-6 w-24 rounded-full bg-green-100 px-4 py-0.5 text-sm text-green-700', {
-                'text-base': isMainPost,
-              })}
-            />
-          )}
+          {variant === 'vertical' && <Skeleton className="h-4 w-20" />}
         </div>
       </div>
     </div>
