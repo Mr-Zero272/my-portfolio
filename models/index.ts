@@ -11,7 +11,7 @@ export { Comment, Image, Post, Tag, User };
 // Also export the interfaces
 export type { IComment } from './Comment';
 export type { IImage } from './Image';
-export type { IPost } from './Post';
+export type { IPost, IPostResponse } from './Post';
 export type { ITag } from './Tag';
 export type { IUser } from './User';
 

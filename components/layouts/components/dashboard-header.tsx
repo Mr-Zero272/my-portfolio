@@ -14,9 +14,6 @@ const DashboardHeader = () => {
     setIsScrolled(window.scrollY > 0);
   });
 
-  console.log({
-    isScrolled,
-  });
   return (
     <>
       <div

@@ -1,7 +1,7 @@
 'use client';
 
 import { AnimatePresence, motion } from 'framer-motion';
-import { ArrowUp } from 'lucide-react';
+import { ChevronUp } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
 const ScrollToTopButton = () => {
@@ -33,7 +33,7 @@ const ScrollToTopButton = () => {
       {isVisible && (
         <motion.button
           onClick={scrollToTop}
-          className="bg-primary hover:bg-primary/80 focus:ring-primary/50 dark:bg-primary fixed right-16 bottom-10 z-50 flex h-12 w-12 items-center justify-center rounded-full text-white shadow-lg focus:ring-2 focus:ring-offset-2 focus:outline-none dark:ring-offset-gray-900"
+          className="bg-primary hover:bg-primary/80 focus:ring-primary/50 dark:bg-primary fixed right-5 bottom-5 z-50 flex size-8 items-center justify-center rounded-full text-white shadow-lg focus:ring-2 focus:ring-offset-2 focus:outline-none md:right-16 md:bottom-10 md:size-12 dark:ring-offset-gray-900"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: 20 }}
@@ -42,7 +42,7 @@ const ScrollToTopButton = () => {
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.9 }}
         >
-          <ArrowUp size={20} />
+          <ChevronUp className="size-3 md:size-4" />
         </motion.button>
       )}
     </AnimatePresence>

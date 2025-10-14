@@ -3,7 +3,7 @@
 import { uploadFile, uploadMultipleFiles } from '@/lib/uploadthing';
 import NextImage from 'next/image';
 import { ChangeEvent, useCallback, useEffect, useRef, useState } from 'react';
-import RichTextEditor, { BaseKit } from 'reactjs-tiptap-editor';
+import RichTextEditor, { BaseKit, useEditorState } from 'reactjs-tiptap-editor';
 import useImagePreview from '../hooks/use-preview-image';
 
 import {
@@ -203,12 +203,14 @@ const extensions = [
 ];
 
 function Editor() {
+  const { editor, editorRef } = useEditorState();
   const { theme } = useTheme();
   const { _id, title, content, featureImage: storeFeatureImage, imageCaption, setField } = usePostStorage();
   const { handlePaste } = useSmartPaste();
   const [editorKey, setEditorKey] = useState(`key-${_id}`);
 
   const debouncedOnValueChange = useDebounceCallback((value: string) => {
+    const plainText = editor?.getText() || '';
     setField('content', value);
   }, 300);
 
@@ -344,12 +346,12 @@ function Editor() {
             <Textarea
               ref={titleRef}
               value={title || ''}
-              className="text-foreground min-w-full resize-none border-none px-0 !text-4xl font-semibold shadow-none focus-visible:ring-0 focus-visible:ring-offset-0"
+              className="text-foreground min-w-full resize-none border-none px-0 !text-4xl font-semibold shadow-none focus-visible:ring-0 focus-visible:ring-offset-0 dark:bg-transparent"
               placeholder="Post title"
               onPaste={(e) =>
                 handlePaste(e, {
                   onContentDetected: (detectedContent) => {
-                    setEditorKey(`key-${_id}-${Date.now()}`); // Reset editor
+                    setEditorKey(`key-${_id}-${Date.now()}`);
                     setField('content', detectedContent);
                   },
                   onTitleDetected: (detectedTitle) => {
@@ -384,6 +386,7 @@ function Editor() {
 
           <div className="my-editor">
             <RichTextEditor
+              ref={editorRef}
               key={editorKey} // Sử dụng key để reset editor khi cần
               contentClass="p-0 !shadow-none !outline-none"
               output="html"

@@ -4,7 +4,7 @@ import ScrollToTopButton from '@/components/shared/scroll-to-top-button';
 import { AnimatedButton } from '@/components/ui/animated-button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
-import { IPost, ITag } from '@/models';
+import { IPostResponse } from '@/models';
 import { formatDistanceToNow } from 'date-fns';
 import { enUS, vi } from 'date-fns/locale';
 import { Bookmark, Heart, MessageCircle, Share2 } from 'lucide-react';
@@ -12,7 +12,7 @@ import Image from 'next/image';
 import ReadPost from './components/read-post';
 
 interface PostPreviewFeatureProps {
-  post: Omit<IPost, 'tags'> & { tags: ITag[] };
+  post: IPostResponse;
   locale?: string;
 }
 

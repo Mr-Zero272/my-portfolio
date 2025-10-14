@@ -1,6 +1,6 @@
 import { API_URL, SITE_URL } from '@/configs/env';
 import PostPreviewFeature from '@/features/preview-post';
-import { IPost, ITag } from '@/models';
+import { IPostResponse } from '@/models';
 import { BaseResponse } from '@/types/response';
 import { Metadata } from 'next';
 
@@ -19,7 +19,7 @@ const getPostBySlug = async (slug: string) => {
     if (!res.ok) {
       throw new Error('Failed to fetch post data');
     }
-    return res.json() as Promise<BaseResponse<Omit<IPost, 'tags'> & { tags: ITag[] }>>;
+    return res.json() as Promise<BaseResponse<IPostResponse>>;
   } catch (error) {
     console.warn('Failed to fetch post during build:', error);
     // Trả về dữ liệu mặc định khi không thể fetch
@@ -80,10 +80,7 @@ export async function generateMetadata({ params }: BlogDetailPageProps): Promise
       post.title + ' | Piti blog',
       post.title + ' | Piti blog',
       ...tags,
-      'Piti blog',
-      'Article',
-      'Content',
-      'Publishing',
+      ...(post.keywords || []),
     ].filter(Boolean);
 
     const publishDate = post.createdAt || post.updatedAt;
@@ -98,7 +95,7 @@ export async function generateMetadata({ params }: BlogDetailPageProps): Promise
         description: metaDescription,
         url: canonicalUrl,
         type: 'article',
-        siteName: 'Platform Tapnews',
+        siteName: 'Piti blog',
         images: [
           {
             url: ogImage,
@@ -156,8 +153,8 @@ export async function generateMetadata({ params }: BlogDetailPageProps): Promise
     console.error('Error generating metadata:', error);
     // Fallback metadata if post not found
     return {
-      title: 'Article Not Found | Platform Tapnews',
-      description: 'The requested article could not be found on Platform Tapnews.',
+      title: 'Article Not Found | Piti blog',
+      description: 'The requested article could not be found on Piti blog.',
       robots: {
         index: false,
         follow: false,

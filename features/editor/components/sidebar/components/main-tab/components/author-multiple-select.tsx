@@ -13,9 +13,6 @@ import { usePostStorage } from '../../../../../store/use-post-storage';
 
 export const AuthorMultipleSelect = () => {
   const { data: session } = useSession();
-  console.log({
-    session,
-  });
   const { authors: authorsFromStorage, setField, errors } = usePostStorage();
   const { data: users, isLoading: isUserLoading } = useQuery({
     queryKey: ['users'],

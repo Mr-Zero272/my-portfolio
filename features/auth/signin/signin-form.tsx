@@ -3,6 +3,7 @@
 import { AnimatedButton } from '@/components/ui/animated-button';
 import { Form, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { logger } from '@/lib/logger';
 import { cn } from '@/lib/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { signIn } from 'next-auth/react';
@@ -43,7 +44,7 @@ export default function SignInForm() {
         const callbackUrl = searchParams.get('callbackUrl') || '/piti/posts';
         router.push(callbackUrl);
       } else {
-        console.log('SignIn response:', res);
+        logger('SignIn response:', res);
         toast.error('Login failed. Please check your credentials and try again.');
         form.setError('email', { message: 'Invalid email or password' });
       }

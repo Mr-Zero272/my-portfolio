@@ -14,7 +14,8 @@ interface PostState {
   title: string;
   slug: string;
   excerpt: string;
-  content: string;
+  content: string; // HTML content
+  keywords: string[];
   featureImage: string;
   featureImageFile: File | null;
   imageCaption: string;
@@ -54,6 +55,7 @@ const initialPostState: PostState = {
   slug: '',
   excerpt: '',
   content: '',
+  keywords: [],
   featureImageFile: null,
   featureImage: '',
   imageCaption: '',
@@ -147,6 +149,7 @@ export const usePostStorage = create<PostState & PostActions>((set, get) => ({
       // Other fields don't need validation
       _id: () => true,
       excerpt: () => true,
+      keywords: () => true,
       featureImage: () => true,
       featureImageFile: () => true,
       imageCaption: () => true,
@@ -196,6 +199,7 @@ export const usePostStorage = create<PostState & PostActions>((set, get) => ({
       slug: state.slug,
       excerpt: state.excerpt,
       content: state.content,
+      keywords: state.keywords,
       featureImage: state.featureImage,
       featureImageFile: state.featureImageFile,
       imageCaption: state.imageCaption,
@@ -247,6 +251,7 @@ export const mapPostToPostInterface = (
     imageCaption: post.imageCaption || '',
     slug: post.slug,
     content: post.content,
+    keywords: post.keywords || [],
     likes: post.likes || 0,
     comments: post.comments.map((comment) => comment._id.toString()) || [],
     metaTitle: post.metaTitle || '',
