@@ -612,7 +612,9 @@ function PostCellViewer({ post }: { post: PostType }) {
           </div>
         </div>
         <DrawerFooter>
-          <Button>Edit Post</Button>
+          <Link href={`/posts/${post.slug}`} className="w-full flex-1">
+            <Button className="w-full">Edit Post</Button>
+          </Link>
           <DrawerClose asChild>
             <Button variant="outline">Close</Button>
           </DrawerClose>

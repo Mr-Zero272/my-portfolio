@@ -3,7 +3,7 @@
 import { uploadFile, uploadMultipleFiles } from '@/lib/uploadthing';
 import NextImage from 'next/image';
 import { ChangeEvent, useCallback, useEffect, useRef, useState } from 'react';
-import RichTextEditor, { BaseKit, useEditorState } from 'reactjs-tiptap-editor';
+import RichTextEditor, { BaseKit } from 'reactjs-tiptap-editor';
 import useImagePreview from '../hooks/use-preview-image';
 
 import {
@@ -203,14 +203,13 @@ const extensions = [
 ];
 
 function Editor() {
-  const { editor, editorRef } = useEditorState();
+  // const { editorRef } = useEditorState();
   const { theme } = useTheme();
   const { _id, title, content, featureImage: storeFeatureImage, imageCaption, setField } = usePostStorage();
   const { handlePaste } = useSmartPaste();
   const [editorKey, setEditorKey] = useState(`key-${_id}`);
 
   const debouncedOnValueChange = useDebounceCallback((value: string) => {
-    const plainText = editor?.getText() || '';
     setField('content', value);
   }, 300);
 
@@ -386,7 +385,7 @@ function Editor() {
 
           <div className="my-editor">
             <RichTextEditor
-              ref={editorRef}
+              // ref={editorRef}
               key={editorKey} // Sử dụng key để reset editor khi cần
               contentClass="p-0 !shadow-none !outline-none"
               output="html"

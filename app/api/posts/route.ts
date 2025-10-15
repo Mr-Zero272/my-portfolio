@@ -83,6 +83,8 @@ export async function POST(request: NextRequest) {
       slug: slug.trim(),
       content,
       excerpt: body.excerpt || '',
+      keywords: body.keywords || [],
+      authors: body.authors || [],
       featureImage: body.featureImage,
       imageCaption: body.imageCaption || '',
       tags: body.tags || [],

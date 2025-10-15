@@ -1,5 +1,6 @@
 'use client';
 
+import { AnimatedButton } from '@/components/ui/animated-button';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -76,11 +77,6 @@ const KeywordsInput = () => {
     }
   };
 
-  console.log({
-    content,
-    title,
-  });
-
   return (
     <div className="space-y-3">
       <Label htmlFor="keywords-input" className="text-sm font-medium">
@@ -96,9 +92,9 @@ const KeywordsInput = () => {
           placeholder="Add keyword..."
           className="flex-1"
         />
-        <Button onClick={handleAddKeyword} size="sm" variant="outline" disabled={!inputValue.trim()}>
+        <AnimatedButton onClick={handleAddKeyword} size="sm" variant="outline" disabled={!inputValue.trim()}>
           <Plus className="h-4 w-4" />
-        </Button>
+        </AnimatedButton>
       </div>
 
       <Button

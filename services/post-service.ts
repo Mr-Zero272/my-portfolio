@@ -27,7 +27,33 @@ export class PostService {
         throw new Error('Post with this slug already exists');
       }
 
-      const newPost = new Post(data);
+      // Validate and sanitize data
+      const sanitizedData = { ...data };
+
+      // Sanitize keywords - remove empty strings and trim
+      if (sanitizedData.keywords) {
+        sanitizedData.keywords = sanitizedData.keywords
+          .map((keyword) => keyword.trim())
+          .filter((keyword) => keyword.length > 0);
+      }
+
+      // Validate authors ObjectIds
+      if (sanitizedData.authors && sanitizedData.authors.length > 0) {
+        const invalidAuthorIds = sanitizedData.authors.filter((authorId) => !mongoose.Types.ObjectId.isValid(authorId));
+        if (invalidAuthorIds.length > 0) {
+          throw new Error(`Invalid author IDs: ${invalidAuthorIds.join(', ')}`);
+        }
+      }
+
+      // Validate tags ObjectIds
+      if (sanitizedData.tags && sanitizedData.tags.length > 0) {
+        const invalidTagIds = sanitizedData.tags.filter((tagId) => !mongoose.Types.ObjectId.isValid(tagId));
+        if (invalidTagIds.length > 0) {
+          throw new Error(`Invalid tag IDs: ${invalidTagIds.join(', ')}`);
+        }
+      }
+
+      const newPost = new Post(sanitizedData);
       const result = await newPost.save();
       return { status: 'success', data: result };
     } catch (error) {
@@ -99,9 +125,36 @@ export class PostService {
         }
       }
 
-      const updatedPost = await Post.findOneAndUpdate(query, data, { new: true, runValidators: true }).populate(
-        'authors tags',
-      );
+      // Validate and sanitize update data
+      const sanitizedData = { ...data };
+
+      // Sanitize keywords - remove empty strings and trim
+      if (sanitizedData.keywords) {
+        sanitizedData.keywords = sanitizedData.keywords
+          .map((keyword) => keyword.trim())
+          .filter((keyword) => keyword.length > 0);
+      }
+
+      // Validate authors ObjectIds
+      if (sanitizedData.authors && sanitizedData.authors.length > 0) {
+        const invalidAuthorIds = sanitizedData.authors.filter((authorId) => !mongoose.Types.ObjectId.isValid(authorId));
+        if (invalidAuthorIds.length > 0) {
+          throw new Error(`Invalid author IDs: ${invalidAuthorIds.join(', ')}`);
+        }
+      }
+
+      // Validate tags ObjectIds
+      if (sanitizedData.tags && sanitizedData.tags.length > 0) {
+        const invalidTagIds = sanitizedData.tags.filter((tagId) => !mongoose.Types.ObjectId.isValid(tagId));
+        if (invalidTagIds.length > 0) {
+          throw new Error(`Invalid tag IDs: ${invalidTagIds.join(', ')}`);
+        }
+      }
+
+      const updatedPost = await Post.findOneAndUpdate(query, sanitizedData, {
+        new: true,
+        runValidators: true,
+      }).populate('authors tags');
       return { status: 'success', data: updatedPost };
     } catch (error) {
       console.error('Error updating post:', error);
@@ -132,6 +185,7 @@ export class PostService {
           { title: { $regex: searchTerm, $options: 'i' } },
           { content: { $regex: searchTerm, $options: 'i' } },
           { metaDescription: { $regex: searchTerm, $options: 'i' } },
+          { keywords: { $in: [new RegExp(searchTerm, 'i')] } },
         ],
       };
 

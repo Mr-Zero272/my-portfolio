@@ -127,7 +127,7 @@ const PostEditorContent = ({ mode = 'create' }: PostEditorProps) => {
           title,
           slug,
           content,
-          keywords,
+          keywords: keywords.filter((kw) => kw.trim() !== ''),
           authors,
           tags,
           excerpt,
