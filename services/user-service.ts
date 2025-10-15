@@ -1,5 +1,6 @@
 import connectDB from '@/lib/mongodb';
 import { User, type IUser } from '@/models';
+import { BasePaginationResponse } from '@/types/response';
 import bcrypt from 'bcryptjs';
 
 export class UserService {
@@ -87,7 +88,7 @@ export class UserService {
     limit?: number;
     page?: number;
     role?: string;
-  } = {}) {
+  } = {}): Promise<BasePaginationResponse<IUser>> {
     try {
       await connectDB();
 
@@ -108,21 +109,22 @@ export class UserService {
       ]);
 
       return {
-        success: true,
+        status: 'success',
         data: users,
         pagination: {
-          currentPage: page,
+          page,
           totalPages: Math.ceil(total / limit),
-          totalItems: total,
-          itemsPerPage: limit,
+          total,
+          limit,
         },
       };
     } catch (error) {
       console.error('Error getting users:', error);
       return {
-        success: false,
+        status: 'error',
         message: 'Failed to get users',
         data: [],
+        pagination: { total: 0, page: 1, limit, totalPages: 0 },
       };
     }
   }
