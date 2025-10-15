@@ -23,7 +23,7 @@ import {
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -41,7 +41,7 @@ import {
 } from '@tanstack/react-table';
 import { format } from 'date-fns';
 import { Types } from 'mongoose';
-import React from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { z } from 'zod';
 
 // Lucide Icons
@@ -62,6 +62,7 @@ import {
 } from 'lucide-react';
 
 // UI Components
+import ConfirmDialog from '@/components/shared/confirm-dialog';
 import { AnimatedButton } from '@/components/ui/animated-button';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -90,6 +91,7 @@ import { Separator } from '@/components/ui/separator';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import Link from 'next/link';
+import { toast } from 'sonner';
 
 // Schema for Post table data
 export const postSchema = z.object({
@@ -126,115 +128,6 @@ function DragHandle({ id }: { id: string }) {
   );
 }
 
-const columns: ColumnDef<PostType>[] = [
-  {
-    id: 'drag',
-    header: () => null,
-    cell: ({ row }) => <DragHandle id={row.original._id} />,
-  },
-  {
-    id: 'select',
-    header: ({ table }) => (
-      <div className="flex items-center justify-center">
-        <Checkbox
-          checked={table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && 'indeterminate')}
-          onCheckedChange={(value: boolean | string) => table.toggleAllPageRowsSelected(!!value)}
-          aria-label="Select all"
-        />
-      </div>
-    ),
-    cell: ({ row }) => (
-      <div className="flex items-center justify-center">
-        <Checkbox
-          checked={row.getIsSelected()}
-          onCheckedChange={(value: boolean | string) => row.toggleSelected(!!value)}
-          aria-label="Select row"
-        />
-      </div>
-    ),
-    enableSorting: false,
-    enableHiding: false,
-  },
-  {
-    accessorKey: 'title',
-    header: () => <div className="min-w-80">Title</div>,
-    cell: ({ row }) => {
-      return <PostCellViewer post={row.original} />;
-    },
-    enableHiding: false,
-  },
-  {
-    accessorKey: 'published',
-    header: () => <div className="min-w-10">Status</div>,
-    cell: ({ row }) => (
-      <Badge variant={row.original.published ? 'default' : 'secondary'} className="px-1.5">
-        {row.original.published ? (
-          <>
-            <CheckIcon className="mr-1 h-3 w-3 text-white dark:text-white" />
-            Published
-          </>
-        ) : (
-          <>
-            <LoaderIcon className="mr-1 h-3 w-3" />
-            Draft
-          </>
-        )}
-      </Badge>
-    ),
-  },
-  {
-    accessorKey: 'likes',
-    header: () => <div className="w-full text-right">Likes</div>,
-    cell: ({ row }) => <div className="text-right font-medium">{row.original.likes}</div>,
-  },
-  {
-    accessorKey: 'createdAt',
-    header: () => <div className="w-full text-right">Created</div>,
-    cell: ({ row }) => (
-      <div className="text-muted-foreground text-right text-sm">
-        {format(new Date(row.original.createdAt), 'MMM dd, yyyy hh:mm a')}
-      </div>
-    ),
-  },
-  {
-    id: 'actions',
-    cell: ({ row }) => {
-      const post = row.original;
-      return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button
-              variant="ghost"
-              className="data-[state=open]:bg-muted text-muted-foreground flex size-8"
-              size="icon"
-            >
-              <EllipsisVerticalIcon />
-              <span className="sr-only">Open menu for {post.title}</span>
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="w-32">
-            <DropdownMenuItem>
-              <Eye className="mr-2 h-4 w-4" />
-              View
-            </DropdownMenuItem>
-            <Link href={`/posts/${post.slug}`}>
-              <DropdownMenuItem>
-                <Edit className="mr-2 h-4 w-4" />
-                Edit
-              </DropdownMenuItem>
-            </Link>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem className="text-destructive">
-              <Trash2 className="mr-2 h-4 w-4" />
-              Delete
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      );
-    },
-  },
-];
-
 function DraggableRow({ row }: { row: Row<PostType> }) {
   const { transform, transition, setNodeRef, isDragging } = useSortable({
     id: row.original._id,
@@ -269,6 +162,10 @@ export function PostTable() {
     pageIndex: 0,
     pageSize: 10,
   });
+  const [deleteState, setDeleteState] = React.useState<{ isOpen: boolean; postId: string | null }>({
+    isOpen: false,
+    postId: null,
+  });
 
   const sortableId = React.useId();
   const sensors = useSensors(
@@ -295,13 +192,18 @@ export function PostTable() {
       }),
   });
 
+  // delete post
+  const { mutateAsync: deletePost, isPending: isDeleteingPost } = useMutation({
+    mutationFn: postApi.deletePost,
+  });
+
   const { data: statsResponse, isLoading: statsLoading } = useQuery({
     queryKey: ['post-stats-by-status'],
     queryFn: () => postApi.getPostStatsByStatus(),
   });
 
   // Update local data when API response changes
-  React.useEffect(() => {
+  useEffect(() => {
     if (postsResponse?.data) {
       // Transform IPost to PostType
       const transformedData = postsResponse.data.map((post: IPost) => ({
@@ -320,6 +222,121 @@ export function PostTable() {
   }, [postsResponse]);
 
   const dataIds = React.useMemo<UniqueIdentifier[]>(() => data?.map((post) => post._id) || [], [data]);
+
+  const columns: ColumnDef<PostType>[] = useMemo(
+    () => [
+      {
+        id: 'drag',
+        header: () => null,
+        cell: ({ row }) => <DragHandle id={row.original._id} />,
+      },
+      {
+        id: 'select',
+        header: ({ table }) => (
+          <div className="flex items-center justify-center">
+            <Checkbox
+              checked={table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && 'indeterminate')}
+              onCheckedChange={(value: boolean | string) => table.toggleAllPageRowsSelected(!!value)}
+              aria-label="Select all"
+            />
+          </div>
+        ),
+        cell: ({ row }) => (
+          <div className="flex items-center justify-center">
+            <Checkbox
+              checked={row.getIsSelected()}
+              onCheckedChange={(value: boolean | string) => row.toggleSelected(!!value)}
+              aria-label="Select row"
+            />
+          </div>
+        ),
+        enableSorting: false,
+        enableHiding: false,
+      },
+      {
+        accessorKey: 'title',
+        header: () => <div className="min-w-80">Title</div>,
+        cell: ({ row }) => {
+          return <PostCellViewer post={row.original} />;
+        },
+        enableHiding: false,
+      },
+      {
+        accessorKey: 'published',
+        header: () => <div className="min-w-10">Status</div>,
+        cell: ({ row }) => (
+          <Badge variant={row.original.published ? 'default' : 'secondary'} className="px-1.5">
+            {row.original.published ? (
+              <>
+                <CheckIcon className="mr-1 h-3 w-3 text-white dark:text-white" />
+                Published
+              </>
+            ) : (
+              <>
+                <LoaderIcon className="mr-1 h-3 w-3" />
+                Draft
+              </>
+            )}
+          </Badge>
+        ),
+      },
+      {
+        accessorKey: 'likes',
+        header: () => <div className="w-full text-right">Likes</div>,
+        cell: ({ row }) => <div className="text-right font-medium">{row.original.likes}</div>,
+      },
+      {
+        accessorKey: 'createdAt',
+        header: () => <div className="w-full text-right">Created</div>,
+        cell: ({ row }) => (
+          <div className="text-muted-foreground text-right text-sm">
+            {format(new Date(row.original.createdAt), 'MMM dd, yyyy hh:mm a')}
+          </div>
+        ),
+      },
+      {
+        id: 'actions',
+        cell: ({ row }) => {
+          const post = row.original;
+          return (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="ghost"
+                  className="data-[state=open]:bg-muted text-muted-foreground flex size-8"
+                  size="icon"
+                >
+                  <EllipsisVerticalIcon />
+                  <span className="sr-only">Open menu for {post.title}</span>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-32">
+                <DropdownMenuItem>
+                  <Eye className="mr-2 h-4 w-4" />
+                  View
+                </DropdownMenuItem>
+                <Link href={`/posts/${post.slug}`}>
+                  <DropdownMenuItem>
+                    <Edit className="mr-2 h-4 w-4" />
+                    Edit
+                  </DropdownMenuItem>
+                </Link>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem
+                  className="text-destructive"
+                  onClick={() => setDeleteState({ isOpen: true, postId: post._id })}
+                >
+                  <Trash2 className="mr-2 h-4 w-4" />
+                  Delete
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          );
+        },
+      },
+    ],
+    [],
+  );
 
   const table = useReactTable({
     data,
@@ -372,192 +389,217 @@ export function PostTable() {
   }
 
   return (
-    <Tabs
-      value={tab}
-      onValueChange={(tab) => setTab(tab as 'posts' | 'drafts' | 'published')}
-      className="w-full flex-col justify-start gap-6"
-    >
-      <div className="flex items-center justify-between px-4 lg:px-6">
-        <TabsList className="">
-          <TabsTrigger value="posts">All Posts</TabsTrigger>
-          <TabsTrigger value="drafts">
-            Drafts <Badge variant="secondary">{statsResponse?.data?.unpublished || 0}</Badge>
-          </TabsTrigger>
-          <TabsTrigger value="published">
-            Published <Badge variant="secondary">{statsResponse?.data?.published || 0}</Badge>
-          </TabsTrigger>
-        </TabsList>
-        <div className="flex items-center gap-2">
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="outline" size="sm">
-                <LayoutGrid />
-                <span className="hidden lg:inline">Customize Columns</span>
-                <span className="lg:hidden">Columns</span>
-                <ChevronDown />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-56">
-              {table
-                .getAllColumns()
-                .filter((column) => typeof column.accessorFn !== 'undefined' && column.getCanHide())
-                .map((column) => {
-                  return (
-                    <DropdownMenuCheckboxItem
-                      key={column.id}
-                      className="capitalize"
-                      checked={column.getIsVisible()}
-                      onCheckedChange={(value: boolean | string) => column.toggleVisibility(!!value)}
-                    >
-                      {column.id}
-                    </DropdownMenuCheckboxItem>
-                  );
-                })}
-            </DropdownMenuContent>
-          </DropdownMenu>
-          <Link href="/posts/create">
-            <AnimatedButton variant="outline" size="sm">
-              <Plus />
-              <span className="hidden lg:inline">New Post</span>
-            </AnimatedButton>
-          </Link>
-        </div>
-      </div>
-      <div className="relative flex flex-col gap-4 overflow-auto px-4 lg:px-6">
-        <div className="overflow-hidden rounded-lg border">
-          <DndContext
-            collisionDetection={closestCenter}
-            modifiers={[restrictToVerticalAxis]}
-            onDragEnd={handleDragEnd}
-            sensors={sensors}
-            id={sortableId}
-          >
-            <SortableContext items={dataIds} strategy={verticalListSortingStrategy}>
-              <Table>
-                <TableHeader className="bg-muted sticky top-0 z-10">
-                  {table.getHeaderGroups().map((headerGroup) => (
-                    <TableRow key={headerGroup.id}>
-                      {headerGroup.headers.map((header) => {
-                        return (
-                          <TableHead key={header.id}>
-                            {header.isPlaceholder
-                              ? null
-                              : flexRender(header.column.columnDef.header, header.getContext())}
-                          </TableHead>
-                        );
-                      })}
-                    </TableRow>
-                  ))}
-                </TableHeader>
-                <TableBody className="**:data-[slot=table-cell]:first:w-8">
-                  {isLoading ? (
-                    <TableRow>
-                      <TableCell colSpan={columns.length} className="h-24 text-center">
-                        <Loader2Icon className="mx-auto h-6 w-6 animate-spin" />
-                        <p className="text-muted-foreground mt-2">Loading posts...</p>
-                      </TableCell>
-                    </TableRow>
-                  ) : table.getRowModel().rows?.length ? (
-                    table.getRowModel().rows.map((row) => <DraggableRow key={row.id} row={row} />)
-                  ) : (
-                    <TableRow>
-                      <TableCell colSpan={columns.length} className="h-24 text-center">
-                        No posts found.
-                      </TableCell>
-                    </TableRow>
-                  )}
-                </TableBody>
-              </Table>
-            </SortableContext>
-          </DndContext>
-        </div>
-        <div className="flex items-center justify-between px-4">
-          <div className="text-muted-foreground hidden flex-1 text-sm lg:flex">
-            {table.getFilteredSelectedRowModel().rows.length} of {table.getFilteredRowModel().rows.length} row(s)
-            selected.
-            {postsResponse && <span className="ml-4">Total: {postsResponse.pagination.total} posts</span>}
-          </div>
-          <div className="flex w-full items-center gap-8 lg:w-fit">
-            <div className="hidden items-center gap-2 lg:flex">
-              <Label htmlFor="rows-per-page" className="text-sm font-medium">
-                Rows per page
-              </Label>
-              <Select
-                value={`${table.getState().pagination.pageSize}`}
-                onValueChange={(value: string) => {
-                  table.setPageSize(Number(value));
-                }}
-              >
-                <SelectTrigger size="sm" className="w-20" id="rows-per-page">
-                  <SelectValue placeholder={table.getState().pagination.pageSize} />
-                </SelectTrigger>
-                <SelectContent side="top">
-                  {[5, 10, 20, 30, 40, 50].map((pageSize) => (
-                    <SelectItem key={pageSize} value={`${pageSize}`}>
-                      {pageSize}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="flex w-fit items-center justify-center text-sm font-medium">
-              Page {table.getState().pagination.pageIndex + 1} of {table.getPageCount()}
-            </div>
-            <div className="ml-auto flex items-center gap-2 lg:ml-0">
-              <Button
-                variant="outline"
-                className="hidden h-8 w-8 p-0 lg:flex"
-                onClick={() => table.setPageIndex(0)}
-                disabled={!table.getCanPreviousPage()}
-              >
-                <span className="sr-only">Go to first page</span>
-                <ChevronLeft />
-              </Button>
-              <Button
-                variant="outline"
-                className="size-8"
-                size="icon"
-                onClick={() => table.previousPage()}
-                disabled={!table.getCanPreviousPage()}
-              >
-                <span className="sr-only">Go to previous page</span>
-                <ChevronLeft />
-              </Button>
-              <Button
-                variant="outline"
-                className="size-8"
-                size="icon"
-                onClick={() => table.nextPage()}
-                disabled={!table.getCanNextPage()}
-              >
-                <span className="sr-only">Go to next page</span>
-                <ChevronRight />
-              </Button>
-              <Button
-                variant="outline"
-                className="hidden size-8 lg:flex"
-                size="icon"
-                onClick={() => table.setPageIndex(table.getPageCount() - 1)}
-                disabled={!table.getCanNextPage()}
-              >
-                <span className="sr-only">Go to last page</span>
-                <ChevronRight />
-              </Button>
-            </div>
+    <>
+      <Tabs
+        value={tab}
+        onValueChange={(tab) => setTab(tab as 'posts' | 'drafts' | 'published')}
+        className="w-full flex-col justify-start gap-6"
+      >
+        <div className="flex items-center justify-between px-4 lg:px-6">
+          <TabsList className="">
+            <TabsTrigger value="posts">All Posts</TabsTrigger>
+            <TabsTrigger value="drafts">
+              Drafts <Badge variant="secondary">{statsResponse?.data?.unpublished || 0}</Badge>
+            </TabsTrigger>
+            <TabsTrigger value="published">
+              Published <Badge variant="secondary">{statsResponse?.data?.published || 0}</Badge>
+            </TabsTrigger>
+          </TabsList>
+          <div className="flex items-center gap-2">
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline" size="sm">
+                  <LayoutGrid />
+                  <span className="hidden lg:inline">Customize Columns</span>
+                  <span className="lg:hidden">Columns</span>
+                  <ChevronDown />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-56">
+                {table
+                  .getAllColumns()
+                  .filter((column) => typeof column.accessorFn !== 'undefined' && column.getCanHide())
+                  .map((column) => {
+                    return (
+                      <DropdownMenuCheckboxItem
+                        key={column.id}
+                        className="capitalize"
+                        checked={column.getIsVisible()}
+                        onCheckedChange={(value: boolean | string) => column.toggleVisibility(!!value)}
+                      >
+                        {column.id}
+                      </DropdownMenuCheckboxItem>
+                    );
+                  })}
+              </DropdownMenuContent>
+            </DropdownMenu>
+            <Link href="/posts/create">
+              <AnimatedButton variant="outline" size="sm">
+                <Plus />
+                <span className="hidden lg:inline">New Post</span>
+              </AnimatedButton>
+            </Link>
           </div>
         </div>
-      </div>
-      {/* <TabsContent value="drafts" className="flex flex-col px-4 lg:px-6">
-        <div className="flex aspect-video w-full flex-1 items-center justify-center rounded-lg border border-dashed">
-          <p className="text-muted-foreground">Draft posts view - Coming soon</p>
+        <div className="relative flex flex-col gap-4 overflow-auto px-4 lg:px-6">
+          <div className="overflow-hidden rounded-lg border">
+            <DndContext
+              collisionDetection={closestCenter}
+              modifiers={[restrictToVerticalAxis]}
+              onDragEnd={handleDragEnd}
+              sensors={sensors}
+              id={sortableId}
+            >
+              <SortableContext items={dataIds} strategy={verticalListSortingStrategy}>
+                <Table>
+                  <TableHeader className="bg-muted sticky top-0 z-10">
+                    {table.getHeaderGroups().map((headerGroup) => (
+                      <TableRow key={headerGroup.id}>
+                        {headerGroup.headers.map((header) => {
+                          return (
+                            <TableHead key={header.id}>
+                              {header.isPlaceholder
+                                ? null
+                                : flexRender(header.column.columnDef.header, header.getContext())}
+                            </TableHead>
+                          );
+                        })}
+                      </TableRow>
+                    ))}
+                  </TableHeader>
+                  <TableBody className="**:data-[slot=table-cell]:first:w-8">
+                    {isLoading ? (
+                      <TableRow>
+                        <TableCell colSpan={columns.length} className="h-24 text-center">
+                          <Loader2Icon className="mx-auto h-6 w-6 animate-spin" />
+                          <p className="text-muted-foreground mt-2">Loading posts...</p>
+                        </TableCell>
+                      </TableRow>
+                    ) : table.getRowModel().rows?.length ? (
+                      table.getRowModel().rows.map((row) => <DraggableRow key={row.id} row={row} />)
+                    ) : (
+                      <TableRow>
+                        <TableCell colSpan={columns.length} className="h-24 text-center">
+                          No posts found.
+                        </TableCell>
+                      </TableRow>
+                    )}
+                  </TableBody>
+                </Table>
+              </SortableContext>
+            </DndContext>
+          </div>
+          <div className="flex items-center justify-between px-4">
+            <div className="text-muted-foreground hidden flex-1 text-sm lg:flex">
+              {table.getFilteredSelectedRowModel().rows.length} of {table.getFilteredRowModel().rows.length} row(s)
+              selected.
+              {postsResponse && <span className="ml-4">Total: {postsResponse.pagination.total} posts</span>}
+            </div>
+            <div className="flex w-full items-center gap-8 lg:w-fit">
+              <div className="hidden items-center gap-2 lg:flex">
+                <Label htmlFor="rows-per-page" className="text-sm font-medium">
+                  Rows per page
+                </Label>
+                <Select
+                  value={`${table.getState().pagination.pageSize}`}
+                  onValueChange={(value: string) => {
+                    table.setPageSize(Number(value));
+                  }}
+                >
+                  <SelectTrigger size="sm" className="w-20" id="rows-per-page">
+                    <SelectValue placeholder={table.getState().pagination.pageSize} />
+                  </SelectTrigger>
+                  <SelectContent side="top">
+                    {[5, 10, 20, 30, 40, 50].map((pageSize) => (
+                      <SelectItem key={pageSize} value={`${pageSize}`}>
+                        {pageSize}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="flex w-fit items-center justify-center text-sm font-medium">
+                Page {table.getState().pagination.pageIndex + 1} of {table.getPageCount()}
+              </div>
+              <div className="ml-auto flex items-center gap-2 lg:ml-0">
+                <Button
+                  variant="outline"
+                  className="hidden h-8 w-8 p-0 lg:flex"
+                  onClick={() => table.setPageIndex(0)}
+                  disabled={!table.getCanPreviousPage()}
+                >
+                  <span className="sr-only">Go to first page</span>
+                  <ChevronLeft />
+                </Button>
+                <Button
+                  variant="outline"
+                  className="size-8"
+                  size="icon"
+                  onClick={() => table.previousPage()}
+                  disabled={!table.getCanPreviousPage()}
+                >
+                  <span className="sr-only">Go to previous page</span>
+                  <ChevronLeft />
+                </Button>
+                <Button
+                  variant="outline"
+                  className="size-8"
+                  size="icon"
+                  onClick={() => table.nextPage()}
+                  disabled={!table.getCanNextPage()}
+                >
+                  <span className="sr-only">Go to next page</span>
+                  <ChevronRight />
+                </Button>
+                <Button
+                  variant="outline"
+                  className="hidden size-8 lg:flex"
+                  size="icon"
+                  onClick={() => table.setPageIndex(table.getPageCount() - 1)}
+                  disabled={!table.getCanNextPage()}
+                >
+                  <span className="sr-only">Go to last page</span>
+                  <ChevronRight />
+                </Button>
+              </div>
+            </div>
+          </div>
         </div>
-      </TabsContent>
-      <TabsContent value="published" className="flex flex-col px-4 lg:px-6">
-        <div className="flex aspect-video w-full flex-1 items-center justify-center rounded-lg border border-dashed">
-          <p className="text-muted-foreground">Published posts view - Coming soon</p>
-        </div>
-      </TabsContent> */}
-    </Tabs>
+        {/* <TabsContent value="drafts" className="flex flex-col px-4 lg:px-6">
+          <div className="flex aspect-video w-full flex-1 items-center justify-center rounded-lg border border-dashed">
+            <p className="text-muted-foreground">Draft posts view - Coming soon</p>
+          </div>
+        </TabsContent>
+        <TabsContent value="published" className="flex flex-col px-4 lg:px-6">
+          <div className="flex aspect-video w-full flex-1 items-center justify-center rounded-lg border border-dashed">
+            <p className="text-muted-foreground">Published posts view - Coming soon</p>
+          </div>
+        </TabsContent> */}
+      </Tabs>
+      <ConfirmDialog
+        open={deleteState.isOpen}
+        title="Delete Post"
+        description="Are you sure you want to delete this post? This action cannot be undone."
+        confirmText="Delete"
+        cancelText="Cancel"
+        isHandling={isDeleteingPost}
+        onOpenChange={(open) => setDeleteState({ ...deleteState, isOpen: open })}
+        onCancel={() => setDeleteState({ ...deleteState, isOpen: false })}
+        onConfirm={async () => {
+          try {
+            if (deleteState.postId) {
+              await deletePost({ postId: deleteState.postId });
+              setDeleteState({ isOpen: false, postId: null });
+              refetch();
+            }
+            toast.success('Post deleted successfully');
+          } catch (error) {
+            console.error(error);
+            toast.error('Failed to delete post. Please try again.');
+          }
+        }}
+      />
+    </>
   );
 }
 

@@ -29,6 +29,50 @@ export async function uploadFile(file: File, endpoint: keyof OurFileRouter = 'me
   }
 }
 
+// Helper function to upload image and save to database
+export async function uploadImageWithDB(
+  file: File,
+  userCreated: string,
+  endpoint: keyof OurFileRouter = 'imageUploader',
+) {
+  try {
+    // Upload file to storage
+    const uploadResult = await uploadFiles(endpoint, {
+      files: [file],
+    });
+
+    if (uploadResult && uploadResult[0]) {
+      // Save image info to database
+      const imageData = {
+        url: uploadResult[0].ufsUrl,
+        name: uploadResult[0].name,
+        size: uploadResult[0].size,
+        mineType: file.type,
+        userCreated,
+      };
+
+      const response = await fetch('/api/images', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(imageData),
+      });
+
+      if (!response.ok) {
+        console.warn('Failed to save image to database, but upload was successful');
+      }
+
+      return uploadResult[0].ufsUrl;
+    }
+
+    throw new Error('Upload failed');
+  } catch (error) {
+    console.error('Upload error:', error);
+    throw error;
+  }
+}
+
 // Helper function to upload multiple files
 export async function uploadMultipleFiles(files: File[], endpoint: keyof OurFileRouter = 'mediaUploader') {
   try {

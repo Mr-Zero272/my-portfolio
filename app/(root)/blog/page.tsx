@@ -51,7 +51,7 @@ export const metadata: Metadata = {
 
 const getListPosts = async () => {
   try {
-    const res = await fetch(`${API_URL}/api/posts`, {
+    const res = await fetch(`${API_URL}/api/posts?status=published`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',

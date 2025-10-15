@@ -30,7 +30,7 @@ const ListPostByTag = () => {
     initialPageParam: 1,
     queryKey: ['posts-by-tag', tag],
     queryFn: ({ pageParam = 1 }) =>
-      postApi.getPosts({ page: pageParam, limit: 8, tag: tag === 'all' ? undefined : tag }),
+      postApi.getPosts({ page: pageParam, limit: 8, tag: tag === 'all' ? undefined : tag, status: 'published' }),
     getNextPageParam: (lastPage) => {
       if (lastPage.pagination.page < lastPage.pagination.totalPages) {
         return lastPage.pagination.page + 1;

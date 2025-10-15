@@ -12,10 +12,11 @@ import { AnimatedButton } from '@/components/ui/animated-button';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { SidebarInset, SidebarProvider, SidebarTrigger, useSidebar } from '@/components/ui/sidebar';
-import { uploadFile } from '@/lib/uploadthing';
+import { uploadFile, uploadImageWithDB } from '@/lib/uploadthing';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { isAxiosError } from 'axios';
 import { ArrowLeft, RefreshCcw } from 'lucide-react';
+import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { toast } from 'sonner';
@@ -38,6 +39,7 @@ interface SubmitParams {
 }
 
 const PostEditorContent = ({ mode = 'create' }: PostEditorProps) => {
+  const { data: session } = useSession();
   const queryClient = useQueryClient();
   const [postDraft, setPostDraft, removePostDraft] = useLocalStorage('post_draft', '');
   const [isSavingDraft, setIsSavingDraft] = useState(false);
@@ -109,14 +111,30 @@ const PostEditorContent = ({ mode = 'create' }: PostEditorProps) => {
         let finalXMetaImage = xMetaImage;
 
         if (featureImageFile) {
-          const res = await uploadFileAsync(featureImageFile);
+          let res;
+          if (session?.user?.id) {
+            // Upload và lưu vào database nếu user đã đăng nhập
+            const imageUrl = await uploadImageWithDB(featureImageFile, session.user.id, 'imageUploader');
+            res = { data: { url: imageUrl } };
+          } else {
+            // Fallback: chỉ upload file nếu user chưa đăng nhập
+            res = await uploadFileAsync(featureImageFile);
+          }
           setField('featureImageFile', null);
           setField('featureImage', res.data.url);
           finalFeatureImage = res.data.url;
         }
 
         if (xMetaImageFile) {
-          const res = await uploadFileAsync(xMetaImageFile);
+          let res;
+          if (session?.user?.id) {
+            // Upload và lưu vào database nếu user đã đăng nhập
+            const imageUrl = await uploadImageWithDB(xMetaImageFile, session.user.id, 'imageUploader');
+            res = { data: { url: imageUrl } };
+          } else {
+            // Fallback: chỉ upload file nếu user chưa đăng nhập
+            res = await uploadFileAsync(xMetaImageFile);
+          }
           setField('xMetaImageFile', null);
           setField('xMetaImage', res.data.url);
           finalXMetaImage = res.data.url;
@@ -192,6 +210,7 @@ const PostEditorContent = ({ mode = 'create' }: PostEditorProps) => {
       setOpen,
       getCurrentState,
       setPostDraft,
+      session?.user?.id,
     ],
   );
 

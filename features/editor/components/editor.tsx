@@ -1,8 +1,8 @@
 'use client';
 
-import { uploadFile, uploadMultipleFiles } from '@/lib/uploadthing';
+import { uploadFile, uploadImageWithDB, uploadMultipleFiles } from '@/lib/uploadthing';
 import NextImage from 'next/image';
-import { ChangeEvent, useCallback, useEffect, useRef, useState } from 'react';
+import { ChangeEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import RichTextEditor, { BaseKit } from 'reactjs-tiptap-editor';
 import useImagePreview from '../hooks/use-preview-image';
 
@@ -72,137 +72,161 @@ import '@excalidraw/excalidraw/index.css';
 import 'easydrawer/styles.css';
 import 'katex/dist/katex.min.css';
 import { Plus, XIcon } from 'lucide-react';
+import { useSession } from 'next-auth/react';
 import { useTheme } from 'next-themes';
 import 'react-image-crop/dist/ReactCrop.css';
 import { useDebounceCallback } from 'usehooks-ts';
 import { usePostStorage } from '../store/use-post-storage';
 
-const extensions = [
-  BaseKit.configure({
-    placeholder: {
-      showOnlyCurrent: true,
-    },
-  }),
-  History,
-  SearchAndReplace,
-  TableOfContents,
-  FormatPainter.configure({ spacer: true }),
-  Clear,
-  FontFamily,
-  Heading.configure({ spacer: true }),
-  FontSize,
-  Italic,
-  TextUnderline,
-  Strike,
-  MoreMark,
-  Emoji,
-  Color.configure({ spacer: true }),
-  Highlight,
-  BulletList,
-  OrderedList,
-  TextAlign.configure({ types: ['heading', 'paragraph'], spacer: true }),
-  Indent,
-  LineHeight,
-  TaskList.configure({
-    spacer: true,
-    taskItem: {
-      nested: true,
-    },
-  }),
-  Link,
-  Image.configure({
-    upload: async (files: File) => {
-      try {
-        const response = await uploadFile(files, 'imageUploader');
-        return response.data.url;
-      } catch (error) {
-        console.error('Failed to upload image:', error);
-        throw error;
-      }
-    },
-    HTMLAttributes: {
-      style: 'max-width: 100%; height: auto;',
-    },
-  }),
-  Video.configure({
-    upload: async (files: File) => {
-      try {
-        const response = await uploadFile(files, 'videoUploader');
-        return response.data.url;
-      } catch (error) {
-        console.error('Failed to upload video:', error);
-        throw error;
-      }
-    },
-  }),
-  ImageGif.configure({
-    GIPHY_API_KEY: process.env.NEXT_PUBLIC_GIPHY_API_KEY as string,
-  }),
-  Blockquote,
-  SlashCommand,
-  HorizontalRule,
-  Code.configure({
-    toolbar: false,
-  }),
-  CodeBlock,
-  ColumnActionButton,
-  Table,
-  Iframe,
-  ExportPdf.configure({ spacer: true }),
-  ImportWord.configure({
-    upload: async (files: File[]) => {
-      try {
-        const uploadResult = await uploadMultipleFiles(files, 'attachmentUploader');
-        return uploadResult;
-      } catch (error) {
-        console.error('Failed to upload Word files:', error);
-        throw error;
-      }
-    },
-  }),
-  ExportWord,
-  TextDirection,
-  Mention,
-  Attachment.configure({
-    upload: async (file: File) => {
-      try {
-        const response = await uploadFile(file, 'attachmentUploader');
-        return response.data.url;
-      } catch (error) {
-        console.error('Failed to upload attachment:', error);
-        throw error;
-      }
-    },
-  }),
-
-  Katex,
-  Excalidraw,
-  Mermaid.configure({
-    upload: async (file: File) => {
-      try {
-        const response = await uploadFile(file, 'imageUploader');
-        return response.data.url;
-      } catch (error) {
-        console.error('Failed to upload Mermaid diagram:', error);
-        throw error;
-      }
-    },
-  }),
-  Drawer.configure({
-    upload: async (file: File) => {
-      try {
-        const response = await uploadFile(file, 'imageUploader');
-        return response.data.url;
-      } catch (error) {
-        console.error('Failed to upload drawing:', error);
-        throw error;
-      }
-    },
-  }),
-  Twitter,
-];
-
 function Editor() {
+  const { data: session } = useSession();
+
+  const extensions = useMemo(
+    () => [
+      BaseKit.configure({
+        placeholder: {
+          showOnlyCurrent: true,
+        },
+      }),
+      History,
+      SearchAndReplace,
+      TableOfContents,
+      FormatPainter.configure({ spacer: true }),
+      Clear,
+      FontFamily,
+      Heading.configure({ spacer: true }),
+      FontSize,
+      Italic,
+      TextUnderline,
+      Strike,
+      MoreMark,
+      Emoji,
+      Color.configure({ spacer: true }),
+      Highlight,
+      BulletList,
+      OrderedList,
+      TextAlign.configure({ types: ['heading', 'paragraph'], spacer: true }),
+      Indent,
+      LineHeight,
+      TaskList.configure({
+        spacer: true,
+        taskItem: {
+          nested: true,
+        },
+      }),
+      Link,
+      Image.configure({
+        upload: async (files: File) => {
+          try {
+            if (session?.user?.id) {
+              // Upload và lưu vào database nếu user đã đăng nhập
+              return await uploadImageWithDB(files, session.user.id, 'imageUploader');
+            } else {
+              // Fallback: chỉ upload file nếu user chưa đăng nhập
+              const response = await uploadFile(files, 'imageUploader');
+              return response.data.url;
+            }
+          } catch (error) {
+            console.error('Failed to upload image:', error);
+            throw error;
+          }
+        },
+        HTMLAttributes: {
+          style: 'max-width: 100%; height: auto;',
+        },
+      }),
+      Video.configure({
+        upload: async (files: File) => {
+          try {
+            const response = await uploadFile(files, 'videoUploader');
+            return response.data.url;
+          } catch (error) {
+            console.error('Failed to upload video:', error);
+            throw error;
+          }
+        },
+      }),
+      ImageGif.configure({
+        GIPHY_API_KEY: process.env.NEXT_PUBLIC_GIPHY_API_KEY as string,
+      }),
+      Blockquote,
+      SlashCommand,
+      HorizontalRule,
+      Code.configure({
+        toolbar: false,
+      }),
+      CodeBlock,
+      ColumnActionButton,
+      Table,
+      Iframe,
+      ExportPdf.configure({ spacer: true }),
+      ImportWord.configure({
+        upload: async (files: File[]) => {
+          try {
+            const uploadResult = await uploadMultipleFiles(files, 'attachmentUploader');
+            return uploadResult;
+          } catch (error) {
+            console.error('Failed to upload Word files:', error);
+            throw error;
+          }
+        },
+      }),
+      ExportWord,
+      TextDirection,
+      Mention,
+      Attachment.configure({
+        upload: async (file: File) => {
+          try {
+            const response = await uploadFile(file, 'attachmentUploader');
+            return response.data.url;
+          } catch (error) {
+            console.error('Failed to upload attachment:', error);
+            throw error;
+          }
+        },
+      }),
+
+      Katex,
+      Excalidraw,
+      Mermaid.configure({
+        upload: async (file: File) => {
+          try {
+            if (session?.user?.id) {
+              // Upload và lưu vào database nếu user đã đăng nhập
+              return await uploadImageWithDB(file, session.user.id, 'imageUploader');
+            } else {
+              // Fallback: chỉ upload file nếu user chưa đăng nhập
+              const response = await uploadFile(file, 'imageUploader');
+              return response.data.url;
+            }
+          } catch (error) {
+            console.error('Failed to upload Mermaid diagram:', error);
+            throw error;
+          }
+        },
+      }),
+      Drawer.configure({
+        upload: async (file: File) => {
+          try {
+            if (session?.user?.id) {
+              // Upload và lưu vào database nếu user đã đăng nhập
+              return await uploadImageWithDB(file, session.user.id, 'imageUploader');
+            } else {
+              // Fallback: chỉ upload file nếu user chưa đăng nhập
+              const response = await uploadFile(file, 'imageUploader');
+              return response.data.url;
+            }
+          } catch (error) {
+            console.error('Failed to upload drawing:', error);
+            throw error;
+          }
+        },
+      }),
+      Twitter,
+    ],
+    [session],
+  );
+
   // const { editorRef } = useEditorState();
   const { theme } = useTheme();
   const { _id, title, content, featureImage: storeFeatureImage, imageCaption, setField } = usePostStorage();
