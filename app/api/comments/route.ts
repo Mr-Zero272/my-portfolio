@@ -31,7 +31,7 @@ export async function GET(request: NextRequest) {
     }
 
     return NextResponse.json({
-      result,
+      ...result,
     });
   } catch (error: unknown) {
     console.error('Error in GET /api/comments:', error);

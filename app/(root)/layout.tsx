@@ -1,7 +1,16 @@
 import PageTransition from '@/components/animations/page-transition';
 import Header from '@/components/layouts/components/header';
 import Navigation from '@/components/layouts/components/navigation/navigation';
+import { Viewport } from 'next';
 import NextTopLoader from 'nextjs-toploader';
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+  interactiveWidget: 'resizes-content',
+};
 
 export default function RootLayout({
   children,

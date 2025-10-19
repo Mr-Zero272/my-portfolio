@@ -5,6 +5,12 @@ import { NextRequest, NextResponse } from 'next/server';
 export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const { id } = await params;
+    const { searchParams } = new URL(request.url);
+
+    // Lấy các query parameters
+    const includeReplies = searchParams.get('includeReplies') !== 'false'; // default true
+    const repliesPage = parseInt(searchParams.get('repliesPage') || '1');
+    const repliesLimit = parseInt(searchParams.get('repliesLimit') || '10');
 
     if (!id) {
       return NextResponse.json(
@@ -17,39 +23,37 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
       );
     }
 
-    const comment = await CommentService.getCommentById(id);
+    const response = await CommentService.getCommentById(id, {
+      includeReplies,
+      repliesPage,
+      repliesLimit,
+    });
 
-    if (!comment) {
+    if (response.status === 'error') {
+      const statusCode = response.message?.includes('Comment not found')
+        ? 404
+        : response.message?.includes('Invalid commentId')
+          ? 400
+          : 500;
+
       return NextResponse.json(
         {
           success: false,
-          error: 'Comment not found',
+          error: response.message,
           data: null,
         },
-        { status: 404 },
+        { status: statusCode },
       );
     }
 
     return NextResponse.json({
       success: true,
-      data: comment,
+      data: response.data,
       message: 'Comment retrieved successfully',
     });
   } catch (error: unknown) {
     console.error('Error in GET /api/comments/[id]:', error);
     const errorMessage = error instanceof Error ? error.message : 'Failed to retrieve comment';
-
-    // Handle validation errors
-    if (errorMessage.includes('Invalid commentId')) {
-      return NextResponse.json(
-        {
-          success: false,
-          error: errorMessage,
-          data: null,
-        },
-        { status: 400 },
-      );
-    }
 
     return NextResponse.json(
       {
@@ -79,60 +83,69 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
       );
     }
 
-    // Extract updateable fields
-    const updateData: { content?: string; author?: string } = {};
+    // Extract updateable fields and userId
+    const { content, images, userId } = body;
 
-    if (body.content !== undefined) {
-      updateData.content = body.content;
+    if (!userId) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: 'User ID is required',
+          data: null,
+        },
+        { status: 400 },
+      );
     }
-    if (body.author !== undefined) {
-      updateData.author = body.author;
+
+    const updateData: { content?: string; images?: string[] } = {};
+
+    if (content !== undefined) {
+      updateData.content = content;
+    }
+    if (images !== undefined) {
+      updateData.images = images;
     }
 
     if (Object.keys(updateData).length === 0) {
       return NextResponse.json(
         {
           success: false,
-          error: 'No valid fields provided for update (content or author)',
+          error: 'No valid fields provided for update (content or images)',
           data: null,
         },
         { status: 400 },
       );
     }
 
-    const updatedComment = await CommentService.updateComment(id, updateData);
+    const response = await CommentService.updateComment(id, updateData, userId);
 
-    if (!updatedComment) {
+    if (response.status === 'error') {
+      const statusCode = response.message?.includes('Comment not found')
+        ? 404
+        : response.message?.includes('can only update your own')
+          ? 403
+          : response.message?.includes('Invalid')
+            ? 400
+            : 500;
+
       return NextResponse.json(
         {
           success: false,
-          error: 'Comment not found',
+          error: response.message,
           data: null,
         },
-        { status: 404 },
+        { status: statusCode },
       );
     }
 
     return NextResponse.json({
       success: true,
-      data: updatedComment,
+      data: response.data,
       message: 'Comment updated successfully',
     });
   } catch (error: unknown) {
     console.error('Error in PUT /api/comments/[id]:', error);
     const errorMessage = error instanceof Error ? error.message : 'Failed to update comment';
-
-    // Handle validation errors
-    if (errorMessage.includes('Invalid commentId') || errorMessage.includes('required')) {
-      return NextResponse.json(
-        {
-          success: false,
-          error: errorMessage,
-          data: null,
-        },
-        { status: 400 },
-      );
-    }
 
     return NextResponse.json(
       {
@@ -149,6 +162,8 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
 export async function DELETE(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const { id } = await params;
+    const body = await request.json().catch(() => ({}));
+    const { userId } = body;
 
     if (!id) {
       return NextResponse.json(
@@ -161,16 +176,35 @@ export async function DELETE(request: NextRequest, { params }: { params: Promise
       );
     }
 
-    const deleted = await CommentService.deleteComment(id);
-
-    if (!deleted) {
+    if (!userId) {
       return NextResponse.json(
         {
           success: false,
-          error: 'Comment not found',
+          error: 'User ID is required',
           data: null,
         },
-        { status: 404 },
+        { status: 400 },
+      );
+    }
+
+    const response = await CommentService.deleteComment(id, userId);
+
+    if (response.status === 'error') {
+      const statusCode = response.message?.includes('Comment not found')
+        ? 404
+        : response.message?.includes('can only delete your own')
+          ? 403
+          : response.message?.includes('Invalid')
+            ? 400
+            : 500;
+
+      return NextResponse.json(
+        {
+          success: false,
+          error: response.message,
+          data: null,
+        },
+        { status: statusCode },
       );
     }
 
@@ -182,18 +216,6 @@ export async function DELETE(request: NextRequest, { params }: { params: Promise
   } catch (error: unknown) {
     console.error('Error in DELETE /api/comments/[id]:', error);
     const errorMessage = error instanceof Error ? error.message : 'Failed to delete comment';
-
-    // Handle validation errors
-    if (errorMessage.includes('Invalid commentId') || errorMessage.includes('not found')) {
-      return NextResponse.json(
-        {
-          success: false,
-          error: errorMessage,
-          data: null,
-        },
-        { status: 400 },
-      );
-    }
 
     return NextResponse.json(
       {

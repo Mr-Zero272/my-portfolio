@@ -9,6 +9,7 @@ import { formatDistanceToNow } from 'date-fns';
 import { enUS, vi } from 'date-fns/locale';
 import { Bookmark, Heart, MessageCircle, Share2 } from 'lucide-react';
 import Image from 'next/image';
+import PostComment from './components/post-comment';
 import ReadPost from './components/read-post';
 
 interface PostPreviewFeatureProps {
@@ -135,6 +136,9 @@ export function PostPreviewFeature({ post, locale = 'en' }: PostPreviewFeaturePr
             Save
           </AnimatedButton>
         </div>
+
+        {/* Post comment */}
+        <PostComment postId={post._id.toString()} />
       </div>
       <ScrollToTopButton />
     </div>
