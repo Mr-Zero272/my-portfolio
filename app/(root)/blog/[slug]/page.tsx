@@ -1,3 +1,4 @@
+import ErrorState from '@/components/shared/state/error-state';
 import { API_URL, SITE_URL } from '@/configs/env';
 import PostPreviewFeature from '@/features/preview-post';
 import { IPostResponse } from '@/models';
@@ -169,9 +170,10 @@ const BlogDetailPage = async ({ params }: BlogDetailPageProps) => {
 
   if (!postResponse.data) {
     return (
-      <div>
-        <p>Post not found or server unavailable</p>
-      </div>
+      <ErrorState
+        title="Post not found or server unavailable"
+        description="The requested post could not be found or the server is unavailable."
+      />
     );
   }
 

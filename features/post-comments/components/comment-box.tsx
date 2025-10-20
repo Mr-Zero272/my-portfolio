@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Toggle } from '@/components/ui/toggle';
 import { uploadImageWithDB } from '@/lib/uploadthing';
 import { cn } from '@/lib/utils';
+import Placeholder from '@tiptap/extension-placeholder';
 import Underline from '@tiptap/extension-underline';
 import { BubbleMenu, EditorContent, useEditor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
@@ -69,9 +70,10 @@ export default function CommentBox({
   });
 
   const editor = useEditor({
-    extensions: [StarterKit, Underline],
+    extensions: [StarterKit, Underline, Placeholder.configure({ placeholder })],
     content: initialContent,
     immediatelyRender: false, // avoid hydration issues
+    autofocus: isMobileMode,
     editorProps: {
       attributes: {
         'data-placeholder': placeholder,
@@ -140,11 +142,12 @@ export default function CommentBox({
     };
   }, [images]);
 
-  useEffect(() => {
-    if (editor && !isSubmitting) {
-      editor.commands.focus();
-    }
-  }, [editor, isSubmitting]);
+  // Removed auto-focus effect to respect autofocus: false setting
+  // useEffect(() => {
+  //   if (editor && !isSubmitting) {
+  //     editor.commands.focus();
+  //   }
+  // }, [editor, isSubmitting]);
 
   // Check if content has changed (for edit mode)
   const hasChanges = useMemo(() => {
@@ -328,11 +331,7 @@ export default function CommentBox({
           </BubbleMenu>
 
           <div ref={editorWrapperRef} className="min-w-0 flex-1">
-            <EditorContent
-              placeholder={placeholder}
-              editor={editor}
-              className="prose prose-sm max-w-none focus:outline-none"
-            />
+            <EditorContent editor={editor} className="prose prose-sm max-w-none focus:outline-none" />
           </div>
         </div>
 

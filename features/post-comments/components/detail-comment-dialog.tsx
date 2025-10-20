@@ -7,7 +7,7 @@ import {
   ResponsiveDialogHeader,
   ResponsiveDialogTitle,
 } from '@/components/shared/responsive-dialog';
-import { EmptyState } from '@/components/shared/state';
+import EmptyState from '@/components/shared/state/empty-state';
 import { AnimatedButton } from '@/components/ui/animated-button';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { RotateCcw } from 'lucide-react';
