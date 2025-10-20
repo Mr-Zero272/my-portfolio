@@ -256,7 +256,10 @@ const PostEditorContent = ({ mode = 'create' }: PostEditorProps) => {
       return;
     }
 
-    handleSubmitPost({ action: 'update' });
+    handleSubmitPost({
+      option: published ? 'publish' : 'save',
+      action: 'update',
+    });
   }, [mode, published, handleSubmitPost]);
 
   const handleBack = useCallback(() => {
