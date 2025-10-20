@@ -12,6 +12,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { Skeleton } from '@/components/ui/skeleton';
+import { logger } from '@/lib/logger';
 import { cn } from '@/lib/utils';
 import { ICommentResponse } from '@/models/Comment';
 import { DropdownMenu } from '@radix-ui/react-dropdown-menu';
@@ -29,13 +31,12 @@ import CommentReply from './comment-reply';
 
 type CommentProps = {
   comment: ICommentResponse;
-  onReply?: (commentId: string) => void;
   onLike?: (commentId: string) => void;
   onDislike?: (commentId: string) => void;
   className?: string;
 };
 
-const Comment = ({ comment, onReply, onLike, onDislike, className }: CommentProps) => {
+const Comment = ({ comment, onLike, onDislike, className }: CommentProps) => {
   const { data: session } = useSession();
   const router = useRouter();
   const [showReplies, setShowReplies] = useState(true);
@@ -52,9 +53,18 @@ const Comment = ({ comment, onReply, onLike, onDislike, className }: CommentProp
     mutationFn: commentsApi.updateComment,
   });
 
+  const { mutateAsync: createComment, isPending: isCreatingComment } = useMutation({
+    mutationFn: commentsApi.crateComment,
+  });
+
   // Tính toán totalPages dựa trên replyCount (giả sử limit=3)
   const totalPages = Math.ceil(Number(comment?.replyCount || 0) / 3);
   const hasMoreThanOnePage = Number(comment?.replyCount || 0) > 3;
+
+  logger({
+    totalPages,
+    hasMoreThanOnePage,
+  });
 
   // Cấu hình initialData cho page 1 từ comment.replies
   const initialData = {
@@ -96,9 +106,35 @@ const Comment = ({ comment, onReply, onLike, onDislike, className }: CommentProp
     return repliesRes?.pages.flatMap((page) => page.data) || comment.replies || [];
   }, [repliesRes, comment.replies]);
 
-  const handleReply = () => {
-    onReply?.(comment._id.toString());
-    setShowReplyBox((prev) => !prev);
+  const handleReply = async (content: string, images?: string[]) => {
+    try {
+      if (!comment) return;
+
+      await createComment({
+        data: {
+          postId: comment.postId,
+          content,
+          images,
+          author: session?.user?.id,
+          parentId: comment._id.toString(),
+        },
+      });
+      // Invalidate comments query to refetch comments
+      if (typeof comment.replyCount === 'number' && comment.replyCount <= 3) {
+        await queryClient.invalidateQueries({
+          queryKey: ['comments-by-post', { postId: comment.postId }],
+        });
+      } else if (typeof comment.replyCount === 'number' && comment.replyCount > 3) {
+        await queryClient.invalidateQueries({
+          queryKey: ['comments-by-parent', { commentId: comment._id.toString() }],
+        });
+      }
+      setShowReplyBox((prev) => !prev);
+      toast.success('Your reply has been added successfully.');
+    } catch (error) {
+      console.error('Failed to create reply comment:', error);
+      toast.error('An unexpected error occurred. Please try again.');
+    }
   };
 
   const handleToggleReplies = () => {
@@ -137,18 +173,24 @@ const Comment = ({ comment, onReply, onLike, onDislike, className }: CommentProp
         queryKey: ['comments-by-post', { postId: comment.postId }],
       });
       setShowEditBox(false);
-      toast.success('Bình luận đã được cập nhật!');
+      toast.success('Your comment has been updated successfully.');
     } catch (error) {
-      toast.error('Đã có lỗi xảy ra khi cập nhật bình luận.');
+      toast.error('An unexpected error occurred. Please try again.');
       console.error('Failed to create comment:', error);
     }
   };
 
-  const isLiked = comment.likes?.some((id) => id.toString() === session?.user?.id);
-  const isDisliked = comment.dislikes?.some((id) => id.toString() === session?.user?.id);
-  const likesCount = comment.likes?.length || 0;
-  const dislikesCount = comment.dislikes?.length || 0;
-  const repliesCount = comment.replies?.length || comment.replyCount || 0;
+  const isLiked = useMemo(
+    () => comment.likes?.some((id) => id.toString() === session?.user?.id),
+    [comment.likes, session?.user?.id],
+  );
+  const isDisliked = useMemo(
+    () => comment.dislikes?.some((id) => id.toString() === session?.user?.id),
+    [comment.dislikes, session?.user?.id],
+  );
+  const likesCount = useMemo(() => comment.likes?.length || 0, [comment.likes]);
+  const dislikesCount = useMemo(() => comment.dislikes?.length || 0, [comment.dislikes]);
+  const repliesCount = useMemo(() => comment.replyCount || 0, [comment.replyCount]);
 
   return (
     <motion.div
@@ -258,7 +300,7 @@ const Comment = ({ comment, onReply, onLike, onDislike, className }: CommentProp
               <Button
                 variant="ghost"
                 size="sm"
-                onClick={handleReply}
+                onClick={() => setShowReplyBox((prev) => !prev)}
                 className="h-8 gap-1 px-2 transition-colors hover:bg-green-50 hover:text-green-600"
               >
                 <MessageCircle className="h-3 w-3" />
@@ -319,7 +361,14 @@ const Comment = ({ comment, onReply, onLike, onDislike, className }: CommentProp
           )}
 
           {/* Reply box */}
-          {showReplyBox && <CommentBox onSubmit={() => {}} showCancel onCancel={() => setShowReplyBox(false)} />}
+          {showReplyBox && (
+            <CommentBox
+              onSubmit={handleReply}
+              isSubmitting={isCreatingComment}
+              showCancel
+              onCancel={() => setShowReplyBox(false)}
+            />
+          )}
 
           {/* Replies */}
           <AnimatePresence mode="wait">
@@ -379,3 +428,55 @@ const Comment = ({ comment, onReply, onLike, onDislike, className }: CommentProp
 };
 
 export default Comment;
+
+export const CommentSkeleton = ({ className = '' }: { className?: string }) => {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20, scale: 0.95 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      transition={{
+        duration: 0.3,
+        ease: [0.25, 0.46, 0.45, 0.94],
+      }}
+      className={cn('group/comment', className)}
+    >
+      <div className="hover:bg-muted/50 flex gap-3 rounded-lg p-4 transition-colors">
+        {/* Avatar Skeleton */}
+        <div className="flex-shrink-0">
+          <Skeleton className="h-10 w-10 rounded-full" />
+        </div>
+
+        {/* Content */}
+        <div className="min-w-0 flex-1">
+          {/* Header Skeleton */}
+          <div className="mb-2 flex items-center gap-2">
+            <Skeleton className="h-4 w-24" />
+            <Skeleton className="h-3 w-16" />
+            <Skeleton className="h-5 w-10 rounded" />
+          </div>
+
+          {/* Comment Content Skeleton */}
+          <div className="mb-3 space-y-2">
+            <Skeleton className="h-4 w-full" />
+            <Skeleton className="h-4 w-5/6" />
+            <Skeleton className="h-4 w-4/6" />
+          </div>
+
+          {/* Images Skeleton */}
+          <div className="mb-3 flex flex-wrap gap-2">
+            <Skeleton className="h-32 w-xs rounded-lg" />
+          </div>
+
+          {/* Actions Skeleton */}
+          <div className="flex items-center gap-1">
+            <Skeleton className="h-8 w-12 rounded" />
+            <Skeleton className="h-8 w-12 rounded" />
+            <Skeleton className="h-8 w-16 rounded" />
+            <Skeleton className="h-8 w-20 rounded" />
+            <Skeleton className="ml-auto h-8 w-8 rounded" />
+          </div>
+        </div>
+      </div>
+    </motion.div>
+  );
+};

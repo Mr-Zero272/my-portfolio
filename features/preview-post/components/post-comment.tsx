@@ -1,6 +1,7 @@
 import { commentsApi } from '@/apis/comments';
 import PostCommentFeature from '@/features/post-comments';
 import { CommentBox } from '@/features/post-comments/components';
+import DetailCommentDialog from '@/features/post-comments/components/detail-comment-dialog';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'nextjs-toploader/app';
@@ -36,9 +37,9 @@ const PostComment = ({ postId }: PostCreateCommentProps) => {
       await queryClient.invalidateQueries({
         queryKey: ['comments-by-post', { postId }],
       });
-      toast.success('Bình luận đã được thêm!');
+      toast.success('Your comment has been added successfully.');
     } catch (error) {
-      toast.error('Đã có lỗi xảy ra khi thêm bình luận.');
+      toast.error('An unexpected error occurred. Please try again.');
       console.error('Failed to create comment:', error);
     }
   };
@@ -47,6 +48,7 @@ const PostComment = ({ postId }: PostCreateCommentProps) => {
     <>
       <CommentBox onSubmit={handleCreateComment} isSubmitting={isCreatingComment} />
       <PostCommentFeature postId={postId} />
+      <DetailCommentDialog />
     </>
   );
 };

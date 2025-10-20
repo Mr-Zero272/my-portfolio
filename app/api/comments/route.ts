@@ -54,7 +54,7 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
 
     // Validate required fields
-    const { postId, content, author } = body;
+    const { postId, content, author, parentId, images } = body;
     if (!postId || !content || !author) {
       return NextResponse.json(
         {
@@ -70,6 +70,8 @@ export async function POST(request: NextRequest) {
       postId: postId.trim(),
       content: content.trim(),
       author: author.trim(),
+      parentId: parentId ? parentId.trim() : null,
+      images: images || [],
     };
 
     const newComment = await CommentService.createComment(commentData);

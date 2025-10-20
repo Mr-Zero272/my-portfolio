@@ -39,7 +39,7 @@ export default function CommentBox({
   onSubmit,
   onCancel,
   isSubmitting = false,
-  placeholder = 'Viết bình luận của bạn...',
+  placeholder = 'Leave a comment...',
   showCancel = false,
   isMobileMode = false,
   className,
@@ -71,6 +71,7 @@ export default function CommentBox({
   const editor = useEditor({
     extensions: [StarterKit, Underline],
     content: initialContent,
+    immediatelyRender: false, // avoid hydration issues
     editorProps: {
       attributes: {
         'data-placeholder': placeholder,
@@ -327,7 +328,11 @@ export default function CommentBox({
           </BubbleMenu>
 
           <div ref={editorWrapperRef} className="min-w-0 flex-1">
-            <EditorContent editor={editor} className="prose prose-sm max-w-none focus:outline-none" />
+            <EditorContent
+              placeholder={placeholder}
+              editor={editor}
+              className="prose prose-sm max-w-none focus:outline-none"
+            />
           </div>
         </div>
 

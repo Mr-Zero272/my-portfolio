@@ -18,11 +18,12 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { formatDistanceToNow } from 'date-fns';
 import { enUS } from 'date-fns/locale';
 import { motion } from 'framer-motion';
-import { Copy, Flag, MoreHorizontal, Pencil, ThumbsDown, ThumbsUp, Trash2 } from 'lucide-react';
+import { Copy, Flag, MessageCircle, MoreHorizontal, Pencil, ThumbsDown, ThumbsUp, Trash2 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'nextjs-toploader/app';
 import { useMemo, useState } from 'react';
 import { toast } from 'sonner';
+import { useDetailCommentStore } from '../store/use-detail-comment';
 import CommentBox from './comment-box';
 
 type CommentReplyProps = {
@@ -34,6 +35,8 @@ type CommentReplyProps = {
 };
 
 const CommentReply = ({ reply, index, onLike, onDislike, className }: CommentReplyProps) => {
+  const { setField } = useDetailCommentStore();
+  const [showReplyBox, setShowReplyBox] = useState(false);
   const { data: session } = useSession();
   const router = useRouter();
   const [showEditBox, setShowEditBox] = useState(false);
@@ -46,6 +49,10 @@ const CommentReply = ({ reply, index, onLike, onDislike, className }: CommentRep
 
   const { mutateAsync: updateComment, isPending: isUpdatingComment } = useMutation({
     mutationFn: commentsApi.updateComment,
+  });
+
+  const { mutateAsync: createComment, isPending: isCreatingComment } = useMutation({
+    mutationFn: commentsApi.crateComment,
   });
 
   const handleDeleteComment = async (commentId: string) => {
@@ -101,6 +108,37 @@ const CommentReply = ({ reply, index, onLike, onDislike, className }: CommentRep
     }
   };
 
+  const handleReply = async (content: string, images?: string[]) => {
+    try {
+      if (!reply) return;
+
+      await createComment({
+        data: {
+          postId: reply.postId,
+          content,
+          images,
+          author: session?.user?.id,
+          parentId: reply._id.toString(),
+        },
+      });
+      // Invalidate comments query to refetch comments
+      if (index <= 2) {
+        await queryClient.invalidateQueries({
+          queryKey: ['comments-by-post', { postId: reply.postId }],
+        });
+      } else {
+        await queryClient.invalidateQueries({
+          queryKey: ['comments-by-parent', { commentId: reply.parentId }],
+        });
+      }
+      setShowReplyBox((prev) => !prev);
+      toast.success('Your reply has been added successfully.');
+    } catch (error) {
+      console.error('Failed to create reply comment:', error);
+      toast.error('An unexpected error occurred. Please try again.');
+    }
+  };
+
   const isLiked = useMemo(() => {
     return reply.likes?.some((id) => id.toString() === session?.user?.id);
   }, [reply.likes, session?.user?.id]);
@@ -113,6 +151,7 @@ const CommentReply = ({ reply, index, onLike, onDislike, className }: CommentRep
   const dislikesCount = useMemo(() => {
     return reply.dislikes?.length || 0;
   }, [reply.dislikes]);
+  const repliesCount = useMemo(() => reply.replyCount || 0, [reply.replyCount]);
 
   return (
     <motion.div
@@ -126,7 +165,7 @@ const CommentReply = ({ reply, index, onLike, onDislike, className }: CommentRep
       }}
       className={cn('group/reply', className)}
     >
-      <div className="hover:bg-muted/30 flex gap-3 rounded-lg p-3 transition-colors">
+      <div className="hover:bg-muted/30 flex gap-3 rounded-lg p-2 transition-colors">
         {/* Avatar - smaller for replies */}
         <div className="flex-shrink-0">
           <Avatar className="h-8 w-8">
@@ -218,6 +257,32 @@ const CommentReply = ({ reply, index, onLike, onDislike, className }: CommentRep
                 <ThumbsDown className={cn('h-2.5 w-2.5', isDisliked && 'fill-current')} />
                 {dislikesCount > 0 && <span>{dislikesCount}</span>}
               </Button>
+              {/* Reply */}
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setShowReplyBox((prev) => !prev)}
+                className="h-8 gap-1 px-2 transition-colors hover:bg-green-50 hover:text-green-600"
+              >
+                <MessageCircle className="h-3 w-3" />
+                <span>Reply</span>
+              </Button>
+
+              {/* Show Replies */}
+              {repliesCount > 0 && (
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="text-muted-foreground hover:text-foreground h-8 gap-1 px-2 transition-colors"
+                  onClick={() => {
+                    setField('commentId', reply._id.toString());
+                    setField('open', true);
+                  }}
+                >
+                  <MessageCircle className="h-3 w-3" />
+                  <span>{repliesCount} relies</span>
+                </Button>
+              )}
 
               {/* More actions */}
               <DropdownMenu modal={false}>
@@ -257,6 +322,15 @@ const CommentReply = ({ reply, index, onLike, onDislike, className }: CommentRep
                 </DropdownMenuContent>
               </DropdownMenu>
             </div>
+          )}
+          {/* Reply box */}
+          {showReplyBox && (
+            <CommentBox
+              onSubmit={handleReply}
+              isSubmitting={isCreatingComment}
+              showCancel
+              onCancel={() => setShowReplyBox(false)}
+            />
           )}
         </div>
       </div>

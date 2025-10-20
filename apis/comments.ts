@@ -15,6 +15,17 @@ export const commentsApi = {
     return res.data;
   },
 
+  getCommentDetailById: async ({ commentId }: { commentId: string }) => {
+    const res = await axiosInstance.get<
+      BaseResponse<{
+        comment: ICommentResponse;
+        replies: ICommentResponse[];
+        repliesPagination?: { total: number; page: number; limit: number; totalPages: number };
+      }>
+    >(`/api/comments/${commentId}`);
+    return res.data;
+  },
+
   getCommentsByPostId: async ({ postId }: { postId: string; page?: number; limit?: number }) => {
     const res = await axiosInstance.get<BasePaginationResponse<ICommentResponse>>(`/api/comments`, {
       params: { postId },
