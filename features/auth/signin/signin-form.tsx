@@ -7,7 +7,8 @@ import { logger } from '@/lib/logger';
 import { cn } from '@/lib/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { signIn } from 'next-auth/react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
+import { useQueryState } from 'nuqs';
 
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
@@ -21,7 +22,7 @@ const signInSchema = z.object({
 type SignInFormData = z.infer<typeof signInSchema>;
 
 export default function SignInForm() {
-  const searchParams = useSearchParams();
+  const [callBackUrl] = useQueryState('callbackUrl', { defaultValue: '/piti/dashboard' });
   const router = useRouter();
   const form = useForm<SignInFormData>({
     resolver: zodResolver(signInSchema),
@@ -37,11 +38,11 @@ export default function SignInForm() {
         email: data.email,
         password: data.password,
         redirect: false,
-        callbackUrl: searchParams.get('callbackUrl') || '/piti/posts',
+        callbackUrl: callBackUrl,
       });
 
       if (res?.ok && !res?.error) {
-        const callbackUrl = searchParams.get('callbackUrl') || '/piti/posts';
+        const callbackUrl = callBackUrl;
         router.push(callbackUrl);
       } else {
         logger('SignIn response:', res);
@@ -94,7 +95,7 @@ export default function SignInForm() {
             type="button"
             variant="outline"
             className="w-full"
-            onClick={() => signIn('google', { callbackUrl: '/piti/dashboard' })}
+            onClick={() => signIn('google', { callbackUrl: callBackUrl })}
           >
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="1em" height="1em">
               <path
@@ -121,7 +122,7 @@ export default function SignInForm() {
             Login with Google
           </AnimatedButton>
         </div>
-        <div className="text-center text-sm">Note: we only support login with admin account</div>
+        <div className="text-center text-sm">Note: we now support for all users!!!</div>
       </form>
     </Form>
   );
