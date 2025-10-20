@@ -2,6 +2,7 @@ import { commentsApi } from '@/apis/comments';
 import {
   ResponsiveDialog,
   ResponsiveDialogContent,
+  ResponsiveDialogDescription,
   ResponsiveDialogFooter,
   ResponsiveDialogHeader,
   ResponsiveDialogTitle,
@@ -91,6 +92,7 @@ const DetailCommentDialog = () => {
       <ResponsiveDialogContent>
         <ResponsiveDialogHeader>
           <ResponsiveDialogTitle>Detail comment</ResponsiveDialogTitle>
+          <ResponsiveDialogDescription className="sr-only">Detail comment</ResponsiveDialogDescription>
         </ResponsiveDialogHeader>
         {/* Content */}
         {commentWithReplies && <Comment comment={commentWithReplies} />}
