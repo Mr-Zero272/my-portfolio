@@ -1,30 +1,118 @@
 'use client';
 
+import { commentsApi } from '@/apis/comments';
+import ConfirmDialog from '@/components/shared/confirm-dialog';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import {
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import { cn } from '@/lib/utils';
 import { ICommentResponse } from '@/models/Comment';
+import { DropdownMenu } from '@radix-ui/react-dropdown-menu';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { formatDistanceToNow } from 'date-fns';
-import { vi } from 'date-fns/locale';
+import { enUS } from 'date-fns/locale';
 import { motion } from 'framer-motion';
-import { MoreHorizontal, ThumbsDown, ThumbsUp } from 'lucide-react';
+import { Copy, Flag, MoreHorizontal, Pencil, ThumbsDown, ThumbsUp, Trash2 } from 'lucide-react';
+import { useSession } from 'next-auth/react';
+import { useRouter } from 'nextjs-toploader/app';
+import { useMemo, useState } from 'react';
+import { toast } from 'sonner';
+import CommentBox from './comment-box';
 
 type CommentReplyProps = {
   reply: ICommentResponse;
   index: number;
   onLike?: (commentId: string) => void;
   onDislike?: (commentId: string) => void;
-  onDelete?: (commentId: string) => void;
-  currentUserId?: string;
   className?: string;
 };
 
-const CommentReply = ({ reply, index, onLike, onDislike, onDelete, currentUserId, className }: CommentReplyProps) => {
-  const isLiked = reply.likes?.some((id) => id.toString() === currentUserId);
-  const isDisliked = reply.dislikes?.some((id) => id.toString() === currentUserId);
-  const likesCount = reply.likes?.length || 0;
-  const dislikesCount = reply.dislikes?.length || 0;
+const CommentReply = ({ reply, index, onLike, onDislike, className }: CommentReplyProps) => {
+  const { data: session } = useSession();
+  const router = useRouter();
+  const [showEditBox, setShowEditBox] = useState(false);
+  const [showDialogDeleteConfirm, setShowDialogDeleteConfirm] = useState(false);
+  const queryClient = useQueryClient();
+
+  const { mutateAsync: deleteComment, isPending: isDeletingComment } = useMutation({
+    mutationFn: commentsApi.deleteComment,
+  });
+
+  const { mutateAsync: updateComment, isPending: isUpdatingComment } = useMutation({
+    mutationFn: commentsApi.updateComment,
+  });
+
+  const handleDeleteComment = async (commentId: string) => {
+    try {
+      await deleteComment({ commentId, userId: session?.user?.id || '' });
+      // Invalidate comments query to refetch comments
+      if (index <= 2) {
+        await queryClient.invalidateQueries({
+          queryKey: ['comments-by-post', { postId: reply.postId }],
+        });
+      } else {
+        await queryClient.invalidateQueries({
+          queryKey: ['comments-by-parent', { commentId: reply.parentId }],
+        });
+      }
+
+      toast.success('Phản hồi đã được xóa!');
+    } catch (error) {
+      toast.error('Đã có lỗi xảy ra khi xóa phản hồi.');
+      console.error('Failed to delete reply:', error);
+    }
+  };
+
+  const handleUpdateComment = async (content: string, images?: string[]) => {
+    if (!session?.user?.id) {
+      router.push('/auth/signin');
+      return;
+    }
+
+    try {
+      await updateComment({
+        commentId: reply._id.toString(),
+        data: {
+          content,
+          images,
+        },
+      });
+      // Invalidate comments query to refetch comments
+      if (index <= 2) {
+        await queryClient.invalidateQueries({
+          queryKey: ['comments-by-post', { postId: reply.postId }],
+        });
+      } else {
+        await queryClient.invalidateQueries({
+          queryKey: ['comments-by-parent', { commentId: reply.parentId }],
+        });
+      }
+      setShowEditBox(false);
+      toast.success('Phản hồi đã được cập nhật!');
+    } catch (error) {
+      toast.error('Đã có lỗi xảy ra khi cập nhật phản hồi.');
+      console.error('Failed to update reply:', error);
+    }
+  };
+
+  const isLiked = useMemo(() => {
+    return reply.likes?.some((id) => id.toString() === session?.user?.id);
+  }, [reply.likes, session?.user?.id]);
+  const isDisliked = useMemo(() => {
+    return reply.dislikes?.some((id) => id.toString() === session?.user?.id);
+  }, [reply.dislikes, session?.user?.id]);
+  const likesCount = useMemo(() => {
+    return reply.likes?.length || 0;
+  }, [reply.likes]);
+  const dislikesCount = useMemo(() => {
+    return reply.dislikes?.length || 0;
+  }, [reply.dislikes]);
 
   return (
     <motion.div
@@ -36,7 +124,7 @@ const CommentReply = ({ reply, index, onLike, onDislike, onDelete, currentUserId
         delay: index * 0.1,
         ease: [0.25, 0.46, 0.45, 0.94],
       }}
-      className={cn('group', className)}
+      className={cn('group/reply', className)}
     >
       <div className="hover:bg-muted/30 flex gap-3 rounded-lg p-3 transition-colors">
         {/* Avatar - smaller for replies */}
@@ -57,7 +145,7 @@ const CommentReply = ({ reply, index, onLike, onDislike, onDelete, currentUserId
             <span className="text-muted-foreground text-xs">
               {formatDistanceToNow(new Date(reply.createdAt), {
                 addSuffix: true,
-                locale: vi,
+                locale: enUS,
               })}
             </span>
             {reply.author.role === 'admin' && (
@@ -68,66 +156,124 @@ const CommentReply = ({ reply, index, onLike, onDislike, onDelete, currentUserId
           </div>
 
           {/* Reply Content */}
-          <div className="text-foreground mb-2 text-xs leading-relaxed">{reply.content}</div>
-
-          {/* Images if any */}
-          {reply.images && reply.images.length > 0 && (
-            <div className="mb-2 flex flex-wrap gap-2">
-              {reply.images.map((image, imgIndex) => (
-                <motion.img
-                  key={imgIndex}
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: imgIndex * 0.1 }}
-                  src={image}
-                  alt={`Reply image ${imgIndex + 1}`}
-                  className="max-h-24 max-w-xs rounded-lg border object-cover"
-                />
-              ))}
-            </div>
+          {showEditBox ? (
+            <CommentBox
+              mode="edit"
+              initialContent={reply.content}
+              initialImages={reply.images}
+              onSubmit={handleUpdateComment}
+              isSubmitting={isUpdatingComment}
+              onCancel={() => setShowEditBox(false)}
+              showCancel={true}
+            />
+          ) : (
+            <>
+              <div className="text-foreground mb-2 text-xs leading-relaxed">{reply.content}</div>
+              {/* Images if any */}
+              {reply.images && reply.images.length > 0 && (
+                <div className="mb-2 flex flex-wrap gap-2">
+                  {reply.images.map((image, imgIndex) => (
+                    <motion.img
+                      key={imgIndex}
+                      initial={{ opacity: 0, scale: 0.8 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{ delay: imgIndex * 0.1 }}
+                      src={image}
+                      alt={`Reply image ${imgIndex + 1}`}
+                      className="max-h-24 max-w-xs rounded-lg border object-cover"
+                    />
+                  ))}
+                </div>
+              )}
+            </>
           )}
 
           {/* Actions */}
-          <div className="flex items-center gap-1 text-xs">
-            {/* Like */}
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => onLike?.(reply._id.toString())}
-              className={cn(
-                'h-6 gap-1 px-2 transition-colors hover:bg-blue-50 hover:text-blue-600',
-                isLiked && 'bg-blue-50 text-blue-600',
-              )}
-            >
-              <ThumbsUp className={cn('h-2.5 w-2.5', isLiked && 'fill-current')} />
-              {likesCount > 0 && <span>{likesCount}</span>}
-            </Button>
+          {!showEditBox && (
+            <div className="flex items-center gap-1 text-xs">
+              {/* Like */}
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => onLike?.(reply._id.toString())}
+                className={cn(
+                  'h-6 gap-1 px-2 transition-colors hover:bg-blue-50 hover:text-blue-600',
+                  isLiked && 'bg-blue-50 text-blue-600',
+                )}
+              >
+                <ThumbsUp className={cn('h-2.5 w-2.5', isLiked && 'fill-current')} />
+                {likesCount > 0 && <span>{likesCount}</span>}
+              </Button>
 
-            {/* Dislike */}
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => onDislike?.(reply._id.toString())}
-              className={cn(
-                'h-6 gap-1 px-2 transition-colors hover:bg-red-50 hover:text-red-600',
-                isDisliked && 'bg-red-50 text-red-600',
-              )}
-            >
-              <ThumbsDown className={cn('h-2.5 w-2.5', isDisliked && 'fill-current')} />
-              {dislikesCount > 0 && <span>{dislikesCount}</span>}
-            </Button>
+              {/* Dislike */}
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => onDislike?.(reply._id.toString())}
+                className={cn(
+                  'h-6 gap-1 px-2 transition-colors hover:bg-red-50 hover:text-red-600',
+                  isDisliked && 'bg-red-50 text-red-600',
+                )}
+              >
+                <ThumbsDown className={cn('h-2.5 w-2.5', isDisliked && 'fill-current')} />
+                {dislikesCount > 0 && <span>{dislikesCount}</span>}
+              </Button>
 
-            {/* More actions */}
-            <Button
-              variant="ghost"
-              size="sm"
-              className="ml-auto h-6 w-6 p-0 opacity-0 transition-opacity group-hover:opacity-100"
-            >
-              <MoreHorizontal className="h-2.5 w-2.5" />
-            </Button>
-          </div>
+              {/* More actions */}
+              <DropdownMenu modal={false}>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="ml-auto h-6 w-6 p-0 opacity-0 transition-opacity group-hover/reply:opacity-100"
+                  >
+                    <MoreHorizontal className="h-2.5 w-2.5" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-40" align="end">
+                  {session?.user?.id === reply.author._id.toString() && (
+                    <DropdownMenuItem onSelect={() => setShowEditBox(true)}>
+                      <Pencil className="text-muted-foreground mr-2 h-3.5 w-3.5" />
+                      Edit
+                    </DropdownMenuItem>
+                  )}
+                  <DropdownMenuItem onSelect={() => {}}>
+                    <Flag /> Report
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <Copy /> Copy content
+                  </DropdownMenuItem>
+                  {session?.user?.id === reply.author._id.toString() && (
+                    <>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem
+                        onSelect={() => setShowDialogDeleteConfirm(true)}
+                        className="text-destructive hover:text-destructive cursor-pointer"
+                      >
+                        <Trash2 className="text-destructive" /> Delete
+                      </DropdownMenuItem>
+                    </>
+                  )}
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
+          )}
         </div>
       </div>
+
+      {/* Delete dialog confirm */}
+      <ConfirmDialog
+        open={showDialogDeleteConfirm}
+        onOpenChange={setShowDialogDeleteConfirm}
+        title="Delete this reply?"
+        description="Are you sure you want to delete this reply? This action cannot be undone."
+        confirmText="Delete"
+        cancelText="Cancel"
+        isHandling={isDeletingComment}
+        onConfirm={async () => {
+          await handleDeleteComment(reply._id.toString());
+        }}
+      />
     </motion.div>
   );
 };

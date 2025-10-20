@@ -1,5 +1,7 @@
 import { CommentService } from '@/services/comment-service';
+import { getServerSession } from 'next-auth';
 import { NextRequest, NextResponse } from 'next/server';
+import { authConfig } from '../../auth/[...nextauth]/auth-config';
 
 // GET /api/comments/[id] - Lấy comment theo ID
 export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
@@ -69,6 +71,7 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
 // PUT /api/comments/[id] - Cập nhật comment
 export async function PUT(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
+    const session = await getServerSession(authConfig);
     const { id } = await params;
     const body = await request.json();
 
@@ -84,17 +87,18 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
     }
 
     // Extract updateable fields and userId
-    const { content, images, userId } = body;
+    const { content, images } = body;
 
-    if (!userId) {
-      return NextResponse.json(
-        {
-          success: false,
-          error: 'User ID is required',
-          data: null,
-        },
-        { status: 400 },
-      );
+    if (!session?.user?.id?.toString()) {
+      return NextResponse.redirect('/auth/signin');
+      // return NextResponse.json(
+      //   {
+      //     success: false,
+      //     error: 'User ID is required',
+      //     data: null,
+      //   },
+      //   { status: 400 },
+      // );
     }
 
     const updateData: { content?: string; images?: string[] } = {};
@@ -117,7 +121,7 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
       );
     }
 
-    const response = await CommentService.updateComment(id, updateData, userId);
+    const response = await CommentService.updateComment(id, updateData, session.user.id.toString());
 
     if (response.status === 'error') {
       const statusCode = response.message?.includes('Comment not found')

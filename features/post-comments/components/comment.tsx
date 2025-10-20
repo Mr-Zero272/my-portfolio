@@ -17,10 +17,11 @@ import { ICommentResponse } from '@/models/Comment';
 import { DropdownMenu } from '@radix-ui/react-dropdown-menu';
 import { useInfiniteQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { formatDistanceToNow } from 'date-fns';
-import { vi } from 'date-fns/locale';
+import { enUS } from 'date-fns/locale';
 import { AnimatePresence, motion } from 'framer-motion';
-import { Copy, Flag, Loader2, MessageCircle, MoreHorizontal, ThumbsDown, ThumbsUp, Trash2 } from 'lucide-react';
+import { Copy, Flag, Loader2, MessageCircle, MoreHorizontal, Pencil, ThumbsDown, ThumbsUp, Trash2 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
+import { useRouter } from 'nextjs-toploader/app';
 import { useMemo, useState } from 'react';
 import { toast } from 'sonner';
 import CommentBox from './comment-box';
@@ -31,19 +32,24 @@ type CommentProps = {
   onReply?: (commentId: string) => void;
   onLike?: (commentId: string) => void;
   onDislike?: (commentId: string) => void;
-  currentUserId?: string;
   className?: string;
 };
 
-const Comment = ({ comment, onReply, onLike, onDislike, currentUserId, className }: CommentProps) => {
+const Comment = ({ comment, onReply, onLike, onDislike, className }: CommentProps) => {
   const { data: session } = useSession();
+  const router = useRouter();
   const [showReplies, setShowReplies] = useState(true);
   const [showReplyBox, setShowReplyBox] = useState(false);
+  const [showEditBox, setShowEditBox] = useState(false);
   const [showDialogDeleteConfirm, setShowDialogDeleteConfirm] = useState(false);
   const queryClient = useQueryClient();
 
   const { mutateAsync: deleteComment, isPending: isDeletingComment } = useMutation({
     mutationFn: commentsApi.deleteComment,
+  });
+
+  const { mutateAsync: updateComment, isPending: isUpdatingComment } = useMutation({
+    mutationFn: commentsApi.updateComment,
   });
 
   // Tính toán totalPages dựa trên replyCount (giả sử limit=3)
@@ -113,8 +119,33 @@ const Comment = ({ comment, onReply, onLike, onDislike, currentUserId, className
     }
   };
 
-  const isLiked = comment.likes?.some((id) => id.toString() === currentUserId);
-  const isDisliked = comment.dislikes?.some((id) => id.toString() === currentUserId);
+  const handleUpdateComment = async (content: string, images?: string[]) => {
+    if (!session?.user?.id) {
+      router.push('/auth/signin');
+    }
+
+    try {
+      await updateComment({
+        commentId: comment._id.toString(),
+        data: {
+          content,
+          images,
+        },
+      });
+      // Invalidate comments query to refetch comments
+      await queryClient.invalidateQueries({
+        queryKey: ['comments-by-post', { postId: comment.postId }],
+      });
+      setShowEditBox(false);
+      toast.success('Bình luận đã được cập nhật!');
+    } catch (error) {
+      toast.error('Đã có lỗi xảy ra khi cập nhật bình luận.');
+      console.error('Failed to create comment:', error);
+    }
+  };
+
+  const isLiked = comment.likes?.some((id) => id.toString() === session?.user?.id);
+  const isDisliked = comment.dislikes?.some((id) => id.toString() === session?.user?.id);
   const likesCount = comment.likes?.length || 0;
   const dislikesCount = comment.dislikes?.length || 0;
   const repliesCount = comment.replies?.length || comment.replyCount || 0;
@@ -128,7 +159,7 @@ const Comment = ({ comment, onReply, onLike, onDislike, currentUserId, className
         duration: 0.3,
         ease: [0.25, 0.46, 0.45, 0.94],
       }}
-      className={cn('group', className)}
+      className={cn('group/comment', className)}
     >
       <div className="hover:bg-muted/50 flex gap-3 rounded-lg p-4 transition-colors">
         {/* Avatar */}
@@ -149,7 +180,7 @@ const Comment = ({ comment, onReply, onLike, onDislike, currentUserId, className
             <span className="text-muted-foreground text-xs">
               {formatDistanceToNow(new Date(comment.createdAt), {
                 addSuffix: true,
-                locale: vi,
+                locale: enUS,
               })}
             </span>
             {comment.author.role === 'admin' && (
@@ -160,111 +191,132 @@ const Comment = ({ comment, onReply, onLike, onDislike, currentUserId, className
           </div>
 
           {/* Comment Content */}
-          <div className="text-foreground mb-3 text-sm leading-relaxed">{comment.content}</div>
-
-          {/* Images if any */}
-          {comment.images && comment.images.length > 0 && (
-            <div className="mb-3 flex flex-wrap gap-2">
-              {comment.images.map((image, index) => (
-                <motion.img
-                  key={index}
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: index * 0.1 }}
-                  src={image}
-                  alt={`Comment image ${index + 1}`}
-                  className="max-h-32 max-w-xs rounded-lg border object-cover"
-                />
-              ))}
-            </div>
+          {showEditBox ? (
+            <CommentBox
+              mode="edit"
+              initialContent={comment.content}
+              initialImages={comment.images}
+              onSubmit={handleUpdateComment}
+              isSubmitting={isUpdatingComment}
+              onCancel={() => setShowEditBox(false)}
+              showCancel={true}
+            />
+          ) : (
+            <>
+              <div className="text-foreground mb-3 text-sm leading-relaxed">{comment.content}</div>
+              {/* Images if any */}
+              {comment.images && comment.images.length > 0 && (
+                <div className="mb-3 flex flex-wrap gap-2">
+                  {comment.images.map((image, index) => (
+                    <motion.img
+                      key={index}
+                      initial={{ opacity: 0, scale: 0.8 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{ delay: index * 0.1 }}
+                      src={image}
+                      alt={`Comment image ${index + 1}`}
+                      className="max-h-32 max-w-xs rounded-lg border object-cover"
+                    />
+                  ))}
+                </div>
+              )}
+            </>
           )}
 
           {/* Actions */}
-          <div className="flex items-center gap-1 text-xs">
-            {/* Like */}
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => onLike?.(comment._id.toString())}
-              className={cn(
-                'h-8 gap-1 px-2 transition-colors hover:bg-blue-50 hover:text-blue-600',
-                isLiked && 'bg-blue-50 text-blue-600',
-              )}
-            >
-              <ThumbsUp className={cn('h-3 w-3', isLiked && 'fill-current')} />
-              {likesCount > 0 && <span>{likesCount}</span>}
-            </Button>
-
-            {/* Dislike */}
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => onDislike?.(comment._id.toString())}
-              className={cn(
-                'h-8 gap-1 px-2 transition-colors hover:bg-red-50 hover:text-red-600',
-                isDisliked && 'bg-red-50 text-red-600',
-              )}
-            >
-              <ThumbsDown className={cn('h-3 w-3', isDisliked && 'fill-current')} />
-              {dislikesCount > 0 && <span>{dislikesCount}</span>}
-            </Button>
-
-            {/* Reply */}
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={handleReply}
-              className="h-8 gap-1 px-2 transition-colors hover:bg-green-50 hover:text-green-600"
-            >
-              <MessageCircle className="h-3 w-3" />
-              <span>Reply</span>
-            </Button>
-
-            {/* Show Replies */}
-            {repliesCount > 0 && (
+          {!showEditBox && (
+            <div className="flex items-center gap-1 text-xs">
+              {/* Like */}
               <Button
                 variant="ghost"
                 size="sm"
-                onClick={handleToggleReplies}
-                className="text-muted-foreground hover:text-foreground h-8 gap-1 px-2 transition-colors"
+                onClick={() => onLike?.(comment._id.toString())}
+                className={cn(
+                  'h-8 gap-1 px-2 transition-colors hover:bg-blue-50 hover:text-blue-600',
+                  isLiked && 'bg-blue-50 text-blue-600',
+                )}
+              >
+                <ThumbsUp className={cn('h-3 w-3', isLiked && 'fill-current')} />
+                {likesCount > 0 && <span>{likesCount}</span>}
+              </Button>
+
+              {/* Dislike */}
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => onDislike?.(comment._id.toString())}
+                className={cn(
+                  'h-8 gap-1 px-2 transition-colors hover:bg-red-50 hover:text-red-600',
+                  isDisliked && 'bg-red-50 text-red-600',
+                )}
+              >
+                <ThumbsDown className={cn('h-3 w-3', isDisliked && 'fill-current')} />
+                {dislikesCount > 0 && <span>{dislikesCount}</span>}
+              </Button>
+
+              {/* Reply */}
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={handleReply}
+                className="h-8 gap-1 px-2 transition-colors hover:bg-green-50 hover:text-green-600"
               >
                 <MessageCircle className="h-3 w-3" />
-                <span>{repliesCount} relies</span>
+                <span>Reply</span>
               </Button>
-            )}
 
-            {/* More actions */}
-            <DropdownMenu modal={false}>
-              <DropdownMenuTrigger asChild>
+              {/* Show Replies */}
+              {repliesCount > 0 && (
                 <Button
                   variant="ghost"
                   size="sm"
-                  className="ml-auto h-8 w-8 p-0 opacity-0 transition-opacity group-hover:opacity-100"
+                  onClick={handleToggleReplies}
+                  className="text-muted-foreground hover:text-foreground h-8 gap-1 px-2 transition-colors"
                 >
-                  <MoreHorizontal className="h-3 w-3" />
+                  <MessageCircle className="h-3 w-3" />
+                  <span>{repliesCount} relies</span>
                 </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent className="w-40" align="end">
-                <DropdownMenuItem onSelect={() => {}}>
-                  <Flag /> Report
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <Copy /> Copy content
-                </DropdownMenuItem>
-                {session?.user?.id === comment.author._id.toString() && (
-                  <>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem
-                      onSelect={() => setShowDialogDeleteConfirm(true)}
-                      className="text-destructive hover:text-destructive cursor-pointer"
-                    >
-                      <Trash2 className="text-destructive" /> Delete
+              )}
+
+              {/* More actions */}
+              <DropdownMenu modal={false}>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="ml-auto h-8 w-8 p-0 opacity-0 transition-opacity group-hover/comment:opacity-100"
+                  >
+                    <MoreHorizontal className="h-3 w-3" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-40" align="end">
+                  {session?.user?.id === comment.author._id.toString() && (
+                    <DropdownMenuItem onSelect={() => setShowEditBox(true)}>
+                      <Pencil className="text-muted-foreground mr-2 h-3.5 w-3.5" />
+                      Edit
                     </DropdownMenuItem>
-                  </>
-                )}
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
+                  )}
+                  <DropdownMenuItem onSelect={() => {}}>
+                    <Flag /> Report
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <Copy /> Copy content
+                  </DropdownMenuItem>
+                  {session?.user?.id === comment.author._id.toString() && (
+                    <>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem
+                        onSelect={() => setShowDialogDeleteConfirm(true)}
+                        className="text-destructive hover:text-destructive cursor-pointer"
+                      >
+                        <Trash2 className="text-destructive" /> Delete
+                      </DropdownMenuItem>
+                    </>
+                  )}
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
+          )}
 
           {/* Reply box */}
           {showReplyBox && <CommentBox onSubmit={() => {}} showCancel onCancel={() => setShowReplyBox(false)} />}
@@ -286,7 +338,6 @@ const Comment = ({ comment, onReply, onLike, onDislike, currentUserId, className
                     index={index}
                     onLike={onLike}
                     onDislike={onDislike}
-                    currentUserId={currentUserId}
                   />
                 ))}
               </motion.div>

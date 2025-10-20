@@ -1,6 +1,7 @@
 import AppProvider from '@/components/providers/app-provider';
 import { Toaster } from '@/components/ui/sonner';
 import type { Metadata } from 'next';
+import NextTopLoader from 'nextjs-toploader';
 import './globals.css';
 
 // JSON-LD Structured Data
@@ -110,6 +111,16 @@ export default function RootLayout({
         <AppProvider>
           {children}
           <Toaster />
+          <NextTopLoader
+            color="#ff6900"
+            initialPosition={0.08}
+            crawlSpeed={200}
+            height={2}
+            crawl={true}
+            showSpinner={false}
+            easing="ease"
+            speed={200}
+          />
         </AppProvider>
       </body>
     </html>

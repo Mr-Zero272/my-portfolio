@@ -1,6 +1,7 @@
 'use client';
 
 import { SessionProvider } from 'next-auth/react';
+import { NuqsAdapter } from 'nuqs/adapters/next/app';
 import React from 'react';
 import { MusicPlayerProvider } from '../contexts/music-context';
 import SidebarProvider from '../contexts/sidebar-context';
@@ -17,7 +18,9 @@ const AppProvider = ({ children }: AppProviderProps) => {
       <MusicPlayerProvider>
         <SidebarProvider>
           <ReactQueryProvider>
-            <SessionProvider>{children}</SessionProvider>
+            <SessionProvider>
+              <NuqsAdapter>{children}</NuqsAdapter>
+            </SessionProvider>
           </ReactQueryProvider>
         </SidebarProvider>
       </MusicPlayerProvider>
