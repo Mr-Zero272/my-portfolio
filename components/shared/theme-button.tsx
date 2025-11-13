@@ -1,43 +1,40 @@
 'use client';
+
 import { useTheme } from 'next-themes';
-import { useEffect, useState } from 'react';
-import Moon from '../icons/moon';
-import Sun from '../icons/sun';
-import { AnimatedButton } from '../ui/animated-button';
+import { useCallback, useEffect, useState } from 'react';
+import { ThemeToggleButton, useThemeTransition } from '../animations/theme-toggle-button';
 
 type Props = {
   className?: string;
 };
 
 const ThemeButton = ({ className = '' }: Props) => {
-  const { theme, setTheme } = useTheme();
-  const [hydrated, setHydrated] = useState(false);
-
+  const { setTheme, theme } = useTheme();
+  const { startTransition } = useThemeTransition();
+  const [mounted, setMounted] = useState(false);
   useEffect(() => {
-    setHydrated(true);
+    setMounted(true);
   }, []);
+  const handleThemeToggle = useCallback(() => {
+    const newMode = theme === 'dark' ? 'light' : 'dark';
 
-  const handleToggleTheme = () => {
-    if (theme === 'light') {
-      setTheme('dark');
-    } else {
-      setTheme('light');
-    }
-  };
+    startTransition(() => {
+      setTheme(newMode);
+    });
+  }, [setTheme, startTransition, theme]);
 
-  if (!hydrated) {
+  if (!mounted) {
     return null;
   }
 
   return (
-    <AnimatedButton
-      variant="ghost"
-      className={`hover:bg-accent rounded-md p-1.5 ${className}`}
-      onClick={handleToggleTheme}
-      size={'icon'}
-    >
-      {theme && theme === 'light' ? <Sun className="size-5" /> : <Moon className="size-5" />}
-    </AnimatedButton>
+    <ThemeToggleButton
+      className={className}
+      theme={theme === 'dark' ? 'light' : 'dark'}
+      onClick={handleThemeToggle}
+      variant="circle-blur"
+      start="top-right"
+    />
   );
 };
 

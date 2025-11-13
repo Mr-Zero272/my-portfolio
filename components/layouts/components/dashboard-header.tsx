@@ -31,7 +31,7 @@ const DashboardHeader = () => {
         </div>
         <div className="relative flex items-center gap-3">
           <GlobalSearch searchPlaceholder="Search all pages, features..." />
-          <ThemeButton className="block" />
+          <ThemeButton />
           <AvatarMenu />
         </div>
       </div>
