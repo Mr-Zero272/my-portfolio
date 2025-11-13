@@ -1,7 +1,6 @@
 'use client';
 
 import { tagApi } from '@/apis/tag';
-import { useIsMobile } from '@/hooks/use-mobile';
 import { type ITag } from '@/models';
 import {
   closestCenter,
@@ -86,6 +85,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Separator } from '@/components/ui/separator';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { useIsMobile } from '@/hooks/use-mobile';
 import TagDeleteConfirmDialog from './tag-delete-confirm-dialog';
 import TagFormDialog from './tag-form-dialog';
 

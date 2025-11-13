@@ -147,7 +147,7 @@ function Editor() {
         },
       }),
       ImageGif.configure({
-        GIPHY_API_KEY: process.env.NEXT_PUBLIC_GIPHY_API_KEY as string,
+        API_KEY: process.env.NEXT_PUBLIC_GIPHY_API_KEY as string,
       }),
       Blockquote,
       SlashCommand,
@@ -418,7 +418,18 @@ function Editor() {
               extensions={extensions}
               dark={theme === 'dark'}
               disabled={false}
-              hideToolbar
+              // hideToolbar
+              toolbar={{
+                render(props, items, dom) {
+                  return (
+                    <div aria-disabled tabIndex={-1} className="hidden">
+                      {dom.map((d, index) => (
+                        <div key={index}>{d}</div>
+                      ))}
+                    </div>
+                  );
+                },
+              }}
               bubbleMenu={{
                 render({ extensionsNames, editor, disabled }, bubbleDefaultDom) {
                   return (

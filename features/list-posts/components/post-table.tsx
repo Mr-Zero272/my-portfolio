@@ -1,7 +1,6 @@
 'use client';
 
 import { postApi } from '@/apis/post';
-import { useIsMobile } from '@/hooks/use-mobile';
 import { type IPost } from '@/models';
 import {
   closestCenter,
@@ -90,6 +89,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Separator } from '@/components/ui/separator';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { useIsMobile } from '@/hooks/use-mobile';
 import Link from 'next/link';
 import { toast } from 'sonner';
 

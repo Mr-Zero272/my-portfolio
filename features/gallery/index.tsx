@@ -8,8 +8,8 @@ import { useMemo, useState } from 'react';
 import Masonry from 'react-masonry-css';
 
 import { AnimatedButton } from '@/components/ui/animated-button';
-import useDebounce from '@/hooks/use-debounce';
 import { cn } from '@/lib/utils';
+import { useDebounceValue } from 'usehooks-ts';
 import GallerySkeleton from './components/gallery-skeleton';
 import ImageCard, { ImageCardSkeleton } from './components/image-card';
 import ImagePreviewPanel from './components/image-preview-panel';
@@ -21,7 +21,7 @@ const GalleryFeature = () => {
   const [selectedImage, setSelectedImage] = useState<IImage | null>(null);
 
   // Debounce search query to avoid too many API calls
-  const debouncedSearch = useDebounce(searchQuery, 500);
+  const [debouncedSearch] = useDebounceValue(searchQuery, 500);
 
   const { data, isLoading, isFetchingNextPage, hasNextPage, fetchNextPage } = useGalleryImages({
     search: debouncedSearch,

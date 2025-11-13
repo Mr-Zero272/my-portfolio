@@ -20,9 +20,11 @@ export default function DashboardLayout({
         <DashboardNav variant="inset" />
         <SidebarInset>
           {/* <PageTransition noFooter className="pt-0"> */}
-          <div>
-            <DashboardHeader />
-            {children}
+          <DashboardHeader />
+          <div className="flex flex-1 flex-col">
+            <div className="@container/main container mx-auto flex flex-1 flex-col gap-2">
+              <div className="px-4 pt-5 pb-5 md:px-10 md:pb-10">{children}</div>
+            </div>
           </div>
           {/* </PageTransition> */}
         </SidebarInset>

@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import * as React from "react";
-import { useIsMobile } from "../../hooks/use-mobile";
+import { useIsMobile } from '@/hooks/use-mobile';
+import * as React from 'react';
 import {
   Drawer,
   DrawerClose,
@@ -11,7 +11,7 @@ import {
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger,
-} from "../ui/drawer";
+} from '../ui/drawer';
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -26,7 +26,7 @@ import {
   DropdownMenuSub,
   DropdownMenuSubContent,
   DropdownMenuTrigger,
-} from "../ui/dropdown-menu";
+} from '../ui/dropdown-menu';
 
 interface ResponsiveDropdownProps {
   open?: boolean;
@@ -36,8 +36,8 @@ interface ResponsiveDropdownProps {
 }
 
 interface ResponsiveDropdownContentProps {
-  align?: "start" | "center" | "end";
-  side?: "top" | "right" | "bottom" | "left";
+  align?: 'start' | 'center' | 'end';
+  side?: 'top' | 'right' | 'bottom' | 'left';
   className?: string;
   children: React.ReactNode;
 }
