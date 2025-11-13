@@ -10,7 +10,7 @@ const protectedPaths = ['/piti/**', '/api/admin/**'];
 // Các route public không cần authentication
 const publicPaths = ['/', '/about-me', '/projects', '/contact', '/favorite', '/api/auth/**', '/auth/**', '/blog/**'];
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   // Kiểm tra nếu là route public thì cho phép
@@ -42,7 +42,6 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  runtime: 'nodejs',
   matcher: [
     /*
      * Match all request paths except for the ones starting with:
@@ -52,5 +51,5 @@ export const config = {
      * - public folder
      */
     '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
-  ],
+  ]
 };
