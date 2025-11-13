@@ -40,11 +40,12 @@ import {
 } from '@tanstack/react-table';
 import { format } from 'date-fns';
 import { Types } from 'mongoose';
-import React, { useEffect, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
 import { z } from 'zod';
 
 // Lucide Icons
 import {
+  CalendarCheck2,
   CheckIcon,
   ChevronDown,
   ChevronLeft,
@@ -57,6 +58,7 @@ import {
   Loader2Icon,
   LoaderIcon,
   Plus,
+  SquareDashedMousePointer,
   Trash2,
 } from 'lucide-react';
 
@@ -192,8 +194,13 @@ export function PostTable() {
       }),
   });
 
+  // Update post
+  const { mutateAsync: updatePost, isPending: isUpdatingPost } = useMutation({
+    mutationFn: postApi.updatePost,
+  });
+
   // delete post
-  const { mutateAsync: deletePost, isPending: isDeleteingPost } = useMutation({
+  const { mutateAsync: deletePost, isPending: isDeletingPost } = useMutation({
     mutationFn: postApi.deletePost,
   });
 
@@ -306,27 +313,43 @@ export function PostTable() {
                   className="data-[state=open]:bg-muted text-muted-foreground flex size-8"
                   size="icon"
                 >
-                  <EllipsisVerticalIcon />
+                  {isDeletingPost || isUpdatingPost ? (
+                    <LoaderIcon className="animate-spin" />
+                  ) : (
+                    <EllipsisVerticalIcon />
+                  )}
                   <span className="sr-only">Open menu for {post.title}</span>
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-32">
+              <DropdownMenuContent align="end" className="w-40">
                 <DropdownMenuItem>
-                  <Eye className="mr-2 h-4 w-4" />
+                  <Eye className="h-4 w-4" />
                   View
                 </DropdownMenuItem>
+                {!post.published && (
+                  <DropdownMenuItem onSelect={() => handleUpdatePostStatus(post._id, true)}>
+                    <CalendarCheck2 className="h-4 w-4" />
+                    Publish
+                  </DropdownMenuItem>
+                )}
+                {post.published && (
+                  <DropdownMenuItem onSelect={() => handleUpdatePostStatus(post._id, false)}>
+                    <SquareDashedMousePointer className="h-4 w-4" />
+                    Make it Draft
+                  </DropdownMenuItem>
+                )}
                 <Link href={`/posts/${post.slug}`}>
                   <DropdownMenuItem>
-                    <Edit className="mr-2 h-4 w-4" />
+                    <Edit className="h-4 w-4" />
                     Edit
                   </DropdownMenuItem>
                 </Link>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem
                   className="text-destructive"
-                  onClick={() => setDeleteState({ isOpen: true, postId: post._id })}
+                  onSelect={() => setDeleteState({ isOpen: true, postId: post._id })}
                 >
-                  <Trash2 className="mr-2 h-4 w-4" />
+                  <Trash2 className="text-destructive h-4 w-4" />
                   Delete
                 </DropdownMenuItem>
               </DropdownMenuContent>
@@ -366,16 +389,33 @@ export function PostTable() {
     manualPagination: true,
   });
 
-  function handleDragEnd(event: DragEndEvent) {
-    const { active, over } = event;
-    if (active && over && active.id !== over.id) {
-      setData((data) => {
-        const oldIndex = dataIds.indexOf(active.id);
-        const newIndex = dataIds.indexOf(over.id);
-        return arrayMove(data, oldIndex, newIndex);
-      });
-    }
-  }
+  const handleUpdatePostStatus = useCallback(
+    async (postId: string, published: boolean) => {
+      try {
+        await updatePost({ postId, data: { published } });
+        toast.success('Post status updated successfully');
+        refetch();
+      } catch (error) {
+        console.error(error);
+        toast.error('Failed to update post status. Please try again.');
+      }
+    },
+    [updatePost, refetch],
+  );
+
+  const handleDragEnd = useCallback(
+    (event: DragEndEvent) => {
+      const { active, over } = event;
+      if (active && over && active.id !== over.id) {
+        setData((data) => {
+          const oldIndex = dataIds.indexOf(active.id);
+          const newIndex = dataIds.indexOf(over.id);
+          return arrayMove(data, oldIndex, newIndex);
+        });
+      }
+    },
+    [dataIds],
+  );
 
   if (error) {
     return (
@@ -582,7 +622,7 @@ export function PostTable() {
         description="Are you sure you want to delete this post? This action cannot be undone."
         confirmText="Delete"
         cancelText="Cancel"
-        isHandling={isDeleteingPost}
+        isHandling={isDeletingPost}
         onOpenChange={(open) => setDeleteState({ ...deleteState, isOpen: open })}
         onCancel={() => setDeleteState({ ...deleteState, isOpen: false })}
         onConfirm={async () => {

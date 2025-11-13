@@ -18,7 +18,7 @@ const DashboardHeader = () => {
     <>
       <div
         className={cn(
-          'bg-background fixed top-2 mt-1 flex h-16 w-[calc(100%-18rem)] flex-1 items-center justify-between px-8',
+          'bg-background sticky top-0 z-99999 mt-1 flex h-16 w-full flex-1 items-center justify-between px-8 py-1',
           {
             'backdrop-blur-sm': isScrolled,
           },
