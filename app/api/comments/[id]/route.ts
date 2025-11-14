@@ -1,7 +1,6 @@
+import { auth } from '@/auth';
 import { CommentService } from '@/services/comment-service';
-import { getServerSession } from 'next-auth';
 import { NextRequest, NextResponse } from 'next/server';
-import { authConfig } from '../../auth/[...nextauth]/auth-config';
 
 // GET /api/comments/[id] - Lấy comment theo ID
 export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
@@ -71,7 +70,7 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
 // PUT /api/comments/[id] - Cập nhật comment
 export async function PUT(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
-    const session = await getServerSession(authConfig);
+    const session = await auth();
     const { id } = await params;
     const body = await request.json();
 

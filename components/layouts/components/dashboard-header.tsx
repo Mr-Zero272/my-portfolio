@@ -18,7 +18,7 @@ const DashboardHeader = () => {
     <>
       <div
         className={cn(
-          'bg-background sticky top-0 z-99999 mt-1 flex h-16 w-full flex-1 items-center justify-between px-8 py-1',
+          'bg-background sticky top-0 z-50 mt-1 flex h-[var(--header-height)] w-full items-center justify-between px-8 py-1',
           {
             'backdrop-blur-sm': isScrolled,
           },
@@ -35,7 +35,6 @@ const DashboardHeader = () => {
           <AvatarMenu />
         </div>
       </div>
-      <div className="h-20" />
     </>
   );
 };

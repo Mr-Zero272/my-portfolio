@@ -1,6 +1,6 @@
-// middleware.ts (ở root của project)
+// proxy.ts (ở root của project - Next.js 16)
+import { auth } from '@/auth';
 import micromatch from 'micromatch';
-import { getToken } from 'next-auth/jwt';
 import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
 
@@ -20,20 +20,22 @@ export async function proxy(request: NextRequest) {
 
   // Kiểm tra nếu là route cần bảo vệ
   if (micromatch.isMatch(pathname, protectedPaths)) {
-    const token = await getToken({
-      req: request,
-      secret: process.env.NEXTAUTH_SECRET,
+    // Sử dụng auth() từ NextAuth v5
+    const session = await auth();
+
+    console.log({
+      session,
     });
 
-    // Nếu không có token, redirect về trang login
-    if (!token) {
+    // Nếu không có session, redirect về trang login
+    if (!session) {
       const url = new URL('/auth/signin', request.url);
       url.searchParams.set('callbackUrl', pathname);
       return NextResponse.redirect(url);
     }
 
-    // Nếu có token nhưng không phải admin
-    if (token.email !== process.env.ADMIN_EMAIL) {
+    // Nếu có session nhưng không phải admin
+    if (session.user?.email !== process.env.ADMIN_EMAIL) {
       return NextResponse.redirect(new URL('/unauthorized', request.url));
     }
   }
@@ -51,5 +53,5 @@ export const config = {
      * - public folder
      */
     '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
-  ]
+  ],
 };

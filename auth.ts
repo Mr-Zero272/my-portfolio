@@ -1,9 +1,10 @@
 import { UserService } from '@/services/user-service';
-import { AuthOptions } from 'next-auth';
+import type { NextAuthConfig } from 'next-auth';
+import NextAuth from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import GoogleProvider from 'next-auth/providers/google';
 
-export const authConfig: AuthOptions = {
+export const authConfig = {
   providers: [
     CredentialsProvider({
       name: 'Credentials',
@@ -18,7 +19,10 @@ export const authConfig: AuthOptions = {
 
         try {
           // Tìm user trong database
-          const user = await UserService.findUserByCredentials(credentials.email, credentials.password);
+          const user = await UserService.findUserByCredentials(
+            credentials.email as string,
+            credentials.password as string,
+          );
 
           if (user) {
             return {
@@ -38,8 +42,8 @@ export const authConfig: AuthOptions = {
       },
     }),
     GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID!,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+      clientId: process.env.AUTH_GOOGLE_ID!,
+      clientSecret: process.env.AUTH_GOOGLE_SECRET!,
     }),
   ],
   callbacks: {
@@ -108,6 +112,7 @@ export const authConfig: AuthOptions = {
           id: token.id as string,
           name: token.name as string,
           email: token.email as string,
+          emailVerified: null,
           image: token.image as string,
           role: token.role as string,
         };
@@ -123,5 +128,8 @@ export const authConfig: AuthOptions = {
     strategy: 'jwt',
     maxAge: 365 * 24 * 60 * 60, // 1 năm - session dài hạn cho admin
   },
-  secret: process.env.NEXTAUTH_SECRET,
-};
+  secret: process.env.AUTH_SECRET,
+  debug: process.env.NODE_ENV === 'development',
+} satisfies NextAuthConfig;
+
+export const { auth, handlers, signIn, signOut } = NextAuth(authConfig);
