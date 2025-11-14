@@ -66,12 +66,15 @@ import 'reactjs-tiptap-editor/style.css';
 import { AnimatedButton } from '@/components/ui/animated-button';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Separator } from '@/components/ui/separator';
 import { Textarea } from '@/components/ui/textarea';
+import GallerySelect from '@/features/gallery/components/gallery-select';
 import { useSmartPaste } from '@/hooks/use-smart-paste';
+import { IImage } from '@/models';
 import '@excalidraw/excalidraw/index.css';
 import 'easydrawer/styles.css';
 import 'katex/dist/katex.min.css';
-import { Plus, XIcon } from 'lucide-react';
+import { Library, Plus, XIcon } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { useTheme } from 'next-themes';
 import 'react-image-crop/dist/ReactCrop.css';
@@ -228,6 +231,7 @@ function Editor() {
   );
 
   // const { editorRef } = useEditorState();
+  const [imageFromLibrary, setImageFromLibrary] = useState<IImage | null>(null);
   const { theme } = useTheme();
   const { _id, title, content, featureImage: storeFeatureImage, imageCaption, setField } = usePostStorage();
   const { handlePaste } = useSmartPaste();
@@ -268,13 +272,25 @@ function Editor() {
     }
   }, []);
 
-  const handleSelectFeatureImage = (event: ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      setField('featureImageFile', file);
-    }
-    handleFileSelect(event);
-  };
+  const handleSelectFeatureImage = useCallback(
+    (event: ChangeEvent<HTMLInputElement>) => {
+      const file = event.target.files?.[0];
+      if (file) {
+        setField('featureImageFile', file);
+      }
+      handleFileSelect(event);
+    },
+    [handleFileSelect, setField],
+  );
+
+  const handleSelectImageFromLibrary = useCallback(
+    (image: IImage | null) => {
+      if (!image) return;
+      setImageFromLibrary(image);
+      setField('featureImage', image.url);
+    },
+    [setField],
+  );
 
   // if post id change mean new post, then set new key to reset editor
   useEffect(() => {
@@ -314,6 +330,7 @@ function Editor() {
                     onClick={() => {
                       if (featureImage) removePreview(featureImage.id);
                       if (storeFeatureImage) setField('featureImage', '');
+                      setField('featureImageFile', null);
                     }}
                     variant="destructive"
                     size="sm"
@@ -352,6 +369,16 @@ function Editor() {
                   <Plus className="h-4 w-4" />
                   {imageLoading ? 'Uploading...' : 'Upload feature image'}
                 </AnimatedButton>
+                <Separator orientation="vertical" className="h-4" />
+                <GallerySelect
+                  onValueChange={handleSelectImageFromLibrary}
+                  value={imageFromLibrary}
+                  trigger={
+                    <AnimatedButton variant="outline">
+                      <Library />
+                    </AnimatedButton>
+                  }
+                />
               </div>
             )}
 

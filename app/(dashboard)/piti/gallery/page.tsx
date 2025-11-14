@@ -1,11 +1,7 @@
 import GalleryFeature from '@/features/gallery';
 
 const GalleryPage = () => {
-  return (
-    <div>
-      <GalleryFeature />
-    </div>
-  );
+  return <GalleryFeature />;
 };
 
 export default GalleryPage;

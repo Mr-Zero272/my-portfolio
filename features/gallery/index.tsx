@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { type IImage } from '@/models';
 import { Loader2, Search } from 'lucide-react';
-import { useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import Masonry from 'react-masonry-css';
 
 import { AnimatedButton } from '@/components/ui/animated-button';
@@ -15,6 +15,13 @@ import ImageCard, { ImageCardSkeleton } from './components/image-card';
 import ImagePreviewPanel from './components/image-preview-panel';
 import './gallery.css';
 import { useGalleryImages } from './hooks/use-gallery-images';
+
+const breakpointColumnsObj = {
+  default: 4,
+  1100: 3,
+  700: 2,
+  500: 1,
+};
 
 const GalleryFeature = () => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -32,29 +39,22 @@ const GalleryFeature = () => {
     return data?.pages.flatMap((page) => page.images) ?? [];
   }, [data]);
 
-  const totalImages = data?.pages[0]?.total ?? 0;
-
-  const breakpointColumnsObj = {
-    default: 4,
-    1100: 3,
-    700: 2,
-    500: 1,
-  };
+  const totalImages = useMemo(() => data?.pages[0]?.total ?? 0, [data]);
 
   // Handle search - debouncing is handled automatically by useDebounce
-  const handleSearch = (e: React.FormEvent) => {
+  const handleSearch = useCallback((e: React.FormEvent) => {
     e.preventDefault();
     // Search will be triggered automatically by debounced value change
-  };
+  }, []);
 
   // Handle load more
-  const handleLoadMore = () => {
+  const handleLoadMore = useCallback(async () => {
     if (hasNextPage && !isFetchingNextPage) {
-      fetchNextPage();
+      await fetchNextPage();
     }
-  };
+  }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
 
-  const handleDownload = async (imageUrl: string, imageName: string) => {
+  const handleDownload = useCallback(async (imageUrl: string, imageName: string) => {
     try {
       const response = await fetch(imageUrl);
       const blob = await response.blob();
@@ -69,11 +69,11 @@ const GalleryFeature = () => {
     } catch (error) {
       console.error('Error downloading image:', error);
     }
-  };
+  }, []);
 
-  const handleImageClick = (image: IImage) => {
+  const handleImageClick = useCallback((image: IImage) => {
     setSelectedImage(image);
-  };
+  }, []);
 
   // Show skeleton on initial loading
   if (isLoading && !data) {

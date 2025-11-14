@@ -295,7 +295,7 @@ const PostEditorContent = ({ mode = 'create' }: PostEditorProps) => {
           </div>
           <div className="flex items-center gap-2">
             <AnimatedButton
-              className="max-md:size-1o fixed right-4 bottom-4 z-50 max-md:rounded-full md:static"
+              className="fixed right-4 bottom-4 z-50 max-md:size-10 max-md:rounded-full md:static"
               disabled={isLoading}
               onClick={handleMainButtonClick}
             >

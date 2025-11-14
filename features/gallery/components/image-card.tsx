@@ -1,6 +1,7 @@
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
+import { cn } from '@/lib/utils';
 import { type IImage } from '@/models';
 import { Download, Share } from 'lucide-react';
 import Image from 'next/image';
@@ -9,9 +10,11 @@ interface ImageCardProps {
   image: IImage;
   onImageClick: (image: IImage) => void;
   onDownload: (imageUrl: string, imageName: string) => void;
+  mode?: 'view' | 'select';
+  isActive?: boolean;
 }
 
-const ImageCard = ({ image, onImageClick, onDownload }: ImageCardProps) => {
+const ImageCard = ({ image, onImageClick, onDownload, mode = 'view', isActive }: ImageCardProps) => {
   const handleDownload = (e: React.MouseEvent) => {
     e.stopPropagation();
     onDownload(image.url, image.name);
@@ -25,7 +28,9 @@ const ImageCard = ({ image, onImageClick, onDownload }: ImageCardProps) => {
 
   return (
     <Card
-      className="group m-0 cursor-pointer overflow-hidden p-0 transition-all duration-300 hover:shadow-lg"
+      className={cn('group m-0 cursor-pointer overflow-hidden p-0 transition-all duration-300 hover:shadow-lg', {
+        'border-primary border-2': mode === 'select' && isActive,
+      })}
       onClick={() => onImageClick(image)}
     >
       <div className="relative">
