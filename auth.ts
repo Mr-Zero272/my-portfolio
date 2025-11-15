@@ -2,6 +2,7 @@ import { UserService } from '@/services/user-service';
 import type { NextAuthConfig } from 'next-auth';
 import NextAuth from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
+import GithubProvider from 'next-auth/providers/github';
 import GoogleProvider from 'next-auth/providers/google';
 
 export const authConfig = {
@@ -45,6 +46,10 @@ export const authConfig = {
       clientId: process.env.AUTH_GOOGLE_ID!,
       clientSecret: process.env.AUTH_GOOGLE_SECRET!,
     }),
+    GithubProvider({
+      clientId: process.env.AUTH_GITHUB_ID!,
+      clientSecret: process.env.AUTH_GITHUB_SECRET!,
+    }),
   ],
   callbacks: {
     async signIn({ user, account }) {
@@ -74,6 +79,32 @@ export const authConfig = {
         }
       }
 
+      // Nếu đăng nhập bằng GitHub
+      if (account?.provider === 'github') {
+        try {
+          // Tìm hoặc tạo user trong database
+          const dbUser = await UserService.findOrCreateGithubUser({
+            email: user.email!,
+            name: user.name!,
+            image: user.image || undefined,
+          });
+
+          if (dbUser) {
+            // Cập nhật thông tin user từ database
+            user.id = dbUser._id.toString();
+            user.name = dbUser.name;
+            user.email = dbUser.email;
+            user.image = dbUser.avatar;
+            return true;
+          }
+
+          return false;
+        } catch (error) {
+          console.error('Error in GitHub sign in:', error);
+          return false;
+        }
+      }
+
       // Nếu đăng nhập bằng credentials
       if (account?.provider === 'credentials') {
         return true; // Đã được validate trong authorize
@@ -90,8 +121,8 @@ export const authConfig = {
         token.name = user.name;
         token.image = user.image;
 
-        // Nếu là Google OAuth, lấy thông tin từ database
-        if (account?.provider === 'google') {
+        // Nếu là Google hoặc GitHub OAuth, lấy thông tin từ database
+        if (account?.provider === 'google' || account?.provider === 'github') {
           const dbUser = await UserService.findUserByEmail(user.email!);
           if (dbUser) {
             token.role = dbUser.role;

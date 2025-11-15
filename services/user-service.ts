@@ -209,4 +209,64 @@ export class UserService {
       return null;
     }
   }
+
+  static async findOrCreateGithubUser(userData: {
+    email: string;
+    name: string;
+    image?: string;
+  }): Promise<IUser | null> {
+    try {
+      await connectDB();
+
+      // Tìm user theo email
+      let user = await User.findOne({ email: userData.email });
+
+      if (!user) {
+        // Tạo username unique từ email
+        const baseUsername = userData.email.split('@')[0];
+        let username = baseUsername;
+        let counter = 1;
+
+        // Kiểm tra xem username đã tồn tại chưa, nếu có thì thêm số
+        while (await User.findOne({ username })) {
+          username = `${baseUsername}${counter}`;
+          counter++;
+        }
+
+        // Tạo user mới với thông tin từ GitHub
+        user = new User({
+          username,
+          email: userData.email,
+          password: 'github_oauth', // Placeholder password for GitHub users
+          name: userData.name,
+          role: 'admin',
+          avatar: userData.image || null,
+        });
+
+        user = await user.save();
+      } else {
+        // Cập nhật thông tin nếu có thay đổi
+        let hasChanges = false;
+
+        if (userData.image && user.avatar !== userData.image) {
+          user.avatar = userData.image;
+          hasChanges = true;
+        }
+
+        if (userData.name && user.name !== userData.name) {
+          user.name = userData.name;
+          hasChanges = true;
+        }
+
+        if (hasChanges) {
+          await user.save();
+        }
+      }
+
+      return user;
+    } catch (error) {
+      console.error('Error finding or creating GitHub user:', error);
+      return null;
+    }
+  }
 }
