@@ -150,9 +150,6 @@ async function seedComments(userId: string) {
       const savedComment = await newComment.save();
 
       if (savedComment) {
-        console.log(
-          `✅ Created comment ${index + 1}/${testComments.length}: "${commentData.content.substring(0, 50)}..."`,
-        );
         successCount++;
         createdCommentIds.push(savedComment._id.toString());
       } else {

@@ -23,10 +23,6 @@ export async function proxy(request: NextRequest) {
     // Sử dụng auth() từ NextAuth v5
     const session = await auth();
 
-    console.log({
-      session,
-    });
-
     // Nếu không có session, redirect về trang login
     if (!session) {
       const url = new URL('/auth/signin', request.url);

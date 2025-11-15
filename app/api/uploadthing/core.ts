@@ -20,8 +20,6 @@ export const ourFileRouter = {
       return { userId: user.id };
     })
     .onUploadComplete(async ({ metadata, file }) => {
-      console.log('Image upload complete for userId:', metadata.userId);
-      console.log('file url', file.ufsUrl);
       return { uploadedBy: metadata.userId, url: file.ufsUrl };
     }),
 
@@ -38,8 +36,6 @@ export const ourFileRouter = {
       return { userId: user.id };
     })
     .onUploadComplete(async ({ metadata, file }) => {
-      console.log('Video upload complete for userId:', metadata.userId);
-      console.log('file url', file.ufsUrl);
       return { uploadedBy: metadata.userId, url: file.ufsUrl };
     }),
 
@@ -55,8 +51,6 @@ export const ourFileRouter = {
       return { userId: user.id };
     })
     .onUploadComplete(async ({ metadata, file }) => {
-      console.log('Attachment upload complete for userId:', metadata.userId);
-      console.log('file url', file.ufsUrl);
       return { uploadedBy: metadata.userId, url: file.ufsUrl };
     }),
 
@@ -74,8 +68,6 @@ export const ourFileRouter = {
       return { userId: user.id };
     })
     .onUploadComplete(async ({ metadata, file }) => {
-      console.log('Media upload complete for userId:', metadata.userId);
-      console.log('file url', file.ufsUrl);
       return { uploadedBy: metadata.userId, url: file.ufsUrl };
     }),
 } satisfies FileRouter;
