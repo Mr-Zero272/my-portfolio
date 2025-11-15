@@ -105,7 +105,7 @@ const data = {
   navSecondary: [
     {
       title: 'Settings',
-      url: '#',
+      url: '/piti/settings',
       icon: CogIcon,
     },
     {

@@ -2,6 +2,12 @@
 
 import { AnimatedButton } from '@/components/ui/animated-button';
 import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import {
   SidebarGroup,
   SidebarGroupContent,
   SidebarMenu,
@@ -10,7 +16,7 @@ import {
 } from '@/components/ui/sidebar';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { cn } from '@/lib/utils';
-import { Globe, LucideIcon, Plus } from 'lucide-react';
+import { Globe, LucideIcon, Plus, PlusCircle } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
@@ -30,15 +36,26 @@ export default function DashboardNavMain({
       <SidebarGroupContent className="flex flex-col gap-2">
         <SidebarMenu>
           <SidebarMenuItem className="flex items-center gap-2">
-            <Link href="/posts/create" className="flex-1">
-              <SidebarMenuButton
-                tooltip="Quick Create"
-                className="bg-primary text-primary-foreground hover:bg-primary/90 hover:text-primary-foreground active:bg-primary/90 active:text-primary-foreground min-w-8 duration-300 ease-in-out active:scale-90"
-              >
-                <Plus />
-                <span>Quick Create Post</span>
-              </SidebarMenuButton>
-            </Link>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <SidebarMenuButton
+                  tooltip="Quick Create"
+                  className="bg-primary text-primary-foreground hover:bg-primary/90 hover:text-primary-foreground active:bg-primary/90 active:text-primary-foreground min-w-8 duration-300 ease-in-out active:scale-90"
+                >
+                  <Plus />
+                  <span>Quick Action</span>
+                </SidebarMenuButton>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="w-52">
+                <Link href="/posts/create" className="flex-1">
+                  <DropdownMenuItem>
+                    <PlusCircle />
+                    Create New Post
+                  </DropdownMenuItem>
+                </Link>
+              </DropdownMenuContent>
+            </DropdownMenu>
+
             <Tooltip>
               <TooltipTrigger asChild>
                 <Link href="/blog">
