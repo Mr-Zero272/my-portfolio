@@ -81,7 +81,7 @@ const GalleryFeature = () => {
   }
 
   return (
-    <div className="container mx-auto px-2 md:px-8">
+    <div className="">
       {/* Header */}
       <div className="mb-8">
         <h1 className="mg-1 text-2xl font-bold">Gallery</h1>

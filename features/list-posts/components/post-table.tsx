@@ -435,7 +435,7 @@ export function PostTable() {
         onValueChange={(tab) => setTab(tab as 'posts' | 'drafts' | 'published')}
         className="w-full flex-col justify-start gap-6"
       >
-        <div className="flex items-center justify-between px-4 lg:px-6">
+        <div className="flex items-center justify-between">
           <TabsList className="">
             <TabsTrigger value="posts">All Posts</TabsTrigger>
             <TabsTrigger value="drafts">
@@ -481,7 +481,7 @@ export function PostTable() {
             </Link>
           </div>
         </div>
-        <div className="relative flex flex-col gap-4 overflow-auto px-4 lg:px-6">
+        <div className="relative flex flex-col gap-4 overflow-auto">
           <div className="overflow-hidden rounded-lg border">
             <DndContext
               collisionDetection={closestCenter}

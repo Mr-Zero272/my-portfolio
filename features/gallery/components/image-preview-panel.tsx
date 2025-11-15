@@ -2,6 +2,7 @@ import { AnimatedButton } from '@/components/ui/animated-button';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
+import { formatFileSize } from '@/lib';
 import { type IImage } from '@/models';
 import { format } from 'date-fns';
 import { Calendar, Download, FileImage, HardDrive, User, XIcon } from 'lucide-react';
@@ -17,14 +18,6 @@ const ImagePreviewPanel = ({ image, onDownload, onClose }: ImagePreviewPanelProp
   if (!image) {
     return null;
   }
-
-  const formatFileSize = (bytes: number) => {
-    if (bytes === 0) return '0 Bytes';
-    const k = 1024;
-    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
-    const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
-  };
 
   return (
     <Card className="sticky top-20 h-fit">

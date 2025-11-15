@@ -6,11 +6,7 @@ export const metadata = {
 };
 
 const DashboardPage = () => {
-  return (
-    <div>
-      <DashboardFeature />
-    </div>
-  );
+  return <DashboardFeature />;
 };
 
 export default DashboardPage;

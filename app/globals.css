@@ -158,3 +158,56 @@
     outline-width: 0;
   }
 }
+
+/* site-container: thuần CSS, responsive, giống Tailwind container */
+.site-container {
+  box-sizing: border-box;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1rem; /* 16px */
+  padding-right: 1rem; /* 16px */
+  width: 100%;
+}
+
+/* Breakpoint widths giống Tailwind defaults */
+@media (min-width: 640px) {
+  /* sm */
+  .site-container {
+    max-width: 640px;
+  }
+}
+@media (min-width: 768px) {
+  /* md */
+  .site-container {
+    max-width: 768px;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+}
+@media (min-width: 1024px) {
+  /* lg */
+  .site-container {
+    max-width: 1024px;
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+}
+@media (min-width: 1280px) {
+  /* xl */
+  .site-container {
+    max-width: 1280px;
+  }
+}
+@media (min-width: 1536px) {
+  /* 2xl */
+  .site-container {
+    max-width: 1536px;
+  }
+}
+
+/* Optional: helper to remove unexpected display/padding inheritance if editor leaks globals */
+.site-container {
+  display: block; /* đảm bảo không bị flex/inline hoặc gì lạ */
+  padding-top: 0;
+  padding-bottom: 0;
+}

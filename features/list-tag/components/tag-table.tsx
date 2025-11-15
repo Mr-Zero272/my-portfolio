@@ -394,7 +394,7 @@ export function TagTable({ page = 1, limit = 10, type }: TagTableProps) {
 
   return (
     <Tabs defaultValue="tags" className="w-full flex-col justify-start gap-6">
-      <div className="flex items-center justify-between px-4 lg:px-6">
+      <div className="flex items-center justify-between">
         <TabsList className="">
           <TabsTrigger value="tags">All Tags</TabsTrigger>
         </TabsList>
@@ -456,7 +456,7 @@ export function TagTable({ page = 1, limit = 10, type }: TagTableProps) {
           </TagFormDialog>
         </div>
       </div>
-      <TabsContent value="tags" className="relative flex flex-col gap-4 overflow-auto px-4 lg:px-6">
+      <TabsContent value="tags" className="relative flex flex-col gap-4 overflow-auto">
         <div className="overflow-hidden rounded-lg border">
           <DndContext
             collisionDetection={closestCenter}

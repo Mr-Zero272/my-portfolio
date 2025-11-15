@@ -41,6 +41,7 @@ const GallerySelect = ({ value, onValueChange, open, onOpenChange, trigger }: Ga
 
   const { data, isLoading, isFetchingNextPage, hasNextPage, fetchNextPage } = useGalleryImages({
     search: debouncedSearch,
+    limit: 30,
   });
 
   // Flatten all pages data

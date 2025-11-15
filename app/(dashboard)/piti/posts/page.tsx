@@ -7,11 +7,7 @@ export const metadata: Metadata = {
 };
 
 const PostPage = () => {
-  return (
-    <div>
-      <ListPostFeature />
-    </div>
-  );
+  return <ListPostFeature />;
 };
 
 export default PostPage;
