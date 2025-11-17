@@ -13,6 +13,8 @@ export interface IPost extends Document {
   featureImage?: string;
   imageCaption?: string;
   likes: number;
+  likedBy: mongoose.Types.ObjectId[];
+  shares: number;
   authors: mongoose.Types.ObjectId[];
   tags: mongoose.Types.ObjectId[];
   comments: mongoose.Types.ObjectId[];
@@ -36,6 +38,8 @@ export interface IPostResponse {
   featureImage?: string;
   imageCaption?: string;
   likes: number;
+  likedBy: string[];
+  shares: number;
   authors: IUser[];
   tags: ITag[];
   comments: IComment[];
@@ -59,6 +63,8 @@ const PostSchema: Schema = new Schema(
     featureImage: { type: String },
     imageCaption: { type: String },
     likes: { type: Number, default: 0 },
+    likedBy: [{ type: Schema.Types.ObjectId, ref: 'User' }],
+    shares: { type: Number, default: 0 },
     authors: [{ type: Schema.Types.ObjectId, ref: 'User' }],
     tags: [{ type: Schema.Types.ObjectId, ref: 'Tag' }],
     comments: [{ type: Schema.Types.ObjectId, ref: 'Comment' }],

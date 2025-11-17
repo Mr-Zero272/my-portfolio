@@ -267,4 +267,53 @@ export class PostService {
       return { status: 'error', message: 'Error fetching post statistics', data: { published: 0, unpublished: 0 } };
     }
   }
+
+  static async likePost(slug: string, userId: string): Promise<BaseResponse<IPost | null>> {
+    try {
+      await connectDB();
+      const post = (await Post.findOne({ slug })) as IPost & { likedBy: mongoose.Types.ObjectId[] };
+      if (!post) {
+        return { status: 'error', message: 'Post not found', data: null as never };
+      }
+
+      // Check if user already liked the post
+      const userObjectId = new mongoose.Types.ObjectId(userId);
+      if (post.likedBy.some((id: mongoose.Types.ObjectId) => id.equals(userObjectId))) {
+        return { status: 'error', message: 'User already liked this post', data: null as never };
+      }
+
+      post.likes += 1;
+      post.likedBy.push(userObjectId);
+      await post.save();
+      return { status: 'success', data: post };
+    } catch (error) {
+      console.error('Error liking post:', error);
+      return { status: 'error', message: 'Error liking post', data: null as never };
+    }
+  }
+
+  static async unlikePost(slug: string, userId: string): Promise<BaseResponse<IPost | null>> {
+    try {
+      await connectDB();
+      const post = (await Post.findOne({ slug })) as IPost & { likedBy: mongoose.Types.ObjectId[] };
+      if (!post) {
+        return { status: 'error', message: 'Post not found', data: null as never };
+      }
+
+      // Check if user has liked the post
+      const userObjectId = new mongoose.Types.ObjectId(userId);
+      const likedIndex = post.likedBy.findIndex((id: mongoose.Types.ObjectId) => id.equals(userObjectId));
+      if (likedIndex === -1) {
+        return { status: 'error', message: 'User has not liked this post', data: null as never };
+      }
+
+      post.likes -= 1;
+      post.likedBy.splice(likedIndex, 1);
+      await post.save();
+      return { status: 'success', data: post };
+    } catch (error) {
+      console.error('Error unliking post:', error);
+      return { status: 'error', message: 'Error unliking post', data: null as never };
+    }
+  }
 }
