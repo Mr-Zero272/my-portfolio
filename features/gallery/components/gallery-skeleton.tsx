@@ -11,7 +11,7 @@ const breakpointColumnsObj = {
 
 const GallerySkeleton = () => {
   return (
-    <div className="container mx-auto px-2 md:px-8">
+    <div className="site-container mx-auto px-2 md:px-8">
       {/* Header Skeleton */}
       <div className="mb-8">
         <Skeleton className="mb-1 h-8 w-32" />

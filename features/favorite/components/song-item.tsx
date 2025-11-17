@@ -1,10 +1,11 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
-import { cn, formatSecondsToTime } from '@/lib/utils';
+import { formatSecondsToTime } from '@/lib';
+import { cn } from '@/lib/utils';
+import { useMusicStore } from '@/store/use-music-store';
 import { Check, ChevronDown, ChevronUp, EllipsisVertical, Play, SquarePen, Trash, X } from 'lucide-react';
 import { FormEvent, useRef, useState } from 'react';
-import { useMusicPlayer } from '../../../components/contexts/music-context';
 import { MusicPlaying } from '../../../components/icons';
 import {
   DropdownMenu,
@@ -22,19 +23,17 @@ type Props = {
 };
 
 const SongItem = ({ index, trackName, active = false }: Props) => {
-  const {
-    isPlaying,
-    progress,
-    tracks,
-    duration,
-    deleteTrack,
-    currentTrackIndex,
-    updateTrackPosition,
-    setTrack,
-    trackNames,
-    updateTrackName,
-    updateEditingTrackNameState,
-  } = useMusicPlayer();
+  const isPlaying = useMusicStore((state) => state.isPlaying);
+  const progress = useMusicStore((state) => state.progress);
+  const tracks = useMusicStore((state) => state.tracks);
+  const duration = useMusicStore((state) => state.duration);
+  const deleteTrack = useMusicStore((state) => state.deleteTrack);
+  const currentTrackIndex = useMusicStore((state) => state.currentTrackIndex);
+  const updateTrackPosition = useMusicStore((state) => state.updateTrackPosition);
+  const setTrack = useMusicStore((state) => state.setTrack);
+  const trackNames = useMusicStore((state) => state.trackNames);
+  const updateTrackName = useMusicStore((state) => state.updateTrackName);
+  const updateEditingTrackNameState = useMusicStore((state) => state.updateEditingTrackNameState);
   const [currentTrackName, setCurrentTrackName] = useState(() => trackNames[index]);
   const [isEditing, setIsEditing] = useState(false);
   const inputEditRef = useRef<HTMLInputElement>(null);

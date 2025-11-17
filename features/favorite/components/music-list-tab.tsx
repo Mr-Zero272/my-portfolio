@@ -1,6 +1,6 @@
-import { useMusicPlayer } from '@/components/contexts/music-context';
 import MarqueeText from '@/components/shared/marquee-text';
 import { AnimatedButton } from '@/components/ui/animated-button';
+import { useMusicStore } from '@/store/use-music-store';
 import { Dot, Plus } from 'lucide-react';
 import { useMemo } from 'react';
 import SongItem from './song-item';
@@ -10,24 +10,9 @@ type MusicListTabProps = {
 };
 
 const MusicListTab = ({ onSetTab }: MusicListTabProps) => {
-  const {
-    tracks,
-    trackNames,
-    currentTrackIndex,
-    musicBackgroundSrc,
-    isPlaying,
-    duration,
-    progress,
-    play,
-    pause,
-    nextTrack,
-    previousTrack,
-    isShuffle,
-    shuffle,
-    repeat,
-    toggleRepeat,
-    seek,
-  } = useMusicPlayer();
+  const tracks = useMusicStore((state) => state.tracks);
+  const trackNames = useMusicStore((state) => state.trackNames);
+  const currentTrackIndex = useMusicStore((state) => state.currentTrackIndex);
   const currentTrack = useMemo(() => trackNames[currentTrackIndex], [trackNames, currentTrackIndex]);
   return (
     <div>

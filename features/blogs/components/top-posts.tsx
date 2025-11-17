@@ -13,9 +13,9 @@ const TopPosts = ({ posts }: TopPostsProps) => {
   if (!posts) return null;
   const firstPost = posts[0];
   return (
-    <div className="space-y-5 px-2 md:px-30">
+    <div className="space-y-5 px-2 lg:px-20">
       <PostCard isMainPost isDisplayExcerpt post={firstPost} />
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
         {posts.slice(1, 3).map((post) => (
           <PostCard key={post._id.toString()} post={post} isDisplayExcerpt={isSmallScreen} />
         ))}

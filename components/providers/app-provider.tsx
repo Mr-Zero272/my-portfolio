@@ -3,9 +3,9 @@
 import { SessionProvider } from 'next-auth/react';
 import { NuqsAdapter } from 'nuqs/adapters/next/app';
 import React from 'react';
-import { MusicPlayerProvider } from '../contexts/music-context';
 import SidebarProvider from '../contexts/sidebar-context';
 import { ThemeProvider } from '../contexts/theme-provider';
+import { MusicStoreInitializer } from './music-store-initializer';
 import ReactQueryProvider from './react-query-provider';
 
 type AppProviderProps = {
@@ -15,7 +15,7 @@ type AppProviderProps = {
 const AppProvider = ({ children }: AppProviderProps) => {
   return (
     <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
-      <MusicPlayerProvider>
+      <MusicStoreInitializer>
         <SidebarProvider>
           <ReactQueryProvider>
             <SessionProvider>
@@ -23,7 +23,7 @@ const AppProvider = ({ children }: AppProviderProps) => {
             </SessionProvider>
           </ReactQueryProvider>
         </SidebarProvider>
-      </MusicPlayerProvider>
+      </MusicStoreInitializer>
     </ThemeProvider>
   );
 };

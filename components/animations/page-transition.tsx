@@ -36,7 +36,7 @@ const PageTransition = ({
         onAnimationStart={() => setIsAnimating(true)}
         onAnimationComplete={() => setIsAnimating(false)}
       >
-        <div className="container mx-auto">{children}</div>
+        <div className="site-container mx-auto">{children}</div>
         {!noFooter && <Footer />}
       </motion.div>
     </div>

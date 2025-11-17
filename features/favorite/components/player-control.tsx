@@ -1,35 +1,59 @@
-import { useMusicPlayer } from '@/components/contexts/music-context';
 import { Pause, Play } from '@/components/icons';
 import { AnimatedButton } from '@/components/ui/animated-button';
 import { Slider } from '@/components/ui/slider';
-import { cn, formatSecondsToTime } from '@/lib/utils';
+import { formatSecondsToTime } from '@/lib';
+import { cn } from '@/lib/utils';
+import { useMusicStore } from '@/store/use-music-store';
 import { Heart, Repeat, Shuffle, SkipBack, SkipForward } from 'lucide-react';
 import Image from 'next/image';
+import { useCallback, useEffect, useState } from 'react';
 
 const PlayerControl = () => {
-  const {
-    musicBackgroundSrc,
-    isPlaying,
-    duration,
-    progress,
-    play,
-    pause,
-    nextTrack,
-    previousTrack,
-    isShuffle,
-    shuffle,
-    repeat,
-    toggleRepeat,
-    seek,
-  } = useMusicPlayer();
+  const musicBackgroundSrc = useMusicStore((state) => state.musicBackgroundSrc);
+  const isPlaying = useMusicStore((state) => state.isPlaying);
+  const duration = useMusicStore((state) => state.duration);
+  const progress = useMusicStore((state) => state.progress);
+  const play = useMusicStore((state) => state.play);
+  const pause = useMusicStore((state) => state.pause);
+  const nextTrack = useMusicStore((state) => state.nextTrack);
+  const previousTrack = useMusicStore((state) => state.previousTrack);
+  const isShuffle = useMusicStore((state) => state.isShuffle);
+  const shuffle = useMusicStore((state) => state.shuffle);
+  const repeat = useMusicStore((state) => state.repeat);
+  const toggleRepeat = useMusicStore((state) => state.toggleRepeat);
+  const seek = useMusicStore((state) => state.seek);
 
-  const handlePlayButtonClick = () => {
+  // Local state for slider to avoid lag
+  const [localProgress, setLocalProgress] = useState(progress);
+  const [isSeeking, setIsSeeking] = useState(false);
+
+  // Sync local progress with store progress when not seeking
+  useEffect(() => {
+    if (!isSeeking) {
+      setLocalProgress(progress);
+    }
+  }, [progress, isSeeking]);
+
+  const handlePlayButtonClick = useCallback(() => {
     if (isPlaying) {
       pause();
     } else {
       play();
     }
-  };
+  }, [isPlaying, pause, play]);
+
+  const handleSliderChange = useCallback((arrValue: number[]) => {
+    setIsSeeking(true);
+    setLocalProgress(arrValue[0]);
+  }, []);
+
+  const handleSliderCommit = useCallback(
+    (arrValue: number[]) => {
+      seek(arrValue[0]);
+      setIsSeeking(false);
+    },
+    [seek],
+  );
 
   return (
     <article className="mb-10 w-full flex-1 space-y-10 xl:mb-0">
@@ -51,14 +75,15 @@ const PlayerControl = () => {
         </div>
       </div>
       <div className="flex items-center justify-center gap-x-4">
-        <p className="w-10">{formatSecondsToTime(Math.round(progress))}</p>
+        <p className="w-10">{formatSecondsToTime(Math.round(localProgress))}</p>
         <Slider
-          value={[progress]}
+          value={[localProgress]}
           max={duration}
           className="w-[60%]"
-          onValueChange={(arrValue) => seek(Number(arrValue[0]))}
+          onValueChange={handleSliderChange}
+          onValueCommit={handleSliderCommit}
         />
-        <p className="w-10">{formatSecondsToTime(Math.round(duration - progress))}</p>
+        <p className="w-10">{formatSecondsToTime(Math.round(duration - localProgress))}</p>
       </div>
       <div className="flex w-full items-center justify-between px-2 sm:px-5 md:px-10 lg:px-32">
         <AnimatedButton variant="ghost" size={'icon'} onClick={shuffle}>

@@ -1,28 +1,35 @@
 'use client';
 
-import { formatSecondsToTime } from '@/lib/utils';
+import { formatSecondsToTime } from '@/lib';
+import { useMusicStore } from '@/store/use-music-store';
 import { Music, Pause, Play, SkipBack, SkipForward } from 'lucide-react';
 import Image from 'next/image';
-import { useMusicPlayer } from '../contexts/music-context';
+import { useCallback } from 'react';
 import { Forward10Sharp, Replay10 } from '../icons';
 import { AnimatedButton } from '../ui/animated-button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from '../ui/dropdown-menu';
 import { Slider } from '../ui/slider';
 
 const MusicButton = ({ className }: { className?: string }) => {
-  const {
-    trackNames,
-    currentTrackIndex,
-    musicBackgroundSrc,
-    isPlaying,
-    duration,
-    progress,
-    play,
-    pause,
-    nextTrack,
-    previousTrack,
-    seek,
-  } = useMusicPlayer();
+  const trackNames = useMusicStore((state) => state.trackNames);
+  const currentTrackIndex = useMusicStore((state) => state.currentTrackIndex);
+  const musicBackgroundSrc = useMusicStore((state) => state.musicBackgroundSrc);
+  const isPlaying = useMusicStore((state) => state.isPlaying);
+  const duration = useMusicStore((state) => state.duration);
+  const progress = useMusicStore((state) => state.progress);
+  const play = useMusicStore((state) => state.play);
+  const pause = useMusicStore((state) => state.pause);
+  const nextTrack = useMusicStore((state) => state.nextTrack);
+  const previousTrack = useMusicStore((state) => state.previousTrack);
+  const seek = useMusicStore((state) => state.seek);
+
+  const handlePlayButtonClick = useCallback(() => {
+    if (isPlaying) {
+      pause();
+    } else {
+      play();
+    }
+  }, [isPlaying, pause, play]);
 
   return (
     <DropdownMenu>
@@ -49,11 +56,16 @@ const MusicButton = ({ className }: { className?: string }) => {
               <p className="text-muted-foreground">{formatSecondsToTime(Math.round(duration - progress))}</p>
             </div>
           </div>
-          <AnimatedButton variant="ghost" size="icon" className="bg-accent size-12 rounded-full p-4">
+          <AnimatedButton
+            variant="ghost"
+            size="icon"
+            className="bg-accent size-12 rounded-full p-4"
+            onClick={handlePlayButtonClick}
+          >
             {isPlaying ? (
-              <Pause className="size-5 fill-black group-active:scale-90" onClick={pause} />
+              <Pause className="size-5 fill-black group-active:scale-90" />
             ) : (
-              <Play className="size-5 fill-black group-active:scale-90" onClick={play} />
+              <Play className="size-5 fill-black group-active:scale-90" />
             )}
           </AnimatedButton>
         </div>

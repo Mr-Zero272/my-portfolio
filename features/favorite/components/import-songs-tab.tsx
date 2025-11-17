@@ -1,7 +1,7 @@
 'use client';
 
-import { useMusicPlayer } from '@/components/contexts/music-context';
 import { cn } from '@/lib/utils';
+import { useMusicStore } from '@/store/use-music-store';
 import { ChevronLeft, CloudUpload } from 'lucide-react';
 import { useCallback, useRef, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
@@ -15,7 +15,9 @@ type ImportSongsTabProps = {
 };
 
 const ImportSongsTab = ({ onBack }: ImportSongsTabProps) => {
-  const { setTracks, tracks, setTrackNames } = useMusicPlayer();
+  const setTracks = useMusicStore((state) => state.setTracks);
+  const tracks = useMusicStore((state) => state.tracks);
+  const setTrackNames = useMusicStore((state) => state.setTrackNames);
   const [files, setFiles] = useState<File[]>([]);
   const [error, setError] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);

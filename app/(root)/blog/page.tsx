@@ -82,6 +82,7 @@ const getListPosts = async () => {
 
 const BlogPage = async () => {
   const postsData = await getListPosts();
+
   return (
     <Suspense fallback={<BlogsSkeleton />}>
       <BlogFeature posts={postsData.data} />

@@ -17,17 +17,6 @@ export const formatArray = <T>(arr: Array<T>) => {
   return `${arr.slice(0, -1).join(', ')} and ${arr[arr.length - 1]}.`;
 };
 
-export const formatSecondsToTime = (seconds: number): string => {
-  // Calculate minutes and seconds
-  const minutes = Math.floor(seconds / 60);
-  const remainingSeconds = seconds % 60;
-
-  // Format the time as "m:ss"
-  const formattedTime = `${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`;
-
-  return formattedTime;
-};
-
 export const moveElementInArray = <T>(array: T[], oldIndex: number, newIndex: number): T[] => {
   // Check if indices are valid
   if (oldIndex < 0 || oldIndex >= array.length || newIndex < 0 || newIndex >= array.length) {
