@@ -73,6 +73,8 @@ function AnimatedButton({ size, disableAnimation = false, ...props }: AnimatedBu
     return <Button size={size} {...props} />;
   }
 
+  const isHasFullWidth = props.className?.includes('w-full');
+
   // Return animated button wrapper
   return (
     <motion.div
@@ -81,7 +83,7 @@ function AnimatedButton({ size, disableAnimation = false, ...props }: AnimatedBu
       whileHover="hover"
       whileTap="tap"
       whileFocus="focus"
-      style={{ display: 'inline-block' }}
+      style={{ display: 'inline-block', width: isHasFullWidth ? '100%' : 'auto' }}
     >
       <Button size={size} {...props} />
     </motion.div>
