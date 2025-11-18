@@ -2,6 +2,9 @@ import { SITE_URL } from '@/configs/env';
 import { PostService } from '@/services/post-service';
 import type { MetadataRoute } from 'next';
 
+export const revalidate = 3600; // ISR: revalidate mỗi 1 giờ
+export const dynamic = 'force-dynamic'; // Bắt buộc dynamic rendering
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const allPostSlugsRes = await PostService.getAllPostSlugs();
 

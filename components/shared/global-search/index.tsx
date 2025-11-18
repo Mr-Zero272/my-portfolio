@@ -1,14 +1,20 @@
 'use client';
 
 import { Blog, Contact, Home, Music, Projects, User } from '@/components/icons';
-import SearchGeneric from '@/components/shared/search-generic';
-import useSearchGeneric from '@/components/shared/search-generic/use-search-generic';
 import { AnimatedButton } from '@/components/ui/animated-button';
+import {
+  CommandDialog,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from '@/components/ui/command';
 import { navbarRoutesInfo } from '@/constants/nav-routes';
 import { useGlobalSearch } from '@/store/use-global-search';
 import { Code, FileText, GalleryHorizontal, Heart, Info, LayoutGrid, Mail, Search, SquarePen, Tag } from 'lucide-react';
 import { usePathname, useRouter } from 'next/navigation';
-import { useCallback, useEffect } from 'react';
+import { useEffect } from 'react';
 
 // Define the unified routes data structure
 interface RouteItem {
@@ -154,56 +160,17 @@ const GlobalSearch = ({
   const pathname = usePathname();
   const globalSearch = useGlobalSearch();
 
-  const searchProps = useSearchGeneric<RouteItem>({
-    onSelect: (route) => {
-      router.push(route.url);
+  const handleSelect = (route: RouteItem) => {
+    router.push(route.url);
+    globalSearch.closeSearch();
+  };
+
+  const handleOpenChange = (open: boolean) => {
+    if (open) {
+      globalSearch.openSearch();
+    } else {
       globalSearch.closeSearch();
-    },
-  });
-
-  // Handle search state changes to sync back to global store
-  const handleOpenChange = useCallback(
-    (open: boolean) => {
-      searchProps.onOpenChange(open);
-      if (open) {
-        globalSearch.openSearch();
-      } else {
-        globalSearch.closeSearch();
-      }
-    },
-    [searchProps, globalSearch],
-  );
-
-  // Sync global search state with local search state
-  useEffect(() => {
-    if (globalSearch.open && !searchProps.isOpen) {
-      searchProps.openSearch();
-    } else if (!globalSearch.open && searchProps.isOpen) {
-      searchProps.closeSearch();
     }
-  }, [globalSearch.open]); // eslint-disable-line react-hooks/exhaustive-deps
-
-  const renderRouteItem = (route: RouteItem) => {
-    const IconComponent = route.icon;
-    const isCurrentPage = pathname === route.url;
-
-    return (
-      <div className={`flex items-center gap-3 ${isCurrentPage ? '-m-2 rounded-lg bg-blue-50 p-2' : ''}`}>
-        <IconComponent className={`h-4 w-4 ${isCurrentPage ? 'text-blue-600' : 'text-gray-500'}`} />
-        <div className="flex-1">
-          <div className={`font-medium ${isCurrentPage ? 'text-blue-900' : 'text-gray-900'}`}>
-            {route.title}
-            {isCurrentPage && <span className="ml-2 text-xs text-blue-600">(current)</span>}
-          </div>
-          {route.content && (
-            <div className={`text-sm ${isCurrentPage ? 'text-blue-700' : 'text-gray-500'}`}>{route.content}</div>
-          )}
-          <div className="mt-1 text-xs text-gray-400 capitalize">
-            {route.category} • {route.url}
-          </div>
-        </div>
-      </div>
-    );
   };
 
   // Add keyboard shortcut support
@@ -236,22 +203,87 @@ const GlobalSearch = ({
         </AnimatedButton>
       )}
 
-      {/* Search Component */}
-      <SearchGeneric
-        isOpen={searchProps.isOpen}
-        onOpenChange={handleOpenChange}
-        value={searchProps.value}
-        onValueChange={searchProps.onValueChange}
-        data={allRoutes}
-        onSelect={searchProps.onSelect}
-        renderResultItem={renderRouteItem}
-        placeholder={searchPlaceholder}
-        emptyStateMessage="Start typing to search pages and features"
-        noResultsMessage="No pages or features found for"
-        searchKeys={['title', 'content', 'category']}
-        maxResults={12}
-        className="z-50"
-      />
+      {/* Command Dialog */}
+      <CommandDialog open={globalSearch.open} onOpenChange={handleOpenChange}>
+        <CommandInput placeholder={searchPlaceholder} />
+        <CommandList>
+          <CommandEmpty>No results found.</CommandEmpty>
+
+          {/* Main Navigation Group */}
+          <CommandGroup heading="Navigation">
+            {mainRoutes.map((route) => {
+              const IconComponent = route.icon;
+              const isCurrentPage = pathname === route.url;
+              return (
+                <CommandItem
+                  key={route.id}
+                  value={`${route.title} ${route.content || ''}`}
+                  onSelect={() => handleSelect(route)}
+                  className={isCurrentPage ? 'bg-blue-50' : ''}
+                >
+                  <IconComponent className={`mr-2 h-4 w-4 ${isCurrentPage ? 'text-blue-600' : ''}`} />
+                  <div className="flex-1">
+                    <span className={isCurrentPage ? 'font-medium text-blue-900' : ''}>
+                      {route.title}
+                      {isCurrentPage && <span className="ml-2 text-xs text-blue-600">(current)</span>}
+                    </span>
+                  </div>
+                </CommandItem>
+              );
+            })}
+          </CommandGroup>
+
+          {/* Dashboard Group */}
+          <CommandGroup heading="Dashboard">
+            {dashboardRoutes.map((route) => {
+              const IconComponent = route.icon;
+              const isCurrentPage = pathname === route.url;
+              return (
+                <CommandItem
+                  key={route.id}
+                  value={`${route.title} ${route.content || ''}`}
+                  onSelect={() => handleSelect(route)}
+                  className={isCurrentPage ? 'bg-blue-50' : ''}
+                >
+                  <IconComponent className={`mr-2 h-4 w-4 ${isCurrentPage ? 'text-blue-600' : ''}`} />
+                  <div className="flex-1">
+                    <span className={isCurrentPage ? 'font-medium text-blue-900' : ''}>
+                      {route.title}
+                      {isCurrentPage && <span className="ml-2 text-xs text-blue-600">(current)</span>}
+                    </span>
+                    {route.content && <div className="text-muted-foreground text-sm">{route.content}</div>}
+                  </div>
+                </CommandItem>
+              );
+            })}
+          </CommandGroup>
+
+          {/* Content Group */}
+          <CommandGroup heading="Content">
+            {contentRoutes.map((route) => {
+              const IconComponent = route.icon;
+              const isCurrentPage = pathname === route.url;
+              return (
+                <CommandItem
+                  key={route.id}
+                  value={`${route.title} ${route.content || ''}`}
+                  onSelect={() => handleSelect(route)}
+                  className={isCurrentPage ? 'bg-blue-50' : ''}
+                >
+                  <IconComponent className={`mr-2 h-4 w-4 ${isCurrentPage ? 'text-blue-600' : ''}`} />
+                  <div className="flex-1">
+                    <span className={isCurrentPage ? 'font-medium text-blue-900' : ''}>
+                      {route.title}
+                      {isCurrentPage && <span className="ml-2 text-xs text-blue-600">(current)</span>}
+                    </span>
+                    {route.content && <div className="text-muted-foreground text-sm">{route.content}</div>}
+                  </div>
+                </CommandItem>
+              );
+            })}
+          </CommandGroup>
+        </CommandList>
+      </CommandDialog>
     </>
   );
 };

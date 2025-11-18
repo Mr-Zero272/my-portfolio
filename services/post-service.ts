@@ -247,7 +247,12 @@ export class PostService {
   static async getAllPostSlugs(): Promise<BaseResponse<string[]>> {
     try {
       await connectDB();
-      const posts = await Post.find({}, 'slug');
+      const posts = await Post.find(
+        {
+          published: true,
+        },
+        'slug',
+      );
       const slugs = posts.map((post) => post.slug);
       return { status: 'success', data: slugs };
     } catch (error) {
