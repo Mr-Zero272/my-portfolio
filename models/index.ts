@@ -8,11 +8,12 @@ import Profile from './Profile';
 import Project from './Project';
 import SiteSettings from './SiteSettings';
 import Skill from './Skill';
+import SocialLink from './SocialLink';
 import Tag from './Tag';
 import User from './User';
 
 // Re-export all models
-export { Comment, Education, Experience, Image, Post, Profile, Project, SiteSettings, Skill, Tag, User };
+export { Comment, Education, Experience, Image, Post, Profile, Project, SiteSettings, Skill, SocialLink, Tag, User };
 
 // Also export the interfaces
 export type { IComment } from './Comment';
@@ -24,6 +25,7 @@ export type { IProfile } from './Profile';
 export type { IProject, ProjectStatus, ProjectType } from './Project';
 export type { ISiteSettings } from './SiteSettings';
 export type { ISkill, ProficiencyLevel, SkillCategory } from './Skill';
+export type { ISocialLink } from './SocialLink';
 export type { ITag } from './Tag';
 export type { IUser } from './User';
 
@@ -38,6 +40,7 @@ const models = {
   Project,
   Skill,
   SiteSettings,
+  SocialLink,
   Tag,
   User,
 };

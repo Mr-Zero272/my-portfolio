@@ -8,7 +8,33 @@ import { Clock, Handshake } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 
-export default function Home() {
+const fetchGithubStats = async () => {
+  try {
+    const res = await fetch('/api/github/stats', { cache: 'no-store' });
+    if (!res.ok) {
+      throw new Error('Failed to fetch GitHub stats');
+    }
+    return res.json();
+  } catch (error) {
+    console.error('Error fetching GitHub stats:', error);
+    return {
+      username: process.env.GITHUB_USERNAME || 'github-username',
+      avatar: '',
+      bio: 'github bio',
+      followers: 0,
+      following: 0,
+      publicRepos: 0,
+      totalStars: 0,
+      totalForks: 0,
+      topLanguages: ['JavaScript', 'TypeScript', 'Python'],
+      contributionsThisYear: 0,
+    };
+  }
+};
+
+export default async function Home() {
+  const githubStats = await fetchGithubStats();
+
   return (
     <section className="flex flex-col xl:flex-row">
       <div className="relative mb-7 flex flex-1 justify-evenly xl:mb-0 xl:w-5/12 xl:justify-center">
@@ -22,7 +48,7 @@ export default function Home() {
         />
         <div className="xl:dark:bg-card/50 z-[1] mb-5 hidden flex-col items-center justify-between gap-5 rounded-3xl p-5 sm:flex xl:absolute xl:bottom-0 xl:h-56 xl:w-[26rem] xl:flex-row xl:gap-0 xl:bg-slate-200/30 xl:backdrop-blur-sm">
           <InfoCard title="YOE" content="1.5" sub="Years of experiences" arrow={false} />
-          <InfoCard title="Repo" content="18" sub="Public repositories" arrow={false} />
+          <InfoCard title="Repo" content={githubStats.publicRepos} sub="Public repositories" arrow={false} />
         </div>
       </div>
       <div className="flex-1 p-5">
@@ -109,7 +135,7 @@ export default function Home() {
         </div>
         <div className="flex items-center justify-center gap-5 min-[1440px]:justify-between">
           <div className="dark:bg-card flex h-56 flex-1 items-center justify-around rounded-[3rem] bg-slate-200/30 px-4 py-5 min-[1440px]:flex-1 sm:w-10/12 sm:flex-shrink-0 sm:flex-grow-0 sm:px-7">
-            <InfoCard title="Github" content="103" sub="Total commits (2025)" />
+            <InfoCard title="Github" content={githubStats.contributionsThisYear} sub="Contributions This Year" />
             <InfoCard className="sm:hidden" title="Repo" content="17" sub="Public repositories" />
             <div className="hidden sm:flex">
               <div className="flex w-60 flex-col">
@@ -120,7 +146,7 @@ export default function Home() {
                   <div className="bg-background h-20 w-48"></div>
                   <div className="dark:bg-card absolute top-0 left-0 z-[1] h-20 w-48 rounded-tr-2xl bg-slate-200/30">
                     <div className="bg-background m-3 flex items-center gap-x-2 rounded-2xl p-3">
-                      <span className="text-4xl text-red-400">7</span>
+                      <span className="text-4xl text-red-400">{githubStats.totalStars}</span>
                       <p className="text-xs">Total stars earned</p>
                     </div>
                   </div>

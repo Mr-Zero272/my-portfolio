@@ -32,7 +32,7 @@ export function PostPreviewFeature({ post, locale = 'en' }: PostPreviewFeaturePr
 
   return (
     <div className="bg-background relative min-h-screen">
-      <div className="mx-auto max-w-4xl px-4 py-8">
+      <div className="mx-auto max-w-4xl px-2 py-8 md:px-4">
         {/* Header */}
         <div className="mb-8">
           {/* Category */}

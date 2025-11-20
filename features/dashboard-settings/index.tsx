@@ -1,17 +1,25 @@
 'use client';
 
 import { Separator } from '@/components/ui/separator';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Bell, Blocks, Palette, Shield, User2 } from 'lucide-react';
+import Link from 'next/link';
 import { useState } from 'react';
-import { AccountSettings } from './components/account-settings';
-import { AppearanceSettings } from './components/appearance-settings';
-import { GeneralSettings } from './components/general-settings';
-import { NotificationSettings } from './components/notification-settings';
-import { SecuritySettings } from './components/security-settings';
+// import { AccountSettings } from './components/account-settings';
+// import { AppearanceSettings } from './components/appearance-settings';
+// import { GeneralSettings } from './components/general-settings';
+// import { NotificationSettings } from './components/notification-settings';
+// import { SecuritySettings } from './components/security-settings';
 
-export default function DashboardSettingsFeature() {
-  const [activeTab, setActiveTab] = useState('general');
+const settingsTabs = [
+  { id: 'profile', label: 'Profile', icon: User2, href: '/dashboard/settings/profile' },
+  { id: 'general', label: 'General', icon: Blocks, href: '/dashboard/settings/general' },
+  { id: 'security', label: 'Security', icon: Shield, href: '/dashboard/settings/security' },
+  { id: 'notifications', label: 'Notifications', icon: Bell, href: '/dashboard/settings/notifications' },
+  { id: 'appearance', label: 'Appearance', icon: Palette, href: '/dashboard/settings/appearance' },
+];
+
+export function DashboardSettingsFeature() {
+  const [activeTab, setActiveTab] = useState('profile');
 
   return (
     <div className="w-full space-y-6 pb-8">
@@ -23,74 +31,37 @@ export default function DashboardSettingsFeature() {
         </p>
       </div>
 
-      {/* Settings Tabs */}
-      <Tabs
-        value={activeTab}
-        onValueChange={setActiveTab}
-        className="flex w-full flex-row items-start justify-center gap-4"
-      >
-        <TabsList className="bg-background grid shrink-0 grid-cols-1 gap-1 p-0">
-          <TabsTrigger
-            value="general"
-            className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground justify-start px-3 py-1.5"
-          >
-            <Blocks />
-            General
-          </TabsTrigger>
-          <TabsTrigger
-            value="account"
-            className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground justify-start px-3 py-1.5"
-          >
-            <User2 />
-            Account
-          </TabsTrigger>
-          <TabsTrigger
-            value="security"
-            className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground justify-start px-3 py-1.5"
-          >
-            <Shield />
-            Security
-          </TabsTrigger>
-          <TabsTrigger
-            value="notifications"
-            className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground justify-start px-3 py-1.5"
-          >
-            <Bell />
-            Notifications
-          </TabsTrigger>
-          <TabsTrigger
-            value="appearance"
-            className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground justify-start px-3 py-1.5"
-          >
-            <Palette />
-            Appearance
-          </TabsTrigger>
-        </TabsList>
+      {/* Settings Navigation */}
+      <div className="flex flex-col gap-6 md:flex-row">
+        {/* Sidebar Navigation */}
+        <nav className="w-full space-y-1 md:w-48">
+          {settingsTabs.map((tab) => {
+            const Icon = tab.icon;
+            return (
+              <Link
+                key={tab.id}
+                href={tab.href}
+                onClick={() => setActiveTab(tab.id)}
+                className={`flex cursor-pointer items-center gap-3 rounded-lg px-4 py-2 transition-colors ${
+                  activeTab === tab.id
+                    ? 'bg-primary text-primary-foreground'
+                    : 'hover:bg-muted text-muted-foreground hover:text-foreground'
+                }`}
+              >
+                <Icon className="h-4 w-4" />
+                <span className="text-sm font-medium">{tab.label}</span>
+              </Link>
+            );
+          })}
+        </nav>
 
-        <Separator orientation="vertical" className="data-[orientation=vertical]:h-96" />
+        <Separator orientation="vertical" className="hidden h-auto md:block" />
 
-        <div className="w-full">
-          <TabsContent value="general" className="space-y-4">
-            <GeneralSettings />
-          </TabsContent>
-
-          <TabsContent value="account" className="space-y-4">
-            <AccountSettings />
-          </TabsContent>
-
-          <TabsContent value="security" className="space-y-4">
-            <SecuritySettings />
-          </TabsContent>
-
-          <TabsContent value="notifications" className="space-y-4">
-            <NotificationSettings />
-          </TabsContent>
-
-          <TabsContent value="appearance" className="space-y-4">
-            <AppearanceSettings />
-          </TabsContent>
-        </div>
-      </Tabs>
+        {/* Content Area */}
+        <div className="flex-1">{/* Content will be rendered by nested routes */}</div>
+      </div>
     </div>
   );
 }
+
+export default DashboardSettingsFeature;

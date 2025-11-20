@@ -21,12 +21,6 @@ export interface IProfile extends Document {
   freelanceAvailable: boolean;
   languages: string[]; // e.g., ["Vietnamese", "English"]
 
-  // Social Links
-  githubUsername?: string;
-  linkedinUrl?: string;
-  youtubeUrl?: string;
-  twitterUrl?: string;
-
   // Rotating words for homepage
   rotatingWords: string[]; // e.g., ["Web", "Software", "Mainframe"]
 
@@ -103,24 +97,6 @@ const ProfileSchema: Schema = new Schema(
     languages: {
       type: [String],
       default: ['Vietnamese', 'English'],
-    },
-
-    // Social Links
-    githubUsername: {
-      type: String,
-      trim: true,
-    },
-    linkedinUrl: {
-      type: String,
-      trim: true,
-    },
-    youtubeUrl: {
-      type: String,
-      trim: true,
-    },
-    twitterUrl: {
-      type: String,
-      trim: true,
     },
 
     // Rotating words for homepage
