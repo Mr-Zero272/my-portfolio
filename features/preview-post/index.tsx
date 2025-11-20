@@ -7,8 +7,9 @@ import { Badge } from '@/components/ui/badge';
 import { IPostResponse } from '@/models';
 import { formatDistanceToNow } from 'date-fns';
 import { enUS, vi } from 'date-fns/locale';
-import { Bookmark, Heart, MessageCircle, Share2 } from 'lucide-react';
+import { Bookmark, MessageCircle, Share2 } from 'lucide-react';
 import Image from 'next/image';
+import { LikePost } from './components/like-post';
 import PostComment from './components/post-comment';
 import ReadPost from './components/read-post';
 
@@ -68,10 +69,7 @@ export function PostPreviewFeature({ post, locale = 'en' }: PostPreviewFeaturePr
 
           {/* Engagement Bar */}
           <div className="mb-8 flex items-center gap-6 border-y border-gray-200 py-4">
-            <AnimatedButton variant="ghost" size="sm" className="text-gray-600 hover:text-red-500">
-              <Heart className="mr-2 h-5 w-5" />
-              {post.likes || 0}
-            </AnimatedButton>
+            <LikePost slug={post.slug} initialLikes={post.likes || 0} initialLikedBy={post.likedBy || []} />
             <AnimatedButton variant="ghost" size="sm" className="text-gray-600 hover:text-blue-500">
               <MessageCircle className="mr-2 h-5 w-5" />
               {post.comments?.length || 0}

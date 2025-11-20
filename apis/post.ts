@@ -68,6 +68,16 @@ export const postApi = {
     return res.data;
   },
 
+  likePost: async ({ slug }: { slug: string }) => {
+    const res = await axiosInstance.post<BaseResponse<IPost>>(`/api/posts/${slug}/like`);
+    return res.data;
+  },
+
+  unlikePost: async ({ slug }: { slug: string }) => {
+    const res = await axiosInstance.post<BaseResponse<IPost>>(`/api/posts/${slug}/unlike`);
+    return res.data;
+  },
+
   getPostStatsByStatus: async () => {
     const res =
       await axiosInstance.get<BaseResponse<{ published: number; unpublished: number }>>('/api/posts/stats/status');
