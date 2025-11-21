@@ -9,8 +9,10 @@ import Masonry from 'react-masonry-css';
 
 import { AnimatedButton } from '@/components/ui/animated-button';
 import { cn } from '@/lib/utils';
+import { useQueryClient } from '@tanstack/react-query';
 import { useDebounceValue } from 'usehooks-ts';
 import GallerySkeleton from './components/gallery-skeleton';
+import GalleryUploadDialog from './components/gallery-upload-dialog';
 import ImageCard, { ImageCardSkeleton } from './components/image-card';
 import ImagePreviewPanel from './components/image-preview-panel';
 import './gallery.css';
@@ -24,6 +26,7 @@ const breakpointColumnsObj = {
 };
 
 const GalleryFeature = () => {
+  const queryClient = useQueryClient();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedImage, setSelectedImage] = useState<IImage | null>(null);
 
@@ -84,13 +87,22 @@ const GalleryFeature = () => {
     <div className="">
       {/* Header */}
       <div className="mb-8">
-        <h1 className="mg-1 text-2xl font-bold">Gallery</h1>
-        <p className="text-muted-foreground mb-5 text-sm">
-          Explore your gallery {totalImages > 0 && `(${totalImages} images)`}
-        </p>
+        <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
+          <div>
+            <h1 className="mg-1 text-2xl font-bold">Gallery</h1>
+            <p className="text-muted-foreground text-sm">
+              Explore your gallery {totalImages > 0 && `(${totalImages} images)`}
+            </p>
+          </div>
+          <GalleryUploadDialog
+            onUploadComplete={() => {
+              queryClient.invalidateQueries({ queryKey: ['gallery-images'] });
+            }}
+          />
+        </div>
 
         {/* Search Form */}
-        <form onSubmit={handleSearch} className="flex max-w-md gap-2">
+        <form onSubmit={handleSearch} className="mt-4 flex max-w-md gap-2 sm:mt-0">
           <Input
             type="text"
             placeholder="Search images..."

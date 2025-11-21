@@ -4,13 +4,18 @@ import { RotateWords } from '@/components/animations/rotate-words';
 import InfoCard from '@/components/cards/info-card';
 import DigitalClock from '@/components/shared/digital-clock';
 import { Button } from '@/components/ui/button';
+import { SITE_URL } from '@/configs/env';
 import { Clock, Handshake } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 
 const fetchGithubStats = async () => {
   try {
-    const res = await fetch('/api/github/stats', { cache: 'no-store' });
+    const res = await fetch(`${SITE_URL}/api/github/stats`, {
+      next: {
+        revalidate: 60 * 60, // 1 hour
+      },
+    });
     if (!res.ok) {
       throw new Error('Failed to fetch GitHub stats');
     }
