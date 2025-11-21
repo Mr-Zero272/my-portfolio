@@ -134,7 +134,7 @@ export default function GalleryUploadDialog({ onUploadComplete, trigger }: Galle
 
   const defaultTrigger = (
     <AnimatedButton variant="default" title="Upload Images">
-      <Upload className="mr-2 h-4 w-4" />
+      <Upload className="h-4 w-4" />
       Upload
     </AnimatedButton>
   );

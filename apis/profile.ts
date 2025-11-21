@@ -67,7 +67,7 @@ export interface UpdateSocialLinkDto {
  * Get public profile (active profile with social links)
  */
 export const getPublicProfile = async (): Promise<ProfileWithSocialLinks> => {
-  const response = await apiClient.get<ProfileWithSocialLinks>('/profile?public=true');
+  const response = await apiClient.get<ProfileWithSocialLinks>('/api/profile?public=true');
   return response.data;
 };
 
@@ -75,7 +75,7 @@ export const getPublicProfile = async (): Promise<ProfileWithSocialLinks> => {
  * Get profile by user ID
  */
 export const getProfileByUserId = async (userId: string): Promise<ProfileWithSocialLinks> => {
-  const response = await apiClient.get<ProfileWithSocialLinks>(`/profile?userId=${userId}`);
+  const response = await apiClient.get<ProfileWithSocialLinks>(`/api/profile?userId=${userId}`);
   return response.data;
 };
 
@@ -83,7 +83,7 @@ export const getProfileByUserId = async (userId: string): Promise<ProfileWithSoc
  * Get authenticated user's profile
  */
 export const getMyProfile = async (): Promise<ProfileWithSocialLinks> => {
-  const response = await apiClient.get<ProfileWithSocialLinks>('/profile');
+  const response = await apiClient.get<ProfileWithSocialLinks>('/api/profile');
   return response.data;
 };
 
@@ -91,7 +91,7 @@ export const getMyProfile = async (): Promise<ProfileWithSocialLinks> => {
  * Create a new profile
  */
 export const createProfile = async (data: CreateProfileDto): Promise<IProfile> => {
-  const response = await apiClient.post<IProfile>('/profile', data);
+  const response = await apiClient.post<IProfile>('/api/profile', data);
   return response.data;
 };
 
@@ -99,7 +99,7 @@ export const createProfile = async (data: CreateProfileDto): Promise<IProfile> =
  * Update profile
  */
 export const updateProfile = async (data: UpdateProfileDto): Promise<IProfile> => {
-  const response = await apiClient.patch<IProfile>('/profile', data);
+  const response = await apiClient.patch<IProfile>('/api/profile', data);
   return response.data;
 };
 
@@ -107,7 +107,7 @@ export const updateProfile = async (data: UpdateProfileDto): Promise<IProfile> =
  * Delete profile
  */
 export const deleteProfile = async (): Promise<{ message: string }> => {
-  const response = await apiClient.delete<{ message: string }>('/profile');
+  const response = await apiClient.delete<{ message: string }>('/api/profile');
   return response.data;
 };
 
@@ -117,7 +117,7 @@ export const deleteProfile = async (): Promise<{ message: string }> => {
  * Get all social links for a user
  */
 export const getSocialLinksByUserId = async (userId?: string): Promise<ISocialLink[]> => {
-  const url = userId ? `/social-links?userId=${userId}` : '/social-links';
+  const url = userId ? `/api/social-links?userId=${userId}` : '/api/social-links';
   const response = await apiClient.get<ISocialLink[]>(url);
   return response.data;
 };
@@ -126,7 +126,7 @@ export const getSocialLinksByUserId = async (userId?: string): Promise<ISocialLi
  * Get a single social link by ID
  */
 export const getSocialLinkById = async (id: string): Promise<ISocialLink> => {
-  const response = await apiClient.get<ISocialLink>(`/social-links/${id}`);
+  const response = await apiClient.get<ISocialLink>(`/api/social-links/${id}`);
   return response.data;
 };
 
@@ -134,7 +134,7 @@ export const getSocialLinkById = async (id: string): Promise<ISocialLink> => {
  * Create a new social link
  */
 export const createSocialLink = async (data: CreateSocialLinkDto): Promise<ISocialLink> => {
-  const response = await apiClient.post<ISocialLink>('/social-links', data);
+  const response = await apiClient.post<ISocialLink>('/api/social-links', data);
   return response.data;
 };
 
@@ -142,7 +142,7 @@ export const createSocialLink = async (data: CreateSocialLinkDto): Promise<ISoci
  * Update a social link
  */
 export const updateSocialLink = async (id: string, data: UpdateSocialLinkDto): Promise<ISocialLink> => {
-  const response = await apiClient.patch<ISocialLink>(`/social-links/${id}`, data);
+  const response = await apiClient.patch<ISocialLink>(`/api/social-links/${id}`, data);
   return response.data;
 };
 
@@ -150,7 +150,7 @@ export const updateSocialLink = async (id: string, data: UpdateSocialLinkDto): P
  * Delete a social link (soft delete)
  */
 export const deleteSocialLink = async (id: string): Promise<{ message: string }> => {
-  const response = await apiClient.delete<{ message: string }>(`/social-links/${id}`);
+  const response = await apiClient.delete<{ message: string }>(`/api/social-links/${id}`);
   return response.data;
 };
 
@@ -158,7 +158,7 @@ export const deleteSocialLink = async (id: string): Promise<{ message: string }>
  * Permanently delete a social link
  */
 export const permanentlyDeleteSocialLink = async (id: string): Promise<{ message: string }> => {
-  const response = await apiClient.delete<{ message: string }>(`/social-links/${id}?permanent=true`);
+  const response = await apiClient.delete<{ message: string }>(`/api/social-links/${id}?permanent=true`);
   return response.data;
 };
 
@@ -166,7 +166,7 @@ export const permanentlyDeleteSocialLink = async (id: string): Promise<{ message
  * Reorder social links
  */
 export const reorderSocialLinks = async (orderedIds: string[]): Promise<{ message: string }> => {
-  const response = await apiClient.patch<{ message: string }>('/social-links', { orderedIds });
+  const response = await apiClient.patch<{ message: string }>('/api/social-links', { orderedIds });
   return response.data;
 };
 

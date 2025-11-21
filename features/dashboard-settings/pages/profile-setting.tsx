@@ -1,7 +1,7 @@
-type Props = {};
+import { ProfileSettingsForm } from '../components/profile-settings-form';
 
-const ProfileSetting = (props: Props) => {
-  return <div>ProfileSetting</div>;
+const ProfileSettingPage = () => {
+  return <ProfileSettingsForm />;
 };
 
-export default ProfileSetting;
+export default ProfileSettingPage;

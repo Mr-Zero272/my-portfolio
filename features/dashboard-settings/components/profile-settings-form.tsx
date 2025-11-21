@@ -7,9 +7,10 @@ import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, For
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { AlertCircle, CheckCircle2, Loader2 } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
 import { useCallback, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
 import * as z from 'zod';
 
 // Validation schema
@@ -34,8 +35,6 @@ type ProfileSettingsFormData = z.infer<typeof profileSettingsSchema>;
 export function ProfileSettingsForm() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-  const [successMessage, setSuccessMessage] = useState('');
-  const [errorMessage, setErrorMessage] = useState('');
 
   const form = useForm<ProfileSettingsFormData>({
     resolver: zodResolver(profileSettingsSchema),
@@ -82,7 +81,7 @@ export function ProfileSettingsForm() {
         }
       } catch (error) {
         console.error('Failed to fetch profile:', error);
-        setErrorMessage('Failed to load profile data');
+        toast.error('Failed to update profile');
       } finally {
         setLoading(false);
       }
@@ -95,16 +94,13 @@ export function ProfileSettingsForm() {
   const onSubmit = useCallback(async (data: ProfileSettingsFormData) => {
     try {
       setSaving(true);
-      setErrorMessage('');
-      setSuccessMessage('');
 
       await profileApi.updateProfile(data);
 
-      setSuccessMessage('Profile updated successfully!');
-      setTimeout(() => setSuccessMessage(''), 5000);
+      toast.success('Profile updated successfully!');
     } catch (error) {
       console.error('Failed to update profile:', error);
-      setErrorMessage(error instanceof Error ? error.message : 'Failed to update profile');
+      toast.error(error instanceof Error ? error.message : 'Failed to update profile');
     } finally {
       setSaving(false);
     }
@@ -119,30 +115,14 @@ export function ProfileSettingsForm() {
   }
 
   return (
-    <div className="max-w-2xl space-y-6">
-      {/* Success Message */}
-      {successMessage && (
-        <div className="flex items-center gap-2 rounded-lg border border-green-200 bg-green-50 p-4 text-green-800">
-          <CheckCircle2 className="h-5 w-5 flex-shrink-0" />
-          <p>{successMessage}</p>
-        </div>
-      )}
-
-      {/* Error Message */}
-      {errorMessage && (
-        <div className="flex items-center gap-2 rounded-lg border border-red-200 bg-red-50 p-4 text-red-800">
-          <AlertCircle className="h-5 w-5 flex-shrink-0" />
-          <p>{errorMessage}</p>
-        </div>
-      )}
-
+    <div className="max-w-2xl space-y-6 px-3 pb-10">
       {/* Basic Information */}
-      <Card>
-        <CardHeader>
+      <Card className="border-none p-0 shadow-none">
+        <CardHeader className="border-b px-0">
           <CardTitle>Basic Information</CardTitle>
           <CardDescription>Update your basic profile information</CardDescription>
         </CardHeader>
-        <CardContent>
+        <CardContent className="px-0">
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
               <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
