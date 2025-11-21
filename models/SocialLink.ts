@@ -49,7 +49,6 @@ const SocialLinkSchema: Schema = new Schema(
 );
 
 // Indexes
-SocialLinkSchema.index({ userId: 1, platform: 1 });
 SocialLinkSchema.index({ userId: 1, displayOrder: 1 });
 
 // Prevent duplicate platform for same user

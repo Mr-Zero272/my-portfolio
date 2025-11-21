@@ -151,6 +151,6 @@ const SiteSettingsSchema: Schema = new Schema(
 );
 
 // Index
-SiteSettingsSchema.index({ userId: 1 });
+// SiteSettingsSchema.index({ userId: 1 });
 
 export default mongoose.models.SiteSettings || mongoose.model<ISiteSettings>('SiteSettings', SiteSettingsSchema);

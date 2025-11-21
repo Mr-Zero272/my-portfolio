@@ -145,7 +145,7 @@ const ProjectSchema: Schema = new Schema(
 
 // Indexes
 ProjectSchema.index({ userId: 1, displayOrder: 1 });
-ProjectSchema.index({ slug: 1 });
+// ProjectSchema.index({ slug: 1 });
 ProjectSchema.index({ isFeatured: 1, isVisible: 1 });
 
 export default mongoose.models.Project || mongoose.model<IProject>('Project', ProjectSchema);

@@ -130,6 +130,6 @@ const ProfileSchema: Schema = new Schema(
 );
 
 // Index
-ProfileSchema.index({ userId: 1 });
+// ProfileSchema.index({ userId: 1 });
 
 export default mongoose.models.Profile || mongoose.model<IProfile>('Profile', ProfileSchema);
