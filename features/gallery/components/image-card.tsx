@@ -5,16 +5,18 @@ import { cn } from '@/lib/utils';
 import { type IImage } from '@/models';
 import { Download, Share } from 'lucide-react';
 import Image from 'next/image';
+import { useState } from 'react';
 
 interface ImageCardProps {
   image: IImage;
-  onImageClick: (image: IImage) => void;
+  onImageClick?: (image: IImage) => void;
   onDownload: (imageUrl: string, imageName: string) => void;
   mode?: 'view' | 'select';
   isActive?: boolean;
+  onClick?: () => void;
 }
 
-const ImageCard = ({ image, onImageClick, onDownload, mode = 'view', isActive }: ImageCardProps) => {
+const ImageCard = ({ image, onImageClick, onDownload, mode = 'view', isActive, onClick }: ImageCardProps) => {
   const handleDownload = (e: React.MouseEvent) => {
     e.stopPropagation();
     onDownload(image.url, image.name);
@@ -31,7 +33,10 @@ const ImageCard = ({ image, onImageClick, onDownload, mode = 'view', isActive }:
       className={cn('group m-0 cursor-pointer overflow-hidden p-0 transition-all duration-300 hover:shadow-lg', {
         'border-primary border-2': mode === 'select' && isActive,
       })}
-      onClick={() => onImageClick(image)}
+      onClick={() => {
+        onImageClick?.(image);
+        onClick?.();
+      }}
     >
       <div className="relative">
         <Image
@@ -79,15 +84,14 @@ const ImageCard = ({ image, onImageClick, onDownload, mode = 'view', isActive }:
 export default ImageCard;
 
 export const ImageCardSkeleton = () => {
-  const randomHeight = Math.floor(Math.random() * (500 - 200 + 1)) + 200; // Random height between 200 and 300
-  const randomWidth = Math.floor(Math.random() * (400 - 300 + 1)) + 300; // Random width between 300 and 400
+  const [height] = useState(() => Math.floor(Math.random() * (500 - 200 + 1)) + 200);
   return (
     <Card className="m-0 cursor-pointer overflow-hidden border-none p-0 shadow-none transition-all duration-300">
       <div className="relative">
         <Skeleton
+          className="w-full"
           style={{
-            height: randomHeight,
-            width: randomWidth,
+            height,
           }}
         />
 

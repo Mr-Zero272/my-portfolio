@@ -2,7 +2,6 @@ import { Button } from '@/components/ui/button';
 import { Eye, XIcon } from 'lucide-react';
 import Image from 'next/image';
 import { PhotoProvider, PhotoView } from 'react-photo-view';
-import 'react-photo-view/dist/react-photo-view.css';
 
 type ImagesUploadProps = {
   images?: string[];

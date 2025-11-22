@@ -165,7 +165,7 @@ export async function DELETE(request: NextRequest, { params }: { params: Promise
 
     const deleted = await PostService.deletePost(slug);
 
-    if (!deleted) {
+    if (!deleted.data) {
       return NextResponse.json(
         {
           success: false,

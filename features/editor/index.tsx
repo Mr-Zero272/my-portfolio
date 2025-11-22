@@ -285,7 +285,7 @@ const PostEditorContent = ({ mode = 'create' }: PostEditorProps) => {
           <div className="flex items-center gap-2">
             <AnimatedButton onClick={handleBack} variant="ghost" disabled={isLoading}>
               <ArrowLeft size={16} />
-              <span className="ml-2">Back</span>
+              Back
             </AnimatedButton>
             <Separator orientation="vertical" className="data-[orientation=vertical]:h-4" />
             <Button variant="ghost" disabled={isSavingDraft || isLoading}>

@@ -10,7 +10,6 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
 import { PhotoProvider, PhotoView } from 'react-photo-view';
-import 'react-photo-view/dist/react-photo-view.css';
 
 type ProjectItem = {
   name: string;

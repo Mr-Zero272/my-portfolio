@@ -164,9 +164,9 @@ export function PostTable() {
     pageIndex: 0,
     pageSize: 10,
   });
-  const [deleteState, setDeleteState] = React.useState<{ isOpen: boolean; postId: string | null }>({
+  const [deleteState, setDeleteState] = React.useState<{ isOpen: boolean; postSlugId: string | null }>({
     isOpen: false,
-    postId: null,
+    postSlugId: null,
   });
 
   const sortableId = React.useId();
@@ -347,7 +347,7 @@ export function PostTable() {
                 <DropdownMenuSeparator />
                 <DropdownMenuItem
                   className="text-destructive"
-                  onSelect={() => setDeleteState({ isOpen: true, postId: post._id })}
+                  onSelect={() => setDeleteState({ isOpen: true, postSlugId: post.slug })}
                 >
                   <Trash2 className="text-destructive h-4 w-4" />
                   Delete
@@ -627,9 +627,9 @@ export function PostTable() {
         onCancel={() => setDeleteState({ ...deleteState, isOpen: false })}
         onConfirm={async () => {
           try {
-            if (deleteState.postId) {
-              await deletePost({ postId: deleteState.postId });
-              setDeleteState({ isOpen: false, postId: null });
+            if (deleteState.postSlugId) {
+              await deletePost({ slug: deleteState.postSlugId });
+              setDeleteState({ isOpen: false, postSlugId: null });
               refetch();
             }
             toast.success('Post deleted successfully');

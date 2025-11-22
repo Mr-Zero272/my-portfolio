@@ -63,8 +63,8 @@ export const postApi = {
     return res.data;
   },
 
-  deletePost: async ({ postId }: { postId: string }) => {
-    const res = await axiosInstance.delete<BaseResponse<null>>(`/api/posts/${postId}`);
+  deletePost: async ({ slug }: { slug: string }) => {
+    const res = await axiosInstance.delete<BaseResponse<null>>(`/api/posts/${slug}`);
     return res.data;
   },
 

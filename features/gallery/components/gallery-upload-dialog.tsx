@@ -15,7 +15,7 @@ import { Progress } from '@/components/ui/progress';
 import { uploadImageWithDB } from '@/lib/uploadthing';
 import { cn } from '@/lib/utils';
 import { AnimatePresence, motion } from 'framer-motion';
-import { CheckCircle2, ImagePlus, Loader2, Upload, XCircle } from 'lucide-react';
+import { CheckCircle2, ImagePlus, Loader2, XCircle } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { useState } from 'react';
 import { toast } from 'sonner';
@@ -23,6 +23,8 @@ import { toast } from 'sonner';
 interface GalleryUploadDialogProps {
   onUploadComplete?: () => void;
   trigger?: React.ReactNode;
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
 }
 
 interface FileUploadStatus {
@@ -32,9 +34,24 @@ interface FileUploadStatus {
   error?: string;
 }
 
-export default function GalleryUploadDialog({ onUploadComplete, trigger }: GalleryUploadDialogProps) {
+export default function GalleryUploadDialog({
+  onUploadComplete,
+  trigger,
+  open: controlledOpen,
+  onOpenChange: setControlledOpen,
+}: GalleryUploadDialogProps) {
   const { data: session } = useSession();
-  const [open, setOpen] = useState(false);
+  const [internalOpen, setInternalOpen] = useState(false);
+
+  const isControlled = controlledOpen !== undefined;
+  const open = isControlled ? controlledOpen : internalOpen;
+  const setOpen = (val: boolean) => {
+    if (isControlled) {
+      setControlledOpen?.(val);
+    } else {
+      setInternalOpen(val);
+    }
+  };
   const [files, setFiles] = useState<File[]>([]);
   const [uploadStatuses, setUploadStatuses] = useState<FileUploadStatus[]>([]);
   const [isUploading, setIsUploading] = useState(false);
@@ -132,16 +149,9 @@ export default function GalleryUploadDialog({ onUploadComplete, trigger }: Galle
     setOverallProgress(0);
   };
 
-  const defaultTrigger = (
-    <AnimatedButton variant="default" title="Upload Images">
-      <Upload className="h-4 w-4" />
-      Upload
-    </AnimatedButton>
-  );
-
   return (
     <Dialog open={open} onOpenChange={(val) => !isUploading && setOpen(val)}>
-      <DialogTrigger asChild>{trigger || defaultTrigger}</DialogTrigger>
+      {trigger && <DialogTrigger asChild>{trigger}</DialogTrigger>}
 
       <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-3xl">
         <DialogHeader>

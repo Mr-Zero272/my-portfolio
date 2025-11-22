@@ -44,8 +44,41 @@ export async function POST(request: NextRequest) {
   try {
     const body: Partial<IImage> = await request.json();
 
+    // Handle URL upload: fetch metadata if missing
+    if (body.url && (!body.name || body.size === undefined || !body.mineType)) {
+      try {
+        const headRes = await fetch(body.url, { method: 'HEAD' });
+        if (headRes.ok) {
+          const contentType = headRes.headers.get('content-type');
+          const contentLength = headRes.headers.get('content-length');
+
+          if (!body.mineType && contentType) body.mineType = contentType;
+          if (body.size === undefined && contentLength) body.size = parseInt(contentLength);
+        }
+
+        // Fallback or extraction for name
+        if (!body.name) {
+          try {
+            const urlObj = new URL(body.url);
+            const pathname = urlObj.pathname;
+            const filename = pathname.split('/').pop();
+            body.name = filename || 'image-from-url';
+          } catch {
+            body.name = 'image-from-url';
+          }
+        }
+      } catch (error) {
+        console.error('Error fetching image metadata:', error);
+      }
+
+      // Set defaults if still missing
+      if (!body.mineType) body.mineType = 'application/octet-stream';
+      if (body.size === undefined) body.size = 0;
+      if (!body.name) body.name = 'image-from-url';
+    }
+
     // Validate required fields
-    if (!body.url || !body.name || !body.size || !body.mineType || !body.userCreated) {
+    if (!body.url || !body.name || body.size === undefined || !body.mineType || !body.userCreated) {
       return NextResponse.json(
         { error: 'Missing required fields: url, name, size, mineType, userCreated' },
         { status: 400 },
