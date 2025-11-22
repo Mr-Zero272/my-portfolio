@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { usePostStorage } from '@/features/editor/store/use-post-storage';
+import { isEmptyHtml } from '@/lib/validate';
 import { Loader2, Plus, Sparkles, X } from 'lucide-react';
 import { useState } from 'react';
 import { toast } from 'sonner';
@@ -38,8 +39,8 @@ const KeywordsInput = () => {
   };
 
   const generateKeywordsWithAI = async () => {
-    if (!title.trim() && !content.trim()) {
-      toast.error('Please provide title or content to generate keywords');
+    if (!title.trim() || !content.trim() || isEmptyHtml(content)) {
+      toast.error('Please provide title and content to generate keywords');
       return;
     }
 
