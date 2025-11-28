@@ -1,23 +1,66 @@
 import mongoose, { Document, Schema } from 'mongoose';
 
+export type ExperiencePositionIconType = 'code' | 'design' | 'business' | 'education';
+
+export interface IPosition {
+  title: string;
+  employmentType?: string;
+  location?: string;
+  startDate: Date;
+  endDate?: Date;
+  description?: string;
+  icon?: ExperiencePositionIconType;
+  skills?: string[];
+}
+
 export interface IExperience extends Document {
   _id: string;
   userId: mongoose.Types.ObjectId;
-  company: string;
-  position: string;
-  startDate: Date;
-  endDate?: Date; // null if current
-  isCurrent: boolean;
-  description?: string;
-  responsibilities?: string[];
-  technologies?: string[];
-  location?: string;
-  employmentType?: string; // Full-time, Part-time, Internship, Freelance, etc.
+  companyName: string;
+  companyLogo?: string;
+  isCurrentEmployer: boolean;
+  positions: IPosition[];
   displayOrder: number;
   isVisible: boolean;
   createdAt: Date;
   updatedAt: Date;
 }
+
+const PositionSchema = new Schema({
+  title: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  employmentType: {
+    type: String,
+    trim: true,
+  },
+  location: {
+    type: String,
+    trim: true,
+  },
+  startDate: {
+    type: Date,
+    required: true,
+  },
+  endDate: {
+    type: Date,
+  },
+  description: {
+    type: String,
+    trim: true,
+  },
+  icon: {
+    type: String,
+    enum: ['code', 'design', 'business', 'education'],
+    default: 'business',
+  },
+  skills: {
+    type: [String],
+    default: [],
+  },
+});
 
 const ExperienceSchema: Schema = new Schema(
   {
@@ -26,47 +69,22 @@ const ExperienceSchema: Schema = new Schema(
       ref: 'User',
       required: true,
     },
-    company: {
+    companyName: {
       type: String,
       required: true,
       trim: true,
     },
-    position: {
+    companyLogo: {
       type: String,
-      required: true,
       trim: true,
     },
-    startDate: {
-      type: Date,
-      required: true,
-    },
-    endDate: {
-      type: Date,
-    },
-    isCurrent: {
+    isCurrentEmployer: {
       type: Boolean,
       default: false,
     },
-    description: {
-      type: String,
-      trim: true,
-    },
-    responsibilities: {
-      type: [String],
+    positions: {
+      type: [PositionSchema],
       default: [],
-    },
-    technologies: {
-      type: [String],
-      default: [],
-    },
-    location: {
-      type: String,
-      trim: true,
-    },
-    employmentType: {
-      type: String,
-      enum: ['Full-time', 'Part-time', 'Internship', 'Freelance', 'Contract', 'Remote'],
-      default: 'Full-time',
     },
     displayOrder: {
       type: Number,

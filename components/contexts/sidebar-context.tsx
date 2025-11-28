@@ -1,5 +1,5 @@
 'use client';
-import React, { createContext, useCallback, useContext, useEffect, useState } from 'react';
+import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { useMediaQuery, useWindowSize } from 'usehooks-ts';
 
 type Props = {
@@ -68,16 +68,19 @@ const SidebarProvider = ({ children }: Props) => {
     }
   }, [isMobile]);
 
-  const value = {
-    state,
-    isExpanded: state === 'expanded',
-    isCollapsed: state === 'collapsed',
-    isHidden: state === 'hidden',
-    isMobile,
-    toggle,
-    expand,
-    collapse,
-  };
+  const value = useMemo(
+    () => ({
+      state,
+      isExpanded: state === 'expanded',
+      isCollapsed: state === 'collapsed',
+      isHidden: state === 'hidden',
+      isMobile,
+      toggle,
+      expand,
+      collapse,
+    }),
+    [state, isMobile, toggle, expand, collapse],
+  );
 
   return <SidebarContext.Provider value={value}>{children}</SidebarContext.Provider>;
 };
