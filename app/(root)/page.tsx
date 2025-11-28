@@ -10,6 +10,8 @@ import { Clock, Handshake } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 
+export const dynamic = 'force-dynamic';
+
 const fetchGithubStats = async () => {
   try {
     const res = await fetch(`${SITE_URL}/api/github/stats`, {

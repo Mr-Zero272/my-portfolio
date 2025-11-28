@@ -16,7 +16,7 @@ import * as z from 'zod';
 // Validation schema
 const profileSettingsSchema = z.object({
   name: z.string().min(1, 'Name is required').min(2, 'Name must be at least 2 characters'),
-  email: z.string().email('Invalid email address'),
+  yoe: z.number().optional().default(0),
   tagline: z.string().optional().default(''),
   bio: z.string().optional().default(''),
   description: z.string().optional().default(''),
@@ -40,7 +40,7 @@ export function ProfileSettingsForm() {
     resolver: zodResolver(profileSettingsSchema),
     defaultValues: {
       name: '',
-      email: '',
+      yoe: 0,
       tagline: '',
       bio: '',
       description: '',
@@ -65,13 +65,13 @@ export function ProfileSettingsForm() {
         if (response.profile) {
           form.reset({
             name: response.profile.name || '',
-            email: response.profile.email || '',
             tagline: response.profile.tagline || '',
             bio: response.profile.bio || '',
             description: response.profile.description || '',
             phone: response.profile.phone || '',
             nationality: response.profile.nationality || '',
             address: response.profile.address || '',
+            yoe: response.profile.yoe || 0,
             freelanceAvailable: response.profile.freelanceAvailable ?? true,
             languages: response.profile.languages || ['Vietnamese', 'English'],
             rotatingWords: response.profile.rotatingWords || ['Web', 'Software', 'Mainframe'],
@@ -144,12 +144,12 @@ export function ProfileSettingsForm() {
                 {/* Email */}
                 <FormField
                   control={form.control}
-                  name="email"
+                  name="yoe"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Email *</FormLabel>
+                      <FormLabel>Years of Experience *</FormLabel>
                       <FormControl>
-                        <Input type="email" placeholder="your@email.com" {...field} />
+                        <Input type="number" placeholder="Years of Experience" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
