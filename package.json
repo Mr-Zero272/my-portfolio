@@ -61,7 +61,6 @@
     "dotenv": "^17.2.2",
     "easydrawer": "^0.0.18",
     "embla-carousel-react": "^8.6.0",
-    "framer-motion": "^12.23.12",
     "howler": "^2.2.4",
     "katex": "^0.16.25",
     "lucide-react": "^0.469.0",

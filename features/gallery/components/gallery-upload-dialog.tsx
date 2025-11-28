@@ -14,8 +14,8 @@ import {
 import { Progress } from '@/components/ui/progress';
 import { uploadImageWithDB } from '@/lib/uploadthing';
 import { cn } from '@/lib/utils';
-import { AnimatePresence, motion } from 'framer-motion';
 import { CheckCircle2, ImagePlus, Loader2, XCircle } from 'lucide-react';
+import { AnimatePresence, motion } from 'motion/react';
 import { useSession } from 'next-auth/react';
 import { useState } from 'react';
 import { toast } from 'sonner';

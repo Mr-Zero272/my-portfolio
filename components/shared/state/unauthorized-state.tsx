@@ -1,8 +1,8 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
-import { motion } from 'framer-motion';
 import { AlertCircle } from 'lucide-react';
+import { motion } from 'motion/react';
 
 const containerVariants = {
   hidden: { opacity: 0, y: 20 },

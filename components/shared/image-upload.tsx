@@ -1,8 +1,8 @@
 'use client';
 
 import { cn } from '@/lib/utils';
-import { AnimatePresence, motion } from 'framer-motion';
 import { Image as ImageIcon, Upload, X } from 'lucide-react';
+import { AnimatePresence, motion } from 'motion/react';
 import Image from 'next/image';
 import { useCallback, useState } from 'react';
 import { useDropzone } from 'react-dropzone';

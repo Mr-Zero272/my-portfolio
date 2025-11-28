@@ -1,7 +1,7 @@
 'use client';
 
 import { useMobileMenuStore } from '@/store/use-mobile-menu-store';
-import { Transition } from 'framer-motion';
+import { Transition } from 'motion/react';
 import { SVGProps } from 'react';
 import { AnimatedButton } from '../../../ui/animated-button';
 

@@ -3,8 +3,8 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { cn } from '@/lib/utils';
-import { motion } from 'framer-motion';
 import { Trash2 } from 'lucide-react';
+import { motion } from 'motion/react';
 import Image from 'next/image';
 import { useDropzone } from 'react-dropzone';
 import { Button } from '../ui/button';

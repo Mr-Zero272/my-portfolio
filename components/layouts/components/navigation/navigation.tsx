@@ -1,5 +1,5 @@
 'use client';
-import { motion, useAnimationControls } from 'framer-motion';
+import { motion, useAnimationControls } from 'motion/react';
 import { useEffect, useMemo, useRef } from 'react';
 
 import { useSidebar } from '@/components/contexts/sidebar-context';

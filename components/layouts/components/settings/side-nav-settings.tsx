@@ -3,8 +3,8 @@
 import { InputGroup, InputGroupAddon, InputGroupInput } from '@/components/ui/input-group';
 import { cn } from '@/lib/utils';
 import { useMobileMenuStore } from '@/store/use-mobile-menu-store';
-import { motion } from 'framer-motion';
 import { Search } from 'lucide-react';
+import { motion } from 'motion/react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';

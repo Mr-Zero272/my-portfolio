@@ -2,7 +2,7 @@
 
 import { cn } from '@/lib/utils';
 import { ICommentResponse } from '@/models/Comment';
-import { AnimatePresence, motion } from 'framer-motion';
+import { AnimatePresence, motion } from 'motion/react';
 import Comment from './comment';
 
 type CommentListProps = {

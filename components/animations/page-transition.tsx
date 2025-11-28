@@ -1,7 +1,7 @@
 'use client';
 
 import { cn } from '@/lib/utils';
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
 import Footer from '../layouts/components/footer';

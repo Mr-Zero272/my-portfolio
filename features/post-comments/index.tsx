@@ -11,8 +11,8 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { cn } from '@/lib/utils';
 import { useInfiniteQuery, useMutation } from '@tanstack/react-query';
-import { motion } from 'framer-motion';
 import { ArrowUpDown, ChevronDown } from 'lucide-react';
+import { motion } from 'motion/react';
 import { useSession } from 'next-auth/react';
 import { useMemo } from 'react';
 import { CommentList } from './components';

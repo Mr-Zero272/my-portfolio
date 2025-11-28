@@ -3,7 +3,7 @@
 import HeaderSettings from '@/components/layouts/components/settings/header-settings';
 import SideNavSettings from '@/components/layouts/components/settings/side-nav-settings';
 import { useMobileMenuStore } from '@/store/use-mobile-menu-store';
-import { AnimatePresence, motion } from 'framer-motion';
+import { AnimatePresence, motion } from 'motion/react';
 import React from 'react';
 
 interface SettingsLayoutProps {
