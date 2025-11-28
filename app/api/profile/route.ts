@@ -12,11 +12,11 @@ export async function GET(req: Request) {
   try {
     const { searchParams } = new URL(req.url);
     const userId = searchParams.get('userId');
-    const isPublic = searchParams.get('public') === 'true';
+    const isOwner = searchParams.get('owner') === 'true';
 
-    if (isPublic) {
-      const publicProfile = await ProfileService.getPublicProfile();
-      return Response.json(publicProfile, { status: 200 });
+    if (isOwner) {
+      const ownerProfile = await ProfileService.getOwnerProfile();
+      return Response.json(ownerProfile, { status: 200 });
     }
 
     if (userId) {

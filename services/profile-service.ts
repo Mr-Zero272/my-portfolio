@@ -338,33 +338,32 @@ export class ProfileService {
   }
 
   /**
-   * Get public profile (active profile with social links)
+   * Get owner profile (using ADMIN_ID from env)
    */
-  static async getPublicProfile(): Promise<{
+  static async getOwnerProfile(): Promise<{
     profile: IProfile | null;
     socialLinks: ISocialLink[];
   }> {
     try {
       await connectDB();
 
-      const profile = await this.getActiveProfile();
-
-      if (!profile) {
-        return {
-          profile: null,
-          socialLinks: [],
-        };
+      const adminId = process.env.ADMIN_ID;
+      if (!adminId) {
+        throw new Error('ADMIN_ID is not defined in environment variables');
       }
 
-      const socialLinks = await this.getSocialLinksByUserId(profile.userId.toString());
+      const [profile, socialLinks] = await Promise.all([
+        this.getProfileByUserId(adminId),
+        this.getSocialLinksByUserId(adminId),
+      ]);
 
       return {
         profile,
         socialLinks,
       };
     } catch (error) {
-      console.error('Error getting public profile:', error);
-      throw new Error('Failed to get public profile');
+      console.error('Error getting owner profile:', error);
+      throw new Error('Failed to get owner profile');
     }
   }
 }

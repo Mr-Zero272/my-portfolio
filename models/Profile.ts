@@ -4,12 +4,12 @@ export interface IProfile extends Document {
   _id: string;
   userId: mongoose.Types.ObjectId;
   // Basic Info
+
   name: string;
-  email: string;
   phone?: string;
   nationality?: string;
   address?: string;
-  avatar?: string;
+  yoe?: number;
   resumePath?: string;
 
   // Bio & Introduction
@@ -47,14 +47,8 @@ const ProfileSchema: Schema = new Schema(
     // Basic Info
     name: {
       type: String,
-      required: true,
       trim: true,
-    },
-    email: {
-      type: String,
       required: true,
-      trim: true,
-      lowercase: true,
     },
     phone: {
       type: String,
@@ -68,8 +62,8 @@ const ProfileSchema: Schema = new Schema(
       type: String,
       trim: true,
     },
-    avatar: {
-      type: String,
+    yoe: {
+      type: Number,
     },
     resumePath: {
       type: String,
