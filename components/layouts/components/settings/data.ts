@@ -1,4 +1,4 @@
-import { BriefcaseBusiness, Eye, Laptop, LucideIcon, UserIcon } from 'lucide-react';
+import { BriefcaseBusiness, Eye, FileCodeIcon, Laptop, LucideIcon, UserIcon } from 'lucide-react';
 
 export interface SideNavSettingsItem {
   title: string;
@@ -34,6 +34,11 @@ export const sideNavSettingsItems: SideNavSettingsGroup[] = [
         title: 'Experience',
         url: '/settings/experience',
         icon: BriefcaseBusiness,
+      },
+      {
+        title: 'Projects',
+        url: '/settings/projects',
+        icon: FileCodeIcon,
       },
     ],
   },
