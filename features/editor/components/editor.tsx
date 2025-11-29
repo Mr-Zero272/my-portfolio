@@ -78,7 +78,6 @@ import { Library, Plus, XIcon } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { useTheme } from 'next-themes';
 import 'react-image-crop/dist/ReactCrop.css';
-import { useDebounceCallback } from 'usehooks-ts';
 import { usePostStorage } from '../store/use-post-storage';
 
 function Editor() {
@@ -237,9 +236,14 @@ function Editor() {
   const { handlePaste } = useSmartPaste();
   const [editorKey, setEditorKey] = useState(`key-${_id}`);
 
-  const debouncedOnValueChange = useDebounceCallback((value: string) => {
+  // const debouncedOnValueChange = useDebounceCallback((value: string) => {
+  //   setField('content', value);
+  // }, 0);
+  
+// temp remove debounce to test performance in prod
+  const debouncedOnValueChange = useCallback((value: string) => { 
     setField('content', value);
-  }, 300);
+  }, [setField]);
 
   const titleRef = useRef<HTMLTextAreaElement>(null);
 
@@ -353,6 +357,7 @@ function Editor() {
                     }}
                     variant="ghost"
                     size="sm"
+                    className='text-destructive hover:text-destructive'
                   >
                     Remove
                   </AnimatedButton>
