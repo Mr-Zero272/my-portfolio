@@ -1,4 +1,6 @@
+import { SITE_URL } from '@/configs/env';
 import AboutMeFeature from '@/features/about-me';
+import { IExperience } from '@/models';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -21,7 +23,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'About Thuong Phan Thanh - Full Stack Developer',
     description:
-      'Learn about my journey as a Full Stack Developer. 6+ months experience with Next.js, React, Angular, Java Spring. Skills, education, and professional background.',
+      'Learn about my journey as a Full Stack Developer. 1 year experience with Next.js, React, Angular, Java Spring. Skills, education, and professional background.',
     url: 'https://pitithuong.vercel.app/about-me',
     images: [
       {
@@ -37,13 +39,28 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'About Thuong Phan Thanh - Full Stack Developer',
     description:
-      'Learn about my journey as a Full Stack Developer. 6+ months experience with Next.js, React, Angular, Java Spring. Skills, education, and professional background.',
+      'Learn about my journey as a Full Stack Developer. 1 year experience with Next.js, React, Angular, Java Spring. Skills, education, and professional background.',
     images: ['/images/projects/portfolio/my-portfolio-h-2.png'],
   },
 };
 
-const AboutMePage = () => {
-  return <AboutMeFeature />;
+const fetchExperiences = async () => {
+  try {
+    const response = await fetch(`${SITE_URL}/api/experiences?owner=true`);
+    const experiences = (await response.json()) as IExperience[];
+    return experiences;
+  } catch (error) {
+    throw error;
+  }
+};
+
+const AboutMePage = async () => {
+  try {
+    const experiences = await fetchExperiences();
+    return <AboutMeFeature experiences={experiences} />;
+  } catch (error) {
+    throw error;
+  }
 };
 
 export default AboutMePage;

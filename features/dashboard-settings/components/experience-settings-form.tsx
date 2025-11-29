@@ -211,14 +211,14 @@ export function ExperienceSettingsForm() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 md:pr-10">
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-lg font-medium">Work Experience</h2>
           <p className="text-muted-foreground text-sm">Manage your work history and positions.</p>
         </div>
         <Button onClick={handleAddNew}>
-          <Plus className="mr-2 h-4 w-4" /> Add Experience
+          <Plus className="h-4 w-4" /> Add Experience
         </Button>
       </div>
 
@@ -269,7 +269,7 @@ export function ExperienceSettingsForm() {
       </div>
 
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent className="max-h-[90vh] max-w-3xl overflow-y-auto">
+        <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-3xl">
           <DialogHeader>
             <DialogTitle>{editingId ? 'Edit Experience' : 'Add Experience'}</DialogTitle>
             <DialogDescription>Add details about your work experience. Click save when you're done.</DialogDescription>
@@ -399,7 +399,7 @@ export function ExperienceSettingsForm() {
                               <FormLabel>Employment Type</FormLabel>
                               <Select onValueChange={field.onChange} defaultValue={field.value}>
                                 <FormControl>
-                                  <SelectTrigger>
+                                  <SelectTrigger className="w-full">
                                     <SelectValue placeholder="Select type" />
                                   </SelectTrigger>
                                 </FormControl>
@@ -445,7 +445,6 @@ export function ExperienceSettingsForm() {
                                     selected={field.value}
                                     onSelect={field.onChange}
                                     disabled={(date) => date > new Date() || date < new Date('1900-01-01')}
-                                    initialFocus
                                   />
                                 </PopoverContent>
                               </Popover>
@@ -514,7 +513,7 @@ export function ExperienceSettingsForm() {
                               <FormLabel>Icon</FormLabel>
                               <Select onValueChange={field.onChange} defaultValue={field.value}>
                                 <FormControl>
-                                  <SelectTrigger>
+                                  <SelectTrigger className="w-full">
                                     <SelectValue placeholder="Select icon" />
                                   </SelectTrigger>
                                 </FormControl>
