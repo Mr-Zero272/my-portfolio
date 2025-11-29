@@ -207,7 +207,7 @@ async function main() {
   }
 
   // Seed images
-  await seedImages(adminUserId);
+  await seedImages(adminUserId.toString());
 
   // Final check
   await checkExistingImages();

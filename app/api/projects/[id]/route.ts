@@ -5,9 +5,10 @@ import { ProjectService } from '@/services/project-service';
  * GET /api/projects/[id]
  * Get project by ID
  */
-export async function GET(req: Request, { params }: { params: { id: string } }) {
+export async function GET(req: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
-    const project = await ProjectService.getProjectById(params.id);
+    const { id } = await params;
+    const project = await ProjectService.getProjectById(id);
 
     if (!project) {
       return Response.json({ message: 'Project not found' }, { status: 404 });
@@ -27,15 +28,16 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
  * PUT /api/projects/[id]
  * Update project
  */
-export async function PUT(req: Request, { params }: { params: { id: string } }) {
+export async function PUT(req: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
+    const { id } = await params;
     const session = await auth();
     if (!session?.user?.id) {
       return Response.json({ message: 'Unauthorized' }, { status: 401 });
     }
 
     const data = await req.json();
-    const project = await ProjectService.updateProject(params.id, session.user.id, data);
+    const project = await ProjectService.updateProject(id, session.user.id, data);
 
     if (!project) {
       return Response.json({ message: 'Project not found or unauthorized' }, { status: 404 });
@@ -55,14 +57,15 @@ export async function PUT(req: Request, { params }: { params: { id: string } }) 
  * DELETE /api/projects/[id]
  * Delete project
  */
-export async function DELETE(req: Request, { params }: { params: { id: string } }) {
+export async function DELETE(req: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
+    const { id } = await params;
     const session = await auth();
     if (!session?.user?.id) {
       return Response.json({ message: 'Unauthorized' }, { status: 401 });
     }
 
-    const success = await ProjectService.deleteProject(params.id, session.user.id);
+    const success = await ProjectService.deleteProject(id, session.user.id);
 
     if (!success) {
       return Response.json({ message: 'Project not found or unauthorized' }, { status: 404 });

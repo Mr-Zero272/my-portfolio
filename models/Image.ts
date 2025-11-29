@@ -1,12 +1,11 @@
-import { Document, model, models, Schema } from 'mongoose';
+import mongoose, { Document, model, models, Schema } from 'mongoose';
 
 export interface IImage extends Document {
-  _id: Schema.Types.ObjectId;
   url: string;
   name: string;
   size: number;
   mineType: string;
-  userCreated: Schema.Types.ObjectId;
+  userCreated: mongoose.Types.ObjectId;
   caption?: string;
   createdAt: Date;
   updatedAt: Date;

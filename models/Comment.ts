@@ -2,7 +2,6 @@ import { Document, model, models, Schema, VirtualTypeOptions } from 'mongoose';
 import { IUser } from './User';
 
 export interface IComment extends Document {
-  _id: Schema.Types.ObjectId;
   postId: Schema.Types.ObjectId;
   parentId?: Schema.Types.ObjectId; // null cho comment gốc
   content: string;

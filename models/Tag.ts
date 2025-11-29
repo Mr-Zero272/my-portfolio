@@ -1,7 +1,6 @@
 import { Document, Schema, model, models } from 'mongoose';
 
 export interface ITag extends Document {
-  _id: Schema.Types.ObjectId;
   name: string;
   slug: string;
   createdAt: Date;

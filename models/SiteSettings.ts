@@ -1,7 +1,6 @@
 import mongoose, { Document, Schema } from 'mongoose';
 
 export interface ISiteSettings extends Document {
-  _id: string;
   userId: mongoose.Types.ObjectId;
 
   // Site Information

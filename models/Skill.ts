@@ -4,7 +4,6 @@ export type ProficiencyLevel = 'Beginner' | 'Intermediate' | 'Proficient' | 'Exp
 export type SkillCategory = 'Frontend' | 'Backend' | 'Database' | 'DevOps' | 'Tools' | 'Language' | 'Other';
 
 export interface ISkill extends Document {
-  _id: string;
   userId: mongoose.Types.ObjectId;
   name: string;
   proficiency: ProficiencyLevel;

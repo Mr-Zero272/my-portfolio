@@ -4,7 +4,6 @@ export type ProjectType = 'website' | 'mobile' | 'desktop' | 'api' | 'library' |
 export type ProjectStatus = 'planning' | 'developing' | 'completed' | 'deployed' | 'maintenance' | 'archived';
 
 export interface IProject extends Document {
-  _id: string;
   userId: mongoose.Types.ObjectId;
   name: string;
   slug: string;

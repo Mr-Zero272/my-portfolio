@@ -4,7 +4,6 @@ import { ITag } from './Tag';
 import { IUser } from './User';
 
 export interface IPost extends Document {
-  _id: Schema.Types.ObjectId;
   title: string;
   slug: string;
   excerpt: string;

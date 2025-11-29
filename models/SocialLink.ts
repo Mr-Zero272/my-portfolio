@@ -1,7 +1,6 @@
 import mongoose, { Document, Schema } from 'mongoose';
 
 export interface ISocialLink extends Document {
-  _id: string;
   userId: mongoose.Types.ObjectId;
   platform: string; // e.g., "github", "linkedin", "youtube", "twitter", "facebook", "instagram", etc.
   url: string;

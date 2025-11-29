@@ -245,7 +245,7 @@ async function main() {
   }
 
   // Seed comments
-  await seedComments(adminUserId);
+  await seedComments(adminUserId.toString());
 
   // Final check
   await checkExistingComments();

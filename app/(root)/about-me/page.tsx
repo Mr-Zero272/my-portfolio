@@ -44,6 +44,8 @@ export const metadata: Metadata = {
   },
 };
 
+export const dynamic = 'force-dynamic';
+
 const fetchExperiences = async () => {
   try {
     const response = await fetch(`${SITE_URL}/api/experiences?owner=true`);

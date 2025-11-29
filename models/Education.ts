@@ -1,7 +1,6 @@
 import mongoose, { Document, Schema } from 'mongoose';
 
-export interface IEducation extends Document {
-  _id: string;
+export interface IEducation extends Document {  
   userId: mongoose.Types.ObjectId;
   institution: string; // University/School name
   degree: string; // Bachelor, Master, Certificate, etc.

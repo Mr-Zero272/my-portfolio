@@ -14,7 +14,6 @@ export interface IPosition {
 }
 
 export interface IExperience extends Document {
-  _id: string;
   userId: mongoose.Types.ObjectId;
   companyName: string;
   companyLogo?: string;
