@@ -5,10 +5,14 @@ import {
   CodeXmlIcon,
   DraftingCompassIcon,
   GraduationCapIcon,
+  Pencil,
+  Trash2,
 } from 'lucide-react';
 import Image from 'next/image';
 import React from 'react';
 import ReactMarkdown from 'react-markdown';
+
+import { Button } from '@/components/ui/button';
 
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { Separator } from '@/components/ui/separator';
@@ -59,19 +63,47 @@ export type ExperienceItemType = {
   isCurrentEmployer?: boolean;
 };
 
-export function WorkExperience({ className, experiences }: { className?: string; experiences: ExperienceItemType[] }) {
+export function WorkExperience({
+  className,
+  experiences,
+  mode,
+  onEditClick,
+  onDeleteClick,
+}: {
+  className?: string;
+  experiences: ExperienceItemType[];
+  mode?: 'admin';
+  onEditClick?: (experience: ExperienceItemType) => void;
+  onDeleteClick?: (id: string) => void;
+}) {
   return (
     <div className={cn('bg-background px-4', className)}>
       {experiences.map((experience) => (
-        <ExperienceItem key={experience._id} experience={experience} />
+        <ExperienceItem
+          key={experience._id}
+          experience={experience}
+          mode={mode}
+          onEditClick={onEditClick}
+          onDeleteClick={onDeleteClick}
+        />
       ))}
     </div>
   );
 }
 
-export function ExperienceItem({ experience }: { experience: ExperienceItemType }) {
+export function ExperienceItem({
+  experience,
+  mode,
+  onEditClick,
+  onDeleteClick,
+}: {
+  experience: ExperienceItemType;
+  mode?: 'admin';
+  onEditClick?: (experience: ExperienceItemType) => void;
+  onDeleteClick?: (id: string) => void;
+}) {
   return (
-    <div className="space-y-4 py-4">
+    <div className="group/item relative space-y-4 py-4">
       <div className="not-prose flex items-center gap-3">
         <div className="flex size-6 shrink-0 items-center justify-center" aria-hidden>
           {experience.companyLogo ? (
@@ -97,6 +129,24 @@ export function ExperienceItem({ experience }: { experience: ExperienceItemType 
             <span className="bg-info relative inline-flex size-2 rounded-full" />
             <span className="sr-only">Current Employer</span>
           </span>
+        )}
+
+        {mode === 'admin' && (
+          <div className="ml-auto flex items-center gap-2 opacity-0 transition-opacity group-hover/item:opacity-100">
+            <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => onEditClick?.(experience)}>
+              <Pencil className="h-4 w-4" />
+              <span className="sr-only">Edit</span>
+            </Button>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="text-destructive h-8 w-8"
+              onClick={() => onDeleteClick?.(experience._id)}
+            >
+              <Trash2 className="h-4 w-4" />
+              <span className="sr-only">Delete</span>
+            </Button>
+          </div>
         )}
       </div>
 

@@ -1,9 +1,13 @@
 'use client';
 
 import { projectsApi } from '@/apis/projects';
+import { Github } from '@/components/icons';
+import ConfirmDialog from '@/components/shared/confirm-dialog';
+import EmptyState from '@/components/shared/state/empty-state';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
-import { Card, CardContent } from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import {
   Dialog,
   DialogContent,
@@ -12,6 +16,12 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { MultiSelect } from '@/components/ui/multi-select';
@@ -22,19 +32,25 @@ import { Switch } from '@/components/ui/switch';
 import { Textarea } from '@/components/ui/textarea';
 import { cn } from '@/lib/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { format } from 'date-fns';
 import {
+  BadgeCheckIcon,
   CalendarIcon,
   CodeXmlIcon,
+  Edit,
+  EllipsisIcon,
   Globe,
   LayoutTemplate,
+  Link2,
   Loader2,
-  Pencil,
   Plus,
   Smartphone,
   Trash2,
 } from 'lucide-react';
-import { useCallback, useEffect, useState } from 'react';
+import { useSession } from 'next-auth/react';
+import Link from 'next/link';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import * as z from 'zod';
@@ -115,11 +131,13 @@ const defaultTechnologies = [
 ];
 
 export function ProjectsSettingsForm() {
-  const [loading, setLoading] = useState(true);
-  const [projects, setProjects] = useState<any[]>([]);
+  const queryClient = useQueryClient();
+  const { data: session } = useSession();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
-  const [saving, setSaving] = useState(false);
+
+  const [isDialogDeleteOpen, setIsDialogDeleteOpen] = useState(false);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
 
   const form = useForm<ProjectFormData>({
     resolver: zodResolver(projectSchema),
@@ -144,23 +162,52 @@ export function ProjectsSettingsForm() {
     },
   });
 
-  const fetchProjects = useCallback(async () => {
-    try {
-      setLoading(true);
-      // Fetch owner projects
-      const data = await projectsApi.getAll({ owner: true });
-      setProjects(data);
-    } catch (error) {
-      console.error('Failed to fetch projects:', error);
-      toast.error('Failed to fetch projects');
-    } finally {
-      setLoading(false);
-    }
-  }, []);
+  // Query projects
+  const { data: projects = [], isLoading: loading } = useQuery({
+    queryKey: ['projects', { owner: true }],
+    queryFn: () => projectsApi.getAll({ owner: true }),
+  });
 
-  useEffect(() => {
-    fetchProjects();
-  }, [fetchProjects]);
+  // Mutations
+  const createMutation = useMutation({
+    mutationFn: projectsApi.create,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['projects'] });
+      toast.success('Project created successfully');
+      setIsDialogOpen(false);
+    },
+    onError: (error) => {
+      console.error('Failed to create project:', error);
+      toast.error(error instanceof Error ? error.message : 'Failed to create project');
+    },
+  });
+
+  const updateMutation = useMutation({
+    mutationFn: ({ id, data }: { id: string; data: any }) => projectsApi.update(id, data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['projects'] });
+      toast.success('Project updated successfully');
+      setIsDialogOpen(false);
+    },
+    onError: (error) => {
+      console.error('Failed to update project:', error);
+      toast.error(error instanceof Error ? error.message : 'Failed to update project');
+    },
+  });
+
+  const deleteMutation = useMutation({
+    mutationFn: projectsApi.delete,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['projects'] });
+      toast.success('Project deleted successfully');
+    },
+    onError: (error) => {
+      console.error('Failed to delete project:', error);
+      toast.error('Failed to delete project');
+    },
+  });
+
+  const saving = createMutation.isPending || updateMutation.isPending;
 
   // Auto-generate slug from name
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -216,50 +263,35 @@ export function ProjectsSettingsForm() {
   };
 
   const handleDelete = async (id: string) => {
-    if (!confirm('Are you sure you want to delete this project? This action cannot be undone.')) return;
-
+    if (!id) return;
     try {
-      await projectsApi.delete(id);
-      toast.success('Project deleted successfully');
-      fetchProjects();
+      await deleteMutation.mutateAsync(id);
+      setIsDialogDeleteOpen(false);
     } catch (error) {
       console.error('Failed to delete project:', error);
-      toast.error('Failed to delete project');
+      toast.error(error instanceof Error ? error.message : 'Failed to delete project');
     }
   };
 
   const onSubmit = async (data: ProjectFormData) => {
-    try {
-      setSaving(true);
-      // Format data for API
-      const apiData: any = {
-        ...data,
-        startDate: data.startDate ? data.startDate.toISOString() : undefined,
-        endDate: data.endDate ? data.endDate.toISOString() : undefined,
-      };
+    // Format data for API
+    const apiData: any = {
+      ...data,
+      startDate: data.startDate ? data.startDate.toISOString() : undefined,
+      endDate: data.endDate ? data.endDate.toISOString() : undefined,
+    };
 
-      if (editingId) {
-        await projectsApi.update(editingId, apiData);
-        toast.success('Project updated successfully');
-      } else {
-        await projectsApi.create(apiData);
-        toast.success('Project created successfully');
-      }
-
-      setIsDialogOpen(false);
-      fetchProjects();
-    } catch (error) {
-      console.error('Failed to save project:', error);
-      toast.error(error instanceof Error ? error.message : 'Failed to save project');
-    } finally {
-      setSaving(false);
+    if (editingId) {
+      updateMutation.mutate({ id: editingId, data: apiData });
+    } else {
+      createMutation.mutate(apiData);
     }
   };
 
   if (loading) {
     return (
       <div className="flex items-center justify-center py-12">
-        <Loader2 className="text-primary h-8 w-8 animate-spin" />
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
       </div>
     );
   }
@@ -269,66 +301,103 @@ export function ProjectsSettingsForm() {
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-lg font-medium">Projects</h2>
-          <p className="text-muted-foreground text-sm">Manage your portfolio projects.</p>
+          <p className="text-sm text-muted-foreground">Manage your portfolio projects.</p>
         </div>
         <Button onClick={handleAddNew}>
           <Plus className="h-4 w-4" /> Add Project
         </Button>
       </div>
 
-      <div className="grid gap-4">
+      <div className="grid gap-4 lg:grid-cols-2">
         {projects.map((project) => (
-          <Card key={project._id}>
-            <CardContent className="flex items-center justify-between p-6">
-              <div className="flex items-center gap-4">
-                <div className="bg-muted flex h-16 w-16 items-center justify-center overflow-hidden rounded-md">
-                  {project.thumbnailImage ? (
-                    <img src={project.thumbnailImage} alt={project.name} className="h-full w-full object-cover" />
-                  ) : (
-                    <CodeXmlIcon className="text-muted-foreground h-8 w-8" />
-                  )}
-                </div>
-                <div>
-                  <div className="flex items-center gap-2">
-                    <h3 className="font-semibold">{project.name}</h3>
-                    {project.isFeatured && (
-                      <span className="bg-primary/10 text-primary rounded-full px-2 py-0.5 text-xs font-medium">
-                        Featured
-                      </span>
-                    )}
-                    {!project.isVisible && (
-                      <span className="bg-muted text-muted-foreground rounded-full px-2 py-0.5 text-xs font-medium">
-                        Hidden
-                      </span>
-                    )}
-                  </div>
-                  <p className="text-muted-foreground line-clamp-1 max-w-md text-sm">{project.description}</p>
-                  <div className="text-muted-foreground mt-1 flex items-center gap-2 text-xs">
-                    <span className="capitalize">{project.type}</span>
-                    <span>•</span>
-                    <span className="capitalize">{project.status}</span>
-                  </div>
+          <Card className="" key={project._id.toString()}>
+            <CardHeader className="flex items-center justify-between gap-3">
+              <div className="flex items-center gap-3">
+                <Avatar className="ring-2 ring-ring">
+                  <AvatarImage
+                    src={session?.user?.image || 'https://cdn.shadcnstudio.com/ss-assets/avatar/avatar-5.png'}
+                    alt={session?.user?.name || 'User'}
+                  />
+                  <AvatarFallback className="text-xs">{session?.user?.name?.[0] || 'U'}</AvatarFallback>
+                </Avatar>
+                <div className="flex flex-col gap-0.5">
+                  <CardTitle className="flex items-center gap-1 text-sm">
+                    {session?.user?.name || 'Unknown'}{' '}
+                    <BadgeCheckIcon className="size-4 fill-sky-600 stroke-white dark:fill-sky-400" />
+                  </CardTitle>
+                  <CardDescription>@{session?.user?.email || 'anonymous'}</CardDescription>
                 </div>
               </div>
               <div className="flex items-center gap-2">
-                <Button variant="ghost" size="icon" onClick={() => handleEdit(project)}>
-                  <Pencil className="h-4 w-4" />
+                <Button variant="outline" size="sm" onClick={() => handleEdit(project)}>
+                  <Edit />
+                  Edit
                 </Button>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="text-destructive"
-                  onClick={() => handleDelete(project._id)}
-                >
-                  <Trash2 className="h-4 w-4" />
-                </Button>
+                <DropdownMenu>
+                  <DropdownMenuTrigger>
+                    <Button variant="ghost" size="icon" aria-label="Toggle menu">
+                      <EllipsisIcon />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end">
+                    <DropdownMenuItem
+                      className="text-destructive hover:text-destructive!"
+                      onClick={() => {
+                        setEditingId(project._id.toString());
+                        setIsDialogDeleteOpen(true);
+                      }}
+                    >
+                      <Trash2 className="text-destructive" />
+                      Delete
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
               </div>
+            </CardHeader>
+            <CardContent className="space-y-6 text-sm">
+              <img
+                src={project.thumbnailImage}
+                alt={project.name}
+                className="aspect-video w-full rounded-md object-cover"
+              />
+              <p className="wrap-anywhere">
+                {project.description}
+                {project.technologies.map((tech) => (
+                  <span key={tech} className="ark:text-sky-400 text-sky-600">
+                    #{tech}
+                  </span>
+                ))}
+              </p>
             </CardContent>
+            <CardFooter className="flex items-center gap-1">
+              <Button variant="ghost" size="sm" asChild>
+                <Link href={project.sourceCodeUrl!}>
+                  <Github />
+                </Link>
+              </Button>
+              {project.demoUrl && (
+                <Button variant="ghost" size="sm" asChild>
+                  <Link href={project.demoUrl}>
+                    <Link2 />
+                  </Link>
+                </Button>
+              )}
+            </CardFooter>
           </Card>
         ))}
 
         {projects.length === 0 && (
-          <div className="text-muted-foreground py-12 text-center">No projects found. Add one to get started.</div>
+          <div className="col-span-2 py-12 text-center text-muted-foreground">
+            <EmptyState
+              title="No projects found"
+              description="Add a project to get started"
+              action={
+                <Button onClick={handleAddNew}>
+                  <Plus className="h-4 w-4" /> Add Project
+                </Button>
+              }
+            />
+          </div>
         )}
       </div>
 
@@ -381,7 +450,7 @@ export function ProjectsSettingsForm() {
                         <FormLabel>Type</FormLabel>
                         <Select onValueChange={field.onChange} defaultValue={field.value}>
                           <FormControl>
-                            <SelectTrigger>
+                            <SelectTrigger className="w-full">
                               <SelectValue placeholder="Select type" />
                             </SelectTrigger>
                           </FormControl>
@@ -409,7 +478,7 @@ export function ProjectsSettingsForm() {
                         <FormLabel>Status</FormLabel>
                         <Select onValueChange={field.onChange} defaultValue={field.value}>
                           <FormControl>
-                            <SelectTrigger>
+                            <SelectTrigger className="w-full">
                               <SelectValue placeholder="Select status" />
                             </SelectTrigger>
                           </FormControl>
@@ -660,6 +729,15 @@ export function ProjectsSettingsForm() {
           </Form>
         </DialogContent>
       </Dialog>
+
+      <ConfirmDialog
+        title="Delete Project"
+        description="Are you sure you want to delete this project?"
+        open={isDialogDeleteOpen}
+        onOpenChange={(open) => setIsDialogDeleteOpen(open)}
+        onConfirm={() => handleDelete(deletingId!)}
+        onCancel={() => setIsDialogDeleteOpen(false)}
+      />
     </div>
   );
 }

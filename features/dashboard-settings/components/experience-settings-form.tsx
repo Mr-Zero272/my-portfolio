@@ -22,6 +22,7 @@ import { Switch } from '@/components/ui/switch';
 import { Textarea } from '@/components/ui/textarea';
 import { cn } from '@/lib/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { format } from 'date-fns';
 import {
   BriefcaseBusinessIcon,
@@ -30,14 +31,17 @@ import {
   DraftingCompassIcon,
   GraduationCapIcon,
   Loader2,
-  Pencil,
   Plus,
   Trash2,
 } from 'lucide-react';
-import { useCallback, useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import * as z from 'zod';
+
+import ConfirmDialog from '@/components/shared/confirm-dialog';
+import { Skeleton } from '@/components/ui/skeleton';
+import { WorkExperience } from '@/components/work-experience';
 
 // Validation schema
 const positionSchema = z.object({
@@ -82,11 +86,65 @@ const defaultSkills = [
 ];
 
 export function ExperienceSettingsForm() {
-  const [loading, setLoading] = useState(true);
-  const [experiences, setExperiences] = useState<any[]>([]);
+  const queryClient = useQueryClient();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isDialogConfigOpen, setIsDialogConfigOpen] = useState(false);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
   const [editingId, setEditingId] = useState<string | null>(null);
-  const [saving, setSaving] = useState(false);
+
+  // Fetch experiences with React Query
+  const {
+    data: experiences = [],
+    isLoading,
+    error,
+  } = useQuery<any[]>({
+    queryKey: ['experiences', 'list', { owner: true }],
+    queryFn: async () => {
+      const data = await experienceApi.getAll({ owner: true });
+      return data;
+    },
+  });
+
+  // Mutations
+  const createMutation = useMutation({
+    mutationFn: (data: any) => experienceApi.create(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ['experiences', 'list', { owner: true }],
+      });
+      toast.success('Experience created successfully');
+      setIsDialogOpen(false);
+    },
+    onError: (error) => {
+      console.error('Failed to create experience:', error);
+      toast.error('Failed to create experience');
+    },
+  });
+
+  const updateMutation = useMutation({
+    mutationFn: ({ id, data }: { id: string; data: any }) => experienceApi.update(id, data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['experiences'] });
+      toast.success('Experience updated successfully');
+      setIsDialogOpen(false);
+    },
+    onError: (error) => {
+      console.error('Failed to update experience:', error);
+      toast.error('Failed to update experience');
+    },
+  });
+
+  const deleteMutation = useMutation({
+    mutationFn: (id: string) => experienceApi.delete(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['experiences'] });
+      toast.success('Experience deleted successfully');
+    },
+    onError: (error) => {
+      console.error('Failed to delete experience:', error);
+      toast.error('Failed to delete experience');
+    },
+  });
 
   const form = useForm<ExperienceFormData>({
     resolver: zodResolver(experienceSchema),
@@ -104,23 +162,10 @@ export function ExperienceSettingsForm() {
     name: 'positions',
   });
 
-  const fetchExperiences = useCallback(async () => {
-    try {
-      setLoading(true);
-      // Fetch owner experiences
-      const data = await experienceApi.getAll({ owner: true });
-      setExperiences(data);
-    } catch (error) {
-      console.error('Failed to fetch experiences:', error);
-      toast.error('Failed to fetch experiences');
-    } finally {
-      setLoading(false);
-    }
-  }, []);
-
-  useEffect(() => {
-    fetchExperiences();
-  }, [fetchExperiences]);
+  // Show error toast if query fails
+  if (error) {
+    toast.error('Failed to fetch experiences');
+  }
 
   const handleAddNew = () => {
     setEditingId(null);
@@ -143,7 +188,7 @@ export function ExperienceSettingsForm() {
   };
 
   const handleEdit = (experience: any) => {
-    setEditingId(experience._id);
+    setEditingId(experience._id!);
     form.reset({
       companyName: experience.companyName,
       companyLogo: experience.companyLogo || '',
@@ -159,63 +204,38 @@ export function ExperienceSettingsForm() {
   };
 
   const handleDelete = async (id: string) => {
-    if (!confirm('Are you sure you want to delete this experience?')) return;
-
     try {
-      await experienceApi.delete(id);
+      await deleteMutation.mutateAsync(id);
       toast.success('Experience deleted successfully');
-      fetchExperiences();
     } catch (error) {
-      console.error('Failed to delete experience:', error);
       toast.error('Failed to delete experience');
     }
   };
 
   const onSubmit = async (data: ExperienceFormData) => {
-    try {
-      setSaving(true);
-      // Format data for API
-      const apiData: any = {
-        ...data,
-        positions: data.positions?.map((pos) => ({
-          ...pos,
-          startDate: pos.startDate.toISOString(),
-          endDate: pos.endDate ? pos.endDate.toISOString() : undefined,
-        })),
-      };
+    // Format data for API
+    const apiData: any = {
+      ...data,
+      positions: data.positions?.map((pos) => ({
+        ...pos,
+        startDate: pos.startDate.toISOString(),
+        endDate: pos.endDate ? pos.endDate.toISOString() : undefined,
+      })),
+    };
 
-      if (editingId) {
-        await experienceApi.update(editingId, apiData);
-        toast.success('Experience updated successfully');
-      } else {
-        await experienceApi.create(apiData);
-        toast.success('Experience created successfully');
-      }
-
-      setIsDialogOpen(false);
-      fetchExperiences();
-    } catch (error) {
-      console.error('Failed to save experience:', error);
-      toast.error('Failed to save experience');
-    } finally {
-      setSaving(false);
+    if (editingId) {
+      updateMutation.mutate({ id: editingId, data: apiData });
+    } else {
+      createMutation.mutate(apiData);
     }
   };
-
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center py-12">
-        <Loader2 className="text-primary h-8 w-8 animate-spin" />
-      </div>
-    );
-  }
 
   return (
     <div className="space-y-6 md:pr-10">
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-lg font-medium">Work Experience</h2>
-          <p className="text-muted-foreground text-sm">Manage your work history and positions.</p>
+          <p className="text-sm text-muted-foreground">Manage your work history and positions.</p>
         </div>
         <Button onClick={handleAddNew}>
           <Plus className="h-4 w-4" /> Add Experience
@@ -223,48 +243,38 @@ export function ExperienceSettingsForm() {
       </div>
 
       <div className="grid gap-4">
-        {experiences.map((experience) => (
-          <Card key={experience._id}>
-            <CardContent className="flex items-center justify-between p-6">
-              <div className="flex items-center gap-4">
-                <div className="bg-muted flex h-12 w-12 items-center justify-center rounded-full">
-                  {experience.companyLogo ? (
-                    <img
-                      src={experience.companyLogo}
-                      alt={experience.companyName}
-                      className="h-full w-full rounded-full object-cover"
-                    />
-                  ) : (
-                    <BriefcaseBusinessIcon className="text-muted-foreground h-6 w-6" />
-                  )}
-                </div>
-                <div>
-                  <h3 className="font-semibold">{experience.companyName}</h3>
-                  <p className="text-muted-foreground text-sm">
-                    {experience.positions.length} position{experience.positions.length !== 1 ? 's' : ''}
-                    {experience.isCurrentEmployer && ' • Current Employer'}
-                  </p>
-                </div>
-              </div>
-              <div className="flex items-center gap-2">
-                <Button variant="ghost" size="icon" onClick={() => handleEdit(experience)}>
-                  <Pencil className="h-4 w-4" />
-                </Button>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="text-destructive"
-                  onClick={() => handleDelete(experience._id)}
-                >
-                  <Trash2 className="h-4 w-4" />
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-        ))}
+        {isLoading &&
+          Array.from({ length: 3 }).map((_, index) => (
+            <div className="" key={index}>
+              <Skeleton className="mb-3 h-5 w-40" />
+              <Skeleton className="mb-2 h-5 w-56" />
+              <Skeleton className="mb-2 h-5 w-72" />
+              <Skeleton className="mb-2 h-5 w-56" />
+              <Skeleton className="mb-2 h-5 w-72" />
+            </div>
+          ))}
+        {!isLoading && experiences && experiences.length > 0 && (
+          <WorkExperience
+            experiences={experiences.map((exp: any) => ({
+              ...exp,
+              positions: exp.positions.map((pos: any) => ({
+                ...pos,
+                employmentPeriod: `${format(new Date(pos.startDate), 'MMM yyyy')} - ${
+                  pos.endDate ? format(new Date(pos.endDate), 'MMM yyyy') : 'Present'
+                }`,
+              })),
+            }))}
+            mode="admin"
+            onEditClick={handleEdit}
+            onDeleteClick={(id) => {
+              setDeletingId(id);
+              setIsDialogConfigOpen(true);
+            }}
+          />
+        )}
 
-        {experiences.length === 0 && (
-          <div className="text-muted-foreground py-12 text-center">No experiences found. Add one to get started.</div>
+        {!isLoading && experiences && experiences.length === 0 && (
+          <div className="py-12 text-center text-muted-foreground">No experiences found. Add one to get started.</div>
         )}
       </div>
 
@@ -370,7 +380,7 @@ export function ExperienceSettingsForm() {
                       type="button"
                       variant="ghost"
                       size="icon"
-                      className="text-destructive absolute top-2 right-2"
+                      className="absolute top-2 right-2 text-destructive"
                       onClick={() => remove(index)}
                     >
                       <Trash2 className="h-4 w-4" />
@@ -551,7 +561,10 @@ export function ExperienceSettingsForm() {
                                 maxCount={5}
                                 allowCreateOption
                                 onCreateOption={(inputValue) => {
-                                  return { label: inputValue, value: inputValue };
+                                  return {
+                                    label: inputValue,
+                                    value: inputValue,
+                                  };
                                 }}
                               />
                             </FormControl>
@@ -582,8 +595,10 @@ export function ExperienceSettingsForm() {
                 <Button type="button" variant="outline" onClick={() => setIsDialogOpen(false)}>
                   Cancel
                 </Button>
-                <Button type="submit" disabled={saving}>
-                  {saving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                <Button type="submit" disabled={createMutation.isPending || updateMutation.isPending}>
+                  {(createMutation.isPending || updateMutation.isPending) && (
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                  )}
                   Save Changes
                 </Button>
               </DialogFooter>
@@ -591,6 +606,18 @@ export function ExperienceSettingsForm() {
           </Form>
         </DialogContent>
       </Dialog>
+
+      <ConfirmDialog
+        title="Are you sure you want to delete this experience?"
+        description="This action cannot be undone. This will permanently delete your experience and remove all of your data from our servers. You will not be able to recover your experience."
+        confirmText="Delete Experience"
+        cancelText="Cancel"
+        isHandling={deleteMutation.isPending}
+        open={isDialogConfigOpen}
+        onOpenChange={setIsDialogConfigOpen}
+        onConfirm={() => handleDelete(deletingId!)}
+        onCancel={() => setIsDialogConfigOpen(false)}
+      />
     </div>
   );
 }
