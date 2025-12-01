@@ -1,5 +1,9 @@
+import { SITE_URL } from '@/configs/env';
 import ProjectFeature from '@/features/projects';
+import { IProject } from '@/models';
 import { Metadata } from 'next';
+
+export const dynamic = 'force-dynamic';
 
 export const metadata: Metadata = {
   title: 'Projects by Thuong Phan Thanh - Full Stack Developer',
@@ -42,10 +46,21 @@ export const metadata: Metadata = {
   },
 };
 
-const ProjectPage = () => {
+const fetchProjects = async () => {
+  try {
+    const response = await fetch(`${SITE_URL}/api/projects?owner=true`);
+    const projects = (await response.json()) as IProject[];
+    return projects;
+  } catch (error) {
+    throw error;
+  }
+};
+
+const ProjectPage = async () => {
+  const projects = await fetchProjects();
   return (
     <section className="p-5">
-      <ProjectFeature />
+      <ProjectFeature projects={projects} />
     </section>
   );
 };

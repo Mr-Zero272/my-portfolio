@@ -109,7 +109,7 @@ export function ProfileSettingsForm() {
   if (loading) {
     return (
       <div className="flex items-center justify-center py-12">
-        <Loader2 className="text-primary h-8 w-8 animate-spin" />
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
       </div>
     );
   }
@@ -294,7 +294,7 @@ export function ProfileSettingsForm() {
                 <Button type="submit" disabled={saving}>
                   {saving ? (
                     <>
-                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      <Loader2 className="h-4 w-4 animate-spin" />
                       Saving...
                     </>
                   ) : (

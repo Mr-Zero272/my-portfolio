@@ -370,7 +370,7 @@ export function ExperienceSettingsForm() {
                       })
                     }
                   >
-                    <Plus className="mr-2 h-4 w-4" /> Add Position
+                    <Plus className="h-4 w-4" /> Add Position
                   </Button>
                 </div>
 
@@ -455,6 +455,7 @@ export function ExperienceSettingsForm() {
                                     selected={field.value}
                                     onSelect={field.onChange}
                                     disabled={(date) => date > new Date() || date < new Date('1900-01-01')}
+                                    captionLayout="dropdown"
                                   />
                                 </PopoverContent>
                               </Popover>
@@ -490,7 +491,7 @@ export function ExperienceSettingsForm() {
                                     selected={field.value}
                                     onSelect={field.onChange}
                                     disabled={(date) => date > new Date() || date < new Date('1900-01-01')}
-                                    initialFocus
+                                    captionLayout="dropdown"
                                   />
                                 </PopoverContent>
                               </Popover>

@@ -650,6 +650,7 @@ export function ProjectsSettingsForm() {
                               selected={field.value}
                               onSelect={field.onChange}
                               disabled={(date) => date > new Date() || date < new Date('1900-01-01')}
+                              captionLayout="dropdown"
                             />
                           </PopoverContent>
                         </Popover>
@@ -685,7 +686,7 @@ export function ProjectsSettingsForm() {
                               selected={field.value}
                               onSelect={field.onChange}
                               disabled={(date) => date > new Date() || date < new Date('1900-01-01')}
-                              initialFocus
+                              captionLayout="dropdown"
                             />
                           </PopoverContent>
                         </Popover>
@@ -748,7 +749,7 @@ export function ProjectsSettingsForm() {
                   Cancel
                 </Button>
                 <Button type="submit" disabled={saving}>
-                  {saving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                  {saving && <Loader2 className="h-4 w-4 animate-spin" />}
                   Save Changes
                 </Button>
               </DialogFooter>
