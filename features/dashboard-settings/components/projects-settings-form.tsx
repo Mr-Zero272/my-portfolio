@@ -3,6 +3,7 @@
 import { projectsApi } from '@/apis/projects';
 import { Github } from '@/components/icons';
 import ConfirmDialog from '@/components/shared/confirm-dialog';
+import ImageUploadV2 from '@/components/shared/image-upload-v2';
 import EmptyState from '@/components/shared/state/empty-state';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
@@ -30,6 +31,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Separator } from '@/components/ui/separator';
 import { Switch } from '@/components/ui/switch';
 import { Textarea } from '@/components/ui/textarea';
+import { uploadImageWithDB } from '@/lib/uploadthing';
 import { cn } from '@/lib/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
@@ -68,7 +70,7 @@ const projectSchema = z.object({
   status: z.enum(['planning', 'developing', 'completed', 'deployed', 'maintenance', 'archived']).default('developing'),
 
   // Media
-  thumbnailImage: z.string().optional(),
+  thumbnailImage: z.union([z.string(), z.any()]).optional(),
   images: z.array(z.string()).optional(),
   demoUrl: z.string().url('Invalid URL').optional().or(z.literal('')),
   sourceCodeUrl: z.string().url('Invalid URL').optional().or(z.literal('')),
@@ -274,9 +276,29 @@ export function ProjectsSettingsForm() {
   };
 
   const onSubmit = async (data: ProjectFormData) => {
+    let thumbnailImageUrl = data.thumbnailImage;
+
+    // Upload image if it's a File
+    if (data.thumbnailImage instanceof File) {
+      try {
+        const uploadedUrl = await uploadImageWithDB(data.thumbnailImage, session?.user?.id || '');
+        if (uploadedUrl) {
+          thumbnailImageUrl = uploadedUrl;
+        } else {
+          toast.error('Failed to upload image');
+          return;
+        }
+      } catch (error) {
+        console.error('Image upload failed:', error);
+        toast.error('Failed to upload image');
+        return;
+      }
+    }
+
     // Format data for API
     const apiData: any = {
       ...data,
+      thumbnailImage: thumbnailImageUrl,
       startDate: data.startDate ? data.startDate.toISOString() : undefined,
       endDate: data.endDate ? data.endDate.toISOString() : undefined,
     };
@@ -334,7 +356,7 @@ export function ProjectsSettingsForm() {
                   Edit
                 </Button>
                 <DropdownMenu>
-                  <DropdownMenuTrigger>
+                  <DropdownMenuTrigger asChild>
                     <Button variant="ghost" size="icon" aria-label="Toggle menu">
                       <EllipsisIcon />
                     </Button>
@@ -503,9 +525,14 @@ export function ProjectsSettingsForm() {
                     name="thumbnailImage"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Thumbnail Image URL</FormLabel>
+                        <FormLabel>Thumbnail Image</FormLabel>
                         <FormControl>
-                          <Input placeholder="https://..." {...field} />
+                          <ImageUploadV2
+                            value={field.value ? [field.value] : []}
+                            onChange={(files) => field.onChange(files[0] || '')}
+                            maxFiles={1}
+                            multiple={false}
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
