@@ -8,7 +8,7 @@ export interface ISkill extends Document {
   name: string;
   proficiency: ProficiencyLevel;
   category: SkillCategory;
-  icon?: string; // Icon name or URL
+  icon?: string; // Icon url
   iconColor?: string; // Hex color for hover effect
   description?: string;
   yearsOfExperience?: number;

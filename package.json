@@ -55,6 +55,7 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "cmdk": "^1.1.1",
+    "color": "^5.0.3",
     "date-fns": "^4.1.0",
     "dompurify": "^3.3.0",
     "dotenv": "^17.2.2",
@@ -73,6 +74,7 @@
     "nodemailer": "^7.0.10",
     "nuqs": "^2.7.2",
     "prism-code-editor-lightweight": "^0.0.3",
+    "radix-ui": "^1.4.3",
     "react": "19.2.0",
     "react-day-picker": "^9.11.3",
     "react-dom": "19.2.0",
@@ -98,6 +100,7 @@
   "devDependencies": {
     "@eslint/eslintrc": "^3",
     "@tailwindcss/typography": "^0.5.19",
+    "@types/color": "^4.2.0",
     "@types/howler": "^2.2.12",
     "@types/micromatch": "^4.0.9",
     "@types/mongoose": "^5.11.96",
