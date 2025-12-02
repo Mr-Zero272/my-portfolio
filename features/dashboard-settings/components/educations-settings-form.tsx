@@ -76,7 +76,7 @@ export function EducationsSettingsForm() {
 
   // Query educations
   const { data: educations = [], isLoading: loading } = useQuery({
-    queryKey: ['educations', { owner: true }],
+    queryKey: ['educations', 'list', { owner: true }],
     queryFn: () => educationsApi.getAll({ owner: true }),
   });
 

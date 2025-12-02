@@ -1,8 +1,9 @@
 import apiClient from '@/lib/axios';
 import type { IProfile, ISocialLink } from '@/models';
+import { IProfileResponse } from '@/models/Profile';
 
 export interface ProfileWithSocialLinks {
-  profile: IProfile | null;
+  profile: IProfileResponse | null;
   socialLinks: ISocialLink[];
 }
 

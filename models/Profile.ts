@@ -1,5 +1,5 @@
 import mongoose, { Document, Schema } from 'mongoose';
-
+import { IUser } from './User';
 export interface IProfile extends Document {
   userId: mongoose.Types.ObjectId;
   // Basic Info
@@ -33,6 +33,10 @@ export interface IProfile extends Document {
 
   createdAt: Date;
   updatedAt: Date;
+}
+
+export interface IProfileResponse extends Omit<IProfile, 'userId'> {
+  userId: IUser;
 }
 
 const ProfileSchema: Schema = new Schema(

@@ -38,7 +38,7 @@ export function ProfileSettingsForm() {
   const queryClient = useQueryClient();
 
   const { data: profileData, isLoading: loading } = useQuery({
-    queryKey: ['profile'],
+    queryKey: ['profile', , { owner: true }],
     queryFn: () => profileApi.getProfile(),
   });
 

@@ -1,13 +1,14 @@
+'use client';
+
+import { educationsApi } from '@/apis/educations';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Skeleton } from '@/components/ui/skeleton';
 import { IEducation } from '@/models';
+import { useQuery } from '@tanstack/react-query';
 import { format } from 'date-fns';
 import { CalendarIcon, GraduationCap, MapPin, Share2 } from 'lucide-react';
 import { motion } from 'motion/react';
-
-interface EducationTabProps {
-  educations: IEducation[];
-}
 
 const cardVariants = {
   hidden: { opacity: 0, y: 20 },
@@ -27,7 +28,12 @@ const containerVariants = {
   },
 };
 
-const EducationTab = ({ educations }: EducationTabProps) => {
+const EducationTab = () => {
+  const { data: educations, isLoading } = useQuery<IEducation[]>({
+    queryKey: ['educations', 'list', { owner: true }],
+    queryFn: () => educationsApi.getAll({ owner: true }),
+  });
+
   return (
     <div>
       <h1 className="mb-3 text-2xl font-bold tracking-wider">Education</h1>
@@ -35,57 +41,95 @@ const EducationTab = ({ educations }: EducationTabProps) => {
         Below are details of my university studies as well as information about the short courses I attended.
       </p>
       <motion.ul variants={containerVariants} initial="hidden" animate="visible">
-        {educations.map((education) => (
-          <motion.li variants={cardVariants} whileHover="hover">
-            <Card key={education._id.toString()}>
-              <CardHeader className="flex flex-row items-start justify-between space-y-0">
-                <div className="flex items-center gap-3">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-muted">
-                    <GraduationCap className="h-5 w-5 text-muted-foreground" />
-                  </div>
-                  <div className="flex flex-col">
-                    <CardTitle className="text-base font-semibold">{education.institution}</CardTitle>
-                    <CardDescription className="text-xs">
-                      {education.degree} {education.fieldOfStudy && `- ${education.fieldOfStudy}`}
-                    </CardDescription>
-                  </div>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Button variant="ghost" size="sm">
-                    <Share2 className="h-4 w-4" /> Share
-                  </Button>
-                </div>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="grid gap-2 text-sm text-muted-foreground">
-                  <div className="flex items-center gap-2">
-                    <CalendarIcon className="h-4 w-4" />
-                    <span>
-                      {format(new Date(education.startDate), 'MMM yyyy')} -{' '}
-                      {education.endDate ? format(new Date(education.endDate), 'MMM yyyy') : 'Present'}
-                    </span>
-                  </div>
-                  {education.location && (
-                    <div className="flex items-center gap-2">
-                      <MapPin className="h-4 w-4" />
-                      <span>{education.location}</span>
+        {isLoading &&
+          Array.from({ length: 5 }).map((_, index) => (
+            <motion.li variants={cardVariants} whileHover="hover" key={index}>
+              <Card>
+                <CardHeader className="flex flex-row items-start justify-between space-y-0">
+                  <div className="flex items-center gap-3">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-muted">
+                      <GraduationCap className="h-5 w-5 text-muted-foreground" />
                     </div>
+                    <div className="flex flex-col">
+                      <Skeleton className="mb-1 h-4 w-24" />
+                      <Skeleton className="h-4 w-24" />
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Skeleton className="h-7 w-20" />
+                  </div>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="grid gap-2 text-sm text-muted-foreground">
+                    <div className="flex items-center gap-2">
+                      <Skeleton className="h-4 w-4" />
+                      <Skeleton className="h-4 w-24" />
+                    </div>
+                    <Skeleton className="h-4 w-40" />
+                  </div>
+                  <div>
+                    <Skeleton className="mb-1 h-4 w-1/2" />
+                    <Skeleton className="h-4 w-3/4" />
+                  </div>
+                </CardContent>
+                <CardFooter>
+                  <Skeleton className="h-4 w-24" />
+                </CardFooter>
+              </Card>
+            </motion.li>
+          ))}
+        {educations &&
+          educations.map((education) => (
+            <motion.li variants={cardVariants} whileHover="hover" key={education._id.toString()}>
+              <Card>
+                <CardHeader className="flex flex-row items-start justify-between space-y-0">
+                  <div className="flex items-center gap-3">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-muted">
+                      <GraduationCap className="h-5 w-5 text-muted-foreground" />
+                    </div>
+                    <div className="flex flex-col">
+                      <CardTitle className="text-base font-semibold">{education.institution}</CardTitle>
+                      <CardDescription className="text-xs">
+                        {education.degree} {education.fieldOfStudy && `- ${education.fieldOfStudy}`}
+                      </CardDescription>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Button variant="ghost" size="sm">
+                      <Share2 className="h-4 w-4" /> Share
+                    </Button>
+                  </div>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="grid gap-2 text-sm text-muted-foreground">
+                    <div className="flex items-center gap-2">
+                      <CalendarIcon className="h-4 w-4" />
+                      <span>
+                        {format(new Date(education.startDate), 'MMM yyyy')} -{' '}
+                        {education.endDate ? format(new Date(education.endDate), 'MMM yyyy') : 'Present'}
+                      </span>
+                    </div>
+                    {education.location && (
+                      <div className="flex items-center gap-2">
+                        <MapPin className="h-4 w-4" />
+                        <span>{education.location}</span>
+                      </div>
+                    )}
+                  </div>
+                  {education.description && (
+                    <p className="line-clamp-3 text-sm text-muted-foreground">{education.description}</p>
                   )}
-                </div>
-                {education.description && (
-                  <p className="line-clamp-3 text-sm text-muted-foreground">{education.description}</p>
-                )}
-              </CardContent>
-              <CardFooter>
-                {!education.isVisible && (
-                  <span className="inline-flex items-center rounded-full bg-yellow-100 px-2.5 py-0.5 text-xs font-medium text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200">
-                    Hidden
-                  </span>
-                )}
-              </CardFooter>
-            </Card>
-          </motion.li>
-        ))}
+                </CardContent>
+                <CardFooter>
+                  {!education.isVisible && (
+                    <span className="inline-flex items-center rounded-full bg-yellow-100 px-2.5 py-0.5 text-xs font-medium text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200">
+                      Hidden
+                    </span>
+                  )}
+                </CardFooter>
+              </Card>
+            </motion.li>
+          ))}
       </motion.ul>
     </div>
   );

@@ -2,7 +2,6 @@
 
 import CustomCheckbox from '@/components/ui/custom-checkbox';
 import { aboutTabs } from '@/constants/about-tabs';
-import { IEducation, IExperience, ISkill } from '@/models';
 import { useState } from 'react';
 import AboutTab from './components/about-tab';
 import EducationTab from './components/education-tab';
@@ -11,13 +10,7 @@ import SkillsTab from './components/skills-tab';
 
 type TabType = 'about' | 'education' | 'skills' | 'experiences';
 
-interface AboutMeFeatureProps {
-  experiences: IExperience[];
-  educations: IEducation[];
-  skills: ISkill[];
-}
-
-function AboutMeFeature({ experiences, educations, skills }: AboutMeFeatureProps) {
+function AboutMeFeature() {
   const [activeTab, setActiveTab] = useState<TabType>('about');
 
   const handleChangeTab = (tab: string) => {
@@ -44,9 +37,9 @@ function AboutMeFeature({ experiences, educations, skills }: AboutMeFeatureProps
       </article>
       <article className="flex-1">
         {activeTab === 'about' && <AboutTab />}
-        {activeTab === 'education' && <EducationTab educations={educations} />}
-        {activeTab === 'skills' && <SkillsTab skills={skills} />}
-        {activeTab === 'experiences' && <ExperiencesTab experiences={experiences} />}
+        {activeTab === 'education' && <EducationTab />}
+        {activeTab === 'skills' && <SkillsTab />}
+        {activeTab === 'experiences' && <ExperiencesTab />}
       </article>
     </section>
   );

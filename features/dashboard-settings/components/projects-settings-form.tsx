@@ -167,7 +167,7 @@ export function ProjectsSettingsForm() {
 
   // Query projects
   const { data: projects = [], isLoading: loading } = useQuery({
-    queryKey: ['projects', { owner: true }],
+    queryKey: ['projects', 'list', { owner: true }],
     queryFn: () => projectsApi.getAll({ owner: true }),
   });
 

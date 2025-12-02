@@ -1,6 +1,7 @@
 import { SITE_URL } from '@/configs/env';
 import AboutMeFeature from '@/features/about-me';
-import { IEducation, IExperience, ISkill } from '@/models';
+import { IEducation, IExperience, IProfile, ISkill, IUser } from '@/models';
+import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -44,11 +45,13 @@ export const metadata: Metadata = {
   },
 };
 
-export const dynamic = 'force-dynamic';
-
 const fetchExperiences = async () => {
   try {
-    const response = await fetch(`${SITE_URL}/api/experiences?owner=true`);
+    const response = await fetch(`${SITE_URL}/api/experiences?owner=true`, {
+      next: {
+        revalidate: 60 * 60 * 1,
+      },
+    });
     const experiences = (await response.json()) as IExperience[];
     return experiences;
   } catch (error) {
@@ -59,7 +62,11 @@ const fetchExperiences = async () => {
 
 const fetchEducations = async () => {
   try {
-    const response = await fetch(`${SITE_URL}/api/educations?owner=true`);
+    const response = await fetch(`${SITE_URL}/api/educations?owner=true`, {
+      next: {
+        revalidate: 60 * 60 * 1,
+      },
+    });
     const educations = (await response.json()) as IEducation[];
     return educations;
   } catch (error) {
@@ -70,7 +77,11 @@ const fetchEducations = async () => {
 
 const fetchSkills = async () => {
   try {
-    const response = await fetch(`${SITE_URL}/api/skills?owner=true`);
+    const response = await fetch(`${SITE_URL}/api/skills?owner=true`, {
+      next: {
+        revalidate: 60 * 60 * 1,
+      },
+    });
     const skills = (await response.json()) as ISkill[];
     return skills;
   } catch (error) {
@@ -79,16 +90,41 @@ const fetchSkills = async () => {
   }
 };
 
+const fetchProfile = async () => {
+  try {
+    const response = await fetch(`${SITE_URL}/api/profile?owner=true`, {
+      next: {
+        revalidate: 60 * 60 * 1,
+      },
+    });
+    const profileRes = await response.json();
+    return profileRes as { profile: Omit<IProfile, 'userId'> & { userId: IUser }; socialLinks: unknown[] };
+  } catch (error) {
+    console.error('Error fetching profile:', error);
+    return null;
+  }
+};
+
 const AboutMePage = async () => {
   try {
-    const experiences = await fetchExperiences();
-    const educations = await fetchEducations();
-    const skills = await fetchSkills();
+    const queryClient = new QueryClient();
 
-    return <AboutMeFeature experiences={experiences} educations={educations} skills={skills} />;
+    await Promise.all([
+      queryClient.prefetchQuery({ queryKey: ['experiences', 'list', { owner: true }], queryFn: fetchExperiences }),
+      queryClient.prefetchQuery({ queryKey: ['educations', 'list', { owner: true }], queryFn: fetchEducations }),
+      queryClient.prefetchQuery({ queryKey: ['skills', 'list', { owner: true }], queryFn: fetchSkills }),
+      queryClient.prefetchQuery({ queryKey: ['profile', 'detail', { owner: true }], queryFn: fetchProfile }),
+    ]);
+
+    return (
+      <HydrationBoundary state={dehydrate(queryClient)}>
+        {' '}
+        <AboutMeFeature />
+      </HydrationBoundary>
+    );
   } catch (error) {
     console.error('Error fetching about me data:', error);
-    return <AboutMeFeature experiences={[]} educations={[]} skills={[]} />;
+    return <AboutMeFeature />;
   }
 };
 

@@ -1,6 +1,9 @@
+import { skillsApi } from '@/apis/skills';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Skeleton } from '@/components/ui/skeleton';
 import { ISkill } from '@/models';
+import { useQuery } from '@tanstack/react-query';
 import { motion } from 'motion/react';
 
 const cardVariants = {
@@ -21,7 +24,12 @@ const containerVariants = {
   },
 };
 
-const SkillsTab = ({ skills }: { skills: ISkill[] }) => {
+const SkillsTab = () => {
+  const { data: skills = [], isLoading } = useQuery<ISkill[]>({
+    queryKey: ['skills', 'list', { owner: true }],
+    queryFn: () => skillsApi.getAll({ owner: true }),
+  });
+
   return (
     <div>
       <h1 className="mb-2 text-2xl font-bold tracking-wider">Skills</h1>
@@ -35,6 +43,28 @@ const SkillsTab = ({ skills }: { skills: ISkill[] }) => {
           initial="hidden"
           animate="visible"
         >
+          {isLoading &&
+            Array.from({ length: 6 }).map((_, index) => (
+              <Card key={index} className="group">
+                <CardHeader className="flex flex-row items-start justify-between space-y-0">
+                  <div className="flex items-center gap-3">
+                    <Skeleton className="size-10" />
+                    <div>
+                      <Skeleton className="mb-2 h-4 w-20" />
+                      <Skeleton className="h-3 w-16" />
+                    </div>
+                  </div>
+                  <Skeleton className="size-8" />
+                </CardHeader>
+                <CardContent>
+                  <div className="mt-2 flex flex-wrap gap-2 text-sm">
+                    <Skeleton className="h-4 w-24" />
+                    <Skeleton className="h-4 w-24" />
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+
           {skills.map((skill) => (
             <motion.li variants={cardVariants} whileHover="hover">
               <Card key={skill._id.toString()} className="group">
