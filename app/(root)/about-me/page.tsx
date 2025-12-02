@@ -1,6 +1,6 @@
 import { SITE_URL } from '@/configs/env';
 import AboutMeFeature from '@/features/about-me';
-import { IEducation, IExperience } from '@/models';
+import { IEducation, IExperience, ISkill } from '@/models';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -52,7 +52,8 @@ const fetchExperiences = async () => {
     const experiences = (await response.json()) as IExperience[];
     return experiences;
   } catch (error) {
-    throw error;
+    console.error('Error fetching experiences:', error);
+    return [];
   }
 };
 
@@ -62,7 +63,19 @@ const fetchEducations = async () => {
     const educations = (await response.json()) as IEducation[];
     return educations;
   } catch (error) {
-    throw error;
+    console.error('Error fetching educations:', error);
+    return [];
+  }
+};
+
+const fetchSkills = async () => {
+  try {
+    const response = await fetch(`${SITE_URL}/api/skills?owner=true`);
+    const skills = (await response.json()) as ISkill[];
+    return skills;
+  } catch (error) {
+    console.error('Error fetching skills:', error);
+    return [];
   }
 };
 
@@ -70,9 +83,12 @@ const AboutMePage = async () => {
   try {
     const experiences = await fetchExperiences();
     const educations = await fetchEducations();
-    return <AboutMeFeature experiences={experiences} educations={educations} />;
+    const skills = await fetchSkills();
+
+    return <AboutMeFeature experiences={experiences} educations={educations} skills={skills} />;
   } catch (error) {
-    throw error;
+    console.error('Error fetching about me data:', error);
+    return <AboutMeFeature experiences={[]} educations={[]} skills={[]} />;
   }
 };
 

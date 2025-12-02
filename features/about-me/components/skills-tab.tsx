@@ -1,22 +1,27 @@
-import {
-  Angular,
-  Apachekafka,
-  Cobol,
-  Express,
-  Java,
-  Javascript,
-  Microsoftsqlserver,
-  Mongodb,
-  Mysql,
-  Nextjs,
-  React,
-  Redis,
-  Spring,
-  SpringSecurity,
-  Typescript,
-} from '@/components/icons';
+import { Badge } from '@/components/ui/badge';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { ISkill } from '@/models';
+import { motion } from 'motion/react';
 
-const SkillsTab = () => {
+const cardVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0 },
+  hover: {
+    y: -5,
+  },
+};
+
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1,
+    },
+  },
+};
+
+const SkillsTab = ({ skills }: { skills: ISkill[] }) => {
   return (
     <div>
       <h1 className="mb-2 text-2xl font-bold tracking-wider">Skills</h1>
@@ -24,143 +29,50 @@ const SkillsTab = () => {
         Below are the skills, technologies and programming languages ​​I am proficient in.
       </p>
       <div className="max-h-[365px] overflow-y-auto pb-10">
-        <ul className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-          <li className="group flex cursor-pointer gap-10 rounded-xl border border-transparent p-4 shadow-md hover:border-slate-100 hover:shadow-lg">
-            <p className="transition-all duration-300 ease-in-out group-hover:text-[#087ea4]">
-              <React className="size-10" />
-            </p>
-            <div>
-              <h3 className="text-xl font-bold">React</h3>
-              <p className="">Proficient.</p>
-            </div>
-          </li>
-          <li className="group flex cursor-pointer gap-10 rounded-xl border border-transparent p-4 shadow-md hover:border-slate-100 hover:shadow-lg">
-            <p className="transition-all duration-300 ease-in-out group-hover:text-red-500">
-              <Angular className="size-10" />
-            </p>
-            <div>
-              <h3 className="text-xl font-bold">Angular</h3>
-              <p className="">Intermediate.</p>
-            </div>
-          </li>
-          <li className="group flex cursor-pointer gap-10 rounded-xl border border-transparent p-4 shadow-md hover:border-slate-100 hover:shadow-lg">
-            <p className="transition-all duration-300 ease-in-out group-hover:text-gray-900 dark:group-hover:text-white">
-              <Nextjs className="size-10" />
-            </p>
-            <div>
-              <h3 className="text-xl font-bold">Next.js</h3>
-              <p className="">Proficient.</p>
-            </div>
-          </li>
-          <li className="group flex cursor-pointer gap-10 rounded-xl border border-transparent p-4 shadow-md hover:border-slate-100 hover:shadow-lg">
-            <p className="group-hover:text-primary transition-all duration-300 ease-in-out">
-              <Spring className="size-10" />
-            </p>
-            <div>
-              <h3 className="text-xl font-bold">Spring Boot</h3>
-              <p className="">Proficient.</p>
-            </div>
-          </li>
-          <li className="group flex cursor-pointer gap-10 rounded-xl border border-transparent p-4 shadow-md hover:border-slate-100 hover:shadow-lg">
-            <p className="group-hover:text-primary transition-all duration-300 ease-in-out">
-              <SpringSecurity className="size-10" />
-            </p>
-            <div>
-              <h3 className="text-xl font-bold">Spring Security</h3>
-              <p className="">Proficient.</p>
-            </div>
-          </li>
-          <li className="group flex cursor-pointer gap-10 rounded-xl border border-transparent p-4 shadow-md hover:border-slate-100 hover:shadow-lg">
-            <p className="transition-all duration-300 ease-in-out group-hover:text-gray-900">
-              <Express className="size-10 dark:text-white" />
-            </p>
-            <div>
-              <h3 className="text-xl font-bold">Express</h3>
-              <p className="">Intermediate.</p>
-            </div>
-          </li>
-          <li className="group flex cursor-pointer gap-10 rounded-xl border border-transparent p-4 shadow-md hover:border-slate-100 hover:shadow-lg">
-            <p className="transition-all duration-300 ease-in-out group-hover:text-gray-900">
-              <Apachekafka className="size-10 dark:text-white" />
-            </p>
-            <div>
-              <h3 className="text-xl font-bold">Apache Kafka</h3>
-              <p className="">Intermediate.</p>
-            </div>
-          </li>
-          <li className="group flex cursor-pointer gap-10 rounded-xl border border-transparent p-4 shadow-md hover:border-slate-100 hover:shadow-lg">
-            <p className="transition-all duration-300 ease-in-out group-hover:text-red-500">
-              <Redis className="size-10" />
-            </p>
-            <div>
-              <h3 className="text-xl font-bold">Redis</h3>
-              <p className="">Intermediate.</p>
-            </div>
-          </li>
-          <li className="group flex cursor-pointer gap-10 rounded-xl border border-transparent p-4 shadow-md hover:border-slate-100 hover:shadow-lg">
-            <p className="transition-all duration-300 ease-in-out group-hover:text-[#f7df1e]">
-              <Javascript className="size-10" />
-            </p>
-            <div>
-              <h3 className="text-xl font-bold">Javascript</h3>
-              <p className="">Proficient.</p>
-            </div>
-          </li>
-          <li className="group flex cursor-pointer gap-10 rounded-xl border border-transparent p-4 shadow-md hover:border-slate-100 hover:shadow-lg">
-            <p className="transition-all duration-300 ease-in-out group-hover:text-[#3178c6]">
-              <Typescript className="size-10" />
-            </p>
-            <div>
-              <h3 className="text-xl font-bold">Typescript</h3>
-              <p className="">Proficient.</p>
-            </div>
-          </li>
-          <li className="group flex cursor-pointer gap-10 rounded-xl border border-transparent p-4 shadow-md hover:border-slate-100 hover:shadow-lg">
-            <p className="transition-all duration-300 ease-in-out group-hover:text-red-500">
-              <Java className="size-10" />
-            </p>
-            <div>
-              <h3 className="text-xl font-bold">Java</h3>
-              <p className="">Proficient.</p>
-            </div>
-          </li>
-          <li className="group flex cursor-pointer gap-10 rounded-xl border border-transparent p-4 shadow-md hover:border-slate-100 hover:shadow-lg">
-            <p className="transition-all duration-300 ease-in-out group-hover:text-[#8aadf4]">
-              <Cobol className="size-10" />
-            </p>
-            <div>
-              <h3 className="text-xl font-bold">Cobol</h3>
-              <p className="">Intermediate.</p>
-            </div>
-          </li>
-          <li className="group flex cursor-pointer gap-10 rounded-xl border border-transparent p-4 shadow-md hover:border-slate-100 hover:shadow-lg">
-            <p className="transition-all duration-300 ease-in-out group-hover:text-green-600">
-              <Mongodb className="size-10" />
-            </p>
-            <div>
-              <h3 className="text-xl font-bold">Mongodb</h3>
-              <p className="">Database.</p>
-            </div>
-          </li>
-          <li className="group flex cursor-pointer gap-10 rounded-xl border border-transparent p-4 shadow-md hover:border-slate-100 hover:shadow-lg">
-            <p className="transition-all duration-300 ease-in-out group-hover:text-[#5797b2]">
-              <Mysql className="size-10" />
-            </p>
-            <div>
-              <h3 className="text-xl font-bold">Mysql</h3>
-              <p className="">Database.</p>
-            </div>
-          </li>
-          <li className="group flex cursor-pointer gap-10 rounded-xl border border-transparent p-4 shadow-md hover:border-slate-100 hover:shadow-lg">
-            <p className="transition-all duration-300 ease-in-out group-hover:text-[#c0595d]">
-              <Microsoftsqlserver className="size-10" />
-            </p>
-            <div>
-              <h3 className="text-xl font-bold">Sql server</h3>
-              <p className="">Database.</p>
-            </div>
-          </li>
-        </ul>
+        <motion.ul
+          className="grid gap-5 md:grid-cols-2 xl:grid-cols-3"
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+        >
+          {skills.map((skill) => (
+            <motion.li variants={cardVariants} whileHover="hover">
+              <Card key={skill._id.toString()} className="group">
+                <CardHeader className="flex flex-row items-start justify-between space-y-0">
+                  <div className="flex items-center gap-3">
+                    {skill.icon ? (
+                      <img
+                        src={skill.icon}
+                        alt={skill.name}
+                        className="h-10 w-10 rounded-md object-contain"
+                        // style={{ backgroundColor: skill.iconColor ? `${skill.iconColor}20` : 'transparent' }}
+                      />
+                    ) : (
+                      <div
+                        className="flex h-10 w-10 items-center justify-center rounded-md bg-muted text-lg font-bold"
+                        style={{ color: skill.iconColor }}
+                      >
+                        {skill.name.charAt(0)}
+                      </div>
+                    )}
+                    <div>
+                      <CardTitle className="text-base font-medium">{skill.name}</CardTitle>
+                      <CardDescription className="text-xs">{skill.category}</CardDescription>
+                    </div>
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  <div className="mt-2 flex flex-wrap gap-2 text-sm">
+                    <Badge variant="secondary">{skill.proficiency}</Badge>
+                    {skill.yearsOfExperience && skill.yearsOfExperience > 0 && (
+                      <Badge variant="secondary">{skill.yearsOfExperience} years</Badge>
+                    )}
+                  </div>
+                </CardContent>
+              </Card>
+            </motion.li>
+          ))}
+        </motion.ul>
       </div>
     </div>
   );
