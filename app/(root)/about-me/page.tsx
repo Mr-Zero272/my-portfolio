@@ -1,6 +1,6 @@
 import { SITE_URL } from '@/configs/env';
 import AboutMeFeature from '@/features/about-me';
-import { IExperience } from '@/models';
+import { IEducation, IExperience } from '@/models';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -56,10 +56,21 @@ const fetchExperiences = async () => {
   }
 };
 
+const fetchEducations = async () => {
+  try {
+    const response = await fetch(`${SITE_URL}/api/educations?owner=true`);
+    const educations = (await response.json()) as IEducation[];
+    return educations;
+  } catch (error) {
+    throw error;
+  }
+};
+
 const AboutMePage = async () => {
   try {
     const experiences = await fetchExperiences();
-    return <AboutMeFeature experiences={experiences} />;
+    const educations = await fetchEducations();
+    return <AboutMeFeature experiences={experiences} educations={educations} />;
   } catch (error) {
     throw error;
   }
