@@ -29,6 +29,7 @@ import { MultiSelect } from '@/components/ui/multi-select';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Separator } from '@/components/ui/separator';
+import { Skeleton } from '@/components/ui/skeleton';
 import { Switch } from '@/components/ui/switch';
 import { Textarea } from '@/components/ui/textarea';
 import { uploadImageWithDB } from '@/lib/uploadthing';
@@ -310,14 +311,6 @@ export function ProjectsSettingsForm() {
     }
   };
 
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center py-12">
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
-      </div>
-    );
-  }
-
   return (
     <div className="space-y-6 md:pr-10">
       <div className="flex items-center justify-between">
@@ -331,84 +324,115 @@ export function ProjectsSettingsForm() {
       </div>
 
       <div className="grid gap-4 lg:grid-cols-2">
-        {projects.map((project) => (
-          <Card className="" key={project._id.toString()}>
-            <CardHeader className="flex items-center justify-between gap-3">
-              <div className="flex items-center gap-3">
-                <Avatar className="ring-2 ring-ring">
-                  <AvatarImage
-                    src={session?.user?.image || 'https://cdn.shadcnstudio.com/ss-assets/avatar/avatar-5.png'}
-                    alt={session?.user?.name || 'User'}
-                  />
-                  <AvatarFallback className="text-xs">{session?.user?.name?.[0] || 'U'}</AvatarFallback>
-                </Avatar>
-                <div className="flex flex-col gap-0.5">
-                  <CardTitle className="flex items-center gap-1 text-sm">
-                    {session?.user?.name || 'Unknown'}{' '}
-                    <BadgeCheckIcon className="size-4 fill-sky-600 stroke-white dark:fill-sky-400" />
-                  </CardTitle>
-                  <CardDescription>@{session?.user?.email || 'anonymous'}</CardDescription>
+        {loading &&
+          Array.from({ length: 4 }, (_, index) => (
+            <Card className="" key={index}>
+              <CardHeader className="flex items-center justify-between gap-3">
+                <div className="flex items-center gap-3">
+                  <Skeleton className="size-12 rounded-full" />
+                  <div className="flex flex-col gap-0.5">
+                    <Skeleton className="h-4 w-20" />
+                    <Skeleton className="h-4 w-16" />
+                  </div>
                 </div>
-              </div>
-              <div className="flex items-center gap-2">
-                <Button variant="outline" size="sm" onClick={() => handleEdit(project)}>
-                  <Edit />
-                  Edit
-                </Button>
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" size="icon" aria-label="Toggle menu">
-                      <EllipsisIcon />
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end">
-                    <DropdownMenuItem
-                      className="text-destructive hover:text-destructive!"
-                      onClick={() => {
-                        setEditingId(project._id.toString());
-                        setIsDialogDeleteOpen(true);
-                      }}
-                    >
-                      <Trash2 className="text-destructive" />
-                      Delete
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </div>
-            </CardHeader>
-            <CardContent className="space-y-6 text-sm">
-              <img
-                src={project.thumbnailImage}
-                alt={project.name}
-                className="aspect-video w-full rounded-md object-cover"
-              />
-              <p className="wrap-anywhere">
-                {project.description}
-                {project.technologies.map((tech) => (
-                  <span key={tech} className="ark:text-sky-400 text-sky-600">
-                    #{tech}
-                  </span>
-                ))}
-              </p>
-            </CardContent>
-            <CardFooter className="flex items-center gap-1">
-              <Button variant="ghost" size="sm" asChild>
-                <Link href={project.sourceCodeUrl!}>
-                  <Github />
-                </Link>
-              </Button>
-              {project.demoUrl && (
+                <div className="flex items-center gap-2">
+                  <Skeleton className="size-6 rounded-full" />
+                  <Skeleton className="size-6 rounded-full" />
+                </div>
+              </CardHeader>
+              <CardContent className="space-y-6 text-sm">
+                <Skeleton className="aspect-video w-full rounded-md" />
+                <div className="space-y-1">
+                  <Skeleton className="h-4 w-20" />
+                  <Skeleton className="h-4 w-16" />
+                  <Skeleton className="h-4 w-16" />
+                </div>
+              </CardContent>
+              <CardFooter className="flex items-center gap-1">
+                <Skeleton className="size-6 rounded-full" />
+                <Skeleton className="size-6 rounded-full" />
+              </CardFooter>
+            </Card>
+          ))}
+        {!loading &&
+          projects.map((project) => (
+            <Card className="" key={project._id.toString()}>
+              <CardHeader className="flex items-center justify-between gap-3">
+                <div className="flex items-center gap-3">
+                  <Avatar className="ring-2 ring-ring">
+                    <AvatarImage
+                      src={session?.user?.image || 'https://cdn.shadcnstudio.com/ss-assets/avatar/avatar-5.png'}
+                      alt={session?.user?.name || 'User'}
+                    />
+                    <AvatarFallback className="text-xs">{session?.user?.name?.[0] || 'U'}</AvatarFallback>
+                  </Avatar>
+                  <div className="flex flex-col gap-0.5">
+                    <CardTitle className="flex items-center gap-1 text-sm">
+                      {session?.user?.name || 'Unknown'}{' '}
+                      <BadgeCheckIcon className="size-4 fill-sky-600 stroke-white dark:fill-sky-400" />
+                    </CardTitle>
+                    <CardDescription>@{session?.user?.email || 'anonymous'}</CardDescription>
+                  </div>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Button variant="outline" size="sm" onClick={() => handleEdit(project)}>
+                    <Edit />
+                    Edit
+                  </Button>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="ghost" size="icon" aria-label="Toggle menu">
+                        <EllipsisIcon />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                      <DropdownMenuItem
+                        className="text-destructive hover:text-destructive!"
+                        onClick={() => {
+                          setEditingId(project._id.toString());
+                          setIsDialogDeleteOpen(true);
+                        }}
+                      >
+                        <Trash2 className="text-destructive" />
+                        Delete
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </div>
+              </CardHeader>
+              <CardContent className="space-y-6 text-sm">
+                <img
+                  src={project.thumbnailImage}
+                  alt={project.name}
+                  className="aspect-video w-full rounded-md object-cover"
+                />
+                <p className="wrap-anywhere">
+                  {project.description}
+                  {project.technologies.map((tech) => (
+                    <span key={tech} className="ark:text-sky-400 text-sky-600">
+                      #{tech}
+                    </span>
+                  ))}
+                </p>
+              </CardContent>
+              <CardFooter className="flex items-center gap-1">
                 <Button variant="ghost" size="sm" asChild>
-                  <Link href={project.demoUrl}>
-                    <Link2 />
+                  <Link href={project.sourceCodeUrl!}>
+                    <Github />
                   </Link>
                 </Button>
-              )}
-            </CardFooter>
-          </Card>
-        ))}
+                {project.demoUrl && (
+                  <Button variant="ghost" size="sm" asChild>
+                    <Link href={project.demoUrl}>
+                      <Link2 />
+                    </Link>
+                  </Button>
+                )}
+              </CardFooter>
+            </Card>
+          ))}
 
-        {projects.length === 0 && (
+        {!loading && projects.length === 0 && (
           <div className="col-span-2 py-12 text-center text-muted-foreground">
             <EmptyState
               title="No projects found"

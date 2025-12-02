@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
 @import 'react-photo-view/dist/react-photo-view.css';
 @import 'tailwindcss';
-@import "tw-animate-css";
+@import 'tw-animate-css';
 @plugin 'tailwind-scrollbar';
 @plugin '@tailwindcss/typography';
 
@@ -204,6 +204,26 @@
   /* 2xl */
   .site-container {
     max-width: 1536px;
+  }
+}
+
+@theme {
+  --animate-c-pulse-before: c-pulse 2s infinite linear;
+  --animate-c-pulse-after: c-pulse 2s 1s infinite linear;
+
+  @keyframes c-pulse {
+    0% {
+      transform: scale(0.6);
+      opacity: 0;
+    }
+    33% {
+      transform: scale(1);
+      opacity: 1;
+    }
+    100% {
+      transform: scale(1.4);
+      opacity: 0;
+    }
   }
 }
 
