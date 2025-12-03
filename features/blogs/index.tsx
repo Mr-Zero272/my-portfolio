@@ -8,7 +8,7 @@ interface BlogFeatureProps {
 
 const BlogFeature = ({ posts }: BlogFeatureProps) => {
   return (
-    <div className="site-container mx-auto flex flex-col gap-20 space-y-10 p-4 md:space-y-20">
+    <div className="site-container mx-auto mt-8 flex flex-col gap-20 space-y-10 p-4 md:space-y-20">
       <TopPosts posts={posts} />
       <ListPostByTag />
     </div>

@@ -19,8 +19,8 @@ const Header = () => {
   const isInBlogDetailPage = useMemo(() => micromatch.isMatch(pathname || '', '/blog/*'), [pathname]);
 
   return (
-    <div className="fixed top-0 left-1/2 z-20 mt-2 flex -translate-x-1/2 items-center justify-center bg-transparent">
-      <ul className="flex w-fit items-center justify-center gap-4 rounded-2xl bg-neutral-100/30 px-3 py-2 backdrop-blur-sm">
+    <header className="fixed top-4 left-1/2 z-20 flex -translate-x-1/2 items-center justify-center bg-transparent">
+      <ul className="flex w-fit items-center justify-center gap-2 rounded-full bg-neutral-100/30 px-3 py-2 backdrop-blur-sm">
         <li className="md:hidden">
           <SidebarToggle />
         </li>
@@ -55,7 +55,7 @@ const Header = () => {
           </li>
         )}
       </ul>
-    </div>
+    </header>
   );
 };
 
