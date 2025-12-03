@@ -3,6 +3,7 @@
 import { SessionProvider } from 'next-auth/react';
 import { NuqsAdapter } from 'nuqs/adapters/next/app';
 import React from 'react';
+import { ColorProvider } from '../contexts/color-context';
 import { ThemeProvider } from '../contexts/theme-provider';
 import ReactQueryProvider from './react-query-provider';
 
@@ -13,11 +14,13 @@ type AppProviderProps = {
 const AppProvider = ({ children }: AppProviderProps) => {
   return (
     <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
-      <ReactQueryProvider>
-        <SessionProvider>
-          <NuqsAdapter>{children}</NuqsAdapter>
-        </SessionProvider>
-      </ReactQueryProvider>
+      <ColorProvider>
+        <ReactQueryProvider>
+          <SessionProvider>
+            <NuqsAdapter>{children}</NuqsAdapter>
+          </SessionProvider>
+        </ReactQueryProvider>
+      </ColorProvider>
     </ThemeProvider>
   );
 };

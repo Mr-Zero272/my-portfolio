@@ -32,14 +32,26 @@ const checkboxVariants = cva(
 function Checkbox({
   className,
   size,
+  icon,
+  checkedIcon,
   ...props
-}: React.ComponentProps<typeof CheckboxPrimitive.Root> & VariantProps<typeof checkboxVariants>) {
+}: React.ComponentProps<typeof CheckboxPrimitive.Root> &
+  VariantProps<typeof checkboxVariants> & {
+    icon?: React.ReactNode;
+    checkedIcon?: React.ReactNode;
+  }) {
   return (
     <CheckboxPrimitive.Root data-slot="checkbox" className={cn(checkboxVariants({ size }), className)} {...props}>
-      <CheckboxPrimitive.Indicator className={cn('flex items-center justify-center text-current')}>
-        <Check className="group-data-[state=indeterminate]:hidden" />
-        <Minus className="hidden group-data-[state=indeterminate]:block" />
-      </CheckboxPrimitive.Indicator>
+      <span className="group-data-[state=checked]:hidden">{icon}</span>
+      <span className="group-data-[state=unchecked]:hidden">{checkedIcon}</span>
+      {!icon && !checkedIcon && (
+        <>
+          <CheckboxPrimitive.Indicator className={cn('flex items-center justify-center text-current')}>
+            <Check className="group-data-[state=indeterminate]:hidden" />
+            <Minus className="hidden group-data-[state=indeterminate]:block" />
+          </CheckboxPrimitive.Indicator>
+        </>
+      )}
     </CheckboxPrimitive.Root>
   );
 }

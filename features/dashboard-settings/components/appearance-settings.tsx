@@ -1,5 +1,6 @@
 'use client';
 
+import { useColorContext } from '@/components/contexts/color-context';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
@@ -7,7 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Separator } from '@/components/ui/separator';
 import { Switch } from '@/components/ui/switch';
 import { cn } from '@/lib/utils';
-import { Monitor, Moon, Sun } from 'lucide-react';
+import { CircleCheck, Monitor, Moon, Sun } from 'lucide-react';
 import { useTheme } from 'next-themes';
 
 const themes = [
@@ -16,8 +17,20 @@ const themes = [
   { name: 'System', icon: Monitor, value: 'system', description: 'Follow system' },
 ];
 
+const colors = [
+  { name: 'blue', value: 'blue', color: '#1447e6' },
+  { name: 'green', value: 'green', color: '#5ea500' },
+  { name: 'orange', value: 'orange', color: '#f54a00' },
+  { name: 'slate', value: 'slate', color: '#171717' },
+  { name: 'red', value: 'red', color: '#e7000b' },
+  { name: 'rose', value: 'rose', color: '#ec003f' },
+  { name: 'violet', value: 'violet', color: '#7f22fe' },
+  { name: 'yellow', value: 'yellow', color: '#fdc700' },
+];
+
 export function AppearanceSettings() {
   const { theme, setTheme } = useTheme();
+  const { currentColor, switchColor } = useColorContext();
   return (
     <div className="space-y-4">
       <Card className="border-none shadow-none">
@@ -34,14 +47,14 @@ export function AppearanceSettings() {
                   key={value}
                   onClick={() => setTheme(value)}
                   className={cn(
-                    'hover:bg-accent flex cursor-pointer flex-col items-center gap-3 rounded-lg border-2 p-4 transition-colors',
+                    'flex cursor-pointer flex-col items-center gap-3 rounded-lg border-2 p-4 transition-colors hover:bg-accent',
                     theme === value ? 'border-primary' : 'border-transparent',
                   )}
                 >
                   <Icon className="h-6 w-6" />
                   <div className="space-y-1 text-center">
                     <p className="text-sm font-medium">{name}</p>
-                    <p className="text-muted-foreground text-xs">{description}</p>
+                    <p className="text-xs text-muted-foreground">{description}</p>
                   </div>
                 </button>
               ))}
@@ -52,18 +65,32 @@ export function AppearanceSettings() {
 
           <div className="space-y-2">
             <Label htmlFor="accent-color">Accent Color</Label>
-            <Select defaultValue="blue">
-              <SelectTrigger id="accent-color">
-                <SelectValue placeholder="Select accent color" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="blue">Blue</SelectItem>
-                <SelectItem value="green">Green</SelectItem>
-                <SelectItem value="purple">Purple</SelectItem>
-                <SelectItem value="orange">Orange</SelectItem>
-                <SelectItem value="red">Red</SelectItem>
-              </SelectContent>
-            </Select>
+            <div className="flex w-full items-center gap-2">
+              {colors.map(({ name, value, color }) => (
+                <button
+                  key={value}
+                  onClick={() => switchColor(value as never)}
+                  className={cn(
+                    'flex cursor-pointer items-center gap-3 rounded-full border-2 p-1 transition-colors hover:bg-accent',
+                    currentColor === value ? 'border-primary' : 'border-transparent',
+                  )}
+                >
+                  <span
+                    className="flex size-6 items-center justify-center rounded-full"
+                    style={{ backgroundColor: color }}
+                  >
+                    {currentColor === value && (
+                      <CircleCheck
+                        className="h-4 w-4 fill-white"
+                        style={{
+                          stroke: color,
+                        }}
+                      />
+                    )}
+                  </span>
+                </button>
+              ))}
+            </div>
           </div>
 
           <Separator />
@@ -71,7 +98,7 @@ export function AppearanceSettings() {
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div className="space-y-1">
               <Label className="text-sm font-medium">Compact Mode</Label>
-              <p className="text-muted-foreground text-xs">Reduce spacing for a more compact layout</p>
+              <p className="text-xs text-muted-foreground">Reduce spacing for a more compact layout</p>
             </div>
             <Switch />
           </div>
@@ -103,7 +130,7 @@ export function AppearanceSettings() {
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div className="space-y-1">
               <Label className="text-sm font-medium">Show Sidebar</Label>
-              <p className="text-muted-foreground text-xs">Display sidebar navigation by default</p>
+              <p className="text-xs text-muted-foreground">Display sidebar navigation by default</p>
             </div>
             <Switch defaultChecked />
           </div>
@@ -113,7 +140,7 @@ export function AppearanceSettings() {
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div className="space-y-1">
               <Label className="text-sm font-medium">Animations</Label>
-              <p className="text-muted-foreground text-xs">Enable smooth animations and transitions</p>
+              <p className="text-xs text-muted-foreground">Enable smooth animations and transitions</p>
             </div>
             <Switch defaultChecked />
           </div>
@@ -123,7 +150,7 @@ export function AppearanceSettings() {
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div className="space-y-1">
               <Label className="text-sm font-medium">High Contrast</Label>
-              <p className="text-muted-foreground text-xs">Increase contrast for better visibility</p>
+              <p className="text-xs text-muted-foreground">Increase contrast for better visibility</p>
             </div>
             <Switch />
           </div>
