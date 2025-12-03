@@ -66,8 +66,8 @@ const SkillsTab = () => {
             ))}
 
           {skills.map((skill) => (
-            <motion.li variants={cardVariants} whileHover="hover">
-              <Card key={skill._id.toString()} className="group">
+            <motion.li variants={cardVariants} whileHover="hover" key={skill._id.toString()}>
+              <Card className="group">
                 <CardHeader className="flex flex-row items-start justify-between space-y-0">
                   <div className="flex items-center gap-3">
                     {skill.icon ? (
