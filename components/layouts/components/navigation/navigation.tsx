@@ -4,7 +4,6 @@ import { useEffect, useMemo, useRef } from 'react';
 
 import { useSidebar } from '@/components/contexts/sidebar-context';
 import AppLogo from '@/components/shared/logo';
-import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { navbarRoutesInfo } from '@/constants/nav-routes';
 import { cn } from '@/lib/utils';
 import Link from 'next/link';
@@ -25,7 +24,7 @@ const Navigation = () => {
   const pathname = usePathname();
   const sidebarRef = useRef<HTMLElement>(null!);
 
-  const { state, isExpanded, isCollapsed, isHidden, isMobile, toggle, collapse } = useSidebar();
+  const { isExpanded, isCollapsed, isHidden, isMobile, toggle, collapse } = useSidebar();
 
   const containerControls = useAnimationControls();
   const svgControls = useAnimationControls();
@@ -71,7 +70,7 @@ const Navigation = () => {
       containerControls.start('collapsed');
       svgControls.start('close');
     }
-  }, [state, containerControls, svgControls, isHidden, isExpanded, isCollapsed]);
+  }, [containerControls, svgControls, isHidden, isExpanded, isCollapsed]);
 
   // Click outside để đóng sidebar trên mobile
   const handleClickOutside = () => {
@@ -87,6 +86,15 @@ const Navigation = () => {
     }
   };
 
+  console.log({
+    isExpanded,
+    isCollapsed,
+    isHidden,
+    isMobile,
+    toggle,
+    collapse,
+  });
+
   useOnClickOutside(sidebarRef, handleClickOutside);
 
   return (
@@ -96,7 +104,7 @@ const Navigation = () => {
         variants={containerVariants}
         animate={containerControls}
         initial={isMobile ? 'hidden' : 'collapsed'}
-        className="bg-sidebar fixed top-0 left-0 z-50 flex h-full flex-col gap-20 p-5 shadow-sm"
+        className="fixed top-0 left-0 z-50 flex h-full flex-col gap-20 bg-sidebar p-5 shadow-sm"
       >
         <div
           onClick={toggle}
@@ -152,29 +160,17 @@ const Navigation = () => {
             const Icon = navLink.icon;
             const IconSolid = navLink.iconSolid;
             return (
-              <Tooltip key={navLink.label}>
-                <TooltipTrigger asChild>
-                  <div>
-                    <NavigationLink
-                      name={navLink.label}
-                      href={navLink.route}
-                      active={isActive}
-                      onClick={handleRoutePage}
-                    >
-                      {isActive ? (
-                        <IconSolid className="w-8 min-w-8 stroke-transparent dark:fill-white" strokeWidth={1.5} />
-                      ) : (
-                        <Icon className="w-8 min-w-8 stroke-inherit" strokeWidth={1.5} />
-                      )}{' '}
-                    </NavigationLink>
-                  </div>
-                </TooltipTrigger>
-                {!isExpanded && !isHidden && (
-                  <TooltipContent side="right">
-                    <p className="text-sm">{navLink.label}</p>
-                  </TooltipContent>
-                )}
-              </Tooltip>
+              <NavigationLink
+                key={navLink.label}
+                name={navLink.label}
+                href={navLink.route}
+                isCollapsed={isCollapsed}
+                isHidden={isHidden}
+                active={isActive}
+                onClick={handleRoutePage}
+              >
+                <Icon className="w-8 min-w-8 stroke-inherit" strokeWidth={1.5} />
+              </NavigationLink>
             );
           })}
         </div>
