@@ -118,7 +118,6 @@ const AboutMePage = async () => {
 
     return (
       <HydrationBoundary state={dehydrate(queryClient)}>
-        {' '}
         <AboutMeFeature />
       </HydrationBoundary>
     );

@@ -312,7 +312,7 @@ export function ProjectsSettingsForm() {
   };
 
   return (
-    <div className="space-y-6 md:pr-10">
+    <div className="max-w-2xl space-y-6 md:pr-10">
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-lg font-medium">Projects</h2>

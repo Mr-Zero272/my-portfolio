@@ -3,7 +3,6 @@
 import { profileApi } from '@/apis/profile';
 import PulsingLoader from '@/components/shared/pulsing-loader';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -106,202 +105,201 @@ export function ProfileSettingsForm() {
   return (
     <div className="max-w-2xl space-y-6 px-3 pb-10">
       {/* Basic Information */}
-      <Card className="border-none p-0 shadow-none">
-        <CardHeader className="border-b px-0">
-          <CardTitle>Basic Information</CardTitle>
-          <CardDescription>Update your basic profile information</CardDescription>
-        </CardHeader>
-        <CardContent className="px-0">
-          {loading && (
-            <div className="flex h-[600px] items-center justify-center">
-              <PulsingLoader className="size-6" />
-            </div>
-          )}
-          {!loading && (
-            <Form {...form}>
-              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-                <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                  {/* Name */}
-                  <FormField
-                    control={form.control}
-                    name="name"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Name *</FormLabel>
-                        <FormControl>
-                          <Input placeholder="Your full name" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
 
-                  {/* Email */}
-                  <FormField
-                    control={form.control}
-                    name="yoe"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Years of Experience *</FormLabel>
-                        <FormControl>
-                          <Input type="number" placeholder="Years of Experience" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-
-                <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                  {/* Phone */}
-                  <FormField
-                    control={form.control}
-                    name="phone"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Phone</FormLabel>
-                        <FormControl>
-                          <Input placeholder="+1 (555) 000-0000" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  {/* Nationality */}
-                  <FormField
-                    control={form.control}
-                    name="nationality"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Nationality</FormLabel>
-                        <FormControl>
-                          <Input placeholder="e.g., Vietnamese" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-
-                {/* Address */}
+      <div className="border-b px-0">
+        <h2 className="text-lg font-medium">Basic Information</h2>
+        <p className="text-sm text-muted-foreground">Update your basic profile information</p>
+      </div>
+      <div className="px-0">
+        {loading && (
+          <div className="flex h-[600px] items-center justify-center">
+            <PulsingLoader className="size-6" />
+          </div>
+        )}
+        {!loading && (
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+              <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                {/* Name */}
                 <FormField
                   control={form.control}
-                  name="address"
+                  name="name"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Address</FormLabel>
+                      <FormLabel>Name *</FormLabel>
                       <FormControl>
-                        <Input placeholder="Your address" {...field} />
+                        <Input placeholder="Your full name" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
 
-                {/* Tagline */}
+                {/* Email */}
                 <FormField
                   control={form.control}
-                  name="tagline"
+                  name="yoe"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Tagline</FormLabel>
+                      <FormLabel>Years of Experience *</FormLabel>
                       <FormControl>
-                        <Input placeholder="e.g., Full Stack Developer" {...field} />
+                        <Input type="number" placeholder="Years of Experience" {...field} />
                       </FormControl>
-                      <FormDescription>A short description of what you do</FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+
+              <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                {/* Phone */}
+                <FormField
+                  control={form.control}
+                  name="phone"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Phone</FormLabel>
+                      <FormControl>
+                        <Input placeholder="+1 (555) 000-0000" {...field} />
+                      </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
 
-                {/* Bio */}
+                {/* Nationality */}
                 <FormField
                   control={form.control}
-                  name="bio"
+                  name="nationality"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Bio</FormLabel>
+                      <FormLabel>Nationality</FormLabel>
                       <FormControl>
-                        <Textarea placeholder="Short biography" rows={3} {...field} />
+                        <Input placeholder="e.g., Vietnamese" {...field} />
                       </FormControl>
-                      <FormDescription>A brief introduction about yourself</FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+
+              {/* Address */}
+              <FormField
+                control={form.control}
+                name="address"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Address</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Your address" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              {/* Tagline */}
+              <FormField
+                control={form.control}
+                name="tagline"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Tagline</FormLabel>
+                    <FormControl>
+                      <Input placeholder="e.g., Full Stack Developer" {...field} />
+                    </FormControl>
+                    <FormDescription>A short description of what you do</FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              {/* Bio */}
+              <FormField
+                control={form.control}
+                name="bio"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Bio</FormLabel>
+                    <FormControl>
+                      <Textarea placeholder="Short biography" rows={3} {...field} />
+                    </FormControl>
+                    <FormDescription>A brief introduction about yourself</FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              {/* Description */}
+              <FormField
+                control={form.control}
+                name="description"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Description</FormLabel>
+                    <FormControl>
+                      <Textarea placeholder="Longer description about you" rows={4} {...field} />
+                    </FormControl>
+                    <FormDescription>A longer, more detailed description</FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              {/* SEO Section */}
+              <div className="space-y-4 border-t pt-4">
+                <h3 className="text-sm font-semibold">SEO Settings</h3>
+
+                <FormField
+                  control={form.control}
+                  name="metaTitle"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Meta Title</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Page title for search engines" {...field} />
+                      </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
 
-                {/* Description */}
                 <FormField
                   control={form.control}
-                  name="description"
+                  name="metaDescription"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Description</FormLabel>
+                      <FormLabel>Meta Description</FormLabel>
                       <FormControl>
-                        <Textarea placeholder="Longer description about you" rows={4} {...field} />
+                        <Textarea
+                          placeholder="Description for search engines (max 160 characters)"
+                          rows={2}
+                          {...field}
+                        />
                       </FormControl>
-                      <FormDescription>A longer, more detailed description</FormDescription>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
+              </div>
 
-                {/* SEO Section */}
-                <div className="space-y-4 border-t pt-4">
-                  <h3 className="text-sm font-semibold">SEO Settings</h3>
-
-                  <FormField
-                    control={form.control}
-                    name="metaTitle"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Meta Title</FormLabel>
-                        <FormControl>
-                          <Input placeholder="Page title for search engines" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name="metaDescription"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Meta Description</FormLabel>
-                        <FormControl>
-                          <Textarea
-                            placeholder="Description for search engines (max 160 characters)"
-                            rows={2}
-                            {...field}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-
-                {/* Submit Button */}
-                <div className="flex justify-end">
-                  <Button type="submit" disabled={updating}>
-                    {updating ? (
-                      <>
-                        <Loader2 className="h-4 w-4 animate-spin" />
-                        Saving...
-                      </>
-                    ) : (
-                      'Save Changes'
-                    )}
-                  </Button>
-                </div>
-              </form>
-            </Form>
-          )}
-        </CardContent>
-      </Card>
+              {/* Submit Button */}
+              <div className="flex justify-end">
+                <Button type="submit" disabled={updating}>
+                  {updating ? (
+                    <>
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                      Saving...
+                    </>
+                  ) : (
+                    'Save Changes'
+                  )}
+                </Button>
+              </div>
+            </form>
+          </Form>
+        )}
+      </div>
     </div>
   );
 }
