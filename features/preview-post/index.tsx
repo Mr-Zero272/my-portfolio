@@ -7,7 +7,8 @@ import { Badge } from '@/components/ui/badge';
 import { IPostResponse } from '@/models';
 import { formatDistanceToNow } from 'date-fns';
 import { enUS, vi } from 'date-fns/locale';
-import { Bookmark, MessageCircle, Share2 } from 'lucide-react';
+import DOMPurify from 'dompurify';
+import { Bookmark, Eye, MessageCircle, Share2 } from 'lucide-react';
 import Image from 'next/image';
 import { LikePost } from './components/like-post';
 import PostComment from './components/post-comment';
@@ -26,13 +27,15 @@ export function PostPreviewFeature({ post, locale = 'en' }: PostPreviewFeaturePr
     locale: dateLocale,
   });
 
+  const firstAuthor = post.authors?.[0];
+
   // Parse HTML content safely
   const createMarkup = () => {
-    return { __html: post.content || '' };
+    return { __html: DOMPurify.sanitize(post.content || '') };
   };
 
   return (
-    <div className="bg-background relative min-h-screen">
+    <div className="relative min-h-screen bg-background">
       <div className="mx-auto max-w-4xl px-2 py-8 md:px-4">
         {/* Header */}
         <div className="mb-8">
@@ -47,7 +50,7 @@ export function PostPreviewFeature({ post, locale = 'en' }: PostPreviewFeaturePr
           <h1 className="mb-4 text-4xl leading-tight font-bold">{post.title}</h1>
 
           {/* Excerpt */}
-          {post.excerpt && <p className="text-muted-foreground mb-6 text-xl leading-relaxed">{post.excerpt}</p>}
+          {post.excerpt && <p className="mb-6 text-xl leading-relaxed text-muted-foreground">{post.excerpt}</p>}
 
           {/* Read button */}
           <ReadPost content={post.content || ''} showProgress={true} showEstimatedTime={true} className="mb-4" />
@@ -55,34 +58,34 @@ export function PostPreviewFeature({ post, locale = 'en' }: PostPreviewFeaturePr
           {/* Author & Meta */}
 
           <div className="mb-6 flex items-center gap-4">
-            <Avatar className="h-12 w-12">
-              <AvatarImage src="/images/profile-img-with-bg.jpg" alt="Pitithuong" />
-              <AvatarFallback className="bg-gray-200 text-gray-700">P</AvatarFallback>
+            <Avatar className="size-8 md:size-12">
+              <AvatarImage src={firstAuthor?.avatar} alt={firstAuthor?.name} />
+              <AvatarFallback className="bg-gray-200 text-gray-700">U</AvatarFallback>
             </Avatar>
             <div>
-              <p className="font-semibold">Pitithuong</p>
-              <p className="text-muted-foreground text-sm">
+              <p className="font-semibold">{firstAuthor?.name}</p>
+              <p className="text-sm text-muted-foreground">
                 {timeAgo} • {Math.ceil((post.content?.length || 0) / 1000)} min read
               </p>
             </div>
           </div>
 
           {/* Engagement Bar */}
-          <div className="mb-8 flex items-center gap-6 border-y border-gray-200 py-4">
+          <div className="mb-8 flex items-center gap-4 border-y py-4 md:gap-6">
             <LikePost slug={post.slug} initialLikes={post.likes || 0} initialLikedBy={post.likedBy || []} />
             <AnimatedButton variant="ghost" size="sm" className="text-gray-600 hover:text-blue-500">
-              <MessageCircle className="mr-2 h-5 w-5" />
-              {post.comments?.length || 0}
+              <Eye className="h-5 w-5" />
+              {post.views || 0}
             </AnimatedButton>
             <AnimatedButton variant="ghost" size="sm" className="text-gray-600 hover:text-green-500">
-              <Bookmark className="mr-2 h-5 w-5" />0
+              <Bookmark className="h-5 w-5" />0
             </AnimatedButton>
             <AnimatedButton
               variant="ghost"
               size="sm"
               className="text-gray-600 hover:text-gray-900 dark:hover:text-white"
             >
-              <Share2 className="mr-2 h-5 w-5" />
+              <Share2 className="h-5 w-5" />
               Share
             </AnimatedButton>
           </div>
@@ -99,9 +102,9 @@ export function PostPreviewFeature({ post, locale = 'en' }: PostPreviewFeaturePr
         )}
 
         {/* Content */}
-        <article className="prose prose-lg prose-gray dark:prose-invert mb-8 max-w-none">
+        <article className="prose prose-lg mb-8 max-w-none prose-gray dark:prose-invert">
           <div
-            className="prose-headings:font-bold prose-headings:text-gray-900 dark:prose-headings:text-gray-100 prose-p:text-gray-700 dark:prose-p:text-gray-300 prose-p:leading-relaxed prose-p:text-lg prose-a:text-blue-600 dark:prose-a:text-blue-400 prose-a:no-underline hover:prose-a:underline prose-strong:text-gray-900 dark:prose-strong:text-gray-100 prose-strong:font-semibold prose-code:bg-gray-100 dark:prose-code:bg-gray-800 prose-code:text-gray-800 dark:prose-code:text-gray-100 prose-code:px-2 prose-code:py-1 prose-code:rounded prose-blockquote:border-l-4 prose-blockquote:border-gray-300 dark:prose-blockquote:border-gray-600 prose-blockquote:pl-6 prose-blockquote:italic prose-ul:list-disc prose-ol:list-decimal prose-li:text-gray-700 dark:prose-li:text-gray-300 prose-li:leading-relaxed prose-img:rounded-lg prose-img:shadow-sm prose-hr:border-gray-200 dark:prose-hr:border-gray-700 prose-hr:my-8"
+            className="prose-headings:font-bold prose-headings:text-gray-900 dark:prose-headings:text-gray-100 prose-p:text-lg prose-p:leading-relaxed prose-p:text-gray-700 dark:prose-p:text-gray-300 prose-a:text-blue-600 prose-a:no-underline hover:prose-a:underline dark:prose-a:text-blue-400 prose-blockquote:border-l-4 prose-blockquote:border-gray-300 prose-blockquote:pl-6 prose-blockquote:italic dark:prose-blockquote:border-gray-600 prose-strong:font-semibold prose-strong:text-gray-900 dark:prose-strong:text-gray-100 prose-code:rounded prose-code:bg-gray-100 prose-code:px-2 prose-code:py-1 prose-code:text-gray-800 dark:prose-code:bg-gray-800 dark:prose-code:text-gray-100 prose-ol:list-decimal prose-ul:list-disc prose-li:leading-relaxed prose-li:text-gray-700 dark:prose-li:text-gray-300 prose-img:rounded-lg prose-img:shadow-sm prose-hr:my-8 prose-hr:border-gray-200 dark:prose-hr:border-gray-700"
             dangerouslySetInnerHTML={createMarkup()}
           />
         </article>

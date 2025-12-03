@@ -321,4 +321,20 @@ export class PostService {
       return { status: 'error', message: 'Error unliking post', data: null as never };
     }
   }
+
+  static async incrementViews(slug: string): Promise<BaseResponse<{ views: number }>> {
+    try {
+      const res = await fetch(`/api/posts/${slug}/view`, {
+        method: 'POST',
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.message || 'Failed to increment views');
+      }
+      return data;
+    } catch (error) {
+      console.error('Error incrementing views:', error);
+      return { status: 'error', message: 'Error incrementing views', data: { views: 0 } };
+    }
+  }
 }

@@ -13,6 +13,7 @@ export interface IPost extends Document {
   imageCaption?: string;
   likes: number;
   likedBy: mongoose.Types.ObjectId[];
+  views: number;
   shares: number;
   authors: mongoose.Types.ObjectId[];
   tags: mongoose.Types.ObjectId[];
@@ -38,6 +39,7 @@ export interface IPostResponse {
   imageCaption?: string;
   likes: number;
   likedBy: string[];
+  views: number;
   shares: number;
   authors: IUser[];
   tags: ITag[];
@@ -63,6 +65,7 @@ const PostSchema: Schema = new Schema(
     imageCaption: { type: String },
     likes: { type: Number, default: 0 },
     likedBy: [{ type: Schema.Types.ObjectId, ref: 'User' }],
+    views: { type: Number, default: 0 },
     shares: { type: Number, default: 0 },
     authors: [{ type: Schema.Types.ObjectId, ref: 'User' }],
     tags: [{ type: Schema.Types.ObjectId, ref: 'Tag' }],

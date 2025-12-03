@@ -1,3 +1,4 @@
+import ViewCounter from '@/components/features/blog/view-counter';
 import ErrorState from '@/components/shared/state/error-state';
 import { API_URL, SITE_URL } from '@/configs/env';
 import PostPreviewFeature from '@/features/preview-post';
@@ -177,7 +178,12 @@ const BlogDetailPage = async ({ params }: BlogDetailPageProps) => {
     );
   }
 
-  return <PostPreviewFeature post={postResponse.data} />;
+  return (
+    <>
+      <PostPreviewFeature post={postResponse.data} />
+      <ViewCounter slug={slug} />
+    </>
+  );
 };
 
 export default BlogDetailPage;
