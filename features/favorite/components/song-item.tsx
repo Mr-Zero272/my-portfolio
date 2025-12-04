@@ -1,10 +1,11 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
+import { SortableItem, SortableItemHandle } from '@/components/ui/sortable';
 import { formatSecondsToTime } from '@/lib';
 import { cn } from '@/lib/utils';
-import { useMusicStore } from '@/store/use-music-store';
-import { Check, ChevronDown, ChevronUp, EllipsisVertical, Play, SquarePen, Trash, X } from 'lucide-react';
+import { Track, useMusicStore } from '@/store/use-music-store';
+import { Check, ChevronDown, ChevronUp, EllipsisVertical, GripVertical, Play, SquarePen, Trash, X } from 'lucide-react';
 import { FormEvent, useRef, useState } from 'react';
 import { MusicPlaying } from '../../../components/icons';
 import {
@@ -17,12 +18,13 @@ import {
 import { Input } from '../../../components/ui/input';
 
 type Props = {
-  trackName: string;
+  track: Track;
   index: number;
   active?: boolean;
+  value: string;
 };
 
-const SongItem = ({ index, trackName, active = false }: Props) => {
+const SongItem = ({ index, track, active = false, value }: Props) => {
   const isPlaying = useMusicStore((state) => state.isPlaying);
   const progress = useMusicStore((state) => state.progress);
   const tracks = useMusicStore((state) => state.tracks);
@@ -31,10 +33,10 @@ const SongItem = ({ index, trackName, active = false }: Props) => {
   const currentTrackIndex = useMusicStore((state) => state.currentTrackIndex);
   const updateTrackPosition = useMusicStore((state) => state.updateTrackPosition);
   const setTrack = useMusicStore((state) => state.setTrack);
-  const trackNames = useMusicStore((state) => state.trackNames);
   const updateTrackName = useMusicStore((state) => state.updateTrackName);
   const updateEditingTrackNameState = useMusicStore((state) => state.updateEditingTrackNameState);
-  const [currentTrackName, setCurrentTrackName] = useState(() => trackNames[index]);
+
+  const [currentTrackName, setCurrentTrackName] = useState(() => track.name);
   const [isEditing, setIsEditing] = useState(false);
   const inputEditRef = useRef<HTMLInputElement>(null);
 
@@ -60,13 +62,18 @@ const SongItem = ({ index, trackName, active = false }: Props) => {
 
     updateTrackPosition(oldPosition, newPosition);
   };
+
   return (
-    <div
+    <SortableItem
+      value={value}
       className={cn('group flex cursor-pointer items-center justify-between rounded-lg px-5 py-3', {
         'bg-black text-white dark:bg-white dark:text-black': active,
       })}
     >
       <div className="flex flex-1 items-center gap-x-3">
+        <SortableItemHandle className="text-muted-foreground hover:text-foreground">
+          <GripVertical className="h-4 w-4" />
+        </SortableItemHandle>
         <div className="flex size-5 items-center justify-center" onClick={() => setTrack(index)}>
           <p className={cn('group-hover:hidden', { hidden: isPlaying && currentTrackIndex === index })}>{index + 1}</p>
 
@@ -89,23 +96,23 @@ const SongItem = ({ index, trackName, active = false }: Props) => {
                 placeholder="New track name"
               />
               <div className="flex items-center">
-                <button type="submit" className="hover:bg-accent rounded-md p-1">
+                <button type="submit" className="rounded-md p-1 hover:bg-accent">
                   <Check className="size-4 text-green-500" />
                 </button>
                 <button
-                  className="hover:bg-accent rounded-md p-1"
+                  className="rounded-md p-1 hover:bg-accent"
                   onClick={(e) => {
                     e.preventDefault();
                     setIsEditing(false);
                     updateEditingTrackNameState(false);
                   }}
                 >
-                  <X className="text-destructive size-4" />
+                  <X className="size-4 text-destructive" />
                 </button>
               </div>
             </form>
           ) : (
-            <h2 className="line-clamp-1 capitalize">{trackName}</h2>
+            <h2 className="line-clamp-1 capitalize">{track.name}</h2>
           )}
         </div>
       </div>
@@ -155,7 +162,7 @@ const SongItem = ({ index, trackName, active = false }: Props) => {
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
-    </div>
+    </SortableItem>
   );
 };
 

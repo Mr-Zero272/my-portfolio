@@ -1,7 +1,7 @@
 'use client';
 
 import { cn } from '@/lib/utils';
-import { useMusicStore } from '@/store/use-music-store';
+import { Track, useMusicStore } from '@/store/use-music-store';
 import { ChevronLeft, CloudUpload } from 'lucide-react';
 import { useCallback, useRef, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
@@ -17,7 +17,6 @@ type ImportSongsTabProps = {
 const ImportSongsTab = ({ onBack }: ImportSongsTabProps) => {
   const setTracks = useMusicStore((state) => state.setTracks);
   const tracks = useMusicStore((state) => state.tracks);
-  const setTrackNames = useMusicStore((state) => state.setTrackNames);
   const [files, setFiles] = useState<File[]>([]);
   const [error, setError] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
@@ -46,14 +45,16 @@ const ImportSongsTab = ({ onBack }: ImportSongsTabProps) => {
         return;
       }
 
-      const newTrackUrls = validFiles.map((file) => URL.createObjectURL(file));
-      const newTrackNames = validFiles.map((file) => file.name);
+      const newTracks: Track[] = validFiles.map((file) => ({
+        id: crypto.randomUUID(),
+        url: URL.createObjectURL(file),
+        name: file.name,
+      }));
 
-      setTracks([...newTrackUrls]);
-      setTrackNames([...newTrackNames]);
+      setTracks([...tracks, ...newTracks]);
       onBack();
     },
-    [setError, setTracks, setTrackNames, onBack],
+    [setError, setTracks, tracks, onBack],
   );
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
@@ -86,16 +87,14 @@ const ImportSongsTab = ({ onBack }: ImportSongsTabProps) => {
     const newFiles = [...files];
     newFiles.splice(index, 1);
     setFiles(newFiles);
-    const newTrackUrls = newFiles.map((file) => URL.createObjectURL(file));
-    const newTrackNames = newFiles.map((file) => file.name);
-    setTracks(newTrackUrls);
-    setTrackNames(newTrackNames);
+    // Note: This only updates the local files state.
+    // Since handleFileChange commits to store and exits, this might not be reachable in current flow.
   };
 
   return (
     <div>
       <div className="mb-2 flex items-center gap-x-2">
-        <button className="group hover:bg-accent/40 rounded-md p-1.5" onClick={onBack}>
+        <button className="group rounded-md p-1.5 hover:bg-accent/40" onClick={onBack}>
           <ChevronLeft className="size-6 transition-all duration-200 ease-in-out group-active:pr-2" />
         </button>
         <h1 className="font-medium">Add songs</h1>
@@ -110,7 +109,7 @@ const ImportSongsTab = ({ onBack }: ImportSongsTabProps) => {
           <div className="flex flex-col items-center justify-center">
             <div className="mb-2 space-y-2 text-center">
               <div className="flex justify-center">
-                <CloudUpload className="text-muted-foreground size-7" />
+                <CloudUpload className="size-7 text-muted-foreground" />
               </div>
               <div className="text-center">
                 <p>Drag and drop your files here</p>
@@ -120,7 +119,7 @@ const ImportSongsTab = ({ onBack }: ImportSongsTabProps) => {
             <input ref={fileInputRef} type="file" hidden id="browse" {...getInputProps()} />
             <label
               htmlFor="browse"
-              className="bg-primary w-fit cursor-pointer rounded-md px-3 py-2 text-white active:scale-95"
+              className="w-fit cursor-pointer rounded-md bg-primary px-3 py-2 text-white active:scale-95"
             >
               Browse files
             </label>
@@ -138,6 +137,7 @@ const ImportSongsTab = ({ onBack }: ImportSongsTabProps) => {
           )}
         </div>
       </section>
+      <div>{error && <p className="text-sm text-red-500">{error}</p>}</div>
     </div>
   );
 };

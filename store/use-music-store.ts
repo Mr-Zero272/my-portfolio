@@ -4,10 +4,15 @@ import { Howl } from 'howler';
 import { toast } from 'sonner';
 import { create } from 'zustand';
 
+export interface Track {
+  id: string;
+  url: string;
+  name: string;
+}
+
 interface MusicState {
   // State
-  tracks: string[];
-  trackNames: string[];
+  tracks: Track[];
   currentTrackIndex: number;
   isPlaying: boolean;
   progress: number;
@@ -21,8 +26,8 @@ interface MusicState {
   currentTrackSrcRef: string | null;
 
   // Actions
-  setTracks: (tracks: string[]) => void;
-  setTrackNames: (trackNames: string[]) => void;
+  setTracks: (tracks: Track[]) => void;
+  reorderTracks: (tracks: Track[]) => void;
   setTrack: (index: number) => void;
   play: () => void;
   pause: () => void;
@@ -47,7 +52,6 @@ interface MusicState {
 export const useMusicStore = create<MusicState>((set, get) => ({
   // Initial state
   tracks: [],
-  trackNames: [],
   currentTrackIndex: -1,
   isPlaying: false,
   progress: 0,
@@ -68,7 +72,27 @@ export const useMusicStore = create<MusicState>((set, get) => ({
     }
   },
 
-  setTrackNames: (trackNames) => set({ trackNames }),
+  reorderTracks: (tracks) => {
+    const { soundRef, currentTrackIndex, tracks: oldTracks } = get();
+
+    // Find the current playing track in the new order
+    const currentTrack = oldTracks[currentTrackIndex];
+    const newIndex = currentTrack ? tracks.findIndex((t) => t.id === currentTrack.id) : -1;
+
+    // Cleanup old sound since track order changed
+    if (soundRef) {
+      soundRef.unload();
+    }
+
+    set({
+      tracks,
+      currentTrackIndex: newIndex >= 0 ? newIndex : 0,
+      soundRef: null,
+      currentTrackSrcRef: null,
+      isPlaying: false,
+      progress: 0,
+    });
+  },
 
   setTrack: (index) => {
     set({ currentTrackIndex: index });
@@ -111,26 +135,18 @@ export const useMusicStore = create<MusicState>((set, get) => ({
   },
 
   shuffle: () => {
-    const { tracks, trackNames, currentTrackIndex } = get();
+    const { tracks, currentTrackIndex } = get();
     set({ isShuffle: !get().isShuffle });
 
     if (tracks.length <= 1) return;
 
-    // Create array of indices to maintain track-trackName relationship
-    const indices = Array.from({ length: tracks.length }, (_, i) => i);
-    const shuffledIndices = [...indices].sort(() => Math.random() - 0.5);
-
-    // Shuffle both tracks and trackNames using the same order
-    const shuffledTracks = shuffledIndices.map((i) => tracks[i]);
-    const shuffledTrackNames = shuffledIndices.map((i) => trackNames[i]);
-
-    // Find new position of current track
-    const currentTrackNewIndex = shuffledIndices.indexOf(currentTrackIndex);
+    const currentTrackId = tracks[currentTrackIndex].id;
+    const shuffledTracks = [...tracks].sort(() => Math.random() - 0.5);
+    const newIndex = shuffledTracks.findIndex((t) => t.id === currentTrackId);
 
     set({
       tracks: shuffledTracks,
-      trackNames: shuffledTrackNames,
-      currentTrackIndex: currentTrackNewIndex >= 0 ? currentTrackNewIndex : 0,
+      currentTrackIndex: newIndex >= 0 ? newIndex : 0,
     });
   },
 
@@ -144,39 +160,43 @@ export const useMusicStore = create<MusicState>((set, get) => ({
   },
 
   deleteTrack: (index) => {
-    const { tracks, trackNames, soundRef } = get();
+    const { tracks, soundRef } = get();
 
-    URL.revokeObjectURL(tracks[index]);
+    URL.revokeObjectURL(tracks[index].url);
     const updatedTracks = tracks.filter((_, i) => i !== index);
-    const updatedNames = trackNames.filter((_, i) => i !== index);
 
     soundRef?.unload();
 
     set({
       tracks: updatedTracks,
-      trackNames: updatedNames,
       currentTrackIndex: updatedTracks.length === 0 ? -1 : get().currentTrackIndex,
     });
   },
 
   updateTrackPosition: (oldPosition, newPosition) => {
-    const { tracks, trackNames } = get();
-
+    const { tracks, soundRef } = get();
     const updatedTracks = moveElementInArray(tracks, oldPosition, newPosition);
-    const updatedNames = moveElementInArray(trackNames, oldPosition, newPosition);
+
+    // Cleanup old sound since track position changed
+    if (soundRef) {
+      soundRef.unload();
+    }
 
     set({
       tracks: updatedTracks,
-      trackNames: updatedNames,
       currentTrackIndex: newPosition,
+      soundRef: null,
+      currentTrackSrcRef: null,
+      isPlaying: false,
+      progress: 0,
     });
   },
 
   updateTrackName: (newName, position) => {
-    const { trackNames } = get();
-    const updatedNames = [...trackNames];
-    updatedNames[position] = newName;
-    set({ trackNames: updatedNames });
+    const { tracks } = get();
+    const updatedTracks = [...tracks];
+    updatedTracks[position] = { ...updatedTracks[position], name: newName };
+    set({ tracks: updatedTracks });
   },
 
   updateEditingTrackNameState: (state) => set({ isEditingTrackName: state }),
@@ -208,7 +228,7 @@ export const useMusicStore = create<MusicState>((set, get) => ({
       return;
     }
 
-    const currentTrackSrc = tracks[currentTrackIndex];
+    const currentTrackSrc = tracks[currentTrackIndex].url;
 
     // Cleanup old sound if track changed
     if (state.soundRef && state.currentTrackSrcRef !== currentTrackSrc) {
@@ -272,7 +292,7 @@ export const useDuration = () => useMusicStore((state) => state.duration);
 export const useCurrentTrack = () =>
   useMusicStore((state) => ({
     currentTrackIndex: state.currentTrackIndex,
-    trackName: state.trackNames[state.currentTrackIndex],
+    trackName: state.tracks[state.currentTrackIndex]?.name,
   }));
 export const useMusicControls = () =>
   useMusicStore((state) => ({

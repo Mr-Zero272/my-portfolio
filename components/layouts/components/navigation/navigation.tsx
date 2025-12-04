@@ -86,15 +86,6 @@ const Navigation = () => {
     }
   };
 
-  console.log({
-    isExpanded,
-    isCollapsed,
-    isHidden,
-    isMobile,
-    toggle,
-    collapse,
-  });
-
   useOnClickOutside(sidebarRef, handleClickOutside);
 
   return (

@@ -17,7 +17,6 @@ export const MusicStoreInitializer = ({ children }: { children: React.ReactNode 
   const pause = useMusicStore((state) => state.pause);
   const setProgress = useMusicStore((state) => state.setProgress);
   const setVolume = useMusicStore((state) => state.setVolume);
-  const seek = useMusicStore((state) => state.seek);
   const initializeTrack = useMusicStore((state) => state.initializeTrack);
 
   // Initialize track when tracks or currentTrackIndex changes
@@ -78,7 +77,7 @@ export const MusicStoreInitializer = ({ children }: { children: React.ReactNode 
   // Cleanup on unload
   useEffect(() => {
     const handleUnload = () => {
-      tracks.forEach((trackUrl) => URL.revokeObjectURL(trackUrl));
+      tracks.forEach((trackUrl) => URL.revokeObjectURL(trackUrl.url));
     };
 
     if (tracks.length !== 0) {
