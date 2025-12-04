@@ -1,29 +1,26 @@
 import { auth } from '@/auth';
-import { ProfileService } from '@/services/profile-service';
+import { SocialLinkService } from '@/services/social-link-service';
 
 /**
  * GET /api/social-links
  * Get all social links for a user
  * Query params:
  * - userId: string (optional) - Get social links for specific user
+ * - owner: boolean (optional) - Get owner social links
  */
 export async function GET(req: Request) {
   try {
     const { searchParams } = new URL(req.url);
     const userId = searchParams.get('userId');
+    // const isOwner = searchParams.get('owner') === 'true';
 
     if (userId) {
-      const socialLinks = await ProfileService.getSocialLinksByUserId(userId);
+      const socialLinks = await SocialLinkService.getSocialLinksByUserId(userId);
       return Response.json(socialLinks, { status: 200 });
     }
 
-    // If no userId, get authenticated user's social links
-    const session = await auth();
-    if (!session?.user?.id) {
-      return Response.json({ message: 'Unauthorized' }, { status: 401 });
-    }
-
-    const socialLinks = await ProfileService.getSocialLinksByUserId(session.user.id);
+    // Default to owner's social links
+    const socialLinks = await SocialLinkService.getOwnerSocialLinks();
     return Response.json(socialLinks, { status: 200 });
   } catch (error) {
     console.error('Error in GET /api/social-links:', error);
@@ -63,7 +60,7 @@ export async function POST(req: Request) {
       userId: session.user.id,
     };
 
-    const socialLink = await ProfileService.createSocialLink(socialLinkData);
+    const socialLink = await SocialLinkService.createSocialLink(socialLinkData);
     return Response.json(socialLink, { status: 201 });
   } catch (error) {
     console.error('Error in POST /api/social-links:', error);
@@ -93,7 +90,7 @@ export async function PATCH(req: Request) {
       return Response.json({ message: 'orderedIds must be a non-empty array' }, { status: 400 });
     }
 
-    const success = await ProfileService.reorderSocialLinks(session.user.id, orderedIds);
+    const success = await SocialLinkService.reorderSocialLinks(session.user.id, orderedIds);
 
     if (!success) {
       return Response.json({ message: 'Failed to reorder social links' }, { status: 500 });

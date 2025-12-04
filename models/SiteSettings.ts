@@ -19,10 +19,6 @@ export interface ISiteSettings extends Document {
   heroSubtitle?: string;
   heroDescription?: string;
 
-  // Theme & Appearance
-  primaryColor?: string;
-  secondaryColor?: string;
-
   // Features
   enableBlog: boolean;
   enableProjects: boolean;

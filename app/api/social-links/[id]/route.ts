@@ -1,14 +1,14 @@
 import { auth } from '@/auth';
-import { ProfileService } from '@/services/profile-service';
+import { SocialLinkService } from '@/services/social-link-service';
 
 /**
  * GET /api/social-links/[id]
- * Get a single social link by ID
+ * Get social link by ID
  */
 export async function GET(req: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
     const { id } = await params;
-    const socialLink = await ProfileService.getSocialLinkById(id);
+    const socialLink = await SocialLinkService.getSocialLinkById(id);
 
     if (!socialLink) {
       return Response.json({ message: 'Social link not found' }, { status: 404 });
@@ -25,34 +25,27 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
 }
 
 /**
- * PATCH /api/social-links/[id]
- * Update a social link
- * Body:
- * - platform: string (optional)
- * - url: string (optional)
- * - username: string (optional)
- * - isActive: boolean (optional)
- * - displayOrder: number (optional)
+ * PUT /api/social-links/[id]
+ * Update social link
  */
-export async function PATCH(req: Request, { params }: { params: Promise<{ id: string }> }) {
+export async function PUT(req: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
+    const { id } = await params;
     const session = await auth();
     if (!session?.user?.id) {
       return Response.json({ message: 'Unauthorized' }, { status: 401 });
     }
 
-    const { id } = await params;
     const data = await req.json();
-
-    const socialLink = await ProfileService.updateSocialLink(id, session.user.id, data);
+    const socialLink = await SocialLinkService.updateSocialLink(id, session.user.id, data);
 
     if (!socialLink) {
-      return Response.json({ message: 'Social link not found' }, { status: 404 });
+      return Response.json({ message: 'Social link not found or unauthorized' }, { status: 404 });
     }
 
     return Response.json(socialLink, { status: 200 });
   } catch (error) {
-    console.error('Error in PATCH /api/social-links/[id]:', error);
+    console.error('Error in PUT /api/social-links/[id]:', error);
     return Response.json(
       { message: error instanceof Error ? error.message : 'Failed to update social link' },
       { status: 500 },
@@ -62,28 +55,20 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
 
 /**
  * DELETE /api/social-links/[id]
- * Delete a social link (soft delete by default, use ?permanent=true for hard delete)
+ * Delete social link
  */
 export async function DELETE(req: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
+    const { id } = await params;
     const session = await auth();
     if (!session?.user?.id) {
       return Response.json({ message: 'Unauthorized' }, { status: 401 });
     }
 
-    const { id } = await params;
-    const { searchParams } = new URL(req.url);
-    const isPermanent = searchParams.get('permanent') === 'true';
-
-    let success: boolean;
-    if (isPermanent) {
-      success = await ProfileService.permanentlyDeleteSocialLink(id, session.user.id);
-    } else {
-      success = await ProfileService.deleteSocialLink(id, session.user.id);
-    }
+    const success = await SocialLinkService.deleteSocialLink(id, session.user.id);
 
     if (!success) {
-      return Response.json({ message: 'Social link not found' }, { status: 404 });
+      return Response.json({ message: 'Social link not found or unauthorized' }, { status: 404 });
     }
 
     return Response.json({ message: 'Social link deleted successfully' }, { status: 200 });
