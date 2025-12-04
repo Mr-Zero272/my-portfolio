@@ -1,6 +1,6 @@
 'use client';
 
-import { educationsApi } from '@/apis/educations';
+import { CreateEducationDto, educationsApi, UpdateEducationDto } from '@/apis/educations';
 import ConfirmDialog from '@/components/shared/confirm-dialog';
 import EmptyState from '@/components/shared/state/empty-state';
 import { Button } from '@/components/ui/button';
@@ -27,11 +27,11 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { Switch } from '@/components/ui/switch';
 import { Textarea } from '@/components/ui/textarea';
 import { cn } from '@/lib/utils';
+import { IEducation } from '@/models';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { format } from 'date-fns';
 import { CalendarIcon, Edit, EllipsisIcon, GraduationCap, Loader2, MapPin, Plus, Trash2 } from 'lucide-react';
-import { useSession } from 'next-auth/react';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
@@ -54,7 +54,6 @@ type EducationFormData = z.infer<typeof educationSchema>;
 
 export function EducationsSettingsForm() {
   const queryClient = useQueryClient();
-  const { data: session } = useSession();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
 
@@ -95,7 +94,7 @@ export function EducationsSettingsForm() {
   });
 
   const updateMutation = useMutation({
-    mutationFn: ({ id, data }: { id: string; data: any }) => educationsApi.update(id, data),
+    mutationFn: ({ id, data }: { id: string; data: UpdateEducationDto }) => educationsApi.update(id, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['educations'] });
       toast.success('Education updated successfully');
@@ -135,8 +134,8 @@ export function EducationsSettingsForm() {
     setIsDialogOpen(true);
   };
 
-  const handleEdit = (education: any) => {
-    setEditingId(education._id);
+  const handleEdit = (education: IEducation) => {
+    setEditingId(education._id.toString());
     form.reset({
       ...education,
       startDate: education.startDate ? new Date(education.startDate) : undefined,
@@ -158,7 +157,7 @@ export function EducationsSettingsForm() {
 
   const onSubmit = async (data: EducationFormData) => {
     // Format data for API
-    const apiData: any = {
+    const apiData: UpdateEducationDto = {
       ...data,
       startDate: data.startDate.toISOString(),
       endDate: data.endDate ? data.endDate.toISOString() : undefined,
@@ -167,12 +166,12 @@ export function EducationsSettingsForm() {
     if (editingId) {
       updateMutation.mutate({ id: editingId, data: apiData });
     } else {
-      createMutation.mutate(apiData);
+      createMutation.mutate(apiData as CreateEducationDto);
     }
   };
 
   return (
-    <div className="space-y-6 md:pr-10">
+    <div className="max-w-7xl space-y-6 md:pr-10">
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-lg font-medium">Education</h2>
@@ -214,7 +213,7 @@ export function EducationsSettingsForm() {
                       <DropdownMenuItem
                         className="text-destructive hover:text-destructive!"
                         onClick={() => {
-                          setEditingId(education._id.toString());
+                          setDeletingId(education._id.toString());
                           setIsDialogDeleteOpen(true);
                         }}
                       >
@@ -274,7 +273,7 @@ export function EducationsSettingsForm() {
         <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-2xl">
           <DialogHeader>
             <DialogTitle>{editingId ? 'Edit Education' : 'Add Education'}</DialogTitle>
-            <DialogDescription>Add details about your education. Click save when you're done.</DialogDescription>
+            <DialogDescription>Add details about your education. Click save when you&apos;re done.</DialogDescription>
           </DialogHeader>
 
           <Form {...form}>

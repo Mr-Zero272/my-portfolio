@@ -5,6 +5,7 @@ export { default as Cobol } from './cobol';
 export { default as Contact } from './contact';
 export { default as ContactSolid } from './contact-solid';
 export { default as Express } from './express';
+export { default as Facebook, default as FacebookIcon } from './facebook';
 export { default as Forward10Sharp } from './forward-10-sharp';
 export { default as Github, default as GithubIcon } from './github';
 export { default as Google, default as GoogleIcon } from './google';

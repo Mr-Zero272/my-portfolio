@@ -93,17 +93,20 @@ export function ProfileSettingsForm() {
   }, [form, profileData]);
 
   // Handle form submission
-  const onSubmit = useCallback(async (data: ProfileSettingsFormData) => {
-    try {
-      await updateProfile(data);
-    } catch (error) {
-      console.error('Failed to update profile:', error);
-      toast.error(error instanceof Error ? error.message : 'Failed to update profile');
-    }
-  }, []);
+  const onSubmit = useCallback(
+    async (data: ProfileSettingsFormData) => {
+      try {
+        await updateProfile(data);
+      } catch (error) {
+        console.error('Failed to update profile:', error);
+        toast.error(error instanceof Error ? error.message : 'Failed to update profile');
+      }
+    },
+    [updateProfile],
+  );
 
   return (
-    <div className="max-w-2xl space-y-6 px-3 pb-10">
+    <div className="max-w-7xl space-y-6 px-3 pb-10">
       {/* Basic Information */}
 
       <div className="border-b px-0">

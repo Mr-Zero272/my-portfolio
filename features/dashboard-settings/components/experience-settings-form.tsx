@@ -42,6 +42,9 @@ import * as z from 'zod';
 import ConfirmDialog from '@/components/shared/confirm-dialog';
 import { Skeleton } from '@/components/ui/skeleton';
 import { WorkExperience } from '@/components/work-experience';
+import { IExperience } from '@/models';
+import { IPosition } from '@/models/Experience';
+import { CreateExperienceData, UpdateExperienceData } from '@/services/experience-service';
 
 // Validation schema
 const positionSchema = z.object({
@@ -97,7 +100,7 @@ export function ExperienceSettingsForm() {
     data: experiences = [],
     isLoading,
     error,
-  } = useQuery<any[]>({
+  } = useQuery<IExperience[]>({
     queryKey: ['experiences', 'list', { owner: true }],
     queryFn: async () => {
       const data = await experienceApi.getAll({ owner: true });
@@ -107,7 +110,7 @@ export function ExperienceSettingsForm() {
 
   // Mutations
   const createMutation = useMutation({
-    mutationFn: (data: any) => experienceApi.create(data),
+    mutationFn: (data: CreateExperienceData) => experienceApi.create(data),
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ['experiences', 'list', { owner: true }],
@@ -122,7 +125,7 @@ export function ExperienceSettingsForm() {
   });
 
   const updateMutation = useMutation({
-    mutationFn: ({ id, data }: { id: string; data: any }) => experienceApi.update(id, data),
+    mutationFn: ({ id, data }: { id: string; data: UpdateExperienceData }) => experienceApi.update(id, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['experiences'] });
       toast.success('Experience updated successfully');
@@ -187,14 +190,14 @@ export function ExperienceSettingsForm() {
     setIsDialogOpen(true);
   };
 
-  const handleEdit = (experience: any) => {
-    setEditingId(experience._id!);
+  const handleEdit = (experience: IExperience) => {
+    setEditingId(experience._id.toString());
     form.reset({
       companyName: experience.companyName,
       companyLogo: experience.companyLogo || '',
       isCurrentEmployer: experience.isCurrentEmployer,
       isVisible: experience.isVisible,
-      positions: experience.positions.map((pos: any) => ({
+      positions: experience.positions.map((pos: IPosition) => ({
         ...pos,
         startDate: new Date(pos.startDate),
         endDate: pos.endDate ? new Date(pos.endDate) : undefined,
@@ -208,13 +211,14 @@ export function ExperienceSettingsForm() {
       await deleteMutation.mutateAsync(id);
       toast.success('Experience deleted successfully');
     } catch (error) {
+      console.error('Failed to delete experience:', error);
       toast.error('Failed to delete experience');
     }
   };
 
   const onSubmit = async (data: ExperienceFormData) => {
     // Format data for API
-    const apiData: any = {
+    const apiData = {
       ...data,
       positions: data.positions?.map((pos) => ({
         ...pos,
@@ -226,12 +230,12 @@ export function ExperienceSettingsForm() {
     if (editingId) {
       updateMutation.mutate({ id: editingId, data: apiData });
     } else {
-      createMutation.mutate(apiData);
+      createMutation.mutate(apiData as CreateExperienceData);
     }
   };
 
   return (
-    <div className="space-y-6 md:pr-10">
+    <div className="max-w-7xl space-y-6 md:pr-10">
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-lg font-medium">Work Experience</h2>
@@ -255,17 +259,19 @@ export function ExperienceSettingsForm() {
           ))}
         {!isLoading && experiences && experiences.length > 0 && (
           <WorkExperience
-            experiences={experiences.map((exp: any) => ({
-              ...exp,
-              positions: exp.positions.map((pos: any) => ({
-                ...pos,
-                employmentPeriod: `${format(new Date(pos.startDate), 'MMM yyyy')} - ${
-                  pos.endDate ? format(new Date(pos.endDate), 'MMM yyyy') : 'Present'
-                }`,
-              })),
-            }))}
+            experiences={
+              experiences.map((exp: IExperience) => ({
+                ...exp,
+                positions: exp.positions.map((pos: IPosition) => ({
+                  ...pos,
+                  employmentPeriod: `${format(new Date(pos.startDate), 'MMM yyyy')} - ${
+                    pos.endDate ? format(new Date(pos.endDate), 'MMM yyyy') : 'Present'
+                  }`,
+                })),
+              })) as never
+            }
             mode="admin"
-            onEditClick={handleEdit}
+            onEditClick={handleEdit as never}
             onDeleteClick={(id) => {
               setDeletingId(id);
               setIsDialogConfigOpen(true);
@@ -282,7 +288,9 @@ export function ExperienceSettingsForm() {
         <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-3xl">
           <DialogHeader>
             <DialogTitle>{editingId ? 'Edit Experience' : 'Add Experience'}</DialogTitle>
-            <DialogDescription>Add details about your work experience. Click save when you're done.</DialogDescription>
+            <DialogDescription>
+              Add details about your work experience. Click save when you&apos;re done.
+            </DialogDescription>
           </DialogHeader>
 
           <Form {...form}>

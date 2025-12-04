@@ -1,6 +1,6 @@
 'use client';
 
-import { projectsApi } from '@/apis/projects';
+import { projectsApi, UpdateProjectDto } from '@/apis/projects';
 import { Github } from '@/components/icons';
 import ConfirmDialog from '@/components/shared/confirm-dialog';
 import ImageUploadV2 from '@/components/shared/image-upload-v2';
@@ -34,6 +34,7 @@ import { Switch } from '@/components/ui/switch';
 import { Textarea } from '@/components/ui/textarea';
 import { uploadImageWithDB } from '@/lib/uploadthing';
 import { cn } from '@/lib/utils';
+import { IProject } from '@/models';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { format } from 'date-fns';
@@ -52,6 +53,7 @@ import {
   Trash2,
 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
+import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -186,7 +188,7 @@ export function ProjectsSettingsForm() {
   });
 
   const updateMutation = useMutation({
-    mutationFn: ({ id, data }: { id: string; data: any }) => projectsApi.update(id, data),
+    mutationFn: ({ id, data }: { id: string; data: UpdateProjectDto }) => projectsApi.update(id, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['projects'] });
       toast.success('Project updated successfully');
@@ -249,8 +251,8 @@ export function ProjectsSettingsForm() {
     setIsDialogOpen(true);
   };
 
-  const handleEdit = (project: any) => {
-    setEditingId(project._id);
+  const handleEdit = (project: IProject) => {
+    setEditingId(project._id.toString());
     form.reset({
       ...project,
       startDate: project.startDate ? new Date(project.startDate) : undefined,
@@ -297,7 +299,7 @@ export function ProjectsSettingsForm() {
     }
 
     // Format data for API
-    const apiData: any = {
+    const apiData = {
       ...data,
       thumbnailImage: thumbnailImageUrl,
       startDate: data.startDate ? data.startDate.toISOString() : undefined,
@@ -312,7 +314,7 @@ export function ProjectsSettingsForm() {
   };
 
   return (
-    <div className="max-w-2xl space-y-6 md:pr-10">
+    <div className="max-w-7xl space-y-6 md:pr-10">
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-lg font-medium">Projects</h2>
@@ -389,7 +391,7 @@ export function ProjectsSettingsForm() {
                       <DropdownMenuItem
                         className="text-destructive hover:text-destructive!"
                         onClick={() => {
-                          setEditingId(project._id.toString());
+                          setDeletingId(project._id.toString());
                           setIsDialogDeleteOpen(true);
                         }}
                       >
@@ -401,10 +403,13 @@ export function ProjectsSettingsForm() {
                 </div>
               </CardHeader>
               <CardContent className="space-y-6 text-sm">
-                <img
-                  src={project.thumbnailImage}
+                <Image
+                  src={project.thumbnailImage || ''}
                   alt={project.name}
                   className="aspect-video w-full rounded-md object-cover"
+                  width={800}
+                  height={450}
+                  quality={100}
                 />
                 <p className="wrap-anywhere">
                   {project.description}
@@ -451,7 +456,7 @@ export function ProjectsSettingsForm() {
         <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-4xl">
           <DialogHeader>
             <DialogTitle>{editingId ? 'Edit Project' : 'Add Project'}</DialogTitle>
-            <DialogDescription>Add details about your project. Click save when you're done.</DialogDescription>
+            <DialogDescription>Add details about your project. Click save when you&apos;re done.</DialogDescription>
           </DialogHeader>
 
           <Form {...form}>

@@ -1,5 +1,6 @@
 'use client';
 
+import { UpdateSocialLinkDto } from '@/apis/profile';
 import { socialLinksApi } from '@/apis/social-links';
 import ConfirmDialog from '@/components/shared/confirm-dialog';
 import EmptyState from '@/components/shared/state/empty-state';
@@ -24,10 +25,10 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Switch } from '@/components/ui/switch';
+import { ISocialLink } from '@/models';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Edit, EllipsisIcon, ExternalLink, Globe, Loader2, Plus, Trash2 } from 'lucide-react';
-import { useSession } from 'next-auth/react';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
@@ -57,7 +58,6 @@ const PLATFORMS = [
 
 export function SocialLinksSettingsForm() {
   const queryClient = useQueryClient();
-  const { data: session } = useSession();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
 
@@ -96,7 +96,7 @@ export function SocialLinksSettingsForm() {
   });
 
   const updateMutation = useMutation({
-    mutationFn: ({ id, data }: { id: string; data: any }) => socialLinksApi.update(id, data),
+    mutationFn: ({ id, data }: { id: string; data: UpdateSocialLinkDto }) => socialLinksApi.update(id, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['social-links'] });
       toast.success('Social link updated successfully');
@@ -134,8 +134,8 @@ export function SocialLinksSettingsForm() {
     setIsDialogOpen(true);
   };
 
-  const handleEdit = (socialLink: any) => {
-    setEditingId(socialLink._id);
+  const handleEdit = (socialLink: ISocialLink) => {
+    setEditingId(socialLink._id.toString());
     form.reset({
       platform: socialLink.platform,
       url: socialLink.url,
@@ -158,7 +158,7 @@ export function SocialLinksSettingsForm() {
   };
 
   const onSubmit = async (data: SocialLinkFormData) => {
-    const apiData: any = {
+    const apiData = {
       ...data,
       isActive: data.isVisible,
     };
@@ -171,7 +171,7 @@ export function SocialLinksSettingsForm() {
   };
 
   return (
-    <div className="space-y-6 md:pr-10">
+    <div className="max-w-7xl space-y-6 md:pr-10">
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-lg font-medium">Social Links</h2>
@@ -261,7 +261,7 @@ export function SocialLinksSettingsForm() {
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
             <DialogTitle>{editingId ? 'Edit Social Link' : 'Add Social Link'}</DialogTitle>
-            <DialogDescription>Add your social media profile. Click save when you're done.</DialogDescription>
+            <DialogDescription>Add your social media profile. Click save when you&apos;re done.</DialogDescription>
           </DialogHeader>
 
           <Form {...form}>

@@ -106,25 +106,20 @@ const fetchProfile = async () => {
 };
 
 const AboutMePage = async () => {
-  try {
-    const queryClient = new QueryClient();
+  const queryClient = new QueryClient();
 
-    await Promise.all([
-      queryClient.prefetchQuery({ queryKey: ['experiences', 'list', { owner: true }], queryFn: fetchExperiences }),
-      queryClient.prefetchQuery({ queryKey: ['educations', 'list', { owner: true }], queryFn: fetchEducations }),
-      queryClient.prefetchQuery({ queryKey: ['skills', 'list', { owner: true }], queryFn: fetchSkills }),
-      queryClient.prefetchQuery({ queryKey: ['profile', 'detail', { owner: true }], queryFn: fetchProfile }),
-    ]);
+  await Promise.all([
+    queryClient.prefetchQuery({ queryKey: ['experiences', 'list', { owner: true }], queryFn: fetchExperiences }),
+    queryClient.prefetchQuery({ queryKey: ['educations', 'list', { owner: true }], queryFn: fetchEducations }),
+    queryClient.prefetchQuery({ queryKey: ['skills', 'list', { owner: true }], queryFn: fetchSkills }),
+    queryClient.prefetchQuery({ queryKey: ['profile', 'detail', { owner: true }], queryFn: fetchProfile }),
+  ]);
 
-    return (
-      <HydrationBoundary state={dehydrate(queryClient)}>
-        <AboutMeFeature />
-      </HydrationBoundary>
-    );
-  } catch (error) {
-    console.error('Error fetching about me data:', error);
-    return <AboutMeFeature />;
-  }
+  return (
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <AboutMeFeature />
+    </HydrationBoundary>
+  );
 };
 
 export default AboutMePage;

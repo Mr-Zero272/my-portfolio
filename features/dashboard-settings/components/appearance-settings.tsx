@@ -8,6 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Separator } from '@/components/ui/separator';
 import { Switch } from '@/components/ui/switch';
 import { cn } from '@/lib/utils';
+import { useSettingsStore } from '@/store/use-settings';
 import { CircleCheck, Monitor, Moon, Sun } from 'lucide-react';
 import { useTheme } from 'next-themes';
 
@@ -31,8 +32,10 @@ const colors = [
 export function AppearanceSettings() {
   const { theme, setTheme } = useTheme();
   const { currentColor, switchColor } = useColorContext();
+  const { isTransitionPageEnabled, setIsTransitionPageEnabled } = useSettingsStore();
+
   return (
-    <div className="space-y-4">
+    <div className="max-w-7xl space-y-6 md:pr-10">
       <Card className="border-none shadow-none">
         <CardHeader className="border-b">
           <CardTitle>Theme</CardTitle>
@@ -66,7 +69,7 @@ export function AppearanceSettings() {
           <div className="space-y-2">
             <Label htmlFor="accent-color">Accent Color</Label>
             <div className="flex w-full items-center gap-2">
-              {colors.map(({ name, value, color }) => (
+              {colors.map(({ value, color }) => (
                 <button
                   key={value}
                   onClick={() => switchColor(value as never)}
@@ -97,15 +100,15 @@ export function AppearanceSettings() {
 
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div className="space-y-1">
-              <Label className="text-sm font-medium">Compact Mode</Label>
-              <p className="text-xs text-muted-foreground">Reduce spacing for a more compact layout</p>
+              <Label className="text-sm font-medium">Enable Page Transition</Label>
+              <p className="text-xs text-muted-foreground">Smooth transitions when navigating between pages</p>
             </div>
-            <Switch />
+            <Switch checked={isTransitionPageEnabled} onCheckedChange={setIsTransitionPageEnabled} />
           </div>
         </CardContent>
       </Card>
 
-      <Card>
+      <Card className="border-none shadow-none">
         <CardHeader>
           <CardTitle>Display Settings</CardTitle>
           <CardDescription>Adjust how content is displayed</CardDescription>
@@ -157,7 +160,7 @@ export function AppearanceSettings() {
         </CardContent>
       </Card>
 
-      <Card>
+      <Card className="max-w-2xl space-y-6 md:pr-10">
         <CardHeader>
           <CardTitle>Content Preferences</CardTitle>
           <CardDescription>Control how content is organized and displayed</CardDescription>

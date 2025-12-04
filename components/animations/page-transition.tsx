@@ -1,6 +1,7 @@
 'use client';
 
 import { cn } from '@/lib/utils';
+import { useSettingsStore } from '@/store/use-settings';
 import { motion } from 'motion/react';
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
@@ -18,10 +19,20 @@ const PageTransition = ({
 }) => {
   const pathname = usePathname();
   const [isAnimating, setIsAnimating] = useState(false);
+  const { isTransitionPageEnabled } = useSettingsStore();
+
+  if (!isTransitionPageEnabled) {
+    return (
+      <div className={cn('w-full bg-background pt-16', className)}>
+        <div className="site-container mx-auto">{children}</div>
+        {!noFooter && <Footer />}
+      </div>
+    );
+  }
 
   return (
     <div
-      className={cn('bg-background w-full pt-16', className, {
+      className={cn('w-full bg-background pt-16', className, {
         'overflow-hidden': isAnimating,
         'overflow-y-auto': !isAnimating,
       })}

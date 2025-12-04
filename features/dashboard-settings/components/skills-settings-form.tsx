@@ -1,6 +1,6 @@
 'use client';
 
-import { skillsApi } from '@/apis/skills';
+import { skillsApi, UpdateSkillDto } from '@/apis/skills';
 import ConfirmDialog from '@/components/shared/confirm-dialog';
 import ImageUploadV2 from '@/components/shared/image-upload-v2';
 import EmptyState from '@/components/shared/state/empty-state';
@@ -30,10 +30,11 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { Switch } from '@/components/ui/switch';
 import { Textarea } from '@/components/ui/textarea';
 import { uploadFile } from '@/lib/uploadthing';
+import { ISkill } from '@/models';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Edit, EllipsisIcon, Loader2, Plus, Trash2 } from 'lucide-react';
-import { useSession } from 'next-auth/react';
+import Image from 'next/image';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
@@ -59,7 +60,6 @@ const skillCategories = ['Frontend', 'Backend', 'Database', 'DevOps', 'Tools', '
 
 export function SkillsSettingsForm() {
   const queryClient = useQueryClient();
-  const { data: session } = useSession();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
 
@@ -102,7 +102,7 @@ export function SkillsSettingsForm() {
   });
 
   const updateMutation = useMutation({
-    mutationFn: ({ id, data }: { id: string; data: any }) => skillsApi.update(id, data),
+    mutationFn: ({ id, data }: { id: string; data: UpdateSkillDto }) => skillsApi.update(id, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['skills'], exact: false });
       toast.success('Skill updated successfully');
@@ -144,8 +144,8 @@ export function SkillsSettingsForm() {
     setIsDialogOpen(true);
   };
 
-  const handleEdit = (skill: any) => {
-    setEditingId(skill._id);
+  const handleEdit = (skill: ISkill) => {
+    setEditingId(skill._id.toString());
     form.reset({
       ...skill,
       icon: skill.icon || '',
@@ -186,7 +186,7 @@ export function SkillsSettingsForm() {
     }
 
     // Format data for API
-    const apiData: any = {
+    const apiData = {
       ...data,
       icon: iconUrl,
     };
@@ -199,7 +199,7 @@ export function SkillsSettingsForm() {
   };
 
   return (
-    <div className="space-y-6 md:pr-10">
+    <div className="max-w-7xl space-y-6 md:pr-10">
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-lg font-medium">Skills</h2>
@@ -239,11 +239,13 @@ export function SkillsSettingsForm() {
               <CardHeader className="flex flex-row items-start justify-between space-y-0">
                 <div className="flex items-center gap-3">
                   {skill.icon ? (
-                    <img
+                    <Image
                       src={skill.icon}
                       alt={skill.name}
                       className="h-10 w-10 rounded-md object-contain"
                       // style={{ backgroundColor: skill.iconColor ? `${skill.iconColor}20` : 'transparent' }}
+                      width={80}
+                      height={80}
                     />
                   ) : (
                     <div
