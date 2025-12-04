@@ -36,14 +36,14 @@ export class SocialLinkService {
   /**
    * Get owner social links (using ADMIN_ID from env)
    */
-  static async getOwnerSocialLinks(): Promise<ISocialLink[]> {
+  static async getOwnerSocialLinks({ limit = 10 }: { limit?: number }): Promise<ISocialLink[]> {
     try {
       await connectDB();
       const adminId = process.env.ADMIN_ID;
       if (!adminId) {
         throw new Error('ADMIN_ID is not defined in environment variables');
       }
-      return await SocialLink.find({ userId: adminId }).sort({ displayOrder: 1, createdAt: 1 });
+      return await SocialLink.find({ userId: adminId }).sort({ displayOrder: 1, createdAt: 1 }).limit(limit);
     } catch (error) {
       console.error('Error getting owner social links:', error);
       throw new Error('Failed to get owner social links');

@@ -12,6 +12,7 @@ export async function GET(req: Request) {
   try {
     const { searchParams } = new URL(req.url);
     const userId = searchParams.get('userId');
+    const limit = searchParams.get('limit');
     // const isOwner = searchParams.get('owner') === 'true';
 
     if (userId) {
@@ -20,7 +21,7 @@ export async function GET(req: Request) {
     }
 
     // Default to owner's social links
-    const socialLinks = await SocialLinkService.getOwnerSocialLinks();
+    const socialLinks = await SocialLinkService.getOwnerSocialLinks({ limit: limit ? Number(limit) : undefined });
     return Response.json(socialLinks, { status: 200 });
   } catch (error) {
     console.error('Error in GET /api/social-links:', error);
