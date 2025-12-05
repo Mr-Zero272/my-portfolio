@@ -1,5 +1,6 @@
 'use client';
 
+import { useSidebar } from '@/components/contexts/sidebar-context';
 import Home from '@/components/icons/home';
 import AvatarMenu from '@/components/shared/avatar-menu';
 import MusicButton from '@/components/shared/music-button';
@@ -18,8 +19,22 @@ const Header = () => {
   const router = useRouter();
   const isInBlogDetailPage = useMemo(() => micromatch.isMatch(pathname || '', '/blog/*'), [pathname]);
 
+  // get sidebar state to calculate header position
+  const { isCollapsed, isExpanded, isHidden } = useSidebar();
+  const sidebarWidth = useMemo(() => {
+    if (isHidden) return '0rem';
+    if (isCollapsed) return '5rem';
+    if (isExpanded) return '5rem';
+    return '0';
+  }, [isHidden, isCollapsed, isExpanded]);
+
   return (
-    <header className="fixed top-4 left-1/2 z-20 flex -translate-x-1/2 items-center justify-center bg-transparent">
+    <header
+      className="fixed top-4 z-20 flex -translate-x-1/2 items-center justify-center bg-transparent"
+      style={{
+        left: `calc(${sidebarWidth} + (100% - ${sidebarWidth}) / 2)`,
+      }}
+    >
       <ul className="flex w-fit items-center justify-center gap-2 rounded-full bg-neutral-100/30 px-3 py-2 backdrop-blur-sm">
         <li className="md:hidden">
           <SidebarToggle />
