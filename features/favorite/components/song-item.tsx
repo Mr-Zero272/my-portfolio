@@ -71,7 +71,11 @@ const SongItem = ({ index, track, active = false, value }: Props) => {
       })}
     >
       <div className="flex flex-1 items-center gap-x-3">
-        <SortableItemHandle className="text-muted-foreground hover:text-foreground">
+        <SortableItemHandle
+          className={cn('text-muted-foreground hover:text-foreground', {
+            'hover:text-white dark:hover:text-black': active,
+          })}
+        >
           <GripVertical className="h-4 w-4" />
         </SortableItemHandle>
         <div className="flex size-5 items-center justify-center" onClick={() => setTrack(index)}>

@@ -1,8 +1,9 @@
 import MarqueeText from '@/components/shared/marquee-text';
 import { AnimatedButton } from '@/components/ui/animated-button';
 import { Sortable } from '@/components/ui/sortable';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { useMusicStore } from '@/store/use-music-store';
-import { Dot, Plus } from 'lucide-react';
+import { Dot, ListX, Plus } from 'lucide-react';
 import { useMemo } from 'react';
 import SongItem from './song-item';
 
@@ -15,12 +16,9 @@ const MusicListTab = ({ onSetTab }: MusicListTabProps) => {
   const currentTrackIndex = useMusicStore((state) => state.currentTrackIndex);
   const setTracks = useMusicStore((state) => state.setTracks);
   const reorderTracks = useMusicStore((state) => state.reorderTracks);
+  const soundRef = useMusicStore((state) => state.soundRef);
 
   const currentTrack = useMemo(() => tracks[currentTrackIndex], [tracks, currentTrackIndex]);
-
-  console.log({
-    tracks,
-  });
 
   return (
     <div>
@@ -39,15 +37,28 @@ const MusicListTab = ({ onSetTab }: MusicListTabProps) => {
         </div>
         <div className="flex items-center gap-2">
           {tracks.length > 0 && (
-            <AnimatedButton
-              variant="outline"
-              className="border-destructive text-destructive hover:text-destructive"
-              onClick={() => {
-                setTracks([]);
-              }}
-            >
-              Clear list
-            </AnimatedButton>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <AnimatedButton
+                  variant="outline"
+                  size="icon"
+                  className="border-destructive text-destructive hover:text-destructive"
+                  onClick={() => {
+                    // clean up all list and current track
+                    setTracks([]);
+                    if (soundRef) {
+                      soundRef.pause();
+                      soundRef.unload();
+                    }
+                  }}
+                >
+                  <ListX />
+                </AnimatedButton>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Clear list</p>
+              </TooltipContent>
+            </Tooltip>
           )}
           <AnimatedButton variant="outline" onClick={() => onSetTab('add')}>
             <Plus /> <span>Add songs</span>
