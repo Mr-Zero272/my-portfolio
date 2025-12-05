@@ -13,7 +13,7 @@ import NavigationLink from './navigation-link';
 
 const svgVariants = {
   close: {
-    rotate: 360,
+    rotate: 0,
   },
   open: {
     rotate: 180,
@@ -120,7 +120,7 @@ const Navigation = () => {
             )}
             onClick={toggle}
           >
-            <svg
+            <motion.svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
               viewBox="0 0 24 24"
@@ -129,19 +129,15 @@ const Navigation = () => {
               className={cn('size-4 stroke-[#E0E4EB] transition-all duration-700 ease-in-out dark:stroke-[#373F4E]', {
                 'size-8': isExpanded,
               })}
+              variants={svgVariants}
+              animate={svgControls}
+              transition={{
+                duration: 0.3,
+                ease: 'easeInOut',
+              }}
             >
-              <motion.path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="m8.25 4.5 7.5 7.5-7.5 7.5"
-                variants={svgVariants}
-                animate={svgControls}
-                transition={{
-                  duration: 0.5,
-                  ease: 'easeInOut',
-                }}
-              />
-            </svg>
+              <path strokeLinecap="round" strokeLinejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+            </motion.svg>
           </button>
         </div>
         <div className="flex flex-col gap-3">
