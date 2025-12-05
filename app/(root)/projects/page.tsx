@@ -6,7 +6,7 @@ import { Metadata } from 'next';
 export const dynamic = 'force-dynamic';
 
 export const metadata: Metadata = {
-  title: 'Projects by Thuong Phan Thanh - Full Stack Developer',
+  title: 'Projects',
   description:
     'Browse my web development projects including React, Next.js, Angular, and Java Spring applications. See live demos, source code, and technical implementations.',
   keywords: [

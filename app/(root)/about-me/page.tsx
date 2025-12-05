@@ -5,7 +5,7 @@ import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'About Thuong Phan Thanh - Full Stack Developer',
+  title: 'About Me',
   description:
     'Learn about my journey as a Full Stack Developer. 6+ months experience with Next.js, React, Angular, Java Spring. Skills, education, and professional background.',
   keywords: [

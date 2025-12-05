@@ -2,7 +2,7 @@ import ContactFeature from '@/features/contact';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Contact Thuong Phan Thanh - Hire Full Stack Developer',
+  title: 'Contact',
   description:
     'Ready to collaborate? Contact me for full stack development projects, freelance work, or job opportunities. Specialized in Next.js, React, Angular, Java Spring.',
   keywords: [
