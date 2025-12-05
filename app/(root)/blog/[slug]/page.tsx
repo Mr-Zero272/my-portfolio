@@ -1,6 +1,6 @@
-import ViewCounter from '@/components/features/blog/view-counter';
 import ErrorState from '@/components/shared/state/error-state';
 import { API_URL, SITE_URL } from '@/configs/env';
+import ViewCounter from '@/features/blogs/components/view-counter';
 import PostPreviewFeature from '@/features/preview-post';
 import { IPostResponse } from '@/models';
 import { BaseResponse } from '@/types/response';
