@@ -12,7 +12,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { IProject } from '@/models';
-import { BadgeCheckIcon, EllipsisIcon, FolderGit, GitBranch, Link2, Server } from 'lucide-react';
+import { BadgeCheckIcon, EllipsisIcon, ExternalLink, FolderGit, GitBranch, Server } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { toast } from 'sonner';
@@ -54,7 +54,7 @@ const ProjectFeature = ({ projects }: { projects: IProject[] }) => {
           </p>
         </div>
       </div>
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 lg:gap-8">
+      <div className="grid gap-6 lg:grid-cols-2 xl:grid-cols-3 xl:gap-8">
         {projects.map((project) => (
           <Card className="" key={project._id.toString()}>
             <CardHeader className="flex items-center justify-between gap-3">
@@ -75,7 +75,12 @@ const ProjectFeature = ({ projects }: { projects: IProject[] }) => {
                 </div>
               </div>
               <div className="flex items-center gap-2">
-                <Button variant="outline" size="sm" onClick={() => handleCloneButtonClick(project.sourceCodeUrl!)}>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => handleCloneButtonClick(project.sourceCodeUrl!)}
+                  className="hidden md:inline-flex"
+                >
                   <FolderGit />
                   Clone
                 </Button>
@@ -86,12 +91,19 @@ const ProjectFeature = ({ projects }: { projects: IProject[] }) => {
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end">
+                    <DropdownMenuItem
+                      className="md:hidden"
+                      onClick={() => handleCloneButtonClick(project.sourceCodeUrl!)}
+                    >
+                      <FolderGit className="text-primary" />
+                      Clone
+                    </DropdownMenuItem>
                     <DropdownMenuItem>
-                      <GitBranch className="text-destructive" />
+                      <GitBranch className="text-primary" />
                       Fork
                     </DropdownMenuItem>
                     <DropdownMenuItem>
-                      <Server className="text-destructive" />
+                      <Server className="text-primary" />
                       Deploy
                     </DropdownMenuItem>
                   </DropdownMenuContent>
@@ -113,16 +125,21 @@ const ProjectFeature = ({ projects }: { projects: IProject[] }) => {
                 ))}
               </p>
             </CardContent>
-            <CardFooter className="flex items-center gap-1">
-              <Button variant="ghost" size="sm" asChild>
+            <CardFooter className="flex items-center gap-2">
+              <Button variant="outline" className="border-black" size="sm" asChild>
                 <Link href={project.sourceCodeUrl!}>
                   <Github />
                 </Link>
               </Button>
               {project.demoUrl && (
-                <Button variant="ghost" size="sm" asChild>
-                  <Link href={project.demoUrl}>
-                    <Link2 />
+                <Button
+                  variant="outline"
+                  className="border-primary text-primary hover:bg-primary/5 hover:text-primary"
+                  size="sm"
+                  asChild
+                >
+                  <Link href={project.demoUrl} className="flex items-center gap-2">
+                    <ExternalLink /> Demo
                   </Link>
                 </Button>
               )}

@@ -59,7 +59,7 @@ const fetchProjects = async () => {
 const ProjectPage = async () => {
   const projects = await fetchProjects();
   return (
-    <section className="p-5">
+    <section className="p-2 md:p-5">
       <ProjectFeature projects={projects} />
     </section>
   );

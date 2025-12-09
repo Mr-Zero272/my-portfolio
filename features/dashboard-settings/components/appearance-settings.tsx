@@ -32,7 +32,8 @@ const colors = [
 export function AppearanceSettings() {
   const { theme, setTheme } = useTheme();
   const { currentColor, switchColor } = useColorContext();
-  const { isTransitionPageEnabled, setIsTransitionPageEnabled } = useSettingsStore();
+  const { isTransitionPageEnabled, setIsTransitionPageEnabled, isAnimationCursorEnabled, setIsAnimationCursorEnabled } =
+    useSettingsStore();
 
   return (
     <div className="max-w-7xl space-y-6 md:pr-10">
@@ -104,6 +105,16 @@ export function AppearanceSettings() {
               <p className="text-xs text-muted-foreground">Smooth transitions when navigating between pages</p>
             </div>
             <Switch checked={isTransitionPageEnabled} onCheckedChange={setIsTransitionPageEnabled} />
+          </div>
+
+          <Separator />
+
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+            <div className="space-y-1">
+              <Label className="text-sm font-medium">Enable Animation Cursor</Label>
+              <p className="text-xs text-muted-foreground">Use special cursor instead of default cursor</p>
+            </div>
+            <Switch checked={isAnimationCursorEnabled} onCheckedChange={setIsAnimationCursorEnabled} />
           </div>
         </CardContent>
       </Card>
@@ -201,7 +212,6 @@ export function AppearanceSettings() {
 
       <div className="flex justify-end gap-3">
         <Button variant="outline">Reset to Default</Button>
-        <Button>Save Changes</Button>
       </div>
     </div>
   );

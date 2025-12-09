@@ -3,6 +3,7 @@ import SidebarProvider from '@/components/contexts/sidebar-context';
 import Header from '@/components/layouts/components/header';
 import Navigation from '@/components/layouts/components/navigation/navigation';
 import { MusicStoreInitializer } from '@/components/providers/music-store-initializer';
+import CursorSetting from '@/features/animation-cursor/components/cursor-setting';
 import { Viewport } from 'next';
 
 export const viewport: Viewport = {
@@ -23,6 +24,7 @@ export default function RootLayout({
       <MusicStoreInitializer>
         <SidebarProvider>
           <Navigation />
+          <CursorSetting />
           <section className="flex w-full flex-col gap-5 overflow-y-auto md:ml-20">
             <Header />
             <PageTransition>{children}</PageTransition>
