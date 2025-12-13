@@ -58,19 +58,19 @@ const PlayerControl = () => {
   return (
     <article className="mb-10 w-full flex-1 space-y-10 xl:mb-0">
       <div className="z-0 flex items-center justify-center">
-        <div className="relative">
+        <div className="relative flex-1 overflow-hidden">
           <Image
             src={musicBackgroundSrc}
-            className={cn('z-0 size-72 rounded-full object-cover drop-shadow-xl md:size-[23rem]', {
-              'animate-spin [animation-duration:15s]': isPlaying,
+            className={cn('z-0 size-70 rounded-full object-cover drop-shadow-xl md:size-92', {
+              'animate-spin animation-duration-[15s]': isPlaying,
             })}
             width={400}
             height={400}
             quality={100}
             alt="music background"
           />
-          <div className="group hover:bg-accent/40 absolute top-2 right-2 cursor-pointer rounded-md p-1.5">
-            <Heart className="text-muted-foreground size-6 group-hover:text-red-500 group-active:scale-90" />
+          <div className="group absolute top-2 right-2 cursor-pointer rounded-md p-1.5 hover:bg-accent/40">
+            <Heart className="size-6 text-muted-foreground group-hover:text-red-500 group-active:scale-90" />
           </div>
         </div>
       </div>
@@ -99,7 +99,7 @@ const PlayerControl = () => {
         <AnimatedButton
           variant="outline"
           size="icon"
-          className="group hover:bg-accent/40 size-12 rounded-full border-2 border-black p-3 dark:border-white"
+          className="group size-12 rounded-full border-2 border-black p-3 hover:bg-accent/40 dark:border-white"
           onClick={handlePlayButtonClick}
         >
           {isPlaying ? (
