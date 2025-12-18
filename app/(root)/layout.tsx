@@ -1,6 +1,7 @@
 import PageTransition from '@/components/animations/page-transition';
 import SidebarProvider from '@/components/contexts/sidebar-context';
 import Header from '@/components/layouts/components/header';
+import { BottomNavBar } from '@/components/layouts/components/navigation/bottom-nav-bar';
 import Navigation from '@/components/layouts/components/navigation/navigation';
 import { MusicStoreInitializer } from '@/components/providers/music-store-initializer';
 import CursorSetting from '@/features/animation-cursor/components/cursor-setting';
@@ -29,6 +30,7 @@ export default function RootLayout({
             <Header />
             <PageTransition>{children}</PageTransition>
           </section>
+          <BottomNavBar />
         </SidebarProvider>
       </MusicStoreInitializer>
     </main>
