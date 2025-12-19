@@ -95,39 +95,44 @@ export default function SortableDefault() {
   const getItemValue = (item: SortableItem) => item.id;
 
   return (
-    <div className="mx-auto w-full max-w-4xl space-y-8 p-6">
-      <Sortable
-        value={items}
-        onValueChange={handleValueChange}
-        getItemValue={getItemValue}
-        strategy="vertical"
-        className="space-y-2"
-      >
-        {items.map((item) => (
-          <SortableItem key={item.id} value={item.id}>
-            <div
-              className="flex cursor-pointer items-center gap-3 rounded-lg border border-border bg-background p-3 transition-colors hover:bg-accent/50"
-              onClick={() => console.log('🔴 ITEM CLICKED:', item.id)}
-            >
-              <SortableItemHandle className="text-muted-foreground hover:text-foreground">
-                <GripVertical className="h-4 w-4" />
-              </SortableItemHandle>
+    <div>
+      <div className="mx-auto w-full max-w-4xl space-y-8 p-6">
+        <Sortable
+          value={items}
+          onValueChange={handleValueChange}
+          getItemValue={getItemValue}
+          strategy="vertical"
+          className="space-y-2"
+        >
+          {items.map((item) => (
+            <SortableItem key={item.id} value={item.id}>
+              <div
+                className="flex cursor-pointer items-center gap-3 rounded-lg border border-border bg-background p-3 transition-colors hover:bg-accent/50"
+                onClick={() => console.log('🔴 ITEM CLICKED:', item.id)}
+              >
+                <SortableItemHandle className="text-muted-foreground hover:text-foreground">
+                  <GripVertical className="h-4 w-4" />
+                </SortableItemHandle>
 
-              <div className="flex items-center gap-2 text-muted-foreground">{getTypeIcon(item.type)}</div>
+                <div className="flex items-center gap-2 text-muted-foreground">{getTypeIcon(item.type)}</div>
 
-              <div className="min-w-0 flex-1">
-                <h4 className="truncate text-sm font-medium">{item.title}</h4>
-                <p className="truncate text-xs text-muted-foreground">{item.description}</p>
+                <div className="min-w-0 flex-1">
+                  <h4 className="truncate text-sm font-medium">{item.title}</h4>
+                  <p className="truncate text-xs text-muted-foreground">{item.description}</p>
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <Badge variant={getTypeColor(item.type) as never}>{item.type}</Badge>
+                  <span className="text-xs text-muted-foreground">{item.size}</span>
+                </div>
               </div>
-
-              <div className="flex items-center gap-2">
-                <Badge variant={getTypeColor(item.type) as never}>{item.type}</Badge>
-                <span className="text-xs text-muted-foreground">{item.size}</span>
-              </div>
-            </div>
-          </SortableItem>
-        ))}
-      </Sortable>
+            </SortableItem>
+          ))}
+        </Sortable>
+      </div>
+      <button className="group relative inline-flex h-12 items-center justify-center overflow-hidden rounded-md border border-neutral-200 bg-transparent px-6 font-medium text-neutral-600 [box-shadow:0px_4px_1px_#a3a3a3] transition-all active:translate-y-[2px] active:shadow-none">
+        Click me
+      </button>
     </div>
   );
 }

@@ -7,6 +7,7 @@ import MusicButton from '@/components/shared/music-button';
 import ThemeButton from '@/components/shared/theme-button';
 import { AnimatedButton } from '@/components/ui/animated-button';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
+import { useIsMobile } from '@/hooks/use-mobile';
 import { ArrowLeft } from 'lucide-react';
 import micromatch from 'micromatch';
 import Link from 'next/link';
@@ -15,6 +16,7 @@ import { useMemo } from 'react';
 import SidebarToggle from './navigation/sidebar-toggle';
 
 const Header = () => {
+  const isMobile = useIsMobile();
   const pathname = usePathname();
   const router = useRouter();
   const isInBlogDetailPage = useMemo(() => micromatch.isMatch(pathname || '', '/blog/*'), [pathname]);
@@ -28,11 +30,16 @@ const Header = () => {
     return '0';
   }, [isHidden, isCollapsed, isExpanded]);
 
+  const sidebarWidthCal = useMemo(() => {
+    if (isMobile) return '0rem';
+    return sidebarWidth;
+  }, [isMobile, sidebarWidth]);
+
   return (
     <header
       className="fixed top-4 z-20 flex -translate-x-1/2 items-center justify-center bg-transparent"
       style={{
-        left: `calc(${sidebarWidth} + (100% - ${sidebarWidth}) / 2)`,
+        left: `calc(${sidebarWidthCal} + (100% - ${sidebarWidthCal}) / 2)`,
       }}
     >
       <ul className="flex w-fit items-center justify-center gap-2 rounded-full bg-neutral-100/30 px-3 py-2 backdrop-blur-sm">
