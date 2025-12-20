@@ -109,10 +109,10 @@ export default async function Home() {
                 <AnimatedWords text={profileInfo.name} className="text-left text-2xl text-primary sm:text-4xl" />
                 <p className="text-sm sm:text-base">{profileInfo.description}</p>
               </div>
-              <div className="sm:w-104] absolute right-0 bottom-0 z-0 h-16 w-76 bg-slate-200/30 dark:bg-card"></div>
+              <div className="absolute right-0 bottom-0 z-0 h-16 w-76 bg-slate-200/30 sm:w-104 dark:bg-card"></div>
               <div className="flex h-16 w-full items-end justify-between">
-                <div className="flex h-1 w-12 items-center justify-center rounded-b-[4rem] bg-slate-200/30 sm:h-16 sm:w-16 dark:bg-card"></div>
-                <div className="sm:w-104] z-1 flex h-16 w-76 items-center gap-x-5 rounded-tl-4xl bg-background p-4">
+                <div className="flex h-16 w-12 items-center justify-center rounded-b-[4rem] bg-slate-200/30 sm:h-16 sm:w-16 dark:bg-card"></div>
+                <div className="z-1 flex h-16 w-76 items-center gap-x-5 rounded-tl-4xl bg-background p-4 sm:w-104">
                   <AnimatedDownloadButton variant="outline" className="rounded-full" urlDownload="/api/download/cv" />
                   <Link href="/contact" className="hidden items-center gap-x-2 sm:flex">
                     <Button className="rounded-full active:scale-90">
@@ -145,9 +145,19 @@ export default async function Home() {
             </div>
           </div>
           <div className="flex items-center justify-center gap-5 min-[1440px]:justify-between">
-            <div className="flex h-56 flex-1 items-center justify-around rounded-[3rem] bg-slate-200/30 px-4 py-5 min-[1440px]:flex-1 sm:w-10/12 sm:shrink-0 sm:grow-0 sm:px-7 dark:bg-card">
-              <InfoCard title="Github" content={githubStats.contributionsThisYear} sub="Contributions This Year" />
-              <InfoCard className="sm:hidden" title="Repo" content="17" sub="Public repositories" />
+            <div className="flex flex-1 flex-col items-center justify-around gap-5 rounded-[3rem] bg-slate-200/30 px-4 py-5 min-[1440px]:flex-1 sm:h-56 sm:w-10/12 sm:shrink-0 sm:grow-0 sm:flex-row sm:gap-0 sm:px-7 dark:bg-card">
+              <InfoCard
+                title="Github"
+                content={githubStats.contributionsThisYear}
+                sub="Contributions This Year"
+                className="w-full sm:w-fit"
+              />
+              <InfoCard
+                className="w-full sm:hidden"
+                title="Repo"
+                content={githubStats.publicRepos}
+                sub="Public repositories"
+              />
               <div className="hidden sm:flex">
                 <div className="flex w-60 flex-col">
                   <div className="flex h-16 w-full items-center justify-center rounded-l-full bg-background p-4">
