@@ -90,8 +90,8 @@ export default async function Home() {
           <Image
             className="size-80 min-[500px]:size-96 xl:h-160 xl:w-full"
             src="/images/profile-img-no-bg.png"
-            width={500}
-            height={500}
+            width={1000}
+            height={1000}
             quality={100}
             alt="profile image no bg"
           />
