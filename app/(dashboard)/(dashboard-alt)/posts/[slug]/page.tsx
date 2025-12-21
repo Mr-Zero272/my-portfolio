@@ -45,11 +45,7 @@ const EditPostPage = async ({ params }: EditPostPageProps) => {
   }
 
   return (
-    <div>
-      <EditPostFeature
-        post={postResponse.data as Omit<IPost, 'tags' | 'authors'> & { tags: ITag[]; authors: IUser[] }}
-      />
-    </div>
+    <EditPostFeature post={postResponse.data as Omit<IPost, 'tags' | 'authors'> & { tags: ITag[]; authors: IUser[] }} />
   );
 };
 

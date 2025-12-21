@@ -28,9 +28,9 @@ export function PostSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) 
           ['--sidebar-width' as never]: isMobile ? '100vw' : '350px',
         } as React.CSSProperties
       }
-      className="w-full flex-shrink-0 md:w-[var(--sidebar-width)]"
+      className="w-full shrink-0 md:w-(--sidebar-width)"
     >
-      <SidebarContent className="no-scrollbar space-y-4 p-6">
+      <SidebarContent className="no-scrollbar scrollbar-none space-y-4 p-6">
         {/* Close button for mobile */}
         {isMobile && (
           <div className="mb-4 flex items-center justify-between">

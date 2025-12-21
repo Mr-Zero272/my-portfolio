@@ -83,7 +83,10 @@ function AnimatedButton({ size, disableAnimation = false, ...props }: AnimatedBu
       whileHover="hover"
       whileTap="tap"
       whileFocus="focus"
-      style={{ display: 'inline-block', width: isHasFullWidth ? '100%' : 'auto' }}
+      style={{
+        display: 'inline-block',
+        width: isHasFullWidth ? '100%' : 'auto',
+      }}
     >
       <Button size={size} {...props} />
     </motion.div>

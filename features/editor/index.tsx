@@ -210,7 +210,7 @@ const PostEditorContent = ({ mode = 'create' }: PostEditorProps) => {
       setOpen,
       getCurrentState,
       setPostDraft,
-      session?.user?.id,
+      session,
     ],
   );
 
@@ -281,7 +281,7 @@ const PostEditorContent = ({ mode = 'create' }: PostEditorProps) => {
   return (
     <>
       <SidebarInset>
-        <header className="bg-background sticky top-0 z-10 flex h-16 shrink-0 items-center justify-between gap-2 border-b px-4">
+        <header className="sticky top-0 z-10 flex h-16 shrink-0 items-center justify-between gap-2 border-b bg-background px-4">
           <div className="flex items-center gap-2">
             <AnimatedButton onClick={handleBack} variant="ghost" disabled={isLoading}>
               <ArrowLeft size={16} />
@@ -294,13 +294,13 @@ const PostEditorContent = ({ mode = 'create' }: PostEditorProps) => {
             </Button>
           </div>
           <div className="flex items-center gap-2">
-            <AnimatedButton
-              className="fixed right-4 bottom-4 z-50 max-md:size-10 max-md:rounded-full md:static"
+            <Button
+              className="fixed right-4 bottom-4 z-50 active:scale-90 md:static"
               disabled={isLoading}
               onClick={handleMainButtonClick}
             >
               {isLoading ? 'Processing' : mode === 'create' ? 'Create' : 'Save'}
-            </AnimatedButton>
+            </Button>
 
             <SidebarTrigger className="-mr-1 ml-auto rotate-180" />
           </div>
@@ -325,7 +325,7 @@ const PostEditorContent = ({ mode = 'create' }: PostEditorProps) => {
                   <h2 className="text-2xl font-semibold">
                     Ready to {mode === 'create' ? 'create' : 'update'} your post?
                   </h2>
-                  <p className="text-muted-foreground text-sm">
+                  <p className="text-sm text-muted-foreground">
                     You can save as draft or publish immediately. Published posts will be visible to everyone.
                   </p>
                 </div>

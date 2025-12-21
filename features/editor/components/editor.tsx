@@ -2,7 +2,7 @@
 
 import { uploadFile, uploadImageWithDB, uploadMultipleFiles } from '@/lib/uploadthing';
 import NextImage from 'next/image';
-import { ChangeEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { ChangeEvent, useCallback, useMemo, useRef, useState } from 'react';
 import RichTextEditor, { BaseKit } from 'reactjs-tiptap-editor';
 import useImagePreview from '../hooks/use-preview-image';
 
@@ -234,16 +234,20 @@ function Editor() {
   const { theme } = useTheme();
   const { _id, title, content, featureImage: storeFeatureImage, imageCaption, setField } = usePostStorage();
   const { handlePaste } = useSmartPaste();
-  const [editorKey, setEditorKey] = useState(`key-${_id}`);
+  const [resetCount, setResetCount] = useState(0);
+  const editorKey = `key-${_id}-${resetCount}`;
 
   // const debouncedOnValueChange = useDebounceCallback((value: string) => {
   //   setField('content', value);
   // }, 0);
-  
-// temp remove debounce to test performance in prod
-  const debouncedOnValueChange = useCallback((value: string) => { 
-    setField('content', value);
-  }, [setField]);
+
+  // temp remove debounce to test performance in prod
+  const debouncedOnValueChange = useCallback(
+    (value: string) => {
+      setField('content', value);
+    },
+    [setField],
+  );
 
   const titleRef = useRef<HTMLTextAreaElement>(null);
 
@@ -296,13 +300,6 @@ function Editor() {
     [setField],
   );
 
-  // if post id change mean new post, then set new key to reset editor
-  useEffect(() => {
-    if (!editorKey.includes(_id)) {
-      setEditorKey(`key-${_id}-${Date.now()}`);
-    }
-  }, [_id, editorKey]);
-
   return (
     <main
       style={{
@@ -325,7 +322,7 @@ function Editor() {
                   />
                   {/* Image caption  */}
                   <Input
-                    className="bg-accent mx-0 mt-1 border-none shadow-none outline-0 focus-visible:bg-transparent focus-visible:ring-0"
+                    className="mx-0 mt-1 border-none bg-accent shadow-none outline-0 focus-visible:bg-transparent focus-visible:ring-0"
                     placeholder="Image caption"
                     value={imageCaption || ''}
                     onChange={(e) => setField('imageCaption', e.target.value)}
@@ -344,7 +341,7 @@ function Editor() {
                   </Button>
                 </div>
                 {featureImage && (
-                  <div className="text-muted-foreground mt-2 text-sm">Feature image: {featureImage.file.name}</div>
+                  <div className="mt-2 text-sm text-muted-foreground">Feature image: {featureImage.file.name}</div>
                 )}
                 <div className="mt-2 flex gap-2">
                   <AnimatedButton onClick={handleUploadLocalImage} variant="outline" size="sm">
@@ -357,7 +354,7 @@ function Editor() {
                     }}
                     variant="ghost"
                     size="sm"
-                    className='text-destructive hover:text-destructive'
+                    className="text-destructive hover:text-destructive"
                   >
                     Remove
                   </AnimatedButton>
@@ -368,7 +365,7 @@ function Editor() {
                 <AnimatedButton
                   onClick={handleUploadLocalImage}
                   variant="ghost"
-                  className="hover:text-foreground cursor-pointer pl-0 text-sm font-normal hover:bg-transparent"
+                  className="cursor-pointer pl-0 text-sm font-normal hover:bg-transparent hover:text-foreground"
                   disabled={imageLoading}
                 >
                   <Plus className="h-4 w-4" />
@@ -387,7 +384,7 @@ function Editor() {
               </div>
             )}
 
-            {imageError && <div className="text-destructive mt-2 text-sm">{imageError}</div>}
+            {imageError && <div className="mt-2 text-sm text-destructive">{imageError}</div>}
 
             <input
               type="file"
@@ -401,12 +398,12 @@ function Editor() {
             <Textarea
               ref={titleRef}
               value={title || ''}
-              className="text-foreground min-w-full resize-none border-none px-0 !text-4xl font-semibold shadow-none focus-visible:ring-0 focus-visible:ring-offset-0 dark:bg-transparent"
+              className="min-w-full resize-none border-none px-0 text-4xl font-semibold text-foreground shadow-none focus-visible:ring-0 focus-visible:ring-offset-0 dark:bg-transparent"
               placeholder="Post title"
               onPaste={(e) =>
                 handlePaste(e, {
                   onContentDetected: (detectedContent) => {
-                    setEditorKey(`key-${_id}-${Date.now()}`);
+                    setResetCount((prev) => prev + 1);
                     setField('content', detectedContent);
                   },
                   onTitleDetected: (detectedTitle) => {
@@ -436,6 +433,9 @@ function Editor() {
                 handleTitleResize();
               }}
               required
+              style={{
+                fontSize: '36px',
+              }}
             />
           </div>
 
