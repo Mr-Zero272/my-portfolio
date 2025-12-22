@@ -1,4 +1,6 @@
 'use client';
+import { projectsApi } from '@/apis/projects';
+import { useQuery } from '@tanstack/react-query';
 
 import { Github } from '@/components/icons';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -11,16 +13,19 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { IProject } from '@/models';
 import { BadgeCheckIcon, EllipsisIcon, ExternalLink, FolderGit, GitBranch, Server } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { toast } from 'sonner';
 import { useCopyToClipboard } from 'usehooks-ts';
 
-const ProjectFeature = ({ projects }: { projects: IProject[] }) => {
+const ProjectFeature = () => {
+  const { data: projects = [] } = useQuery({
+    queryKey: ['projects', 'list', { owner: true }],
+    queryFn: () => projectsApi.getAll({ owner: true }),
+  });
   const { data: session } = useSession();
-  const [_, copy] = useCopyToClipboard();
+  const [, copy] = useCopyToClipboard();
 
   const handleCloneButtonClick = async (url: string) => {
     await copy(`git clone ${url}`);

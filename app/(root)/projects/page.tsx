@@ -1,6 +1,7 @@
 import { SITE_URL } from '@/configs/env';
 import ProjectFeature from '@/features/projects';
 import { IProject } from '@/models';
+import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query';
 import { Metadata } from 'next';
 
 export const dynamic = 'force-dynamic';
@@ -48,20 +49,33 @@ export const metadata: Metadata = {
 
 const fetchProjects = async () => {
   try {
-    const response = await fetch(`${SITE_URL}/api/projects?owner=true`);
+    const response = await fetch(`${SITE_URL}/api/projects?owner=true`, {
+      next: {
+        revalidate: 3600,
+      },
+    });
     const projects = (await response.json()) as IProject[];
     return projects;
   } catch (error) {
-    throw error;
+    console.error('Error fetching projects:', error);
+    return [];
   }
 };
 
 const ProjectPage = async () => {
-  const projects = await fetchProjects();
+  const queryClient = new QueryClient();
+
+  await queryClient.prefetchQuery({
+    queryKey: ['projects', 'list', { owner: true }],
+    queryFn: fetchProjects,
+  });
+
   return (
-    <section className="p-2 md:p-5">
-      <ProjectFeature projects={projects} />
-    </section>
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <section className="p-2 md:p-5">
+        <ProjectFeature />
+      </section>
+    </HydrationBoundary>
   );
 };
 

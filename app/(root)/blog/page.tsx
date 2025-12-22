@@ -3,6 +3,7 @@ import BlogFeature from '@/features/blogs';
 import BlogsSkeleton from '@/features/blogs/components/blogs-skeleton';
 import { IPost, ITag } from '@/models';
 import { BasePaginationResponse } from '@/types/response';
+import { HydrationBoundary, QueryClient, dehydrate } from '@tanstack/react-query';
 import { Metadata } from 'next';
 import { Suspense } from 'react';
 
@@ -81,12 +82,19 @@ const getListPosts = async () => {
 };
 
 const BlogPage = async () => {
-  const postsData = await getListPosts();
+  const queryClient = new QueryClient();
+
+  await queryClient.prefetchQuery({
+    queryKey: ['posts', 'list', { status: 'published' }],
+    queryFn: getListPosts,
+  });
 
   return (
-    <Suspense fallback={<BlogsSkeleton />}>
-      <BlogFeature posts={postsData.data} />
-    </Suspense>
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <Suspense fallback={<BlogsSkeleton />}>
+        <BlogFeature />
+      </Suspense>
+    </HydrationBoundary>
   );
 };
 
