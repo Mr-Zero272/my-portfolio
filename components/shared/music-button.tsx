@@ -5,11 +5,13 @@ import { useMusicStore } from '@/store/use-music-store';
 import { Heart, Music, Music2, Pause, Play, SkipBack, SkipForward } from 'lucide-react';
 import Image from 'next/image';
 import { useCallback } from 'react';
+import { AudioWaveformIcon } from '../icons/audio-waveform';
 import { AnimatedButton } from '../ui/animated-button';
 import { Checkbox } from '../ui/checkbox';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from '../ui/dropdown-menu';
 
 const MusicButton = ({ className }: { className?: string }) => {
+  // const isMobile = useMediaQuery('(max-width: 768px)');
   const tracks = useMusicStore((state) => state.tracks);
   const currentTrackIndex = useMusicStore((state) => state.currentTrackIndex);
   const musicBackgroundSrc = useMusicStore((state) => state.musicBackgroundSrc);
@@ -20,7 +22,6 @@ const MusicButton = ({ className }: { className?: string }) => {
   const pause = useMusicStore((state) => state.pause);
   const nextTrack = useMusicStore((state) => state.nextTrack);
   const previousTrack = useMusicStore((state) => state.previousTrack);
-  const seek = useMusicStore((state) => state.seek);
 
   const handlePlayButtonClick = useCallback(() => {
     if (isPlaying) {
@@ -34,7 +35,7 @@ const MusicButton = ({ className }: { className?: string }) => {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <AnimatedButton size="icon" variant="ghost" className={className}>
-          <Music className="size-5" />
+          {isPlaying ? <AudioWaveformIcon className="size-5 fill-white text-white" /> : <Music className="size-5" />}
         </AnimatedButton>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-72 space-y-3 rounded-2xl p-4 md:w-80">
