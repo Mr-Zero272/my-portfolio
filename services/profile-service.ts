@@ -17,6 +17,7 @@ export interface CreateProfileData {
   freelanceAvailable?: boolean;
   languages?: string[];
   rotatingWords?: string[];
+  heroVideo?: string;
   metaTitle?: string;
   metaDescription?: string;
   ogImage?: string;
@@ -37,6 +38,7 @@ export interface UpdateProfileData {
   freelanceAvailable?: boolean;
   languages?: string[];
   rotatingWords?: string[];
+  heroVideo?: string;
   metaTitle?: string;
   metaDescription?: string;
   ogImage?: string;

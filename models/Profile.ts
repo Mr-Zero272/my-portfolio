@@ -22,6 +22,7 @@ export interface IProfile extends Document {
 
   // Rotating words for homepage
   rotatingWords: string[]; // e.g., ["Web", "Software", "Mainframe"]
+  heroVideo?: string; // URL to the background video
 
   // SEO
   metaTitle?: string;
@@ -100,6 +101,10 @@ const ProfileSchema: Schema = new Schema(
     rotatingWords: {
       type: [String],
       default: ['Web', 'Software', 'Mainframe'],
+    },
+    heroVideo: {
+      type: String,
+      trim: true,
     },
 
     // SEO
