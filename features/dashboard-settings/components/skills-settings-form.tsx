@@ -240,7 +240,7 @@ export function SkillsSettingsForm() {
                 <div className="flex items-center gap-3">
                   {skill.icon ? (
                     <Image
-                      src={skill.icon}
+                      src={encodeURIComponent(skill.icon)}
                       alt={skill.name}
                       className="h-10 w-10 rounded-md object-contain"
                       // style={{ backgroundColor: skill.iconColor ? `${skill.iconColor}20` : 'transparent' }}

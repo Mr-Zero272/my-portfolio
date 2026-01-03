@@ -5,6 +5,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { ISkill } from '@/models';
 import { useQuery } from '@tanstack/react-query';
 import { motion } from 'motion/react';
+import Image from 'next/image';
 
 const cardVariants = {
   hidden: { opacity: 0, y: 20 },
@@ -71,9 +72,11 @@ const SkillsTab = () => {
                 <CardHeader className="flex flex-row items-start justify-between space-y-0">
                   <div className="flex items-center gap-3">
                     {skill.icon ? (
-                      <img
-                        src={skill.icon}
+                      <Image
+                        src={encodeURIComponent(skill.icon)}
                         alt={skill.name}
+                        width={40}
+                        height={40}
                         className="h-10 w-10 rounded-md object-contain"
                         // style={{ backgroundColor: skill.iconColor ? `${skill.iconColor}20` : 'transparent' }}
                       />
