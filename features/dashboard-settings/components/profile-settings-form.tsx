@@ -41,7 +41,7 @@ export function ProfileSettingsForm() {
     queryFn: () => profileApi.getProfile(),
   });
 
-  const { mutateAsync: updateProfile, isPending: updating } = useMutation({
+  const { mutateAsync: updateProfile } = useMutation({
     mutationFn: (data: unknown) => profileApi.updateProfile(data as ProfileSettingsFormData),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['profile'] });
@@ -288,8 +288,8 @@ export function ProfileSettingsForm() {
 
               {/* Submit Button */}
               <div className="flex justify-end">
-                <Button type="submit" disabled={updating}>
-                  {updating ? (
+                <Button type="submit" disabled={form.formState.isSubmitting}>
+                  {form.formState.isSubmitting ? (
                     <>
                       <Loader2 className="h-4 w-4 animate-spin" />
                       Saving...

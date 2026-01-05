@@ -212,8 +212,6 @@ export function ProjectsSettingsForm() {
     },
   });
 
-  const saving = createMutation.isPending || updateMutation.isPending;
-
   // Auto-generate slug from name
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const name = e.target.value;
@@ -777,8 +775,8 @@ export function ProjectsSettingsForm() {
                 <Button type="button" variant="outline" onClick={() => setIsDialogOpen(false)}>
                   Cancel
                 </Button>
-                <Button type="submit" disabled={saving}>
-                  {saving && <Loader2 className="h-4 w-4 animate-spin" />}
+                <Button type="submit" disabled={form.formState.isSubmitting}>
+                  {form.formState.isSubmitting && <Loader2 className="h-4 w-4 animate-spin" />}
                   Save Changes
                 </Button>
               </DialogFooter>
