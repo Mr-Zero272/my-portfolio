@@ -35,7 +35,15 @@ export const BottomNavBar = () => {
         duration: 0.25,
         ease: 'easeOut',
       }}
-      className="fixed bottom-6 left-1/2 z-50 flex -translate-x-1/2 flex-row gap-2 rounded-full border border-neutral-200/20 bg-white/80 p-2 shadow-lg backdrop-blur-xl md:hidden dark:border-white/10 dark:bg-black/80"
+      drag="y"
+      dragConstraints={{ top: 0, bottom: 0 }}
+      dragElastic={{ top: 0, bottom: 0.2 }}
+      onDragEnd={(_, info) => {
+        if (info.offset.y > 20 || info.velocity.y > 10) {
+          setDirection('down');
+        }
+      }}
+      className="fixed bottom-4 left-1/2 z-50 flex -translate-x-1/2 flex-row gap-2 rounded-full border border-neutral-200/20 bg-white/80 p-2 shadow-lg backdrop-blur-xl md:hidden dark:border-white/10 dark:bg-black/80"
     >
       {navbarRoutesInfo.map((route) => {
         const isActive = pathname === route.route || (pathname.includes(route.route) && route.route.length > 1);
