@@ -145,7 +145,7 @@ const Navigation = () => {
             const isActive =
               (pathname.includes(navLink.route) && navLink.route.length > 1) || pathname === navLink.route;
             const Icon = navLink.icon;
-            const IconSolid = navLink.iconSolid;
+            // const IconSolid = navLink.iconSolid;
             return (
               <NavigationLink
                 key={navLink.label}

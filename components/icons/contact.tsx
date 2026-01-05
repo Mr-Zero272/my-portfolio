@@ -1,19 +1,8 @@
-type Props = {
-  className?: string;
-  strokeWidth?: number;
-};
+import { SVGProps } from 'react';
 
-const Contact = ({ className = '', strokeWidth = 1.5 }: Props) => {
+const Contact = (props: SVGProps<SVGSVGElement>) => {
   return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 24 24"
-      width="24"
-      height="24"
-      fill="none"
-      className={className}
-      strokeWidth={strokeWidth}
-    >
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" {...props}>
       <path
         d="M2 5.5L8.91302 9.41697C11.4616 10.861 12.5384 10.861 15.087 9.41697L22 5.5"
         stroke="currentColor"
