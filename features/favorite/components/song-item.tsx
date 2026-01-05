@@ -121,8 +121,10 @@ const SongItem = ({ index, track, active = false, value }: Props) => {
         </div>
       </div>
       <div className="flex items-center justify-end gap-x-2">
-        {active && isPlaying && currentTrackIndex === index && <MusicPlaying className="size-5" />}
-        {currentTrackIndex === index && <p className="w-10">{formatSecondsToTime(Math.round(duration - progress))}</p>}
+        {active && !isEditing && isPlaying && currentTrackIndex === index && <MusicPlaying className="size-5" />}
+        {currentTrackIndex === index && !isEditing && (
+          <p className="w-10">{formatSecondsToTime(Math.round(duration - progress))}</p>
+        )}
         <DropdownMenu>
           <DropdownMenuTrigger className="size-7" asChild>
             <Button variant="ghost" size="icon">

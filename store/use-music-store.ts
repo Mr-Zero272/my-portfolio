@@ -24,6 +24,7 @@ interface MusicState {
   volume: number;
   soundRef: Howl | null;
   currentTrackSrcRef: string | null;
+  sleepTimerTarget: number | null;
 
   // Actions
   setTracks: (tracks: Track[]) => void;
@@ -47,6 +48,9 @@ interface MusicState {
   randomMusicBackground: () => void;
   initializeTrack: () => void;
   cleanupSound: () => void;
+  setSleepTimer: (minutes: number) => void;
+  cancelSleepTimer: () => void;
+  checkSleepTimer: () => void;
 }
 
 export const useMusicStore = create<MusicState>((set, get) => ({
@@ -63,6 +67,7 @@ export const useMusicStore = create<MusicState>((set, get) => ({
   volume: 1.0,
   soundRef: null,
   currentTrackSrcRef: null,
+  sleepTimerTarget: null,
 
   // Actions
   setTracks: (tracks) => {
@@ -273,6 +278,25 @@ export const useMusicStore = create<MusicState>((set, get) => ({
       });
 
       newSound.play();
+    }
+  },
+
+  setSleepTimer: (minutes) => {
+    const targetTime = Date.now() + minutes * 60 * 1000;
+    set({ sleepTimerTarget: targetTime });
+  },
+
+  cancelSleepTimer: () => {
+    set({ sleepTimerTarget: null });
+  },
+
+  checkSleepTimer: () => {
+    const { sleepTimerTarget, isPlaying } = get();
+    if (sleepTimerTarget && isPlaying) {
+      if (Date.now() >= sleepTimerTarget) {
+        get().pause();
+        set({ sleepTimerTarget: null });
+      }
     }
   },
 
