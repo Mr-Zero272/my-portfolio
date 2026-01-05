@@ -23,9 +23,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { ColorPicker, ColorPickerFormat, ColorPickerHue } from '@/components/ui/shadcn-io/color-picker';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Switch } from '@/components/ui/switch';
 import { Textarea } from '@/components/ui/textarea';
@@ -36,6 +34,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Edit, EllipsisIcon, Loader2, Plus, Trash2 } from 'lucide-react';
 import Image from 'next/image';
 import { useState } from 'react';
+import { TwitterPicker } from 'react-color';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import * as z from 'zod';
@@ -240,12 +239,13 @@ export function SkillsSettingsForm() {
                 <div className="flex items-center gap-3">
                   {skill.icon ? (
                     <Image
-                      src={encodeURIComponent(skill.icon)}
+                      src={skill.icon}
                       alt={skill.name}
                       className="h-10 w-10 rounded-md object-contain"
                       // style={{ backgroundColor: skill.iconColor ? `${skill.iconColor}20` : 'transparent' }}
                       width={80}
                       height={80}
+                      unoptimized
                     />
                   ) : (
                     <div
@@ -409,34 +409,7 @@ export function SkillsSettingsForm() {
                   <FormItem>
                     <FormLabel>Icon Color</FormLabel>
                     <FormControl>
-                      <Popover>
-                        <PopoverTrigger asChild>
-                          <Button variant="outline" className="w-full justify-start text-left font-normal">
-                            <div className="h-4 w-4 rounded-full border" style={{ backgroundColor: field.value }} />
-                            {field.value}
-                          </Button>
-                        </PopoverTrigger>
-                        <PopoverContent className="w-auto p-3">
-                          <ColorPicker
-                            value={field.value}
-                            onChange={(v) => {
-                              // Handle color value - if it's already a string, use it directly
-                              if (typeof v === 'string') {
-                                field.onChange(v);
-                              } else if (Array.isArray(v)) {
-                                // Convert RGBA array to hex
-                                const [r, g, b] = v;
-                                const hex = `#${((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1)}`;
-                                field.onChange(hex);
-                              }
-                            }}
-                            className="w-[200px]"
-                          >
-                            <ColorPickerHue />
-                            <ColorPickerFormat />
-                          </ColorPicker>
-                        </PopoverContent>
-                      </Popover>
+                      <TwitterPicker color={field.value} onChange={(e) => field.onChange(e.hex)} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -507,8 +480,8 @@ export function SkillsSettingsForm() {
                 <Button type="button" variant="outline" onClick={() => setIsDialogOpen(false)}>
                   Cancel
                 </Button>
-                <Button type="submit" disabled={saving}>
-                  {saving && <Loader2 className="h-4 w-4 animate-spin" />}
+                <Button type="submit" disabled={form.formState.isSubmitting}>
+                  {form.formState.isSubmitting && <Loader2 className="h-4 w-4 animate-spin" />}
                   Save Changes
                 </Button>
               </DialogFooter>

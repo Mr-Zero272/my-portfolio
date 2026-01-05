@@ -73,11 +73,12 @@ const SkillsTab = () => {
                   <div className="flex items-center gap-3">
                     {skill.icon ? (
                       <Image
-                        src={encodeURIComponent(skill.icon)}
+                        src={skill.icon}
                         alt={skill.name}
                         width={40}
                         height={40}
                         className="h-10 w-10 rounded-md object-contain"
+                        unoptimized
                         // style={{ backgroundColor: skill.iconColor ? `${skill.iconColor}20` : 'transparent' }}
                       />
                     ) : (
@@ -98,7 +99,9 @@ const SkillsTab = () => {
                   <div className="mt-2 flex flex-wrap gap-2 text-sm">
                     <Badge variant="secondary">{skill.proficiency}</Badge>
                     {skill.yearsOfExperience && skill.yearsOfExperience > 0 && (
-                      <Badge variant="secondary">{skill.yearsOfExperience} years</Badge>
+                      <Badge variant="secondary">
+                        {skill.yearsOfExperience} {skill.yearsOfExperience === 1 ? 'year' : 'years'}
+                      </Badge>
                     )}
                   </div>
                 </CardContent>
