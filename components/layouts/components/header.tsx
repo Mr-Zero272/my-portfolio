@@ -10,12 +10,15 @@ import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip
 import { useIsMobile } from '@/hooks/use-mobile';
 import { ArrowLeft } from 'lucide-react';
 import micromatch from 'micromatch';
+import { AnimatePresence, motion } from 'motion/react';
+import { useTheme } from 'next-themes';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useMemo } from 'react';
 import SidebarToggle from './navigation/sidebar-toggle';
 
 const Header = () => {
+  const { theme } = useTheme();
   const isMobile = useIsMobile();
   const pathname = usePathname();
   const router = useRouter();
@@ -42,41 +45,88 @@ const Header = () => {
         left: `calc(${sidebarWidthCal} + (100% - ${sidebarWidthCal}) / 2)`,
       }}
     >
-      <ul className="flex w-fit items-center justify-center gap-2 rounded-full bg-neutral-100/30 px-3 py-2 backdrop-blur-sm">
-        <li className="md:hidden">
-          <SidebarToggle />
-        </li>
-        <li className="md:hidden">
-          <Link href="/">
-            <AnimatedButton size="icon" variant="ghost">
-              <Home className="size-5" />
-            </AnimatedButton>
-          </Link>
-        </li>
-        <li>
-          <ThemeButton />
-        </li>
-        <li>
-          <MusicButton />
-        </li>
-        {!isInBlogDetailPage && (
-          <li className="min-[1440px]:hidden">
-            <AvatarMenu />
-          </li>
-        )}
-        {isInBlogDetailPage && (
-          <li>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <AnimatedButton size="icon" variant="ghost" onClick={() => router.back()}>
-                  <ArrowLeft className="size-5" />
-                </AnimatedButton>
-              </TooltipTrigger>
-              <TooltipContent>Back</TooltipContent>
-            </Tooltip>
-          </li>
-        )}
-      </ul>
+      <motion.ul
+        layout
+        key="header"
+        initial={{ opacity: 0, y: -4 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: -4 }}
+        transition={{ type: 'spring', stiffness: 250, damping: 25 }}
+        className="flex w-fit items-center justify-center gap-2 rounded-full bg-neutral-100/30 px-3 py-2 backdrop-blur-sm"
+      >
+        <AnimatePresence mode="popLayout">
+          <motion.li key="sidebar-toggle" className="md:hidden">
+            <SidebarToggle />
+          </motion.li>
+          <motion.li
+            key="home"
+            layout
+            initial={{ opacity: 0, y: -4 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -4 }}
+            transition={{ type: 'spring', stiffness: 250, damping: 25 }}
+            className="md:hidden"
+          >
+            <Link href="/">
+              <AnimatedButton size="icon" variant="ghost">
+                <Home className="size-5" />
+              </AnimatedButton>
+            </Link>
+          </motion.li>
+          <motion.li
+            key={'theme-button' + theme}
+            layout
+            initial={{ opacity: 0, y: -4 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -4 }}
+            transition={{ type: 'spring', stiffness: 250, damping: 25 }}
+          >
+            <ThemeButton />
+          </motion.li>
+          <motion.li
+            key="music-button"
+            layout
+            initial={{ opacity: 0, y: -4 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -4 }}
+            transition={{ type: 'spring', stiffness: 250, damping: 25 }}
+          >
+            <MusicButton />
+          </motion.li>
+          {!isInBlogDetailPage && (
+            <motion.li
+              layout
+              key="avatar"
+              initial={{ opacity: 0, y: -4 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -4 }}
+              transition={{ type: 'spring', stiffness: 250, damping: 25 }}
+              className="min-[1440px]:hidden"
+            >
+              <AvatarMenu />
+            </motion.li>
+          )}
+          {isInBlogDetailPage && (
+            <motion.li
+              layout
+              key="back"
+              initial={{ opacity: 0, y: -4 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -4 }}
+              transition={{ type: 'spring', stiffness: 250, damping: 25 }}
+            >
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <AnimatedButton size="icon" variant="ghost" onClick={() => router.back()}>
+                    <ArrowLeft className="size-5" />
+                  </AnimatedButton>
+                </TooltipTrigger>
+                <TooltipContent>Back</TooltipContent>
+              </Tooltip>
+            </motion.li>
+          )}
+        </AnimatePresence>
+      </motion.ul>
     </header>
   );
 };
