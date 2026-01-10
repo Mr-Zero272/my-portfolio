@@ -83,10 +83,11 @@ const MusicButton = ({ className }: { className?: string }) => {
               exit={{ y: -100, x: '-50%', opacity: 0 }}
               transition={{ type: 'spring', damping: 25, stiffness: 300 }}
               drag="y"
-              dragConstraints={{ top: 0, bottom: 0 }}
-              dragElastic={{ bottom: 0, top: 0.2 }}
+              dragConstraints={{ top: -100, bottom: -50 }}
+              dragElastic={0.05}
+              dragMomentum={false}
               onDragEnd={(_, info) => {
-                if (info.offset.y < -20 || info.velocity.y < -300) {
+                if (info.offset.y < -20 || info.velocity.y < -200) {
                   setIsOpen(false);
                 }
               }}
