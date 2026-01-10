@@ -2,6 +2,7 @@
 
 import { navbarRoutesInfo } from '@/constants/nav-routes';
 import { cn } from '@/lib/utils';
+import useLayoutState from '@/store/use-layout-state';
 import { AnimatePresence, motion } from 'motion/react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -11,6 +12,7 @@ import { useEventListener } from 'usehooks-ts';
 export const BottomNavBar = () => {
   const lastScrollY = useRef(0);
   const [direction, setDirection] = useState<'up' | 'down'>('up');
+  const setBottomNavOpen = useLayoutState((state) => state.setIsBottomNavOpen);
   const pathname = usePathname();
 
   const onScroll = useCallback(() => {
@@ -19,8 +21,9 @@ export const BottomNavBar = () => {
     const threshold = 10;
     if (Math.abs(diff) < threshold) return;
     setDirection(diff > 0 ? 'down' : 'up');
+    setBottomNavOpen(diff > 0);
     lastScrollY.current = scrollY;
-  }, []);
+  }, [setBottomNavOpen]);
 
   useEventListener('scroll', onScroll);
 

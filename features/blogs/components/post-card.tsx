@@ -57,13 +57,13 @@ const PostCard = ({
             'max-h-[210px]': variant === 'horizontal' && isDisplayExcerpt,
             'max-h-[175px]': variant === 'horizontal' && !isDisplayExcerpt,
             'h-[210px]': variant === 'vertical',
-            'max-h-[280px]': isMainPost,
+            'max-h-[290px]': isMainPost,
           })}
         />
       </div>
       <div
         className={cn('flex flex-1 flex-col justify-between space-y-3 p-4', {
-          'space-y-5 py-8': isMainPost,
+          'space-y-5 py-4': isMainPost,
         })}
       >
         <div
@@ -82,16 +82,16 @@ const PostCard = ({
           )}
           <h2
             className={cn('text-lg font-bold', {
-              'text-2xl': isMainPost,
+              'line-clamp-3 text-2xl': isMainPost,
               'group-hover:underline': isHasHoverEffect,
             })}
           >
             {title}
           </h2>
           {isMainPost ? (
-            <p className="text-muted-foreground line-clamp-2">{excerpt}</p>
+            <p className="line-clamp-2 text-muted-foreground">{excerpt}</p>
           ) : (
-            isDisplayExcerpt && <p className="text-muted-foreground line-clamp-2">{excerpt}</p>
+            isDisplayExcerpt && <p className="line-clamp-2 text-muted-foreground">{excerpt}</p>
           )}
         </div>
         <div className="flex items-center justify-between">
@@ -116,9 +116,9 @@ const PostCard = ({
               )
             )}
             <div className="flex items-center">
-              <span className="text-muted-foreground text-sm">Pitithuong</span>
+              <span className="text-sm text-muted-foreground">Pitithuong</span>
               <Dot className="text-muted-foreground" />
-              <span className="text-muted-foreground text-sm">{format(createdAt, 'MMM dd, yyyy')}</span>
+              <span className="text-sm text-muted-foreground">{format(createdAt, 'MMM dd, yyyy')}</span>
             </div>
           </div>
           {variant === 'vertical' && (
