@@ -23,15 +23,7 @@ const CommentList = ({ comments, isLoading, className }: CommentListProps) => {
   }
 
   if (!comments.length) {
-    return (
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className={cn('py-12 text-center', className)}
-      >
-        <div className="text-muted-foreground text-sm">Chưa có bình luận nào. Hãy là người đầu tiên bình luận!</div>
-      </motion.div>
-    );
+    return null;
   }
 
   return (
@@ -51,28 +43,28 @@ const CommentSkeleton = () => {
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex gap-3 p-4">
       {/* Avatar skeleton */}
       <div className="flex-shrink-0">
-        <div className="bg-muted h-10 w-10 animate-pulse rounded-full" />
+        <div className="h-10 w-10 animate-pulse rounded-full bg-muted" />
       </div>
 
       {/* Content skeleton */}
       <div className="flex-1 space-y-2">
         {/* Header skeleton */}
         <div className="flex items-center gap-2">
-          <div className="bg-muted h-4 w-20 animate-pulse rounded" />
-          <div className="bg-muted h-3 w-16 animate-pulse rounded" />
+          <div className="h-4 w-20 animate-pulse rounded bg-muted" />
+          <div className="h-3 w-16 animate-pulse rounded bg-muted" />
         </div>
 
         {/* Content skeleton */}
         <div className="space-y-1">
-          <div className="bg-muted h-4 w-full animate-pulse rounded" />
-          <div className="bg-muted h-4 w-3/4 animate-pulse rounded" />
+          <div className="h-4 w-full animate-pulse rounded bg-muted" />
+          <div className="h-4 w-3/4 animate-pulse rounded bg-muted" />
         </div>
 
         {/* Actions skeleton */}
         <div className="flex items-center gap-2 pt-2">
-          <div className="bg-muted h-6 w-12 animate-pulse rounded" />
-          <div className="bg-muted h-6 w-12 animate-pulse rounded" />
-          <div className="bg-muted h-6 w-16 animate-pulse rounded" />
+          <div className="h-6 w-12 animate-pulse rounded bg-muted" />
+          <div className="h-6 w-12 animate-pulse rounded bg-muted" />
+          <div className="h-6 w-16 animate-pulse rounded bg-muted" />
         </div>
       </div>
     </motion.div>

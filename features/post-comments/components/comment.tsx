@@ -13,7 +13,6 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Skeleton } from '@/components/ui/skeleton';
-import { logger } from '@/lib/logger';
 import { cn } from '@/lib/utils';
 import { ICommentResponse } from '@/models/Comment';
 import { DropdownMenu } from '@radix-ui/react-dropdown-menu';
@@ -24,7 +23,7 @@ import { Copy, Flag, Loader2, MessageCircle, MoreHorizontal, Pencil, ThumbsDown,
 import { AnimatePresence, motion } from 'motion/react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'nextjs-toploader/app';
-import { useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { toast } from 'sonner';
 import CommentBox from './comment-box';
 import CommentReply from './comment-reply';
@@ -60,11 +59,6 @@ const Comment = ({ comment, onLike, onDislike, className }: CommentProps) => {
   // Tính toán totalPages dựa trên replyCount (giả sử limit=3)
   const totalPages = Math.ceil(Number(comment?.replyCount || 0) / 3);
   const hasMoreThanOnePage = Number(comment?.replyCount || 0) > 3;
-
-  logger({
-    totalPages,
-    hasMoreThanOnePage,
-  });
 
   // Cấu hình initialData cho page 1 từ comment.replies
   const initialData = {
@@ -106,79 +100,88 @@ const Comment = ({ comment, onLike, onDislike, className }: CommentProps) => {
     return repliesRes?.pages.flatMap((page) => page.data) || comment.replies || [];
   }, [repliesRes, comment.replies]);
 
-  const handleReply = async (content: string, images?: string[]) => {
-    try {
-      if (!comment) return;
+  const handleReply = useCallback(
+    async (content: string, images?: string[]) => {
+      try {
+        if (!comment) return;
 
-      await createComment({
-        data: {
-          postId: comment.postId,
-          content,
-          images,
-          author: session?.user?.id,
-          parentId: comment._id.toString(),
-        },
-      });
-      // Invalidate comments query to refetch comments
-      if (typeof comment.replyCount === 'number' && comment.replyCount <= 3) {
-        await queryClient.invalidateQueries({
-          queryKey: ['comments-by-post', { postId: comment.postId }],
+        await createComment({
+          data: {
+            postId: comment.postId,
+            content,
+            images,
+            author: session?.user?.id,
+            parentId: comment._id.toString(),
+          },
         });
-      } else if (typeof comment.replyCount === 'number' && comment.replyCount > 3) {
-        await queryClient.invalidateQueries({
-          queryKey: ['comments-by-parent', { commentId: comment._id.toString() }],
-        });
+        // Invalidate comments query to refetch comments
+        if (typeof comment.replyCount === 'number' && comment.replyCount <= 3) {
+          await queryClient.invalidateQueries({
+            queryKey: ['comments-by-post', { postId: comment.postId }],
+          });
+        } else if (typeof comment.replyCount === 'number' && comment.replyCount > 3) {
+          await queryClient.invalidateQueries({
+            queryKey: ['comments-by-parent', { commentId: comment._id.toString() }],
+          });
+        }
+        setShowReplyBox((prev) => !prev);
+        toast.success('Your reply has been added successfully.');
+      } catch (error) {
+        console.error('Failed to create reply comment:', error);
+        toast.error('An unexpected error occurred. Please try again.');
       }
-      setShowReplyBox((prev) => !prev);
-      toast.success('Your reply has been added successfully.');
-    } catch (error) {
-      console.error('Failed to create reply comment:', error);
-      toast.error('An unexpected error occurred. Please try again.');
-    }
-  };
+    },
+    [comment, createComment, queryClient, session],
+  );
 
   const handleToggleReplies = () => {
     setShowReplies(!showReplies);
   };
 
-  const handleDeleteComment = async (commentId: string) => {
-    try {
-      await deleteComment({ commentId, userId: session?.user?.id || '' });
-      // Invalidate comments query to refetch comments
-      await queryClient.invalidateQueries({
-        queryKey: ['comments-by-post', { postId: comment.postId }],
-      });
-      toast.success('Bình luận đã được xóa!');
-    } catch (error) {
-      toast.error('Đã có lỗi xảy ra khi xóa bình luận.');
-      console.error('Failed to delete comment:', error);
-    }
-  };
+  const handleDeleteComment = useCallback(
+    async (commentId: string) => {
+      try {
+        await deleteComment({ commentId, userId: session?.user?.id || '' });
+        // Invalidate comments query to refetch comments
+        await queryClient.invalidateQueries({
+          queryKey: ['comments-by-post', { postId: comment.postId }],
+        });
+        toast.success('Bình luận đã được xóa!');
+      } catch (error) {
+        toast.error('Đã có lỗi xảy ra khi xóa bình luận.');
+        console.error('Failed to delete comment:', error);
+      }
+    },
+    [comment, deleteComment, queryClient, session],
+  );
 
-  const handleUpdateComment = async (content: string, images?: string[]) => {
-    if (!session?.user?.id) {
-      router.push('/auth/signin');
-    }
+  const handleUpdateComment = useCallback(
+    async (content: string, images?: string[]) => {
+      if (!session?.user?.id) {
+        router.push('/auth/signin');
+      }
 
-    try {
-      await updateComment({
-        commentId: comment._id.toString(),
-        data: {
-          content,
-          images,
-        },
-      });
-      // Invalidate comments query to refetch comments
-      await queryClient.invalidateQueries({
-        queryKey: ['comments-by-post', { postId: comment.postId }],
-      });
-      setShowEditBox(false);
-      toast.success('Your comment has been updated successfully.');
-    } catch (error) {
-      toast.error('An unexpected error occurred. Please try again.');
-      console.error('Failed to create comment:', error);
-    }
-  };
+      try {
+        await updateComment({
+          commentId: comment._id.toString(),
+          data: {
+            content,
+            images,
+          },
+        });
+        // Invalidate comments query to refetch comments
+        await queryClient.invalidateQueries({
+          queryKey: ['comments-by-post', { postId: comment.postId }],
+        });
+        setShowEditBox(false);
+        toast.success('Your comment has been updated successfully.');
+      } catch (error) {
+        toast.error('An unexpected error occurred. Please try again.');
+        console.error('Failed to create comment:', error);
+      }
+    },
+    [comment, updateComment, queryClient, session, router],
+  );
 
   const isLiked = useMemo(
     () => comment.likes?.some((id) => id.toString() === session?.user?.id),
@@ -203,12 +206,12 @@ const Comment = ({ comment, onLike, onDislike, className }: CommentProps) => {
       }}
       className={cn('group/comment', className)}
     >
-      <div className="hover:bg-muted/50 flex gap-3 rounded-lg p-4 transition-colors">
+      <div className="flex gap-3 rounded-lg p-1 transition-colors hover:bg-muted/50 md:p-4">
         {/* Avatar */}
-        <div className="flex-shrink-0">
-          <Avatar className="h-10 w-10">
+        <div className="shrink-0">
+          <Avatar className="size-9 md:size-10">
             <AvatarImage src={comment.author.avatar} alt={comment.author.username} />
-            <AvatarFallback className="bg-primary/10 text-primary font-medium">
+            <AvatarFallback className="bg-primary/10 font-medium text-primary">
               {comment?.author?.username?.charAt?.(0).toUpperCase() || 'U'}
             </AvatarFallback>
           </Avatar>
@@ -218,8 +221,8 @@ const Comment = ({ comment, onLike, onDislike, className }: CommentProps) => {
         <div className="min-w-0 flex-1">
           {/* Header */}
           <div className="mb-2 flex items-center gap-2">
-            <span className="text-foreground text-sm font-medium">{comment.author.username}</span>
-            <span className="text-muted-foreground text-xs">
+            <span className="text-sm font-medium text-foreground">{comment.author.username}</span>
+            <span className="text-xs text-muted-foreground">
               {formatDistanceToNow(new Date(comment.createdAt), {
                 addSuffix: true,
                 locale: enUS,
@@ -245,7 +248,7 @@ const Comment = ({ comment, onLike, onDislike, className }: CommentProps) => {
             />
           ) : (
             <>
-              <div className="text-foreground mb-3 text-sm leading-relaxed">{comment.content}</div>
+              <div className="mb-3 text-sm leading-relaxed text-foreground">{comment.content}</div>
               {/* Images if any */}
               {comment.images && comment.images.length > 0 && (
                 <div className="mb-3 flex flex-wrap gap-2">
@@ -313,7 +316,7 @@ const Comment = ({ comment, onLike, onDislike, className }: CommentProps) => {
                   variant="ghost"
                   size="sm"
                   onClick={handleToggleReplies}
-                  className="text-muted-foreground hover:text-foreground h-8 gap-1 px-2 transition-colors"
+                  className="h-8 gap-1 px-2 text-muted-foreground transition-colors hover:text-foreground"
                 >
                   <MessageCircle className="h-3 w-3" />
                   <span>{repliesCount} relies</span>
@@ -334,7 +337,7 @@ const Comment = ({ comment, onLike, onDislike, className }: CommentProps) => {
                 <DropdownMenuContent className="w-40" align="end">
                   {session?.user?.id === comment.author._id.toString() && (
                     <DropdownMenuItem onSelect={() => setShowEditBox(true)}>
-                      <Pencil className="text-muted-foreground mr-2 h-3.5 w-3.5" />
+                      <Pencil className="mr-2 h-3.5 w-3.5 text-muted-foreground" />
                       Edit
                     </DropdownMenuItem>
                   )}
@@ -349,7 +352,7 @@ const Comment = ({ comment, onLike, onDislike, className }: CommentProps) => {
                       <DropdownMenuSeparator />
                       <DropdownMenuItem
                         onSelect={() => setShowDialogDeleteConfirm(true)}
-                        className="text-destructive hover:text-destructive cursor-pointer"
+                        className="cursor-pointer text-destructive hover:text-destructive"
                       >
                         <Trash2 className="text-destructive" /> Delete
                       </DropdownMenuItem>
@@ -378,7 +381,7 @@ const Comment = ({ comment, onLike, onDislike, className }: CommentProps) => {
                 animate={{ opacity: 1, height: 'auto' }}
                 exit={{ opacity: 0, height: 0 }}
                 transition={{ duration: 0.3, ease: 'easeInOut' }}
-                className="border-muted mt-4 space-y-3 border-l-2 pl-4"
+                className="mt-4 space-y-3 border-l-2 border-muted pl-4"
               >
                 {replies.map((reply, index) => (
                   <CommentReply
@@ -440,7 +443,7 @@ export const CommentSkeleton = ({ className = '' }: { className?: string }) => {
       }}
       className={cn('group/comment', className)}
     >
-      <div className="hover:bg-muted/50 flex gap-3 rounded-lg p-4 transition-colors">
+      <div className="flex gap-3 rounded-lg p-4 transition-colors hover:bg-muted/50">
         {/* Avatar Skeleton */}
         <div className="flex-shrink-0">
           <Skeleton className="h-10 w-10 rounded-full" />
