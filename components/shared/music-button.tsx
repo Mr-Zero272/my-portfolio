@@ -100,7 +100,9 @@ const MusicButton = ({ className }: { className?: string }) => {
                     <div className="flex size-6 items-center justify-center rounded-full bg-primary/10 text-primary">
                       <Music2 className="size-3.5" />
                     </div>
-                    <span className="text-sm font-medium text-muted-foreground">Now Playing</span>
+                    <span className="text-sm font-medium text-muted-foreground">
+                      {isPlaying ? 'Now Playing' : 'Music'}
+                    </span>
                   </div>
 
                   <div className="flex items-center gap-2">
@@ -126,7 +128,7 @@ const MusicButton = ({ className }: { className?: string }) => {
                   </div>
                   <div className="min-w-0 flex-1">
                     <h3 className="line-clamp-2 text-lg leading-tight font-semibold tracking-tight">
-                      {tracks[currentTrackIndex]?.name || 'No song selected'}
+                      {tracks[currentTrackIndex]?.name || 'No song is playing'}
                     </h3>
                     <div className="mt-2 flex w-full items-end justify-between">
                       {/* Progress Bar (Visual only for now matching original simple view) or just Time */}

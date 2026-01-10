@@ -22,8 +22,8 @@ export default function DashboardLayout({
           {/* <PageTransition noFooter className="pt-0"> */}
           <DashboardHeader />
           <div className="flex flex-1 flex-col">
-            <div className="site-container mx-auto flex flex-1 flex-col">
-              <div className="pt-6">{children}</div>
+            <div className="@container/main container mx-auto flex flex-1 flex-col gap-2">
+              <div className="px-4 pt-5 pb-20 md:px-10 md:pt-10 md:pb-10">{children}</div>
             </div>
           </div>
           {/* </PageTransition> */}
