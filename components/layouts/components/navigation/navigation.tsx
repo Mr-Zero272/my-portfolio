@@ -11,15 +11,6 @@ import { usePathname } from 'next/navigation';
 import { useOnClickOutside } from 'usehooks-ts';
 import NavigationLink from './navigation-link';
 
-const svgVariants = {
-  close: {
-    rotate: 0,
-  },
-  open: {
-    rotate: 180,
-  },
-};
-
 const Navigation = () => {
   const pathname = usePathname();
   const sidebarRef = useRef<HTMLElement>(null!);
@@ -95,7 +86,7 @@ const Navigation = () => {
         variants={containerVariants}
         animate={containerControls}
         initial={isMobile ? 'hidden' : 'collapsed'}
-        className="fixed top-0 left-0 z-50 flex h-full flex-col gap-20 bg-sidebar p-5 shadow-sm"
+        className="fixed top-0 left-0 z-50 flex h-full flex-col gap-16 bg-sidebar p-5 shadow-sm"
       >
         <div
           onClick={toggle}
@@ -129,7 +120,14 @@ const Navigation = () => {
               className={cn('size-4 stroke-[#E0E4EB] transition-all duration-700 ease-in-out dark:stroke-[#373F4E]', {
                 'size-8': isExpanded,
               })}
-              variants={svgVariants}
+              variants={{
+                close: {
+                  rotate: 0,
+                },
+                open: {
+                  rotate: 180,
+                },
+              }}
               animate={svgControls}
               transition={{
                 duration: 0.3,
