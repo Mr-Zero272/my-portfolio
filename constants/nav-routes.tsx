@@ -12,6 +12,7 @@ import {
   User,
   UserSolid,
 } from '@/components/icons';
+import { Cog, MessageCircleQuestion } from 'lucide-react';
 
 export const navbarRoutesInfo = [
   {
@@ -49,5 +50,20 @@ export const navbarRoutesInfo = [
     iconSolid: BlogSolid,
     route: '/blog',
     label: 'Blog',
+  },
+];
+
+export const navbarSecondaryRoutesInfo = [
+  {
+    icon: MessageCircleQuestion,
+    iconSolid: MessageCircleQuestion,
+    route: '/help-supports',
+    label: 'Help & Supports',
+  },
+  {
+    icon: Cog,
+    iconSolid: Cog,
+    route: '/settings',
+    label: 'Settings',
   },
 ];

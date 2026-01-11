@@ -1,12 +1,13 @@
 'use client';
 
+import { useSidebar } from '@/components/contexts/sidebar-context';
 import { navbarRoutesInfo } from '@/constants/nav-routes';
 import { cn } from '@/lib/utils';
 import useLayoutState from '@/store/use-layout-state';
 import { AnimatePresence, motion } from 'motion/react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useEventListener } from 'usehooks-ts';
 
 export const BottomNavBar = () => {
@@ -14,6 +15,7 @@ export const BottomNavBar = () => {
   const [direction, setDirection] = useState<'up' | 'down'>('up');
   const setBottomNavOpen = useLayoutState((state) => state.setIsBottomNavOpen);
   const pathname = usePathname();
+  const { isExpanded, isMobile } = useSidebar();
 
   const onScroll = useCallback(() => {
     const scrollY = window.scrollY;
@@ -25,14 +27,22 @@ export const BottomNavBar = () => {
     lastScrollY.current = scrollY;
   }, [setBottomNavOpen]);
 
+  useEffect(() => {
+    if (isExpanded && isMobile) {
+      setBottomNavOpen(false);
+    }
+  }, [isExpanded, isMobile, setBottomNavOpen]);
+
   useEventListener('scroll', onScroll);
+
+  const finalDirection = isExpanded && isMobile ? 'down' : direction;
 
   return (
     <motion.div
       initial={{ y: 0 }}
       animate={{
-        y: direction === 'down' ? 100 : 0,
-        opacity: direction === 'down' ? 0 : 1,
+        y: finalDirection === 'down' ? 100 : 0,
+        opacity: finalDirection === 'down' ? 0 : 1,
       }}
       transition={{
         duration: 0.25,
