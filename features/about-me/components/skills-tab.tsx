@@ -37,7 +37,7 @@ const SkillsTab = () => {
       <p className="mb-7 text-gray-500">
         Below are the skills, technologies and programming languages ​​I am proficient in.
       </p>
-      <div className="max-h-[365px] overflow-y-auto pb-10">
+      <div className="pb-10">
         <motion.ul
           className="grid gap-5 md:grid-cols-2 xl:grid-cols-3"
           variants={containerVariants}

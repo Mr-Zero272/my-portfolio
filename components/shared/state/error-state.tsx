@@ -1,7 +1,6 @@
 'use client';
 
-import { Button } from '@/components/ui/button';
-import { AlertCircle, AlertTriangle } from 'lucide-react';
+import { AlertTriangle } from 'lucide-react';
 import { motion } from 'motion/react';
 
 const containerVariants = {
@@ -30,14 +29,14 @@ const iconVariants = {
 interface ErrorStateProps {
   title?: string;
   description?: string;
-  onRetry?: () => void;
+  action?: React.ReactNode;
   error?: string;
 }
 
 function ErrorState({
   title = 'Có lỗi xảy ra',
   description = 'Không thể tải dữ liệu. Vui lòng thử lại sau.',
-  onRetry,
+  action,
   error,
 }: ErrorStateProps) {
   return (
@@ -55,12 +54,7 @@ function ErrorState({
       <h3 className="mb-2 text-lg font-semibold text-gray-900">{title}</h3>
       <p className="mb-4 max-w-sm text-center text-gray-600">{description}</p>
       {error && <p className="mb-6 max-w-sm rounded bg-red-50 px-3 py-2 text-sm text-red-600">{error}</p>}
-      {onRetry && (
-        <Button onClick={onRetry} className="gap-2">
-          <AlertCircle className="h-4 w-4" />
-          Thử lại
-        </Button>
-      )}
+      {action}
     </motion.div>
   );
 }
