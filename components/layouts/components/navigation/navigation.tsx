@@ -4,6 +4,7 @@ import { useEffect, useMemo, useRef } from 'react';
 
 import { useSidebar } from '@/components/contexts/sidebar-context';
 import AppLogo from '@/components/shared/logo';
+import { ScrollArea } from '@/components/ui/scroll-area';
 import { navbarRoutesInfo, navbarSecondaryRoutesInfo } from '@/constants/nav-routes';
 import { cn } from '@/lib/utils';
 import { Gauge } from 'lucide-react';
@@ -87,7 +88,7 @@ const Navigation = () => {
         variants={containerVariants}
         animate={containerControls}
         initial={isMobile ? 'hidden' : 'collapsed'}
-        className={cn('group/sidebar fixed top-0 left-0 z-50 flex h-full flex-col rounded-lg bg-sidebar shadow-sm', {
+        className={cn('group/sidebar fixed top-0 left-0 z-50 flex h-dvh flex-col rounded-lg bg-sidebar shadow-sm', {
           'bg-transparent shadow-none': isCollapsed,
         })}
       >
@@ -146,8 +147,8 @@ const Navigation = () => {
             </motion.svg>
           </button>
         </div>
-        <div className="flex flex-1 flex-col items-center justify-between">
-          <div className="flex w-full flex-col items-center">
+        <div className="flex flex-1 flex-col items-center justify-between overflow-y-auto">
+          <ScrollArea className="flex w-full flex-1 flex-col items-center overflow-x-hidden overflow-y-auto">
             <div
               className={cn('flex w-full flex-col items-center justify-center gap-2 p-5', {
                 'm-3 w-fit gap-3 rounded-full bg-sidebar p-2': isCollapsed,
@@ -201,12 +202,12 @@ const Navigation = () => {
                     isHidden={isHidden}
                     active={isActive}
                     onClick={handleRoutePage}
-                    icon={<Icon className="w-8 min-w-8 stroke-inherit" strokeWidth={1.5} />}
+                    icon={<Icon className="w-8 min-w-8" strokeWidth={1.5} />}
                   />
                 );
               })}
             </div>
-          </div>
+          </ScrollArea>
           <div className="w-full p-3">
             <div className="cursor-pointer space-y-4 rounded-2xl bg-black p-4 transition-transform ease-in-out active:scale-95 dark:bg-white">
               <Gauge className="size-6 text-white dark:text-black" />
