@@ -1,4 +1,4 @@
-import ExperienceSettingPage from '@/features/dashboard-settings/pages/experience-setting';
+import ExperienceSettingPage from '@/features/settings/pages/experience-setting';
 
 export const metadata = {
   title: 'Experience Settings | Dashboard',

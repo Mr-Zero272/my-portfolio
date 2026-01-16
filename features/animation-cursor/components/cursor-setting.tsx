@@ -6,9 +6,7 @@ import AnimatedCursor from './animated-cursor';
 const CursorSetting = () => {
   const { isAnimationCursorEnabled } = useSettingsStore();
 
-  if (!isAnimationCursorEnabled) return null;
-
-  return <AnimatedCursor />;
+  return <AnimatedCursor enabled={isAnimationCursorEnabled} />;
 };
 
 export default CursorSetting;

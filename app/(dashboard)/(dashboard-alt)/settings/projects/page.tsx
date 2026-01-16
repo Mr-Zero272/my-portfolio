@@ -1,4 +1,4 @@
-import ProjectsSettingPage from '@/features/dashboard-settings/pages/projects-setting';
+import ProjectsSettingPage from '@/features/settings/pages/projects-setting';
 
 export const metadata = {
   title: 'Projects Settings | Dashboard',

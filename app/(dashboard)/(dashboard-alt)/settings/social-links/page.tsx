@@ -1,4 +1,4 @@
-import SocialLinksSettingPage from '@/features/dashboard-settings/pages/social-links-setting';
+import SocialLinksSettingPage from '@/features/settings/pages/social-links-setting';
 
 export const metadata = {
   title: 'Social Links Settings | Dashboard',

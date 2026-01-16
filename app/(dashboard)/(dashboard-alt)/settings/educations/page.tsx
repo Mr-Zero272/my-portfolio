@@ -1,4 +1,4 @@
-import EducationsSettingPage from '@/features/dashboard-settings/pages/educations-setting';
+import EducationsSettingPage from '@/features/settings/pages/educations-setting';
 
 export const metadata = {
   title: 'Education Settings | Dashboard',

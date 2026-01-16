@@ -1,4 +1,4 @@
-import ProfileSettingPage from '@/features/dashboard-settings/pages/profile-setting';
+import ProfileSettingPage from '@/features/settings/pages/profile-setting';
 
 export const metadata = {
   title: 'Profile Settings | Dashboard',

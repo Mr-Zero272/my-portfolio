@@ -1,4 +1,4 @@
-import SkillsSettingPage from '@/features/dashboard-settings/pages/skills-setting';
+import SkillsSettingPage from '@/features/settings/pages/skills-setting';
 
 export default function Page() {
   return <SkillsSettingPage />;

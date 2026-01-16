@@ -1,4 +1,4 @@
-import AppearanceSettingsPage from '@/features/dashboard-settings/pages/appearance-settings';
+import AppearanceSettingsPage from '@/features/settings/pages/appearance-settings';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
