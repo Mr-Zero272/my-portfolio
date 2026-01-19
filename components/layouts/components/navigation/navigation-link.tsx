@@ -50,7 +50,7 @@ const NavigationLink = ({
           className={cn(
             'flex size-11 cursor-pointer place-items-center items-center justify-center gap-3 overflow-clip rounded-full stroke-neutral-400 stroke-[0.75] p-1 text-clip text-neutral-400 transition-colors duration-100 hover:bg-[#f2f2f2] hover:stroke-black hover:text-black/80',
             {
-              'bg-primary text-white hover:bg-primary hover:text-white': active,
+              'bg-primary text-background hover:bg-primary hover:text-background': active,
             },
           )}
           onClick={onClick}
