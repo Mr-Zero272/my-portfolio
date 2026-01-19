@@ -266,7 +266,8 @@ export function ExperienceSettingsForm() {
                   ...pos,
                   employmentPeriod: `${format(new Date(pos.startDate), 'MMM yyyy')} - ${
                     pos.endDate ? format(new Date(pos.endDate), 'MMM yyyy') : 'Present'
-                  }`,
+                    }`,
+                  isExpanded: true,
                 })),
               })) as never
             }

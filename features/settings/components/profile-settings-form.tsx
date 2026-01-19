@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
+import { cn } from '@/lib/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Loader2 } from 'lucide-react';
@@ -37,7 +38,7 @@ export function ProfileSettingsForm() {
   const queryClient = useQueryClient();
 
   const { data: profileData, isLoading: loading } = useQuery({
-    queryKey: ['profile', , { owner: true }],
+    queryKey: ['profile', 'detail', { owner: true }],
     queryFn: () => profileApi.getProfile(),
   });
 
@@ -109,7 +110,7 @@ export function ProfileSettingsForm() {
     <div className="max-w-7xl space-y-6 px-3 pb-10">
       {/* Basic Information */}
 
-      <div className="border-b px-0">
+      <div className="border-b px-0 pb-4">
         <h2 className="text-lg font-medium">Basic Information</h2>
         <p className="text-sm text-muted-foreground">Update your basic profile information</p>
       </div>
@@ -227,7 +228,7 @@ export function ProfileSettingsForm() {
                     <FormControl>
                       <Textarea placeholder="Short biography" rows={3} {...field} />
                     </FormControl>
-                    <FormDescription>A brief introduction about yourself</FormDescription>
+                    <FormDescription>A brief introduction about yourself.</FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -243,7 +244,17 @@ export function ProfileSettingsForm() {
                     <FormControl>
                       <Textarea placeholder="Longer description about you" rows={4} {...field} />
                     </FormControl>
-                    <FormDescription>A longer, more detailed description</FormDescription>
+                    <FormDescription>
+                      A longer, more detailed description. Recommended{' '}
+                      <span
+                        className={cn('font-medium', {
+                          'text-destructive': Number(field?.value?.length) > 210,
+                        })}
+                      >
+                        {field?.value?.length || 0}
+                      </span>
+                      /<span className="font-medium text-teal-600">210</span> characters.
+                    </FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
