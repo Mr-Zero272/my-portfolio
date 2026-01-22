@@ -4,9 +4,9 @@ import { useSettingsStore } from '@/store/use-settings';
 import AnimatedCursor from './animated-cursor';
 
 const CursorSetting = () => {
-  const { isAnimationCursorEnabled } = useSettingsStore();
+  const { isAnimationCursorEnabled, cursorStyle } = useSettingsStore();
 
-  return <AnimatedCursor enabled={isAnimationCursorEnabled} />;
+  return <AnimatedCursor key="animated" enabled={isAnimationCursorEnabled} type={cursorStyle} />;
 };
 
 export default CursorSetting;

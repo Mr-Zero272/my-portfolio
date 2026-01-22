@@ -32,8 +32,14 @@ const colors = [
 export function AppearanceSettings() {
   const { theme, setTheme } = useTheme();
   const { currentColor, switchColor } = useColorContext();
-  const { isTransitionPageEnabled, setIsTransitionPageEnabled, isAnimationCursorEnabled, setIsAnimationCursorEnabled } =
-    useSettingsStore();
+  const {
+    isTransitionPageEnabled,
+    setIsTransitionPageEnabled,
+    isAnimationCursorEnabled,
+    setIsAnimationCursorEnabled,
+    cursorStyle,
+    setCursorStyle,
+  } = useSettingsStore();
 
   return (
     <div className="max-w-7xl space-y-6 md:pr-10">
@@ -114,7 +120,24 @@ export function AppearanceSettings() {
               <Label className="text-sm font-medium">Enable Animation Cursor</Label>
               <p className="text-xs text-muted-foreground">Use special cursor instead of default cursor</p>
             </div>
-            <Switch checked={isAnimationCursorEnabled} onCheckedChange={setIsAnimationCursorEnabled} />
+            <div className="flex items-center gap-4">
+              {isAnimationCursorEnabled && (
+                <Select
+                  value={cursorStyle}
+                  onValueChange={(val: 'default' | 'geometric' | 'glow') => setCursorStyle(val)}
+                >
+                  <SelectTrigger className="w-[140px]">
+                    <SelectValue placeholder="Style" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="default">Default</SelectItem>
+                    <SelectItem value="geometric">Geometric</SelectItem>
+                    <SelectItem value="glow">Glow</SelectItem>
+                  </SelectContent>
+                </Select>
+              )}
+              <Switch checked={isAnimationCursorEnabled} onCheckedChange={setIsAnimationCursorEnabled} />
+            </div>
           </div>
         </CardContent>
       </Card>

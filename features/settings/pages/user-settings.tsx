@@ -5,6 +5,7 @@ import { Moon, Sun } from '@/components/icons';
 import { AnimatedButton } from '@/components/ui/animated-button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Separator } from '@/components/ui/separator';
 import { Switch } from '@/components/ui/switch';
 import { cn } from '@/lib/utils';
@@ -29,11 +30,47 @@ const colors = [
   { name: 'yellow', value: 'yellow', color: '#fdc700' },
 ];
 
+const cursorStyles = [
+  {
+    name: 'Default',
+    value: 'default',
+    icon: (
+      <div className="flex size-6 items-center justify-center rounded-full border-2 border-primary">
+        <div className="size-3 rounded-full bg-primary" />
+      </div>
+    ),
+  },
+  {
+    name: 'Geometric',
+    value: 'geometric',
+    icon: (
+      <div className="flex size-6 rotate-45 items-center justify-center border-2 border-primary">
+        <div className="size-3 bg-primary" />
+      </div>
+    ),
+  },
+  {
+    name: 'Glow',
+    value: 'glow',
+    icon: (
+      <div className="flex size-6 items-center justify-center rounded-full bg-primary/10">
+        <div className="size-3 rounded-full bg-primary" />
+      </div>
+    ),
+  },
+];
+
 const UserSettings = () => {
   const { theme, setTheme } = useTheme();
   const { currentColor, switchColor } = useColorContext();
-  const { isTransitionPageEnabled, setIsTransitionPageEnabled, isAnimationCursorEnabled, setIsAnimationCursorEnabled } =
-    useSettingsStore();
+  const {
+    isTransitionPageEnabled,
+    setIsTransitionPageEnabled,
+    isAnimationCursorEnabled,
+    setIsAnimationCursorEnabled,
+    cursorStyle,
+    setCursorStyle,
+  } = useSettingsStore();
 
   const handleResetToDefault = () => {
     setTheme('system');
@@ -87,7 +124,7 @@ const UserSettings = () => {
                   )}
                 >
                   <span
-                    className="flex size-6 items-center justify-center rounded-full"
+                    className="flex size-6 items-center justify-center rounded-full border-2 border-background"
                     style={{ backgroundColor: color }}
                   >
                     {currentColor === value && (
@@ -123,6 +160,23 @@ const UserSettings = () => {
             </div>
             <Switch checked={isAnimationCursorEnabled} onCheckedChange={setIsAnimationCursorEnabled} />
           </div>
+          {isAnimationCursorEnabled && (
+            <div>
+              <Label className="text-sm font-medium">Cursor Style</Label>
+              <p className="text-xs text-muted-foreground">Choose your cursor style</p>
+              <RadioGroup value={cursorStyle} onValueChange={setCursorStyle as never} className="space-y-2 py-2">
+                {cursorStyles.map(({ name, icon, value }) => (
+                  <div key={value} className="flex items-center gap-3">
+                    <RadioGroupItem value={value} id={value} />
+                    <Label className="flex items-center gap-3" htmlFor={value}>
+                      <span className="text-sm">{name}</span>
+                      <span>{icon}</span>
+                    </Label>
+                  </div>
+                ))}
+              </RadioGroup>
+            </div>
+          )}
           <div className="flex justify-end gap-3">
             <AnimatedButton onClick={handleResetToDefault}>
               <RefreshCcw />
