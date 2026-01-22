@@ -1,7 +1,6 @@
 'use client';
 
 import { useColorContext } from '@/components/contexts/color-context';
-import { Moon, Sun } from '@/components/icons';
 import { AnimatedButton } from '@/components/ui/animated-button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
@@ -10,55 +9,9 @@ import { Separator } from '@/components/ui/separator';
 import { Switch } from '@/components/ui/switch';
 import { cn } from '@/lib/utils';
 import { useSettingsStore } from '@/store/use-settings';
-import { CircleCheck, Monitor, RefreshCcw } from 'lucide-react';
+import { CircleCheck, RefreshCcw } from 'lucide-react';
 import { useTheme } from 'next-themes';
-
-const themes = [
-  { name: 'Light', icon: Sun, value: 'light', description: 'Light theme' },
-  { name: 'Dark', icon: Moon, value: 'dark', description: 'Dark theme' },
-  { name: 'System', icon: Monitor, value: 'system', description: 'Follow system' },
-];
-
-const colors = [
-  { name: 'blue', value: 'blue', color: '#1447e6' },
-  { name: 'green', value: 'green', color: '#5ea500' },
-  { name: 'orange', value: 'orange', color: '#f54a00' },
-  { name: 'slate', value: 'slate', color: '#171717' },
-  { name: 'red', value: 'red', color: '#e7000b' },
-  { name: 'rose', value: 'rose', color: '#ec003f' },
-  { name: 'violet', value: 'violet', color: '#7f22fe' },
-  { name: 'yellow', value: 'yellow', color: '#fdc700' },
-];
-
-const cursorStyles = [
-  {
-    name: 'Default',
-    value: 'default',
-    icon: (
-      <div className="flex size-6 items-center justify-center rounded-full border-2 border-primary">
-        <div className="size-3 rounded-full bg-primary" />
-      </div>
-    ),
-  },
-  {
-    name: 'Geometric',
-    value: 'geometric',
-    icon: (
-      <div className="flex size-6 rotate-45 items-center justify-center border-2 border-primary">
-        <div className="size-3 bg-primary" />
-      </div>
-    ),
-  },
-  {
-    name: 'Glow',
-    value: 'glow',
-    icon: (
-      <div className="flex size-6 items-center justify-center rounded-full bg-primary/10">
-        <div className="size-3 rounded-full bg-primary" />
-      </div>
-    ),
-  },
-];
+import { colors, cursorStyles, themes } from '../constants/appearance-settings';
 
 const UserSettings = () => {
   const { theme, setTheme } = useTheme();

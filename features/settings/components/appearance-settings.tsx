@@ -4,30 +4,15 @@ import { useColorContext } from '@/components/contexts/color-context';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Separator } from '@/components/ui/separator';
 import { Switch } from '@/components/ui/switch';
 import { cn } from '@/lib/utils';
 import { useSettingsStore } from '@/store/use-settings';
-import { CircleCheck, Monitor, Moon, Sun } from 'lucide-react';
+import { CircleCheck } from 'lucide-react';
 import { useTheme } from 'next-themes';
-
-const themes = [
-  { name: 'Light', icon: Sun, value: 'light', description: 'Light theme' },
-  { name: 'Dark', icon: Moon, value: 'dark', description: 'Dark theme' },
-  { name: 'System', icon: Monitor, value: 'system', description: 'Follow system' },
-];
-
-const colors = [
-  { name: 'blue', value: 'blue', color: '#1447e6' },
-  { name: 'green', value: 'green', color: '#5ea500' },
-  { name: 'orange', value: 'orange', color: '#f54a00' },
-  { name: 'slate', value: 'slate', color: '#171717' },
-  { name: 'red', value: 'red', color: '#e7000b' },
-  { name: 'rose', value: 'rose', color: '#ec003f' },
-  { name: 'violet', value: 'violet', color: '#7f22fe' },
-  { name: 'yellow', value: 'yellow', color: '#fdc700' },
-];
+import { colors, cursorStyles, themes } from '../constants/appearance-settings';
 
 export function AppearanceSettings() {
   const { theme, setTheme } = useTheme();
@@ -122,19 +107,21 @@ export function AppearanceSettings() {
             </div>
             <div className="flex items-center gap-4">
               {isAnimationCursorEnabled && (
-                <Select
-                  value={cursorStyle}
-                  onValueChange={(val: 'default' | 'geometric' | 'glow') => setCursorStyle(val)}
-                >
-                  <SelectTrigger className="w-[140px]">
-                    <SelectValue placeholder="Style" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="default">Default</SelectItem>
-                    <SelectItem value="geometric">Geometric</SelectItem>
-                    <SelectItem value="glow">Glow</SelectItem>
-                  </SelectContent>
-                </Select>
+                <div>
+                  <Label className="text-sm font-medium">Cursor Style</Label>
+                  <p className="text-xs text-muted-foreground">Choose your cursor style</p>
+                  <RadioGroup value={cursorStyle} onValueChange={setCursorStyle as never} className="space-y-2 py-2">
+                    {cursorStyles.map(({ name, icon, value }) => (
+                      <div key={value} className="flex items-center gap-3">
+                        <RadioGroupItem value={value} id={value} />
+                        <Label className="flex items-center gap-3" htmlFor={value}>
+                          <span className="text-sm">{name}</span>
+                          <span>{icon}</span>
+                        </Label>
+                      </div>
+                    ))}
+                  </RadioGroup>
+                </div>
               )}
               <Switch checked={isAnimationCursorEnabled} onCheckedChange={setIsAnimationCursorEnabled} />
             </div>
