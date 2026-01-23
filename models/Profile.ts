@@ -36,6 +36,11 @@ export interface IProfile extends Document {
   updatedAt: Date;
 }
 
+export interface IProfileResponse {
+  profile: Omit<IProfile, 'userId'> & { userId: IUser };
+  socialLinks: unknown[];
+}
+
 export interface IProfileResponse extends Omit<IProfile, 'userId'> {
   userId: IUser;
 }

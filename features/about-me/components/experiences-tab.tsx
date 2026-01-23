@@ -1,8 +1,5 @@
-import { experienceApi } from '@/apis/experience';
-import { Skeleton } from '@/components/ui/skeleton';
 import { WorkExperience } from '@/components/work-experience';
 import { IExperience } from '@/models';
-import { useQuery } from '@tanstack/react-query';
 import { useMemo } from 'react';
 
 const experiences = [
@@ -18,14 +15,18 @@ const experiences = [
   },
 ];
 
-const ExperiencesTab = () => {
-  const { data: experiences = [], isLoading } = useQuery<IExperience[]>({
-    queryKey: ['experiences', 'list', { owner: true }],
-    queryFn: async () => {
-      const data = await experienceApi.getAll({ owner: true });
-      return data;
-    },
-  });
+interface ExperiencesTabProps {
+  experiences: IExperience[];
+}
+
+const ExperiencesTab = ({ experiences }: ExperiencesTabProps) => {
+  // const { data: experiences = [], isLoading } = useQuery<IExperience[]>({
+  //   queryKey: ['experiences', 'list', { owner: true }],
+  //   queryFn: async () => {
+  //     const data = await experienceApi.getAll({ owner: true });
+  //     return data;
+  //   },
+  // });
 
   const formattedData = useMemo(() => {
     if (experiences) {
@@ -41,7 +42,7 @@ const ExperiencesTab = () => {
       <h1 className="mb-2 text-2xl font-bold tracking-wider">Experiences</h1>
       <p className="mb-7 text-muted-foreground">Below is my work history and experience as a developer.</p>
       <div className="pb-10">
-        {isLoading &&
+        {/* {isLoading &&
           Array.from({ length: 3 }).map((_, index) => (
             <div className="" key={index}>
               <Skeleton className="mb-3 h-5 w-40" />
@@ -50,8 +51,8 @@ const ExperiencesTab = () => {
               <Skeleton className="mb-2 h-5 w-56" />
               <Skeleton className="mb-2 h-5 w-72" />
             </div>
-          ))}
-        {!isLoading && experiences && <WorkExperience experiences={formattedData as never} />}
+          ))} */}
+        <WorkExperience experiences={formattedData as never} />
       </div>
     </div>
   );

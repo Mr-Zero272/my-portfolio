@@ -1,11 +1,8 @@
 'use client';
 
-import { educationsApi } from '@/apis/educations';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { Skeleton } from '@/components/ui/skeleton';
 import { IEducation } from '@/models';
-import { useQuery } from '@tanstack/react-query';
 import { format } from 'date-fns';
 import { CalendarIcon, GraduationCap, MapPin, Share2 } from 'lucide-react';
 import { motion } from 'motion/react';
@@ -28,12 +25,11 @@ const containerVariants = {
   },
 };
 
-const EducationTab = () => {
-  const { data: educations, isLoading } = useQuery<IEducation[]>({
-    queryKey: ['educations', 'list', { owner: true }],
-    queryFn: () => educationsApi.getAll({ owner: true }),
-  });
+interface EducationTabProps {
+  educations: IEducation[];
+}
 
+const EducationTab = ({ educations }: EducationTabProps) => {
   return (
     <div>
       <h1 className="mb-3 text-2xl font-bold tracking-wider">Education</h1>
@@ -41,7 +37,7 @@ const EducationTab = () => {
         Below are details of my university studies as well as information about the short courses I attended.
       </p>
       <motion.ul variants={containerVariants} initial="hidden" animate="visible">
-        {isLoading &&
+        {/* {isLoading &&
           Array.from({ length: 5 }).map((_, index) => (
             <motion.li variants={cardVariants} whileHover="hover" key={index}>
               <Card>
@@ -77,7 +73,7 @@ const EducationTab = () => {
                 </CardFooter>
               </Card>
             </motion.li>
-          ))}
+          ))} */}
         {educations &&
           educations.map((education) => (
             <motion.li variants={cardVariants} whileHover="hover" key={education._id.toString()}>

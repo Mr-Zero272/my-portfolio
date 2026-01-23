@@ -1,27 +1,15 @@
 'use client';
 
-import { profileApi, ProfileWithSocialLinks } from '@/apis/profile';
-import EmptyState from '@/components/shared/state/empty-state';
 import CopyToClipBoardButton from '@/components/ui/copy-to-clipboard-button';
-import { useQuery } from '@tanstack/react-query';
+import { IProfileResponse } from '@/models/Profile';
 import Link from 'next/link';
 
-const AboutTab = () => {
-  const { data: profileInfo } = useQuery<ProfileWithSocialLinks>({
-    queryKey: ['profile', 'detail', { owner: true }],
-    queryFn: () => profileApi.getProfile(),
-  });
+interface AboutTabProps {
+  profile: IProfileResponse;
+}
 
-  if (!profileInfo?.profile || !profileInfo?.socialLinks) {
-    return (
-      <EmptyState
-        title="Something went wrong"
-        description="I apologize, but something went wrong. Please try again later."
-      />
-    );
-  }
-
-  const { profile, socialLinks } = profileInfo;
+const AboutTab = ({ profile: profileInfo }: AboutTabProps) => {
+  const { profile } = profileInfo;
 
   return (
     <div>

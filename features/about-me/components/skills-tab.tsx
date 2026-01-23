@@ -1,9 +1,6 @@
-import { skillsApi } from '@/apis/skills';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Skeleton } from '@/components/ui/skeleton';
 import { ISkill } from '@/models';
-import { useQuery } from '@tanstack/react-query';
 import { motion } from 'motion/react';
 import Image from 'next/image';
 
@@ -25,12 +22,11 @@ const containerVariants = {
   },
 };
 
-const SkillsTab = () => {
-  const { data: skills = [], isLoading } = useQuery<ISkill[]>({
-    queryKey: ['skills', 'list', { owner: true }],
-    queryFn: () => skillsApi.getAll({ owner: true }),
-  });
+interface SkillsTabProps {
+  skills: ISkill[];
+}
 
+const SkillsTab = ({ skills }: SkillsTabProps) => {
   return (
     <div>
       <h1 className="mb-2 text-2xl font-bold tracking-wider">Skills</h1>
@@ -44,7 +40,7 @@ const SkillsTab = () => {
           initial="hidden"
           animate="visible"
         >
-          {isLoading &&
+          {/* {isLoading &&
             Array.from({ length: 6 }).map((_, index) => (
               <Card key={index} className="group">
                 <CardHeader className="flex flex-row items-start justify-between space-y-0">
@@ -64,7 +60,7 @@ const SkillsTab = () => {
                   </div>
                 </CardContent>
               </Card>
-            ))}
+            ))} */}
 
           {skills.map((skill) => (
             <motion.li variants={cardVariants} whileHover="hover" key={skill._id.toString()}>

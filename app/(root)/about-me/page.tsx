@@ -1,8 +1,12 @@
+import PulsingLoader from '@/components/shared/pulsing-loader';
 import { SITE_URL } from '@/configs/env';
 import AboutMeFeature from '@/features/about-me';
-import { IEducation, IExperience, IProfile, ISkill, IUser } from '@/models';
-import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query';
+import { IEducation, IExperience, ISkill } from '@/models';
+import { IProfileResponse } from '@/models/Profile';
 import { Metadata } from 'next';
+import { Suspense } from 'react';
+
+export const dynamic = 'force-dynamic';
 
 export const metadata: Metadata = {
   title: 'About Me',
@@ -98,7 +102,7 @@ const fetchProfile = async () => {
       },
     });
     const profileRes = await response.json();
-    return profileRes as { profile: Omit<IProfile, 'userId'> & { userId: IUser }; socialLinks: unknown[] };
+    return profileRes as IProfileResponse;
   } catch (error) {
     console.error('Error fetching profile:', error);
     return null;
@@ -106,19 +110,23 @@ const fetchProfile = async () => {
 };
 
 const AboutMePage = async () => {
-  const queryClient = new QueryClient();
-
-  await Promise.all([
-    queryClient.prefetchQuery({ queryKey: ['experiences', 'list', { owner: true }], queryFn: fetchExperiences }),
-    queryClient.prefetchQuery({ queryKey: ['educations', 'list', { owner: true }], queryFn: fetchEducations }),
-    queryClient.prefetchQuery({ queryKey: ['skills', 'list', { owner: true }], queryFn: fetchSkills }),
-    queryClient.prefetchQuery({ queryKey: ['profile', 'detail', { owner: true }], queryFn: fetchProfile }),
+  const [profile, skills, educations, experiences] = await Promise.all([
+    fetchProfile(),
+    fetchSkills(),
+    fetchEducations(),
+    fetchExperiences(),
   ]);
 
   return (
-    <HydrationBoundary state={dehydrate(queryClient)}>
-      <AboutMeFeature />
-    </HydrationBoundary>
+    <Suspense
+      fallback={
+        <div className="flex min-h-dvh w-full items-center justify-center">
+          <PulsingLoader className="size-10" />
+        </div>
+      }
+    >
+      <AboutMeFeature profile={profile as never} skills={skills} educations={educations} experiences={experiences} />
+    </Suspense>
   );
 };
 
