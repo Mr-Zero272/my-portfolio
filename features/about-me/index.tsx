@@ -1,7 +1,9 @@
 'use client';
 
+import { useColorContext } from '@/components/contexts/color-context';
 import CustomCheckbox from '@/components/ui/custom-checkbox';
 import { aboutTabs } from '@/constants/about-tabs';
+import { cn } from '@/lib/utils';
 import { IEducation, IExperience, ISkill } from '@/models';
 import { IProfileResponse } from '@/models/Profile';
 import { useState } from 'react';
@@ -21,6 +23,7 @@ interface AboutMeFeatureProps {
 
 function AboutMeFeature({ profile, skills, experiences, educations }: AboutMeFeatureProps) {
   const [activeTab, setActiveTab] = useState<TabType>('about');
+  const { currentColor } = useColorContext();
 
   const handleChangeTab = (tab: string) => {
     setActiveTab(tab as TabType);
@@ -31,7 +34,11 @@ function AboutMeFeature({ profile, skills, experiences, educations }: AboutMeFea
         <h1 className="z-1 block w-full text-4xl font-bold sm:text-4xl md:w-1/2 lg:w-full lg:text-6xl">
           All over my details find here...
         </h1>
-        <div className="absolute -top-4 -left-3 z-0 size-12 rounded-full bg-primary sm:size-16 lg:size-20"></div>
+        <div
+          className={cn('absolute -top-4 -left-3 z-0 size-12 rounded-full bg-primary sm:size-16 lg:size-20', {
+            'bg-white dark:bg-black': currentColor === 'slate',
+          })}
+        />
         <div className="mt-10 flex flex-1 flex-row flex-wrap gap-3 md:flex-col">
           {aboutTabs.map((tab) => (
             <CustomCheckbox
