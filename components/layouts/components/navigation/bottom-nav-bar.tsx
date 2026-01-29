@@ -68,7 +68,7 @@ export const BottomNavBar = () => {
             href={route.route}
             className={cn(
               'relative flex size-12 items-center justify-center rounded-full text-neutral-500 transition-colors hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-neutral-100',
-              isActive && 'text-primary dark:text-primary',
+              isActive && 'text-primary hover:text-primary dark:text-primary dark:hover:text-primary',
             )}
           >
             {isActive && (
