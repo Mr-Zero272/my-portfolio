@@ -57,7 +57,15 @@ const fetchProfileInfo = async () => {
     return jsonParsedData?.profile;
   } catch (error) {
     console.error('Error fetching profile info:', error);
-    throw error;
+    return {
+      rotatingWords: ['Developer', 'Engineer', 'Creator'],
+      name: 'John Doe',
+      description: 'Welcome to my portfolio! I am a passionate developer.',
+      userId: {
+        username: 'pitithuong',
+        avatar: '/images/profile-img-with-bg.png',
+      },
+    };
   }
 };
 
@@ -80,9 +88,11 @@ const fetchSocialLinks = async () => {
 
 export default async function Home() {
   try {
-    const githubStats = await fetchGithubStats();
-    const profileInfo = await fetchProfileInfo();
-    const socialLinks = await fetchSocialLinks();
+    const [githubStats, profileInfo, socialLinks] = await Promise.all([
+      fetchGithubStats(),
+      fetchProfileInfo(),
+      fetchSocialLinks(),
+    ]);
 
     return (
       <section className="flex flex-col xl:flex-row">
@@ -133,15 +143,6 @@ export default async function Home() {
                     </div>
                   </Link>
                 ))}
-              {/* <div className="cursor-pointer rounded-full border border-primary p-2.5 text-primary hover:border-black hover:bg-accent hover:text-black">
-                <Github className="size-6" />
-              </div>
-              <div className="cursor-pointer rounded-full border border-primary p-2.5 text-primary hover:border-red-500 hover:bg-accent hover:text-red-500">
-                <Youtube className="size-6" />
-              </div>
-              <div className="cursor-pointer rounded-full border border-primary p-2.5 text-primary hover:border-blue-700 hover:bg-accent hover:text-blue-700">
-                <Linkedin className="size-6" />
-              </div> */}
             </div>
           </div>
           <div className="flex items-center justify-center gap-5 min-[1440px]:justify-between">
