@@ -1,7 +1,7 @@
-import { AppearanceSettings } from '../components/appearance-settings';
+import AppearanceSettingsSection from '../section/appearance-settings';
 
 const AppearanceSettingsPage = () => {
-  return <AppearanceSettings />;
+  return <AppearanceSettingsSection />;
 };
 
 export default AppearanceSettingsPage;

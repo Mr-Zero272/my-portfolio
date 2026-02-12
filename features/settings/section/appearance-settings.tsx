@@ -1,18 +1,17 @@
 'use client';
 
 import { useColorContext } from '@/components/contexts/color-context';
-import { AnimatedButton } from '@/components/ui/animated-button';
+import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { useSettingsStore } from '@/store/use-settings';
-import { RefreshCcw } from 'lucide-react';
 import { useTheme } from 'next-themes';
 import AccentColorPicker from '../components/accent-color-picker';
 import CustomCursorPicker from '../components/custom-cursor-picker';
 import PageTransitionSetting from '../components/page-transition-setting';
 import ThemeSwitcherSetting from '../components/theme-switcher-setting';
 
-const UserSettings = () => {
+const AppearanceSettingsSection = () => {
   const { theme, setTheme } = useTheme();
   const { currentColor, switchColor } = useColorContext();
   const {
@@ -32,11 +31,11 @@ const UserSettings = () => {
   };
 
   return (
-    <div className="space-y-6 pt-5">
+    <div className="max-w-7xl space-y-6 md:pr-10">
       <Card className="border-none shadow-none">
         <CardHeader className="border-b">
           <CardTitle>Theme</CardTitle>
-          <CardDescription>Customize the appearance as your favorite</CardDescription>
+          <CardDescription>Customize the appearance of your dashboard</CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
           <ThemeSwitcherSetting theme={theme} setTheme={setTheme} />
@@ -54,16 +53,16 @@ const UserSettings = () => {
             setCursorStyle={setCursorStyle}
             setIsAnimationCursorEnabled={setIsAnimationCursorEnabled}
           />
-          <div className="flex justify-end gap-3">
-            <AnimatedButton onClick={handleResetToDefault}>
-              <RefreshCcw />
-              Reset to Default
-            </AnimatedButton>
-          </div>
         </CardContent>
       </Card>
+
+      <div className="flex justify-end gap-3">
+        <Button variant="outline" onClick={handleResetToDefault}>
+          Reset to Default
+        </Button>
+      </div>
     </div>
   );
 };
 
-export default UserSettings;
+export default AppearanceSettingsSection;

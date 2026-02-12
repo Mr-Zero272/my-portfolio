@@ -4,11 +4,11 @@ import { THEMES } from '@/constants/theme';
 import { createContext, useCallback, useContext, useEffect } from 'react';
 import { useLocalStorage } from 'usehooks-ts';
 
-type Theme = 'blue' | 'orange' | 'green' | 'slate' | 'red' | 'rose' | 'violet' | 'yellow';
+export type AccentColor = 'blue' | 'orange' | 'green' | 'slate' | 'red' | 'rose' | 'violet' | 'yellow';
 
 interface IColorContext {
-  currentColor: Theme;
-  switchColor: (color: Theme) => void;
+  currentColor: AccentColor;
+  switchColor: (color: AccentColor) => void;
 }
 
 const ColorContext = createContext<IColorContext>({
@@ -17,7 +17,7 @@ const ColorContext = createContext<IColorContext>({
 });
 
 export const ColorProvider = ({ children }: { children: React.ReactNode }) => {
-  const [currentColor, setCurrentColor] = useLocalStorage<Theme>('currentColor', 'orange');
+  const [currentColor, setCurrentColor] = useLocalStorage<AccentColor>('currentColor', 'orange');
 
   useEffect(() => {
     const theme = THEMES[currentColor];
@@ -50,9 +50,12 @@ export const ColorProvider = ({ children }: { children: React.ReactNode }) => {
     `;
   }, [currentColor]);
 
-  const switchColor = useCallback((color: Theme) => {
-    setCurrentColor(color);
-  }, []);
+  const switchColor = useCallback(
+    (color: AccentColor) => {
+      setCurrentColor(color);
+    },
+    [setCurrentColor],
+  );
 
   return <ColorContext.Provider value={{ currentColor, switchColor }}>{children}</ColorContext.Provider>;
 };

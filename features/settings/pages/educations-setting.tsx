@@ -1,4 +1,4 @@
-import { EducationsSettingsForm } from '../components/educations-settings-form';
+import { EducationsSettingsForm } from '../section/educations-settings-form';
 
 const EducationsSettingPage = () => {
   return <EducationsSettingsForm />;

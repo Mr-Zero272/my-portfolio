@@ -1,18 +1,18 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
+export type CursorStyle = 'default' | 'geometric' | 'glow';
+
 interface IGlobalSettingsState {
   isTransitionPageEnabled: boolean;
   isAnimationCursorEnabled: boolean;
-  cursorStyle: 'default' | 'geometric' | 'glow' | 'ripple' | 'trail' | 'crosshair' | 'neon' | 'diamond' | 'pulse';
+  cursorStyle: CursorStyle;
 }
 
 interface IGlobalSettingsActions {
   setIsTransitionPageEnabled: (enabled: boolean) => void;
   setIsAnimationCursorEnabled: (enabled: boolean) => void;
-  setCursorStyle: (
-    style: 'default' | 'geometric' | 'glow' | 'ripple' | 'trail' | 'crosshair' | 'neon' | 'diamond' | 'pulse',
-  ) => void;
+  setCursorStyle: (style: CursorStyle) => void;
   resetToDefault: () => void;
 }
 
