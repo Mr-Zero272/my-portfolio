@@ -1,5 +1,6 @@
 import { WorkExperience } from '@/components/work-experience';
 import { IExperience } from '@/models';
+import { format } from 'date-fns';
 import { useMemo } from 'react';
 
 const experiences = [
@@ -32,7 +33,13 @@ const ExperiencesTab = ({ experiences }: ExperiencesTabProps) => {
     if (experiences) {
       return experiences.map((ex) => ({
         ...ex,
-        positions: ex.positions.map((p) => ({ ...p, isExpanded: true })),
+        positions: ex.positions.map((p) => ({
+          ...p,
+          isExpanded: true,
+          employmentPeriod: `${format(p.startDate, 'MMM yyyy')} - ${
+            p.endDate ? format(p.endDate, 'MMM yyyy') : 'Present'
+          }`,
+        })),
       }));
     }
   }, [experiences]);
