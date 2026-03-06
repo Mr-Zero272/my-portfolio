@@ -134,6 +134,15 @@
 }
 
 /* Override RichTextEditor styles */
+.my-editor .ProseMirror {
+  padding: 0;
+}
+
+.my-editor .ProseMirror-focused {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
 .my-editor .richtext-shadow {
   box-shadow: none !important;
 }

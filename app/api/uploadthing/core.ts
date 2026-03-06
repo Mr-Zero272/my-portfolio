@@ -70,6 +70,17 @@ export const ourFileRouter = {
     .onUploadComplete(async ({ metadata, file }) => {
       return { uploadedBy: metadata.userId, url: file.ufsUrl };
     }),
+
+  // Editor uploader for plate editor
+  editorUploader: f(['image', 'text', 'blob', 'pdf', 'video', 'audio'])
+    .middleware(() => ({}))
+    .onUploadComplete(({ file }) => ({
+      key: file.key,
+      name: file.name,
+      size: file.size,
+      type: file.type,
+      url: file.ufsUrl,
+    })),
 } satisfies FileRouter;
 
 export type OurFileRouter = typeof ourFileRouter;

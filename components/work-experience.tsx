@@ -121,7 +121,7 @@ export function ExperienceItem({
           )}
         </div>
 
-        <h3 className="text-foreground text-lg leading-snug font-medium">{experience.companyName}</h3>
+        <h3 className="text-lg leading-snug font-medium text-foreground">{experience.companyName}</h3>
 
         {experience.isCurrentEmployer && (
           <span className="relative flex items-center justify-center">
@@ -140,7 +140,7 @@ export function ExperienceItem({
             <Button
               variant="ghost"
               size="icon"
-              className="text-destructive h-8 w-8"
+              className="h-8 w-8 text-destructive"
               onClick={() => onDeleteClick?.(experience._id)}
             >
               <Trash2 className="h-4 w-4" />
@@ -150,7 +150,7 @@ export function ExperienceItem({
         )}
       </div>
 
-      <div className="before:bg-border relative space-y-4 before:absolute before:left-3 before:h-full before:w-px">
+      <div className="relative space-y-4 before:absolute before:left-3 before:h-full before:w-px before:bg-border">
         {experience.positions.map((position) => (
           <ExperiencePositionItem key={position._id} position={position} />
         ))}
@@ -162,32 +162,36 @@ export function ExperienceItem({
 export function ExperiencePositionItem({ position }: { position: ExperiencePositionItemType }) {
   const ExperienceIcon = iconMap[position.icon || 'business'];
 
+  console.log({
+    position,
+  });
+
   return (
     <Collapsible defaultOpen={position.isExpanded} asChild>
-      <div className="last:before:bg-background relative last:before:absolute last:before:h-full last:before:w-4">
+      <div className="relative last:before:absolute last:before:h-full last:before:w-4 last:before:bg-background">
         <CollapsibleTrigger
           className={cn(
             'group/experience not-prose block w-full text-left select-none',
-            'hover:before:bg-muted/50 relative before:absolute before:-top-1 before:-right-1 before:-bottom-1.5 before:left-7 before:rounded-lg',
+            'relative before:absolute before:-top-1 before:-right-1 before:-bottom-1.5 before:left-7 before:rounded-lg hover:before:bg-muted/50',
           )}
         >
           <div className="relative z-1 mb-1 flex items-center gap-3">
             <div
-              className="bg-muted text-muted-foreground flex size-6 shrink-0 items-center justify-center rounded-lg"
+              className="flex size-6 shrink-0 items-center justify-center rounded-lg bg-muted text-muted-foreground"
               aria-hidden
             >
               <ExperienceIcon className="size-4" />
             </div>
 
-            <h4 className="text-foreground flex-1 text-base font-medium text-balance">{position.title}</h4>
+            <h4 className="flex-1 text-base font-medium text-balance text-foreground">{position.title}</h4>
 
-            <div className="text-muted-foreground shrink-0 [&_svg]:size-4" aria-hidden>
+            <div className="shrink-0 text-muted-foreground [&_svg]:size-4" aria-hidden>
               <ChevronsDownUpIcon className="hidden group-data-[state=open]/experience:block" />
               <ChevronsUpDownIcon className="hidden group-data-[state=closed]/experience:block" />
             </div>
           </div>
 
-          <div className="text-muted-foreground relative z-1 flex items-center gap-2 pl-9 text-sm">
+          <div className="relative z-1 flex items-center gap-2 pl-9 text-sm text-muted-foreground">
             {position.employmentType && (
               <>
                 <dl>
@@ -206,7 +210,7 @@ export function ExperiencePositionItem({ position }: { position: ExperiencePosit
           </div>
         </CollapsibleTrigger>
 
-        <CollapsibleContent className="data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down overflow-hidden duration-300">
+        <CollapsibleContent className="overflow-hidden duration-300 data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down">
           {position.description && (
             <Prose className="pt-2 pl-9">
               <ReactMarkdown>{position.description}</ReactMarkdown>
@@ -232,7 +236,7 @@ function Prose({ className, ...props }: React.ComponentProps<'div'>) {
   return (
     <div
       className={cn(
-        'prose prose-sm text-foreground prose-zinc dark:prose-invert max-w-none font-mono',
+        'prose prose-sm max-w-none font-mono text-foreground prose-zinc dark:prose-invert',
         'prose-a:font-medium prose-a:wrap-break-word prose-a:text-foreground prose-a:underline prose-a:underline-offset-4',
         'prose-code:rounded-md prose-code:border prose-code:bg-muted/50 prose-code:px-[0.3rem] prose-code:py-[0.2rem] prose-code:text-sm prose-code:font-normal prose-code:before:content-none prose-code:after:content-none',
         className,
@@ -246,7 +250,7 @@ function Skill({ className, ...props }: React.ComponentProps<'span'>) {
   return (
     <span
       className={cn(
-        'bg-muted/50 text-muted-foreground inline-flex items-center rounded-lg border px-1.5 py-0.5 font-mono text-xs',
+        'inline-flex items-center rounded-lg border bg-muted/50 px-1.5 py-0.5 font-mono text-xs text-muted-foreground',
         className,
       )}
       {...props}

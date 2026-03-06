@@ -8,7 +8,7 @@ import { uploadImageWithDB } from '@/lib/uploadthing';
 import { cn } from '@/lib/utils';
 import Placeholder from '@tiptap/extension-placeholder';
 import Underline from '@tiptap/extension-underline';
-import { BubbleMenu, EditorContent, useEditor } from '@tiptap/react';
+import { EditorContent, useEditor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import { Bold, Italic, Loader2, Send, UnderlineIcon, X } from 'lucide-react';
 import { useSession } from 'next-auth/react';
@@ -286,7 +286,7 @@ export default function CommentBox({
     <div className={cn('w-full', className)}>
       <div
         className={cn(
-          'border-border bg-background focus-within:border-primary focus-within:ring-primary/10 border-2 px-4 py-1 ring-1 ring-transparent transition-colors',
+          'border-2 border-border bg-background px-4 py-1 ring-1 ring-transparent transition-colors focus-within:border-primary focus-within:ring-primary/10',
           {
             [borderRadius]: true,
           },
@@ -302,33 +302,6 @@ export default function CommentBox({
               </AvatarFallback>
             </Avatar>
           )} */}
-
-          {/* bubble menu */}
-          <BubbleMenu
-            editor={editor}
-            tippyOptions={{ duration: 100 }}
-            className="z-50 rounded-md border bg-white p-1 shadow-lg"
-          >
-            {/* Bold Button */}
-            <Toggle title="Bold" pressed={editor.isActive('bold')} onPressedChange={toggleBold} size="sm">
-              <Bold size={16} strokeWidth={2.5} />
-            </Toggle>
-
-            {/* Italic Button */}
-            <Toggle pressed={editor.isActive('italic')} onPressedChange={toggleItalic} title="Italic" size="sm">
-              <Italic size={16} strokeWidth={2.5} />
-            </Toggle>
-
-            {/* Underline Button */}
-            <Toggle
-              pressed={editor.isActive('underline')}
-              onPressedChange={toggleUnderline}
-              title="Underline"
-              size="sm"
-            >
-              <UnderlineIcon size={16} strokeWidth={2.5} />
-            </Toggle>
-          </BubbleMenu>
 
           <div ref={editorWrapperRef} className="min-w-0 flex-1">
             <EditorContent editor={editor} className="prose prose-sm max-w-none focus:outline-none" />
@@ -369,9 +342,27 @@ export default function CommentBox({
 
       {/* Toolbar */}
       {
-        <div className="border-border flex items-start justify-between pt-2">
+        <div className="flex items-start justify-between border-border pt-2">
           {images.length === 0 ? (
             <div className="flex items-center gap-1">
+              {/* Formatting Buttons */}
+              <Toggle title="Bold" pressed={editor.isActive('bold')} onPressedChange={toggleBold} size="sm">
+                <Bold size={16} strokeWidth={2.5} />
+              </Toggle>
+
+              <Toggle pressed={editor.isActive('italic')} onPressedChange={toggleItalic} title="Italic" size="sm">
+                <Italic size={16} strokeWidth={2.5} />
+              </Toggle>
+
+              <Toggle
+                pressed={editor.isActive('underline')}
+                onPressedChange={toggleUnderline}
+                title="Underline"
+                size="sm"
+              >
+                <UnderlineIcon size={16} strokeWidth={2.5} />
+              </Toggle>
+
               {/* <Separator orientation="vertical" className="mx-1 h-4" /> */}
 
               {/* Upload Images Button */}

@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import type { OurFileRouter } from '@/lib/uploadthing-plate';
+import type { OurFileRouter } from '@/app/api/uploadthing/core';
 import type { ClientUploadedFileData, UploadFilesOptions } from 'uploadthing/types';
 
 import { generateReactHelpers } from '@uploadthing/react';
@@ -15,9 +15,17 @@ interface UseUploadFileProps extends Pick<
 > {
   onUploadComplete?: (file: UploadedFile) => void;
   onUploadError?: (error: unknown) => void;
+  saveToDb?: boolean; // Option để lưu ảnh vào database
+  userCreated?: string; // User ID để lưu vào database
 }
 
-export function useUploadFile({ onUploadComplete, onUploadError, ...props }: UseUploadFileProps = {}) {
+export function useUploadFile({
+  onUploadComplete,
+  onUploadError,
+  saveToDb = false,
+  userCreated,
+  ...props
+}: UseUploadFileProps = {}) {
   const [uploadedFile, setUploadedFile] = React.useState<UploadedFile>();
   const [uploadingFile, setUploadingFile] = React.useState<File>();
   const [progress, setProgress] = React.useState<number>(0);
@@ -36,11 +44,43 @@ export function useUploadFile({ onUploadComplete, onUploadError, ...props }: Use
         },
       });
 
-      setUploadedFile(res[0]);
+      const uploadedFileData = res[0];
+      setUploadedFile(uploadedFileData);
 
-      onUploadComplete?.(res[0]);
+      // Lưu ảnh vào database nếu được yêu cầu
+      if (saveToDb && userCreated && uploadedFileData.url) {
+        try {
+          const imageData = {
+            url: uploadedFileData.ufsUrl,
+            name: uploadedFileData.name,
+            size: uploadedFileData.size,
+            mineType: file.type,
+            userCreated,
+          };
 
-      return uploadedFile;
+          const response = await fetch('/api/images', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(imageData),
+          });
+
+          if (response.ok) {
+            const savedImage = await response.json();
+            console.log('Image saved to database:', savedImage);
+          } else {
+            console.warn('Failed to save image to database, but upload was successful');
+          }
+        } catch (dbError) {
+          console.error('Error saving to database:', dbError);
+          // Không throw error để không ảnh hưởng đến quá trình upload
+        }
+      }
+
+      onUploadComplete?.(uploadedFileData);
+
+      return uploadedFileData;
     } catch (error) {
       const errorMessage = getErrorMessage(error);
 

@@ -1,248 +1,27 @@
 'use client';
 
-import { uploadFile, uploadImageWithDB, uploadMultipleFiles } from '@/lib/uploadthing';
-import NextImage from 'next/image';
-import { ChangeEvent, useCallback, useMemo, useRef, useState } from 'react';
-import RichTextEditor, { BaseKit } from 'reactjs-tiptap-editor';
-import useImagePreview from '../hooks/use-preview-image';
-
-import {
-  BubbleMenuDrawer,
-  BubbleMenuExcalidraw,
-  BubbleMenuKatex,
-  BubbleMenuMermaid,
-  BubbleMenuTwitter,
-} from 'reactjs-tiptap-editor/bubble-extra';
-
-import { Attachment } from 'reactjs-tiptap-editor/attachment';
-import { Blockquote } from 'reactjs-tiptap-editor/blockquote';
-import { BulletList } from 'reactjs-tiptap-editor/bulletlist';
-import { Clear } from 'reactjs-tiptap-editor/clear';
-import { Code } from 'reactjs-tiptap-editor/code';
-import { CodeBlock } from 'reactjs-tiptap-editor/codeblock';
-import { Color } from 'reactjs-tiptap-editor/color';
-import { Drawer } from 'reactjs-tiptap-editor/drawer';
-import { Emoji } from 'reactjs-tiptap-editor/emoji';
-import { Excalidraw } from 'reactjs-tiptap-editor/excalidraw';
-import { ExportPdf } from 'reactjs-tiptap-editor/exportpdf';
-import { ExportWord } from 'reactjs-tiptap-editor/exportword';
-import { FontFamily } from 'reactjs-tiptap-editor/fontfamily';
-import { FontSize } from 'reactjs-tiptap-editor/fontsize';
-import { FormatPainter } from 'reactjs-tiptap-editor/formatpainter';
-import { Heading } from 'reactjs-tiptap-editor/heading';
-import { Highlight } from 'reactjs-tiptap-editor/highlight';
-import { History } from 'reactjs-tiptap-editor/history';
-import { HorizontalRule } from 'reactjs-tiptap-editor/horizontalrule';
-import { Iframe } from 'reactjs-tiptap-editor/iframe';
-import { Image } from 'reactjs-tiptap-editor/image';
-import { ImageGif } from 'reactjs-tiptap-editor/imagegif';
-import { ImportWord } from 'reactjs-tiptap-editor/importword';
-import { Indent } from 'reactjs-tiptap-editor/indent';
-import { Italic } from 'reactjs-tiptap-editor/italic';
-import { Katex } from 'reactjs-tiptap-editor/katex';
-import { LineHeight } from 'reactjs-tiptap-editor/lineheight';
-import { Link } from 'reactjs-tiptap-editor/link';
-import { Mention } from 'reactjs-tiptap-editor/mention';
-import { Mermaid } from 'reactjs-tiptap-editor/mermaid';
-import { MoreMark } from 'reactjs-tiptap-editor/moremark';
-import { ColumnActionButton } from 'reactjs-tiptap-editor/multicolumn';
-import { OrderedList } from 'reactjs-tiptap-editor/orderedlist';
-import { SearchAndReplace } from 'reactjs-tiptap-editor/searchandreplace';
-import { SlashCommand } from 'reactjs-tiptap-editor/slashcommand';
-import { Strike } from 'reactjs-tiptap-editor/strike';
-import { Table } from 'reactjs-tiptap-editor/table';
-import { TableOfContents } from 'reactjs-tiptap-editor/tableofcontent';
-import { TaskList } from 'reactjs-tiptap-editor/tasklist';
-import { TextAlign } from 'reactjs-tiptap-editor/textalign';
-import { TextDirection } from 'reactjs-tiptap-editor/textdirection';
-import { TextUnderline } from 'reactjs-tiptap-editor/textunderline';
-import { Twitter } from 'reactjs-tiptap-editor/twitter';
-import { Video } from 'reactjs-tiptap-editor/video';
-
-import 'prism-code-editor-lightweight/layout.css';
-import 'prism-code-editor-lightweight/themes/github-dark.css';
-import 'reactjs-tiptap-editor/style.css';
-
 import { AnimatedButton } from '@/components/ui/animated-button';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
 import { Textarea } from '@/components/ui/textarea';
 import GallerySelect from '@/features/gallery/components/gallery-select';
+import TiptapEditor from '@/features/tiptap-editor';
 import { useSmartPaste } from '@/hooks/use-smart-paste';
 import { IImage } from '@/models';
-import '@excalidraw/excalidraw/index.css';
-import 'easydrawer/styles.css';
-import 'katex/dist/katex.min.css';
 import { Library, Plus, XIcon } from 'lucide-react';
-import { useSession } from 'next-auth/react';
-import { useTheme } from 'next-themes';
-import 'react-image-crop/dist/ReactCrop.css';
+import NextImage from 'next/image';
+import { ChangeEvent, useCallback, useRef, useState } from 'react';
+import useImagePreview from '../hooks/use-preview-image';
 import { usePostStorage } from '../store/use-post-storage';
 
 function Editor() {
-  const { data: session } = useSession();
-
-  const extensions = useMemo(
-    () => [
-      BaseKit.configure({
-        placeholder: {
-          showOnlyCurrent: true,
-        },
-      }),
-      History,
-      SearchAndReplace,
-      TableOfContents,
-      FormatPainter.configure({ spacer: true }),
-      Clear,
-      FontFamily,
-      Heading.configure({ spacer: true }),
-      FontSize,
-      Italic,
-      TextUnderline,
-      Strike,
-      MoreMark,
-      Emoji,
-      Color.configure({ spacer: true }),
-      Highlight,
-      BulletList,
-      OrderedList,
-      TextAlign.configure({ types: ['heading', 'paragraph'], spacer: true }),
-      Indent,
-      LineHeight,
-      TaskList.configure({
-        spacer: true,
-        taskItem: {
-          nested: true,
-        },
-      }),
-      Link,
-      Image.configure({
-        upload: async (files: File) => {
-          try {
-            if (session?.user?.id) {
-              // Upload và lưu vào database nếu user đã đăng nhập
-              return await uploadImageWithDB(files, session.user.id, 'imageUploader');
-            } else {
-              // Fallback: chỉ upload file nếu user chưa đăng nhập
-              const response = await uploadFile(files, 'imageUploader');
-              return response.data.url;
-            }
-          } catch (error) {
-            console.error('Failed to upload image:', error);
-            throw error;
-          }
-        },
-        HTMLAttributes: {
-          style: 'max-width: 100%; height: auto;',
-        },
-      }),
-      Video.configure({
-        upload: async (files: File) => {
-          try {
-            const response = await uploadFile(files, 'videoUploader');
-            return response.data.url;
-          } catch (error) {
-            console.error('Failed to upload video:', error);
-            throw error;
-          }
-        },
-      }),
-      ImageGif.configure({
-        API_KEY: process.env.NEXT_PUBLIC_GIPHY_API_KEY as string,
-      }),
-      Blockquote,
-      SlashCommand,
-      HorizontalRule,
-      Code.configure({
-        toolbar: false,
-      }),
-      CodeBlock,
-      ColumnActionButton,
-      Table,
-      Iframe,
-      ExportPdf.configure({ spacer: true }),
-      ImportWord.configure({
-        upload: async (files: File[]) => {
-          try {
-            const uploadResult = await uploadMultipleFiles(files, 'attachmentUploader');
-            return uploadResult;
-          } catch (error) {
-            console.error('Failed to upload Word files:', error);
-            throw error;
-          }
-        },
-      }),
-      ExportWord,
-      TextDirection,
-      Mention,
-      Attachment.configure({
-        upload: async (file: File) => {
-          try {
-            const response = await uploadFile(file, 'attachmentUploader');
-            return response.data.url;
-          } catch (error) {
-            console.error('Failed to upload attachment:', error);
-            throw error;
-          }
-        },
-      }),
-
-      Katex,
-      Excalidraw,
-      Mermaid.configure({
-        upload: async (file: File) => {
-          try {
-            if (session?.user?.id) {
-              // Upload và lưu vào database nếu user đã đăng nhập
-              return await uploadImageWithDB(file, session.user.id, 'imageUploader');
-            } else {
-              // Fallback: chỉ upload file nếu user chưa đăng nhập
-              const response = await uploadFile(file, 'imageUploader');
-              return response.data.url;
-            }
-          } catch (error) {
-            console.error('Failed to upload Mermaid diagram:', error);
-            throw error;
-          }
-        },
-      }),
-      Drawer.configure({
-        upload: async (file: File) => {
-          try {
-            if (session?.user?.id) {
-              // Upload và lưu vào database nếu user đã đăng nhập
-              return await uploadImageWithDB(file, session.user.id, 'imageUploader');
-            } else {
-              // Fallback: chỉ upload file nếu user chưa đăng nhập
-              const response = await uploadFile(file, 'imageUploader');
-              return response.data.url;
-            }
-          } catch (error) {
-            console.error('Failed to upload drawing:', error);
-            throw error;
-          }
-        },
-      }),
-      Twitter,
-    ],
-    [session],
-  );
-
-  // const { editorRef } = useEditorState();
   const [imageFromLibrary, setImageFromLibrary] = useState<IImage | null>(null);
-  const { theme } = useTheme();
   const { _id, title, content, featureImage: storeFeatureImage, imageCaption, setField } = usePostStorage();
   const { handlePaste } = useSmartPaste();
-  const [resetCount, setResetCount] = useState(0);
-  const editorKey = `key-${_id}-${resetCount}`;
 
-  // const debouncedOnValueChange = useDebounceCallback((value: string) => {
-  //   setField('content', value);
-  // }, 0);
-
-  // temp remove debounce to test performance in prod
-  const debouncedOnValueChange = useCallback(
+  // Debounced content change handler - được gọi từ TiptapEditor
+  const handleContentChange = useCallback(
     (value: string) => {
       setField('content', value);
     },
@@ -403,11 +182,11 @@ function Editor() {
               onPaste={(e) =>
                 handlePaste(e, {
                   onContentDetected: (detectedContent) => {
-                    setResetCount((prev) => prev + 1);
                     setField('content', detectedContent);
                   },
                   onTitleDetected: (detectedTitle) => {
                     setField('title', detectedTitle);
+                    setField('xMetaTitle', detectedTitle);
                     setField('xMetaTitle', detectedTitle);
                     setField('metaTitle', detectedTitle);
                     setTimeout(() => {
@@ -440,53 +219,7 @@ function Editor() {
           </div>
 
           <div className="my-editor">
-            <RichTextEditor
-              // ref={editorRef}
-              key={editorKey} // Sử dụng key để reset editor khi cần
-              contentClass="p-0 !shadow-none !outline-none"
-              output="html"
-              content={content || ''}
-              onChangeContent={debouncedOnValueChange}
-              extensions={extensions}
-              dark={theme === 'dark'}
-              disabled={false}
-              // hideToolbar
-              toolbar={{
-                render(props, items, dom) {
-                  return (
-                    <div aria-disabled tabIndex={-1} className="hidden">
-                      {dom.map((d, index) => (
-                        <div key={index}>{d}</div>
-                      ))}
-                    </div>
-                  );
-                },
-              }}
-              bubbleMenu={{
-                render({ extensionsNames, editor, disabled }, bubbleDefaultDom) {
-                  return (
-                    <>
-                      {bubbleDefaultDom}
-                      {extensionsNames.includes('twitter') ? (
-                        <BubbleMenuTwitter disabled={disabled} editor={editor} key="twitter" />
-                      ) : null}
-                      {extensionsNames.includes('katex') ? (
-                        <BubbleMenuKatex disabled={disabled} editor={editor} key="katex" />
-                      ) : null}
-                      {extensionsNames.includes('excalidraw') ? (
-                        <BubbleMenuExcalidraw disabled={disabled} editor={editor} key="excalidraw" />
-                      ) : null}
-                      {extensionsNames.includes('mermaid') ? (
-                        <BubbleMenuMermaid disabled={disabled} editor={editor} key="mermaid" />
-                      ) : null}
-                      {extensionsNames.includes('drawer') ? (
-                        <BubbleMenuDrawer disabled={disabled} editor={editor} key="drawer" />
-                      ) : null}
-                    </>
-                  );
-                },
-              }}
-            />
+            <TiptapEditor initialContent={content} onContentChange={handleContentChange} />
           </div>
         </div>
       </div>

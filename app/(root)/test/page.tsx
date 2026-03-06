@@ -1,11 +1,18 @@
 'use client';
 
-import MorphingVideo from '@/components/animations/morphing-video';
+import dynamic from 'next/dynamic';
 
-export default function SortableDefault() {
+const Editor = dynamic(() => import('@/features/tiptap-editor'), {
+  ssr: false,
+  loading: () => <p>Loading...</p>,
+});
+
+const EditorClient = () => {
   return (
-    <div className="flex h-screen flex-col items-center justify-center gap-2">
-      <MorphingVideo />
-    </div>
+    <>
+      <Editor />
+    </>
   );
-}
+};
+
+export default EditorClient;
