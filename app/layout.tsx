@@ -107,7 +107,7 @@ export default function RootLayout({
       <head>
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       </head>
-      <body className="antialiased">
+      <body className="relative antialiased">
         <AppProvider>
           {children}
           <Toaster />

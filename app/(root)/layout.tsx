@@ -26,7 +26,7 @@ export default function RootLayout({
         <SidebarProvider>
           <Navigation />
           <CursorSetting />
-          <section className="flex w-full flex-col gap-5 overflow-y-auto md:ml-20">
+          <section className="relative flex w-full flex-col gap-5 overflow-y-auto md:ml-20">
             <Header />
             <PageTransition>{children}</PageTransition>
           </section>
