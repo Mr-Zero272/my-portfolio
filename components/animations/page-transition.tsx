@@ -23,7 +23,7 @@ const PageTransition = ({
 
   if (!isTransitionPageEnabled) {
     return (
-      <div className={cn('w-full bg-background pt-16', className)}>
+      <div className={cn('w-full bg-transparent pt-16', className)}>
         <div className="site-container mx-auto">{children}</div>
         {!noFooter && <Footer />}
       </div>

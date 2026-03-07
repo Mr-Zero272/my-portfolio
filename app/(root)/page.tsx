@@ -98,6 +98,16 @@ export default async function Home() {
       <section className="relative flex flex-col xl:flex-row">
         <div className="relative mb-7 flex flex-1 justify-evenly xl:mb-0 xl:w-5/12 xl:justify-center">
           <Image
+            className="size-80 rounded-full object-cover object-top min-[500px]:size-96 min-[500px]:rounded-none xl:h-160 xl:w-120"
+            src="/images/profile-home-2.png"
+            width={1000}
+            height={1000}
+            quality={100}
+            priority
+            loading="eager"
+            alt="profile image no bg"
+          />
+          {/* <Image
             className="size-80 rounded-full object-cover object-top min-[500px]:size-96 min-[500px]:rounded-none xl:h-160 xl:w-120 dark:hidden dark:mix-blend-screen"
             src="/images/profile-home.png"
             width={1000}
@@ -116,7 +126,7 @@ export default async function Home() {
             priority
             loading="eager"
             alt="profile image no bg"
-          />
+          /> */}
 
           <div className="z-1 mb-5 hidden flex-col items-center justify-between gap-5 rounded-3xl p-5 sm:flex xl:absolute xl:bottom-0 xl:h-56 xl:w-104 xl:flex-row xl:gap-0 xl:bg-slate-200/30 xl:backdrop-blur-sm xl:dark:bg-card/50">
             <InfoCard title="YOE" content="1.5" sub="Years of experiences" arrow={false} />
