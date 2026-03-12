@@ -313,9 +313,6 @@ const createExtensions = (userId?: string) => [
   Callout,
 ];
 
-// Default content
-const DEFAULT = `<h1>Start writing your story...</h1><p>Press '/' for commands, or select text to see formatting options.</p>`;
-
 interface TipTapEditorProps {
   initialContent?: string;
   onContentChange?: (content: string) => void;
@@ -334,7 +331,7 @@ function TipTapEditor({ initialContent, onContentChange }: TipTapEditorProps) {
   }, 800);
 
   const editor = useEditor({
-    content: initialContent || DEFAULT,
+    content: initialContent || '',
     extensions: createExtensions(session?.user?.id),
     immediatelyRender: false,
     onUpdate: ({ editor }) => {
