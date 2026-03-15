@@ -84,7 +84,7 @@ import { EMOJI_LIST } from '@/features/tiptap-editor/emojis';
 import { uploadFile, uploadImageWithDB } from '@/lib/uploadthing';
 import { EditorContent, useEditor } from '@tiptap/react';
 import { useSession } from 'next-auth/react';
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 import { useDebounceCallback } from 'usehooks-ts';
 
 // Utility function to convert base64 to blob
@@ -320,7 +320,6 @@ interface TipTapEditorProps {
 
 // Main Editor Component
 function TipTapEditor({ initialContent, onContentChange }: TipTapEditorProps) {
-  const isInitializedRef = useRef(false);
   const { data: session } = useSession();
 
   // Debounced callback using usehooks-ts (800ms delay)
@@ -344,12 +343,6 @@ function TipTapEditor({ initialContent, onContentChange }: TipTapEditorProps) {
   // Sync initial content when it changes (e.g., loading a different post)
   useEffect(() => {
     if (editor && initialContent) {
-      // Skip first render
-      if (!isInitializedRef.current) {
-        isInitializedRef.current = true;
-        return;
-      }
-
       const currentContent = editor.getHTML();
       // Only update if content actually changed to avoid unnecessary updates
       if (currentContent !== initialContent) {

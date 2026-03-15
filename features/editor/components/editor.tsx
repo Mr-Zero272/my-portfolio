@@ -20,6 +20,10 @@ function Editor() {
   const { _id, title, content, featureImage: storeFeatureImage, imageCaption, setField } = usePostStorage();
   const { handlePaste } = useSmartPaste();
 
+  console.log({
+    content,
+  });
+
   // Debounced content change handler - được gọi từ TiptapEditor
   const handleContentChange = useCallback(
     (value: string) => {
