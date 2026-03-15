@@ -10,6 +10,7 @@ import { enUS, vi } from 'date-fns/locale';
 import DOMPurify from 'dompurify';
 import { Bookmark, Eye, MessageCircle, Share2 } from 'lucide-react';
 import Image from 'next/image';
+import { useCallback } from 'react';
 import { LikePost } from './components/like-post';
 import PostComment from './components/post-comment';
 import ReadPost from './components/read-post';
@@ -30,9 +31,13 @@ export function PostPreviewFeature({ post, locale = 'en' }: PostPreviewFeaturePr
   const firstAuthor = post.authors?.[0];
 
   // Parse HTML content safely
-  const createMarkup = () => {
+  const createMarkup = useCallback(() => {
     return { __html: DOMPurify.sanitize(post.content || '') };
-  };
+  }, [post.content]);
+
+  console.log({
+    content: post.content,
+  });
 
   return (
     <div className="relative min-h-screen bg-background">
@@ -104,7 +109,7 @@ export function PostPreviewFeature({ post, locale = 'en' }: PostPreviewFeaturePr
         {/* Content */}
         <article className="prose prose-lg mb-8 max-w-none prose-gray dark:prose-invert">
           <div
-            className="prose-headings:font-bold prose-headings:text-gray-900 dark:prose-headings:text-gray-100 prose-p:text-lg prose-p:leading-relaxed prose-p:text-gray-700 dark:prose-p:text-gray-300 prose-a:text-blue-600 prose-a:no-underline hover:prose-a:underline dark:prose-a:text-blue-400 prose-blockquote:border-l-4 prose-blockquote:border-gray-300 prose-blockquote:pl-6 prose-blockquote:italic dark:prose-blockquote:border-gray-600 prose-strong:font-semibold prose-strong:text-gray-900 dark:prose-strong:text-gray-100 prose-code:rounded prose-code:bg-gray-100 prose-code:px-2 prose-code:py-1 prose-code:text-gray-800 dark:prose-code:bg-gray-800 dark:prose-code:text-gray-100 prose-ol:list-decimal prose-ul:list-disc prose-li:leading-relaxed prose-li:text-gray-700 dark:prose-li:text-gray-300 prose-img:rounded-lg prose-img:shadow-sm prose-hr:my-8 prose-hr:border-gray-200 dark:prose-hr:border-gray-700"
+            className="prose-headings:font-bold prose-headings:text-gray-900 dark:prose-headings:text-gray-100 prose-p:text-lg prose-p:leading-relaxed prose-p:text-gray-700 dark:prose-p:text-gray-300 prose-a:text-blue-600 prose-a:no-underline hover:prose-a:underline dark:prose-a:text-blue-400 prose-blockquote:border-l-4 prose-blockquote:border-gray-300 prose-blockquote:pl-6 prose-blockquote:italic dark:prose-blockquote:border-gray-600 prose-strong:font-semibold prose-strong:text-gray-900 dark:prose-strong:text-gray-100 prose-ol:list-decimal prose-ul:list-disc prose-li:leading-relaxed prose-li:text-gray-700 dark:prose-li:text-gray-300 prose-img:rounded-lg prose-img:shadow-sm prose-hr:my-8 prose-hr:border-gray-200 dark:prose-hr:border-gray-700 [&_:not(pre)>code]:rounded [&_:not(pre)>code]:bg-gray-100 [&_:not(pre)>code]:px-1.5 [&_:not(pre)>code]:py-0.5 [&_:not(pre)>code]:font-mono [&_:not(pre)>code]:text-[0.875em] [&_:not(pre)>code]:text-rose-500 [&_:not(pre)>code]:dark:bg-gray-800 [&_:not(pre)>code]:dark:text-rose-400 [&_pre]:my-6 [&_pre]:overflow-x-auto [&_pre]:rounded-xl [&_pre]:border [&_pre]:border-gray-700/50 [&_pre]:bg-[#0d1117] [&_pre]:p-5 [&_pre]:shadow-lg [&_pre_code]:bg-transparent [&_pre_code]:p-0 [&_pre_code]:font-mono [&_pre_code]:text-sm [&_pre_code]:leading-relaxed [&_pre_code]:text-[#e6edf3] [&_table]:my-6 [&_table]:w-full [&_table]:border-collapse [&_table]:overflow-hidden [&_table]:rounded-xl [&_table]:text-sm [&_table]:shadow-sm [&_td]:border-b [&_td]:border-gray-100 [&_td]:px-4 [&_td]:py-0 [&_td]:text-gray-700 [&_td]:dark:border-gray-800 [&_td]:dark:text-gray-300 [&_td_code]:rounded [&_td_code]:bg-gray-100 [&_td_code]:px-1.5 [&_td_code]:py-0.5 [&_td_code]:font-mono [&_td_code]:text-xs [&_td_code]:text-rose-500 [&_td_code]:dark:bg-gray-800 [&_td_code]:dark:text-rose-400 [&_th]:border-b [&_th]:border-gray-200 [&_th]:bg-gray-100 [&_th]:px-4 [&_th]:py-0 [&_th]:text-left [&_th]:font-semibold [&_th]:text-gray-700 [&_th]:dark:border-gray-700 [&_th]:dark:bg-gray-800 [&_th]:dark:text-gray-200 [&_tr:last-child_td]:border-b-0 [&_tr:nth-child(even)_td]:bg-gray-50 [&_tr:nth-child(even)_td]:dark:bg-gray-900/30"
             dangerouslySetInnerHTML={createMarkup()}
           />
         </article>

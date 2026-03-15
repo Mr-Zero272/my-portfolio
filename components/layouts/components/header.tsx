@@ -45,13 +45,12 @@ const Header = () => {
         left: `calc(${sidebarWidthCal} + (100% - ${sidebarWidthCal}) / 2)`,
       }}
     >
-      <motion.ul
-        layout
+      <ul
         key="header"
-        initial={{ opacity: 0, y: -4 }}
-        animate={{ opacity: 1, y: 0 }}
-        exit={{ opacity: 0, y: -4 }}
-        transition={{ type: 'spring', stiffness: 250, damping: 25 }}
+        // initial={{ opacity: 0, y: -4 }}
+        // animate={{ opacity: 1, y: 0 }}
+        // exit={{ opacity: 0, y: -4 }}
+        // transition={{ type: 'spring', stiffness: 250, damping: 25 }}
         className="flex w-fit items-center justify-center gap-2 rounded-full bg-neutral-100/30 px-3 py-2 backdrop-blur-sm"
       >
         <AnimatePresence mode="popLayout">
@@ -126,7 +125,7 @@ const Header = () => {
             </motion.li>
           )}
         </AnimatePresence>
-      </motion.ul>
+      </ul>
     </header>
   );
 };
