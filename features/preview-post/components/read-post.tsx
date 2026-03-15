@@ -2,8 +2,8 @@
 
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { cleanHtmlContent, estimateReadingTime, formatReadingTime } from '@/lib/text';
 import { cn } from '@/lib/utils';
+import { cleanHtmlContent, estimateReadingTime, formatReadingTime } from '@/utils/text';
 import { PauseIcon, PlayIcon, Square, Volume2Icon } from 'lucide-react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 

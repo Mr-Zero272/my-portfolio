@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { usePostStorage } from '@/features/editor/store/use-post-storage';
-import { isEmptyHtml } from '@/lib/validate';
+import { isEmptyHtml } from '@/utils/validate';
 import { Loader2, Plus, Sparkles, X } from 'lucide-react';
 import { useState } from 'react';
 import { toast } from 'sonner';
@@ -125,7 +125,7 @@ const KeywordsInput = () => {
               </Badge>
             ))}
           </div>
-          <p className="text-muted-foreground text-xs">
+          <p className="text-xs text-muted-foreground">
             {keywords.length} keyword{keywords.length !== 1 ? 's' : ''}
           </p>
         </div>

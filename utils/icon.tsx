@@ -1,5 +1,5 @@
 import { Facebook, Github, Linkedin, Youtube } from '@/components/icons';
-import { cn } from './utils';
+import { cn } from '../lib/utils';
 
 export const renderIcon = ({ iconName, className }: { iconName: string; className?: string }) => {
   switch (iconName) {

@@ -14,8 +14,8 @@ import {
 import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { generateSlugWithUnique } from '@/lib/slug';
 import { type ITag } from '@/models';
+import { generateSlugWithUnique } from '@/utils/slug';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import React, { useEffect } from 'react';

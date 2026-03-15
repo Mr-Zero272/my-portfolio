@@ -1,3 +1,3 @@
+export * from '../utils/format';
+export * from '../utils/slug';
 export * from './axios';
-export * from './format';
-export * from './slug';

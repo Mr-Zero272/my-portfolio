@@ -2,7 +2,7 @@ import ErrorMessage from '@/components/shared/error-message';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { API_URL } from '@/configs/env';
-import { generateSlug } from '@/lib/slug';
+import { generateSlug } from '@/utils/slug';
 import { LinkIcon } from 'lucide-react';
 import { useEffect, useRef } from 'react';
 import { usePostStorage } from '../../../../../store/use-post-storage';

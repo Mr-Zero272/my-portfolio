@@ -2,7 +2,7 @@ import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { cn } from '@/lib/utils';
-import { isEmptyHtml } from '@/lib/validate';
+import { isEmptyHtml } from '@/utils/validate';
 import { Sparkles } from 'lucide-react';
 import { useState } from 'react';
 import { toast } from 'sonner';
@@ -57,7 +57,7 @@ const ExcerptInput = () => {
         <Button
           variant="ghost"
           size="sm"
-          className="text-muted-foreground hover:text-primary h-6 px-2 text-xs"
+          className="h-6 px-2 text-xs text-muted-foreground hover:text-primary"
           onClick={handleGenerateExcerpt}
           disabled={isGenerating}
         >
@@ -72,7 +72,7 @@ const ExcerptInput = () => {
         value={excerpt || ''}
         onChange={(e) => setField('excerpt', e.target.value)}
       />
-      <p className="text-muted-foreground text-xs">
+      <p className="text-xs text-muted-foreground">
         Recommended length: up to 145 characters. Current length:{' '}
         <span
           className={cn('', {

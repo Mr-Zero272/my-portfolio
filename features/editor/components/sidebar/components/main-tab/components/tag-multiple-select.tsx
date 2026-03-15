@@ -5,7 +5,7 @@ import ErrorMessage from '@/components/shared/error-message';
 import { Label } from '@/components/ui/label';
 import { MultiSelect, MultiSelectOption } from '@/components/ui/multi-select';
 import { Skeleton } from '@/components/ui/skeleton';
-import { generateSlugWithUnique } from '@/lib/slug';
+import { generateSlugWithUnique } from '@/utils/slug';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { isAxiosError } from 'axios';
 import { Tag } from 'lucide-react';
