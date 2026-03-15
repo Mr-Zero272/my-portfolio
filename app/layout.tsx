@@ -112,7 +112,7 @@ export default function RootLayout({
           {children}
           <Toaster />
           <NextTopLoader
-            color="#ff6900"
+            color="var(--primary)"
             initialPosition={0.08}
             crawlSpeed={200}
             height={2}

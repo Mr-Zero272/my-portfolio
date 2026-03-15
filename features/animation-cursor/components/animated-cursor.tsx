@@ -77,28 +77,6 @@ export default function AnimatedCursor({ enabled, type }: { enabled: boolean; ty
             />
           </>
         );
-        return (
-          <>
-            <motion.div
-              style={{ translateX: x, translateY: y, opacity: enabled ? 1 : 0 }}
-              animate={{ scale: isClicking ? 0.7 : 1 }}
-              className="pointer-events-none fixed z-999999 size-2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary"
-            />
-            <motion.div
-              style={{ translateX: springX, translateY: springY, opacity: enabled ? 1 : 0 }}
-              animate={{
-                scale: [1, 1.3, 1],
-                opacity: [0.5, 0.8, 0.5],
-              }}
-              transition={{
-                duration: 1.5,
-                repeat: Infinity,
-                ease: 'easeInOut',
-              }}
-              className="pointer-events-none fixed z-999998 size-10 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-primary"
-            />
-          </>
-        );
       default:
         return (
           <>
@@ -120,5 +98,7 @@ export default function AnimatedCursor({ enabled, type }: { enabled: boolean; ty
     }
   }, [type, enabled, x, y, springX, springY, isClicking]);
 
-  return <Portal container={typeof document !== 'undefined' ? document.body : null}>{renderCursor()}</Portal>;
+  return (
+    <Portal container={typeof document !== 'undefined' ? document.body : null}>{enabled && renderCursor()}</Portal>
+  );
 }
