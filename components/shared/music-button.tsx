@@ -7,7 +7,7 @@ import { AnimatePresence, motion } from 'motion/react';
 import Image from 'next/image';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useOnClickOutside } from 'usehooks-ts';
-import { AudioWaveformIcon } from '../icons/audio-waveform';
+import AudioLinesAnimatedIcon from '../icons/audio-lines-animated';
 import { AnimatedButton } from '../ui/animated-button';
 import { Badge } from '../ui/badge';
 
@@ -69,7 +69,7 @@ const MusicButton = ({ className }: { className?: string }) => {
   return (
     <>
       <AnimatedButton size="icon" variant="ghost" className={className} onClick={() => setIsOpen(!isOpen)}>
-        {isPlaying ? <AudioWaveformIcon className="size-5" /> : <Music className="size-5" />}
+        {isPlaying ? <AudioLinesAnimatedIcon className="size-5" /> : <Music className="size-5" />}
       </AnimatedButton>
 
       <AnimatePresence>

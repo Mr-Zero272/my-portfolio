@@ -1,16 +1,10 @@
 'use client';
 
-import dynamic from 'next/dynamic';
-
-const Editor = dynamic(() => import('@/features/tiptap-editor'), {
-  ssr: false,
-  loading: () => <p>Loading...</p>,
-});
-
+import AudioLinesAnimatedIcon from '@/components/icons/audio-lines-animated';
 const EditorClient = () => {
   return (
     <>
-      <Editor />
+      <AudioLinesAnimatedIcon />
     </>
   );
 };
