@@ -1,6 +1,6 @@
 import AnimatedDownloadButton from '@/components/animations/animated-download-button';
+import AnimatedTyping from '@/components/animations/animated-typing';
 import AnimatedWords from '@/components/animations/animated-words';
-import { RotateWords } from '@/components/animations/rotate-words';
 import InfoCard from '@/components/cards/info-card';
 import DigitalClock from '@/components/shared/digital-clock';
 import { Badge } from '@/components/ui/badge';
@@ -137,7 +137,9 @@ export default async function Home() {
           <div className="mb-8 flex justify-center p-2 sm:justify-around sm:p-0">
             <div className="relative mt-0 h-80 w-88 sm:w-120">
               <div className="h-64 w-full rounded-t-[4rem] rounded-br-[4rem] bg-slate-200/30 py-6 pr-5 pl-8 backdrop-blur-sm dark:bg-card">
-                <RotateWords text="developer" words={profileInfo.rotatingWords} position="behind" />
+                <div className="flex items-center gap-1">
+                  <AnimatedTyping text={profileInfo.rotatingWords} /> developer
+                </div>
                 <AnimatedWords text="Hello I'm " className="text-left text-xl sm:text-3xl" />
                 <AnimatedWords text={profileInfo.name} className="text-left text-2xl text-primary sm:text-4xl" />
                 <p className="text-sm sm:text-base">{profileInfo.description}</p>

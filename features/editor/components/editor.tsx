@@ -6,7 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
 import { Textarea } from '@/components/ui/textarea';
 import GallerySelect from '@/features/gallery/components/gallery-select';
-import TiptapEditor from '@/features/tiptap-editor';
+import GhostLikeEditor from '@/features/my-lexical-editor/GhostLikeEditor';
 import { useSmartPaste } from '@/hooks/use-smart-paste';
 import { IImage } from '@/models';
 import { Library, Plus, XIcon } from 'lucide-react';
@@ -222,8 +222,8 @@ function Editor() {
             />
           </div>
 
-          <div className="my-editor">
-            <TiptapEditor initialContent={content} onContentChange={handleContentChange} />
+          <div className="my-editor relative ml-9">
+            <GhostLikeEditor content={content} onChange={handleContentChange} />
           </div>
         </div>
       </div>

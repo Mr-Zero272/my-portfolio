@@ -1,0 +1,373 @@
+/* ─── Editor root ─────────────────────────────────────────── */
+.lex-root {
+  position: relative;
+  outline: none;
+  caret-color: currentColor;
+}
+
+/* ─── Block spacing ───────────────────────────────────────── */
+.lex-p {
+  margin: 0 0 0.25rem 0;
+  line-height: 1.75;
+}
+
+/* ─── Headings ────────────────────────────────────────────── */
+.lex-h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1.25;
+  margin: 1.5rem 0 0.5rem;
+}
+.lex-h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1.3;
+  margin: 1.25rem 0 0.5rem;
+}
+.lex-h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  line-height: 1.4;
+  margin: 1rem 0 0.4rem;
+}
+
+/* ─── Inline text formats ─────────────────────────────────── */
+.lex-bold {
+  font-weight: 700;
+}
+.lex-italic {
+  font-style: italic;
+}
+.lex-underline {
+  text-decoration: underline;
+}
+.lex-strikethrough {
+  text-decoration: line-through;
+}
+.lex-underline-strikethrough {
+  text-decoration: underline line-through;
+}
+.lex-text-code {
+  font-family: 'Fira Code', 'Cascadia Code', monospace;
+  font-size: 0.875em;
+  background: hsl(var(--muted));
+  color: hsl(var(--muted-foreground));
+  border-radius: 3px;
+  padding: 0.1em 0.35em;
+}
+
+/* ─── Links ───────────────────────────────────────────────── */
+.lex-link {
+  color: hsl(var(--primary));
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+/* ─── Blockquote ──────────────────────────────────────────── */
+.lex-quote {
+  border-left: 4px solid hsl(var(--border));
+  padding: 0.5rem 1rem;
+  margin: 1rem 0;
+  color: hsl(var(--muted-foreground));
+  font-style: italic;
+}
+
+/* ─── Lists ───────────────────────────────────────────────── */
+.lex-ul {
+  list-style: disc;
+  padding-left: 1.75rem;
+  margin: 0.5rem 0;
+}
+.lex-ol {
+  list-style: decimal;
+  padding-left: 1.75rem;
+  margin: 0.5rem 0;
+}
+.lex-li {
+  margin: 0.2rem 0;
+  line-height: 1.75;
+}
+.lex-li-nested {
+  list-style: circle;
+}
+
+/* Checklist */
+.lex-li-unchecked,
+.lex-li-checked {
+  position: relative;
+  padding-left: 1.5rem;
+  list-style: none;
+}
+.lex-li-unchecked::before,
+.lex-li-checked::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.35em;
+  width: 1em;
+  height: 1em;
+  border: 2px solid hsl(var(--border));
+  border-radius: 3px;
+}
+.lex-li-checked::before {
+  background: hsl(var(--primary));
+  border-color: hsl(var(--primary));
+}
+.lex-li-checked > span {
+  text-decoration: line-through;
+  opacity: 0.6;
+}
+
+/* ─── Code block ──────────────────────────────────────────── */
+.lex-code {
+  display: block;
+  font-family: 'Fira Code', 'Cascadia Code', monospace;
+  font-size: 0.875rem;
+  background: hsl(var(--muted));
+  border-radius: 6px;
+  padding: 1rem 1.25rem;
+  margin: 1rem 0;
+  overflow-x: auto;
+  line-height: 1.6;
+  tab-size: 2;
+}
+
+/* ─── Code syntax tokens ──────────────────────────────────── */
+.lex-token-comment,
+.lex-token-prolog,
+.lex-token-doctype,
+.lex-token-cdata {
+  color: #6a9955;
+  font-style: italic;
+}
+.lex-token-punctuation {
+  color: #d4d4d4;
+}
+.lex-token-property,
+.lex-token-tag,
+.lex-token-boolean,
+.lex-token-number,
+.lex-token-constant,
+.lex-token-symbol,
+.lex-token-deleted {
+  color: #b5cea8;
+}
+.lex-token-selector,
+.lex-token-attr-name,
+.lex-token-string,
+.lex-token-char,
+.lex-token-builtin,
+.lex-token-inserted {
+  color: #ce9178;
+}
+.lex-token-operator,
+.lex-token-entity,
+.lex-token-url {
+  color: #d4d4d4;
+}
+.lex-token-atrule,
+.lex-token-attr-value,
+.lex-token-keyword {
+  color: #c586c0;
+}
+.lex-token-function,
+.lex-token-class-name {
+  color: #dcdcaa;
+}
+.lex-token-regex,
+.lex-token-important,
+.lex-token-variable {
+  color: #9cdcfe;
+}
+.lex-token-important,
+.lex-token-bold {
+  font-weight: bold;
+}
+.lex-token-italic {
+  font-style: italic;
+}
+
+/* ─── Image ───────────────────────────────────────────────── */
+.lex-image {
+  display: block;
+  max-width: 100%;
+  border-radius: 6px;
+  margin: 1rem 0;
+}
+
+/* ─── Hashtag ─────────────────────────────────────────────── */
+.lex-hashtag {
+  color: hsl(var(--primary));
+  font-weight: 600;
+}
+
+/* ─── Placeholder ─────────────────────────────────────────── */
+.lex-placeholder {
+  position: absolute;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  user-select: none;
+  color: hsl(var(--muted-foreground));
+}
+
+/* ─── Drag handle & block controls ────────────────────────── */
+.lex-block-controls {
+  position: absolute;
+  left: -3.5rem;
+  top: 0;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  opacity: 0;
+  transition: opacity 0.15s;
+  height: 100%;
+  pointer-events: none;
+}
+.lex-block-controls.visible {
+  opacity: 1;
+  pointer-events: all;
+}
+.lex-drag-btn,
+.lex-add-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 4px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  color: hsl(var(--muted-foreground));
+  transition:
+    background 0.1s,
+    color 0.1s;
+  flex-shrink: 0;
+}
+.lex-drag-btn:hover,
+.lex-add-btn:hover {
+  background: hsl(var(--muted));
+  color: hsl(var(--foreground));
+}
+.lex-drag-btn {
+  cursor: grab;
+}
+.lex-drag-btn:active {
+  cursor: grabbing;
+}
+
+/* ─── Floating toolbar ─────────────────────────────────────── */
+.lex-floating-toolbar {
+  position: fixed;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  gap: 1px;
+  padding: 4px;
+  background: hsl(var(--popover));
+  border: 1px solid hsl(var(--border));
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  pointer-events: all;
+}
+.lex-toolbar-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 5px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  color: hsl(var(--foreground));
+  transition: background 0.1s;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+.lex-toolbar-btn:hover {
+  background: hsl(var(--muted));
+}
+.lex-toolbar-btn.active {
+  background: hsl(var(--muted));
+  color: hsl(var(--primary));
+}
+.lex-toolbar-divider {
+  width: 1px;
+  height: 1.25rem;
+  background: hsl(var(--border));
+  margin: 0 2px;
+}
+
+/* ─── Block/Slash menu ─────────────────────────────────────── */
+.lex-block-menu {
+  background: hsl(var(--popover));
+  border: 1px solid hsl(var(--border));
+  border-radius: 10px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.14);
+  width: 280px;
+  overflow: hidden;
+  z-index: 60;
+}
+.lex-block-menu-search {
+  width: 100%;
+  border: none;
+  border-bottom: 1px solid hsl(var(--border));
+  background: transparent;
+  padding: 0.6rem 0.75rem;
+  font-size: 0.875rem;
+  outline: none;
+  color: hsl(var(--foreground));
+}
+.lex-block-menu-list {
+  max-height: 320px;
+  overflow-y: auto;
+  padding: 4px;
+}
+.lex-block-menu-group-label {
+  padding: 0.4rem 0.6rem 0.2rem;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: hsl(var(--muted-foreground));
+}
+.lex-block-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.45rem 0.6rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.875rem;
+  color: hsl(var(--foreground));
+  transition: background 0.1s;
+}
+.lex-block-menu-item:hover,
+.lex-block-menu-item.selected {
+  background: hsl(var(--muted));
+}
+.lex-block-menu-item-icon {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 5px;
+  background: hsl(var(--muted));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 0.9rem;
+}
+.lex-block-menu-item-info {
+  display: flex;
+  flex-direction: column;
+}
+.lex-block-menu-item-name {
+  font-weight: 500;
+  line-height: 1.2;
+}
+.lex-block-menu-item-desc {
+  font-size: 0.75rem;
+  color: hsl(var(--muted-foreground));
+}

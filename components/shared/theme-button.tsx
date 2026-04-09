@@ -1,7 +1,8 @@
 'use client';
 
 import { useTheme } from 'next-themes';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback } from 'react';
+import { useIsMounted } from 'usehooks-ts';
 import { ThemeToggleButton, useThemeTransition } from '../animations/theme-toggle-button';
 
 type Props = {
@@ -11,10 +12,7 @@ type Props = {
 const ThemeButton = ({ className = '' }: Props) => {
   const { setTheme, theme } = useTheme();
   const { startTransition } = useThemeTransition();
-  const [mounted, setMounted] = useState(false);
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  const mounted = useIsMounted();
   const handleThemeToggle = useCallback(() => {
     const newMode = theme === 'dark' ? 'light' : 'dark';
 
