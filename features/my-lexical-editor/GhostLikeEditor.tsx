@@ -1,6 +1,7 @@
 import type { JSX } from 'react';
 
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
+import { $generateHtmlFromNodes } from '@lexical/html';
 import { EditorState } from 'lexical';
 import { debounce } from 'lodash';
 import { useEffect, useMemo, useRef, useState } from 'react';
@@ -68,15 +69,18 @@ function InitializeContentPlugin({ content }: { content?: string }) {
   return null;
 }
 
-function DebouncedOnChangePlugin({ onChange }: { onChange?: (content: string) => void }) {
+function DebouncedOnChangePlugin({ onChange }: { onChange?: (json: string, html: string) => void }) {
   const [editor] = useLexicalComposerContext();
 
   const debouncedOnChange = useMemo(() => {
     return debounce((editorState: EditorState) => {
-      const jsonString = JSON.stringify(editorState.toJSON());
-      onChange?.(jsonString);
+      editor.read(() => {
+        const jsonString = JSON.stringify(editorState.toJSON());
+        const htmlString = $generateHtmlFromNodes(editor, null);
+        onChange?.(jsonString, htmlString);
+      });
     }, 1000); // Đồng bộ sau 1s khi người dùng dừng gõ
-  }, [onChange]);
+  }, [onChange, editor]);
 
   useEffect(() => {
     return editor.registerUpdateListener(({ editorState, dirtyElements, dirtyLeaves }) => {
@@ -94,7 +98,7 @@ function GhostLikeEditorInner({
   onChange,
 }: {
   content?: string;
-  onChange?: (content: string) => void;
+  onChange?: (json: string, html: string) => void;
 }): JSX.Element {
   const [floatingAnchorElem, setFloatingAnchorElem] = useState<HTMLDivElement | null>(null);
   const [isSmallWidthViewport, setIsSmallWidthViewport] = useState<boolean>(false);
@@ -148,7 +152,7 @@ export default function GhostLikeEditor({
   onChange,
 }: {
   content?: string;
-  onChange?: (content: string) => void;
+  onChange?: (json: string, html: string) => void;
 }): JSX.Element {
   return (
     <LexicalExtensionComposer extension={ghostEditorExtension} contentEditable={null}>

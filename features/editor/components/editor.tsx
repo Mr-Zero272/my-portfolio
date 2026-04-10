@@ -26,8 +26,9 @@ function Editor() {
 
   // Debounced content change handler - được gọi từ TiptapEditor
   const handleContentChange = useCallback(
-    (value: string) => {
-      setField('content', value);
+    (json: string, html: string) => {
+      setField('content', json);
+      setField('contentHtml', html);
     },
     [setField],
   );

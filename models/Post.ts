@@ -8,6 +8,7 @@ export interface IPost extends Document {
   slug: string;
   excerpt: string;
   content: string;
+  contentHtml?: string;
   keywords: string[];
   featureImage?: string;
   imageCaption?: string;
@@ -34,6 +35,7 @@ export interface IPostResponse {
   slug: string;
   excerpt: string;
   content: string;
+  contentHtml?: string;
   keywords: string[];
   featureImage?: string;
   imageCaption?: string;
@@ -59,6 +61,7 @@ const PostSchema: Schema = new Schema(
     title: { type: String, required: true },
     slug: { type: String, required: true },
     content: { type: String, required: true },
+    contentHtml: { type: String },
     keywords: { type: [String], default: [] },
     excerpt: { type: String },
     featureImage: { type: String },

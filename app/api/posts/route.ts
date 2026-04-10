@@ -82,6 +82,7 @@ export async function POST(request: NextRequest) {
       title: title.trim(),
       slug: slug.trim(),
       content,
+      contentHtml: body.contentHtml,
       excerpt: body.excerpt || '',
       keywords: body.keywords || [],
       authors: body.authors || [],

@@ -72,6 +72,7 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
       'title',
       'slug',
       'content',
+      'contentHtml',
       'excerpt',
       'keywords',
       'authors',

@@ -14,7 +14,8 @@ interface PostState {
   title: string;
   slug: string;
   excerpt: string;
-  content: string; // HTML content
+  content: string; // JSON content
+  contentHtml: string; // HTML content
   keywords: string[];
   featureImage: string;
   featureImageFile: File | null;
@@ -55,6 +56,7 @@ const initialPostState: PostState = {
   slug: '',
   excerpt: '',
   content: '',
+  contentHtml: '',
   keywords: [],
   featureImageFile: null,
   featureImage: '',
@@ -132,6 +134,13 @@ export const usePostStorage = create<PostState & PostActions>((set, get) => ({
         }
         return true;
       },
+      contentHtml: () => {
+        if (!state.contentHtml?.trim()) {
+          state.setError('contentHtml', 'Content is required');
+          return false;
+        }
+        return true;
+      },
       tags: () => {
         if (!state.tags?.length) {
           state.setError('tags', 'At least one tag is required');
@@ -199,6 +208,7 @@ export const usePostStorage = create<PostState & PostActions>((set, get) => ({
       slug: state.slug,
       excerpt: state.excerpt,
       content: state.content,
+      contentHtml: state.contentHtml,
       keywords: state.keywords,
       featureImage: state.featureImage,
       featureImageFile: state.featureImageFile,
@@ -251,6 +261,7 @@ export const mapPostToPostInterface = (
     imageCaption: post.imageCaption || '',
     slug: post.slug,
     content: post.content,
+    contentHtml: post.contentHtml || '',
     keywords: post.keywords || [],
     likes: post.likes || 0,
     comments: post.comments.map((comment) => comment._id.toString()) || [],
