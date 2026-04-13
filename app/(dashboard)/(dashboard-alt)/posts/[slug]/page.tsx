@@ -1,3 +1,4 @@
+import ErrorState from '@/components/shared/state/error-state';
 import { API_URL } from '@/configs/env';
 import EditPostFeature from '@/features/edit-post';
 import { IPost, ITag, IUser } from '@/models';
@@ -38,9 +39,10 @@ const EditPostPage = async ({ params }: EditPostPageProps) => {
   // Nếu không có data, hiển thị thông báo lỗi
   if (!postResponse.data) {
     return (
-      <div>
-        <p>Post not found or server unavailable</p>
-      </div>
+      <ErrorState
+        title="Post not found or server unavailable"
+        description="The requested post could not be found or the server is unavailable."
+      />
     );
   }
 

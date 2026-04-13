@@ -8,27 +8,36 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { useQuery } from '@tanstack/react-query';
 import { User } from 'lucide-react';
 import { useSession } from 'next-auth/react';
-import { useEffect, useState } from 'react';
-import { usePostStorage } from '../../../../../store/use-post-storage';
+import { useEffect, useEffectEvent, useState } from 'react';
+import { Controller, useFormContext } from 'react-hook-form';
+import { PostSchema } from '../../../../../schema';
 
 export const AuthorMultipleSelect = () => {
   const { data: session } = useSession();
-  const { authors: authorsFromStorage, setField, errors } = usePostStorage();
+  const {
+    control,
+    setValue,
+    watch,
+    formState: { errors },
+  } = useFormContext<PostSchema>();
+
+  const authorsFromForm = watch('authors');
+
   const { data: users, isLoading: isUserLoading } = useQuery({
     queryKey: ['users'],
     queryFn: () => userApi.getUsers({ page: 1, limit: 100 }),
   });
 
   useEffect(() => {
-    if (session?.user) {
-      setField('authors', [session.user.id as string]);
+    if (session?.user && (!authorsFromForm || authorsFromForm.length === 0)) {
+      setValue('authors', [session.user.id as string]);
     }
-  }, [session?.user, setField]);
+  }, [session?.user, setValue, authorsFromForm]);
 
   // Author options - make it stateful
   const [authorOptions, setAuthorOptions] = useState<MultiSelectOption[]>([]);
 
-  useEffect(() => {
+  const setAuthorOptionsEffect = useEffectEvent(() => {
     if (!isUserLoading && users) {
       setAuthorOptions(() => {
         return users.data.map((user) => ({
@@ -38,6 +47,10 @@ export const AuthorMultipleSelect = () => {
         }));
       });
     }
+  });
+
+  useEffect(() => {
+    setAuthorOptionsEffect();
   }, [isUserLoading, users]);
 
   return (
@@ -46,19 +59,23 @@ export const AuthorMultipleSelect = () => {
       {isUserLoading ? (
         <Skeleton className="h-10 w-full rounded-md" />
       ) : (
-        <MultiSelect
-          options={authorOptions}
-          onValueChange={(value) => {
-            setField('authors', value);
-          }}
-          defaultValue={authorsFromStorage || []}
-          placeholder="Select authors..."
-          searchable={true}
-          className="w-full max-w-[300px]"
-          maxCount={3}
+        <Controller
+          name="authors"
+          control={control}
+          render={({ field }) => (
+            <MultiSelect
+              options={authorOptions}
+              onValueChange={field.onChange}
+              defaultValue={field.value || []}
+              placeholder="Select authors..."
+              searchable={true}
+              className="w-full max-w-[300px]"
+              maxCount={3}
+            />
+          )}
         />
       )}
-      <ErrorMessage message={errors.authors} />
+      <ErrorMessage message={errors.authors?.message} />
     </div>
   );
 };

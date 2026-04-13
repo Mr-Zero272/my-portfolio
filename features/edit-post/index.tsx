@@ -10,9 +10,6 @@ type EditPostFeatureProps = {
 };
 
 const EditPostFeature = ({ post }: EditPostFeatureProps) => {
-  console.log({
-    post,
-  });
   const setInitialState = usePostStorage((state) => state.setInitialState);
 
   useEffect(() => {

@@ -2,20 +2,23 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { API_URL } from '@/configs/env';
-import { usePostStorage } from '@/features/editor/store/use-post-storage';
 import { Search } from 'lucide-react';
 import { SVGProps } from 'react';
+import { useFormContext } from 'react-hook-form';
+import { PostSchema } from '../../../../../schema';
 
 const MetadataForm = () => {
-  const { metaTitle, metaDescription, slug, setField } = usePostStorage();
+  const { register, watch } = useFormContext<PostSchema>();
+  const metaTitle = watch('metaTitle');
+  const metaDescription = watch('metaDescription');
+  const slug = watch('slug');
 
   return (
     <>
       <div className="space-y-2">
         <Label>Meta title</Label>
         <Input
-          value={metaTitle || ''}
-          onChange={(e) => setField('metaTitle', e.target.value)}
+          {...register('metaTitle')}
           placeholder="Meta title"
           className="w-full"
         />
@@ -23,8 +26,7 @@ const MetadataForm = () => {
       <div className="space-y-2">
         <Label>Meta description</Label>
         <Textarea
-          value={metaDescription || ''}
-          onChange={(e) => setField('metaDescription', e.target.value)}
+          {...register('metaDescription')}
           placeholder="Meta description"
           className="w-full"
         />

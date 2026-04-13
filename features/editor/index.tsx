@@ -13,16 +13,18 @@ import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { SidebarInset, SidebarProvider, SidebarTrigger, useSidebar } from '@/components/ui/sidebar';
 import { uploadFile, uploadImageWithDB } from '@/lib/uploadthing';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { isAxiosError } from 'axios';
 import { ArrowLeft, RefreshCcw } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useMemo, useState } from 'react';
+import { FormProvider, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
-import { useLocalStorage } from 'usehooks-ts';
 import Editor from './components/editor';
 import PostSidebar from './components/sidebar';
+import { initialPostValues, postSchema, type PostSchema } from './schema';
 import { usePostStorage } from './store/use-post-storage';
 
 interface PostEditorProps {
@@ -41,13 +43,35 @@ interface SubmitParams {
 const PostEditorContent = ({ mode = 'create' }: PostEditorProps) => {
   const { data: session } = useSession();
   const queryClient = useQueryClient();
-  const [postDraft, setPostDraft, removePostDraft] = useLocalStorage('post_draft', '');
-  const [isSavingDraft, setIsSavingDraft] = useState(false);
   const router = useRouter();
   const [isSaveDialogOpen, setIsSaveDialogOpen] = useState(false);
   const [isLeaveDialogOpen, setIsLeaveDialogOpen] = useState(false);
   const [currentAction, setCurrentAction] = useState<SubmitOption>('save');
   const { open, setOpen } = useSidebar();
+
+  const isSyncing = usePostStorage((state) => state.isSyncing);
+  const storeState = usePostStorage();
+  const resetState = usePostStorage((state) => state.resetState);
+
+  const methods = useForm<PostSchema>({
+    resolver: zodResolver(postSchema),
+    defaultValues: initialPostValues,
+    mode: 'onChange',
+  });
+
+  const {
+    handleSubmit,
+    reset,
+    formState: { isDirty },
+    getValues,
+  } = methods;
+
+  // Sync initial state from store to form
+  useEffect(() => {
+    if (storeState._id) {
+      reset(storeState);
+    }
+  }, [storeState._id, reset, storeState]);
 
   const { mutateAsync: createPost, isPending: isCreatingPost } = useMutation({
     mutationFn: postApi.createPost,
@@ -67,116 +91,63 @@ const PostEditorContent = ({ mode = 'create' }: PostEditorProps) => {
     },
   });
 
-  const {
-    _id: postId,
-    authors,
-    tags,
-    title,
-    content,
-    contentHtml,
-    keywords,
-    excerpt,
-    featureImage,
-    featureImageFile,
-    slug,
-    imageCaption,
-    metaTitle,
-    metaDescription,
-    xMetaTitle,
-    xMetaDescription,
-    xMetaImage,
-    xMetaImageFile,
-    published,
-    validateForm,
-    getCurrentState,
-    setField,
-  } = usePostStorage();
-
-  const handleSubmitPost = useCallback(
-    async ({ option = 'save', action = 'create', noToast = false }: SubmitParams) => {
+  const onSubmit = useCallback(
+    async (data: PostSchema, option: SubmitOption = 'save') => {
       setCurrentAction(option);
-
-      // Validate form before proceeding
-      if (!validateForm()) {
-        toast.error('Please fill in all required fields before submitting.');
-        if (!open) {
-          setIsSaveDialogOpen(false);
-          setTimeout(() => setOpen(true), 0);
-        }
-        return;
-      }
 
       try {
         // Handle file uploads
-        let finalFeatureImage = featureImage;
-        let finalXMetaImage = xMetaImage;
+        let finalFeatureImage = data.featureImage;
+        let finalXMetaImage = data.xMetaImage;
 
-        if (featureImageFile) {
+        if (data.featureImageFile) {
           let res;
           if (session?.user?.id) {
-            // Upload và lưu vào database nếu user đã đăng nhập
-            const imageUrl = await uploadImageWithDB(featureImageFile, session.user.id, 'imageUploader');
+            const imageUrl = await uploadImageWithDB(data.featureImageFile, session.user.id, 'imageUploader');
             res = { data: { url: imageUrl } };
           } else {
-            // Fallback: chỉ upload file nếu user chưa đăng nhập
-            res = await uploadFileAsync(featureImageFile);
+            res = await uploadFileAsync(data.featureImageFile);
           }
-          setField('featureImageFile', null);
-          setField('featureImage', res.data.url);
+          methods.setValue('featureImageFile', null);
+          methods.setValue('featureImage', res.data.url);
           finalFeatureImage = res.data.url;
         }
 
-        if (xMetaImageFile) {
+        if (data.xMetaImageFile) {
           let res;
           if (session?.user?.id) {
-            // Upload và lưu vào database nếu user đã đăng nhập
-            const imageUrl = await uploadImageWithDB(xMetaImageFile, session.user.id, 'imageUploader');
+            const imageUrl = await uploadImageWithDB(data.xMetaImageFile, session.user.id, 'imageUploader');
             res = { data: { url: imageUrl } };
           } else {
-            // Fallback: chỉ upload file nếu user chưa đăng nhập
-            res = await uploadFileAsync(xMetaImageFile);
+            res = await uploadFileAsync(data.xMetaImageFile);
           }
-          setField('xMetaImageFile', null);
-          setField('xMetaImage', res.data.url);
+          methods.setValue('xMetaImageFile', null);
+          methods.setValue('xMetaImage', res.data.url);
           finalXMetaImage = res.data.url;
         }
 
         // Prepare post body
         const postBody = {
-          title,
-          slug,
-          content,
-          contentHtml,
-          keywords: keywords.filter((kw) => kw.trim() !== ''),
-          authors,
-          tags,
-          excerpt,
+          ...data,
+          keywords: data.keywords.filter((kw) => kw.trim() !== ''),
           featureImage: finalFeatureImage,
-          imageCaption,
-          metaTitle,
-          metaDescription,
-          xMetaTitle,
-          xMetaDescription,
           xMetaImage: finalXMetaImage,
           published: option === 'publish',
         };
 
         // Execute action
-        if (action === 'create') {
+        if (mode === 'create' && !data._id) {
           await createPost({ data: postBody });
-          if (!noToast) toast.success('Post created successfully');
+          toast.success('Post created successfully');
           router.push('/piti/posts');
         } else {
           await updatePost({
-            postId: postId,
+            postId: data._id!,
             data: postBody,
           });
-          if (!noToast) toast.success('Post updated successfully');
+          toast.success('Post updated successfully');
           setIsSaveDialogOpen(false);
         }
-
-        // Update draft in local storage
-        setPostDraft(JSON.stringify(getCurrentState()));
       } catch (error) {
         const errorMessage = isAxiosError(error)
           ? error.response?.data?.message || 'An unexpected error occurred. Please try again.'
@@ -184,66 +155,21 @@ const PostEditorContent = ({ mode = 'create' }: PostEditorProps) => {
         toast.error(errorMessage);
       }
     },
-    [
-      router,
-      excerpt,
-      createPost,
-      updatePost,
-      uploadFileAsync,
-      validateForm,
-      title,
-      slug,
-      content,
-      keywords,
-      authors,
-      tags,
-      featureImage,
-      featureImageFile,
-      imageCaption,
-      metaTitle,
-      metaDescription,
-      xMetaTitle,
-      xMetaDescription,
-      xMetaImage,
-      xMetaImageFile,
-      postId,
-      setField,
-      open,
-      setOpen,
-      getCurrentState,
-      setPostDraft,
-      session,
-    ],
+    [createPost, uploadFileAsync, updatePost, session, router, methods, mode, setIsSaveDialogOpen],
   );
+
+  const handleValidationFailed = useCallback(() => {
+    toast.error('Please fill in all required fields before submitting.');
+    if (!open) {
+      setIsSaveDialogOpen(false);
+      setTimeout(() => setOpen(true), 0);
+    }
+  }, [open, setOpen, setIsSaveDialogOpen]);
 
   const isLoading = useMemo(
     () => isCreatingPost || isUploading || isUpdatingPost,
     [isCreatingPost, isUploading, isUpdatingPost],
   );
-
-  useEffect(() => {
-    // auto save draft every 2 minutes
-    let timeout: NodeJS.Timeout;
-
-    const saveDraft = async () => {
-      // Clear existing timeout if any
-      if (timeout) clearTimeout(timeout);
-
-      setIsSavingDraft(true);
-      setPostDraft(JSON.stringify(getCurrentState()));
-
-      timeout = setTimeout(() => {
-        setIsSavingDraft(false);
-      }, 1000);
-    };
-
-    const interval = setInterval(saveDraft, 120000); // 2 minutes
-
-    return () => {
-      if (interval) clearInterval(interval);
-      if (timeout) clearTimeout(timeout);
-    };
-  }, [getCurrentState, setPostDraft]);
 
   const handleMainButtonClick = useCallback(() => {
     if (mode === 'create') {
@@ -251,37 +177,29 @@ const PostEditorContent = ({ mode = 'create' }: PostEditorProps) => {
       return;
     }
 
-    // For edit mode, directly save/update if already published
-    // Otherwise show dialog for draft posts
-    if (mode === 'edit' && !published) {
+    const currentPublished = getValues('published');
+
+    if (mode === 'edit' && !currentPublished) {
       setIsSaveDialogOpen(true);
       return;
     }
 
-    handleSubmitPost({
-      option: published ? 'publish' : 'save',
-      action: 'update',
-    });
-  }, [mode, published, handleSubmitPost]);
+    handleSubmit((data) => onSubmit(data, currentPublished ? 'publish' : 'save'), handleValidationFailed)();
+  }, [mode, handleSubmit, onSubmit, getValues, handleValidationFailed]);
 
   const handleBack = useCallback(() => {
-    const hasUnsavedChanges = () => {
-      if (mode === 'create') {
-        return Boolean(title || content);
-      }
-      return postDraft && JSON.stringify(getCurrentState()) !== postDraft;
-    };
-
-    if (hasUnsavedChanges()) {
+    if (isDirty) {
       setIsLeaveDialogOpen(true);
     } else {
-      removePostDraft();
+      resetState();
       router.back();
     }
-  }, [mode, title, content, postDraft, getCurrentState, removePostDraft, router]);
+  }, [isDirty, resetState, router]);
+
+  const published = getValues('published');
 
   return (
-    <>
+    <FormProvider {...methods}>
       <SidebarInset>
         <header className="sticky top-0 z-10 flex h-16 shrink-0 items-center justify-between gap-2 border-b bg-background px-4">
           <div className="flex items-center gap-2">
@@ -290,9 +208,9 @@ const PostEditorContent = ({ mode = 'create' }: PostEditorProps) => {
               Back
             </AnimatedButton>
             <Separator orientation="vertical" className="data-[orientation=vertical]:h-4" />
-            <Button variant="ghost" disabled={isSavingDraft || isLoading}>
-              {isSavingDraft ? <RefreshCcw className="animate-spin" /> : null}
-              {isSavingDraft ? 'Saving...' : 'Draft'}
+            <Button variant="ghost" disabled={isSyncing || isLoading}>
+              {isSyncing ? <RefreshCcw className="animate-spin" /> : null}
+              {isSyncing ? 'Saving...' : 'Synced'}
             </Button>
           </div>
           <div className="flex items-center gap-2">
@@ -337,9 +255,7 @@ const PostEditorContent = ({ mode = 'create' }: PostEditorProps) => {
                   </Button>
                   <Button
                     variant="outline"
-                    onClick={() =>
-                      handleSubmitPost({ option: 'save', action: mode === 'create' ? 'create' : 'update' })
-                    }
+                    onClick={() => handleSubmit((data) => onSubmit(data, 'save'), handleValidationFailed)()}
                     disabled={isLoading}
                   >
                     {isLoading && (currentAction === 'create' || currentAction === 'save')
@@ -350,9 +266,7 @@ const PostEditorContent = ({ mode = 'create' }: PostEditorProps) => {
                   </Button>
 
                   <Button
-                    onClick={() =>
-                      handleSubmitPost({ option: 'publish', action: mode === 'create' ? 'create' : 'update' })
-                    }
+                    onClick={() => handleSubmit((data) => onSubmit(data, 'publish'), handleValidationFailed)()}
                     disabled={isLoading}
                   >
                     {isLoading && currentAction === 'publish' ? 'Processing...' : 'Publish'}
@@ -376,13 +290,17 @@ const PostEditorContent = ({ mode = 'create' }: PostEditorProps) => {
             <Button variant="ghost" onClick={() => setIsLeaveDialogOpen(false)} disabled={isLoading}>
               Stay
             </Button>
-            <Button variant="outline" onClick={() => handleSubmitPost({ option: 'save' })} disabled={isLoading}>
+            <Button
+              variant="outline"
+              onClick={() => handleSubmit((data) => onSubmit(data, 'save'), handleValidationFailed)()}
+              disabled={isLoading}
+            >
               {isLoading && currentAction === 'save' ? 'Processing...' : 'Create'}
             </Button>
             <Button
               variant="destructive"
               onClick={() => {
-                removePostDraft();
+                resetState();
                 router.back();
               }}
               disabled={isLoading}
@@ -392,7 +310,7 @@ const PostEditorContent = ({ mode = 'create' }: PostEditorProps) => {
           </ResponsiveDialogFooter>
         </ResponsiveDialogContent>
       </ResponsiveDialog>
-    </>
+    </FormProvider>
   );
 };
 

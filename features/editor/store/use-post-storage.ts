@@ -1,14 +1,6 @@
 import { ITag, IUser, type IPost } from '@/models';
 import { create } from 'zustand';
 
-interface PostErrors {
-  title?: string;
-  slug?: string;
-  content?: string;
-  tags?: string;
-  [key: string]: string | undefined;
-}
-
 interface PostState {
   _id: string;
   title: string;
@@ -36,15 +28,9 @@ interface PostState {
 }
 
 interface PostActions {
-  errors: PostErrors;
-
-  // Original methods
+  isSyncing: boolean;
+  setIsSyncing: (isSyncing: boolean) => void;
   setField: <K extends keyof PostState>(field: K, value: PostState[K]) => void;
-  setError: (field: keyof PostErrors, message: string) => void;
-  clearError: (field: keyof PostErrors) => void;
-  clearAllErrors: () => void;
-  validateField: (field: keyof PostState) => boolean;
-  validateForm: () => boolean;
   getCurrentState: () => PostState;
   setInitialState: (post: Omit<IPost, 'tags' | 'authors'> & { tags: ITag[]; authors: IUser[] }) => void;
   resetState: () => void;
@@ -78,130 +64,16 @@ const initialPostState: PostState = {
 
 export const usePostStorage = create<PostState & PostActions>((set, get) => ({
   ...initialPostState,
-  errors: {},
+  isSyncing: false,
+
+  setIsSyncing: (isSyncing) => set({ isSyncing }),
 
   setField: (field, value) => {
     set((state) => ({ ...state, [field]: value }));
-    // Auto validate field when it changes
-    const store = get();
-    store.validateField(field);
-  },
-
-  setError: (field, message) => {
-    set((state) => ({
-      ...state,
-      errors: { ...state.errors, [field]: message },
-    }));
-  },
-
-  clearError: (field) => {
-    set((state) => ({
-      ...state,
-      errors: { ...state.errors, [field]: undefined },
-    }));
-  },
-
-  clearAllErrors: () => {
-    set((state) => ({ ...state, errors: {} }));
-  },
-
-  validateField: (field) => {
-    const state = get();
-    let isValid = true;
-
-    // Clear any existing error for this field first
-    state.clearError(field);
-
-    const validationRules: Record<keyof PostState, () => boolean> = {
-      title: () => {
-        if (!state.title?.trim()) {
-          state.setError('title', 'Title is required');
-          return false;
-        }
-        return true;
-      },
-      slug: () => {
-        if (!state.slug?.trim()) {
-          state.setError('slug', 'Post URL is required');
-          return false;
-        }
-        return true;
-      },
-      content: () => {
-        if (!state.content?.trim()) {
-          state.setError('content', 'Content is required');
-          return false;
-        }
-        return true;
-      },
-      contentHtml: () => {
-        if (!state.contentHtml?.trim()) {
-          state.setError('contentHtml', 'Content is required');
-          return false;
-        }
-        return true;
-      },
-      tags: () => {
-        if (!state.tags?.length) {
-          state.setError('tags', 'At least one tag is required');
-          return false;
-        }
-        return true;
-      },
-      authors: () => {
-        if (!state.authors?.length) {
-          state.setError('authors', 'At least one author is required');
-          return false;
-        }
-        return true;
-      },
-      // Other fields don't need validation
-      _id: () => true,
-      excerpt: () => true,
-      keywords: () => true,
-      featureImage: () => true,
-      featureImageFile: () => true,
-      imageCaption: () => true,
-      likes: () => true,
-      comments: () => true,
-      metaTitle: () => true,
-      metaDescription: () => true,
-      xMetaTitle: () => true,
-      xMetaDescription: () => true,
-      xMetaImage: () => true,
-      xMetaImageFile: () => true,
-      published: () => true,
-      createdAt: () => true,
-      updatedAt: () => true,
-    };
-
-    const validate = validationRules[field];
-    if (validate) {
-      isValid = validate();
-    }
-
-    return isValid;
-  },
-
-  validateForm: () => {
-    const state = get();
-    const requiredFields: (keyof PostState)[] = ['title', 'slug', 'content', 'authors', 'tags'];
-
-    let isFormValid = true;
-
-    requiredFields.forEach((field) => {
-      const isFieldValid = state.validateField(field);
-      if (!isFieldValid) {
-        isFormValid = false;
-      }
-    });
-
-    return isFormValid;
   },
 
   getCurrentState: () => {
     const state = get();
-    // Return only the post data, excluding actions and errors
     return {
       _id: state._id,
       title: state.title,
@@ -234,14 +106,13 @@ export const usePostStorage = create<PostState & PostActions>((set, get) => ({
     set((state) => ({
       ...state,
       ...postState,
-      errors: {},
     }));
   },
 
   resetState: () => {
     set(() => ({
       ...initialPostState,
-      errors: {},
+      isSyncing: false,
     }));
   },
 }));

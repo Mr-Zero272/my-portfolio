@@ -3,12 +3,17 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { API_URL } from '@/configs/env';
-import { usePostStorage } from '@/features/editor/store/use-post-storage';
 import { Heart, LinkIcon, MessageCircle, RefreshCcw, ShareIcon } from 'lucide-react';
 import { SVGProps } from 'react';
+import { useFormContext } from 'react-hook-form';
+import { PostSchema } from '../../../../../schema';
 
 const XMetadataForm = () => {
-  const { xMetaImage, xMetaTitle, xMetaDescription, slug, setField } = usePostStorage();
+  const { register, watch, setValue } = useFormContext<PostSchema>();
+  const xMetaImage = watch('xMetaImage');
+  const xMetaTitle = watch('xMetaTitle');
+  const xMetaDescription = watch('xMetaDescription');
+  const slug = watch('slug');
 
   return (
     <>
@@ -16,17 +21,15 @@ const XMetadataForm = () => {
         <Label className="mb-2 block">X Meta Image</Label>
         <FileUpload
           previewUrl={xMetaImage || ''}
-          onChange={(file) => setField('xMetaImageFile', file as File | null)}
+          onChange={(file) => setValue('xMetaImageFile', file as File | null, { shouldDirty: true })}
           title="X Meta Image"
-          onRemove={() => setField('xMetaImageFile', null)}
+          onRemove={() => setValue('xMetaImageFile', null, { shouldDirty: true })}
         />
       </div>
       <div className="space-y-2">
         <Label>X Meta Title</Label>
         <Input
-          name="meta_title"
-          value={xMetaTitle || ''}
-          onChange={(e) => setField('xMetaTitle', e.target.value)}
+          {...register('xMetaTitle')}
           placeholder="X Meta Title"
           className="w-full"
         />
@@ -34,9 +37,7 @@ const XMetadataForm = () => {
       <div className="space-y-2">
         <Label>X Meta Description</Label>
         <Textarea
-          name="meta_description"
-          value={xMetaDescription || ''}
-          onChange={(e) => setField('xMetaDescription', e.target.value)}
+          {...register('xMetaDescription')}
           placeholder="X Meta Description"
           className="w-full"
         />

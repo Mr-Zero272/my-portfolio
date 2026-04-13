@@ -33,13 +33,15 @@ import {
 } from 'lexical';
 import { useEffect, useRef, useState } from 'react';
 
-import landscapeImage from '../../images/landscape.jpg';
-import yellowFlowerImage from '../../images/yellow-flower.jpg';
+import { uploadImageWithDB } from '@/lib/uploadthing';
+import { useSession } from 'next-auth/react';
+
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { CheckIcon, Loader2 } from 'lucide-react';
 import { $createImageNode, $isImageNode, ImageNode, ImagePayload } from '../../nodes/ImageNode';
-import Button from '../../ui/Button';
 import { DialogActions, DialogButtonsList } from '../../ui/Dialog';
-import FileInput from '../../ui/FileInput';
-import TextInput from '../../ui/TextInput';
 
 export type InsertImagePayload = Readonly<ImagePayload>;
 
@@ -53,7 +55,31 @@ export function InsertImageUriDialogBody({ onClick }: { onClick: (payload: Inser
 
   return (
     <>
-      <TextInput
+      <div className="flex justify-between gap-5">
+        <Label className="min-w-24 text-right" htmlFor="imageUrl">
+          Image URL
+        </Label>
+        <Input
+          id="imageUrl"
+          placeholder="i.e. https://source.unsplash.com/random"
+          onChange={(e) => setSrc(e.target.value)}
+          value={src}
+          data-test-id="image-modal-url-input"
+        />
+      </div>
+      <div className="flex justify-between gap-5">
+        <Label className="min-w-24 text-right" htmlFor="altText">
+          Alt Text
+        </Label>
+        <Input
+          id="altText"
+          placeholder="Random unsplash image"
+          onChange={(e) => setAltText(e.target.value)}
+          value={altText}
+          data-test-id="image-modal-alt-text-input"
+        />
+      </div>
+      {/* <TextInput
         label="Image URL"
         placeholder="i.e. https://source.unsplash.com/random"
         onChange={setSrc}
@@ -66,7 +92,7 @@ export function InsertImageUriDialogBody({ onClick }: { onClick: (payload: Inser
         onChange={setAltText}
         value={altText}
         data-test-id="image-modal-alt-text-input"
-      />
+      /> */}
       <DialogActions>
         <Button data-test-id="image-modal-confirm-btn" disabled={isDisabled} onClick={() => onClick({ altText, src })}>
           Confirm
@@ -77,34 +103,96 @@ export function InsertImageUriDialogBody({ onClick }: { onClick: (payload: Inser
 }
 
 export function InsertImageUploadedDialogBody({ onClick }: { onClick: (payload: InsertImagePayload) => void }) {
+  const { data: session } = useSession();
   const [src, setSrc] = useState('');
   const [altText, setAltText] = useState('');
+  const [isUploading, setIsUploading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const isDisabled = src === '';
+  const isDisabled = src === '' || isUploading;
 
-  const loadImage = (files: FileList | null) => {
-    const reader = new FileReader();
-    reader.onload = function () {
-      if (typeof reader.result === 'string') {
-        setSrc(reader.result);
-      }
-      return '';
-    };
-    if (files !== null) {
-      reader.readAsDataURL(files[0]);
+  const handleFileUpload = async (files: FileList | null) => {
+    if (files === null || files.length === 0) return;
+
+    const file = files[0];
+    const userId = session?.user?.id as string;
+
+    if (!userId) {
+      setError('You must be logged in to upload images');
+      return;
+    }
+
+    setIsUploading(true);
+    setError(null);
+
+    try {
+      const url = await uploadImageWithDB(file, userId);
+      setSrc(url);
+    } catch (e) {
+      console.error('Upload failed', e);
+      setError('Upload failed. Please try again.');
+    } finally {
+      setIsUploading(false);
     }
   };
 
   return (
     <>
-      <FileInput label="Image Upload" onChange={loadImage} accept="image/*" data-test-id="image-modal-file-upload" />
-      <TextInput
+      <div className="flex items-start justify-between gap-5">
+        <Label htmlFor="imageUpload" className="mt-2 min-w-24 text-right">
+          Image Upload
+        </Label>
+        <div className="flex flex-1 flex-col items-start gap-0.5">
+          <Input
+            id="imageUpload"
+            type="file"
+            accept="image/*"
+            onChange={(e) => handleFileUpload(e.target.files)}
+            disabled={isUploading}
+          />
+          {isUploading && (
+            <div className="flex items-center gap-2">
+              <Loader2 className="animate-spin" size={16} />
+              <span className="text-sm text-muted-foreground italic">Uploading image...</span>
+            </div>
+          )}
+          {error && <div className="text-sm text-red-500">{error}</div>}
+          {src && !isUploading && (
+            <div className="flex items-center gap-2">
+              <CheckIcon size={16} />
+              <span className="text-sm text-muted-foreground">Upload successful! Ready to confirm.</span>
+            </div>
+          )}
+        </div>
+      </div>
+      {/* <FileInput
+        label="Image Upload"
+        onChange={handleFileUpload}
+        accept="image/*"
+        data-test-id="image-modal-file-upload"
+        disabled={isUploading}
+      /> */}
+      <div className="flex justify-between gap-5">
+        <Label htmlFor="altText" className="min-w-24 text-right">
+          Alt Text
+        </Label>
+        <Input
+          id="altText"
+          placeholder="Descriptive alternative text"
+          onChange={(e) => setAltText(e.target.value)}
+          value={altText}
+          disabled={isUploading}
+          data-test-id="image-modal-alt-text-input"
+        />
+      </div>
+      {/* <TextInput
         label="Alt Text"
         placeholder="Descriptive alternative text"
         onChange={setAltText}
         value={altText}
         data-test-id="image-modal-alt-text-input"
-      />
+        disabled={isUploading}
+      /> */}
       <DialogActions>
         <Button
           data-test-id="image-modal-file-upload-btn"
@@ -148,7 +236,7 @@ export function InsertImageDialog({
     <>
       {!mode && (
         <DialogButtonsList>
-          <Button
+          {/* <Button
             data-test-id="image-modal-option-sample"
             onClick={() =>
               onClick(
@@ -165,11 +253,11 @@ export function InsertImageDialog({
             }
           >
             Sample
-          </Button>
-          <Button data-test-id="image-modal-option-url" onClick={() => setMode('url')}>
+          </Button> */}
+          <Button data-test-id="image-modal-option-url" variant="outline" onClick={() => setMode('url')}>
             URL
           </Button>
-          <Button data-test-id="image-modal-option-file" onClick={() => setMode('file')}>
+          <Button data-test-id="image-modal-option-file" variant="outline" onClick={() => setMode('file')}>
             File
           </Button>
         </DialogButtonsList>

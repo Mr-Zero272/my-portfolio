@@ -5,29 +5,35 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { usePostStorage } from '@/features/editor/store/use-post-storage';
 import { isEmptyHtml } from '@/utils/validate';
 import { Loader2, Plus, Sparkles, X } from 'lucide-react';
 import { useState } from 'react';
+import { useFormContext } from 'react-hook-form';
 import { toast } from 'sonner';
+import { PostSchema } from '../../../../../schema';
 
 const KeywordsInput = () => {
-  const { keywords, title, content, setField } = usePostStorage();
+  const { setValue, watch } = useFormContext<PostSchema>();
+  const keywords = watch('keywords') || [];
+  const title = watch('title') || '';
+  const content = watch('content') || '';
+
   const [inputValue, setInputValue] = useState('');
   const [isGenerating, setIsGenerating] = useState(false);
 
   const handleAddKeyword = () => {
     const trimmedValue = inputValue.trim();
     if (trimmedValue && !keywords.includes(trimmedValue)) {
-      setField('keywords', [...keywords, trimmedValue]);
+      setValue('keywords', [...keywords, trimmedValue], { shouldDirty: true });
       setInputValue('');
     }
   };
 
   const handleRemoveKeyword = (keywordToRemove: string) => {
-    setField(
+    setValue(
       'keywords',
       keywords.filter((keyword) => keyword !== keywordToRemove),
+      { shouldDirty: true }
     );
   };
 
@@ -66,7 +72,7 @@ const KeywordsInput = () => {
       if (data.keywords && Array.isArray(data.keywords)) {
         // Merge existing keywords with new ones, avoiding duplicates
         const newKeywords = data.keywords.filter((keyword: string) => !keywords.includes(keyword));
-        setField('keywords', [...keywords, ...newKeywords]);
+        setValue('keywords', [...keywords, ...newKeywords], { shouldDirty: true });
 
         toast.success(`Generated ${newKeywords.length} new keywords`);
       }

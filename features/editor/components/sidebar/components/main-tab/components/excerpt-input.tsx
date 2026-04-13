@@ -5,11 +5,15 @@ import { cn } from '@/lib/utils';
 import { isEmptyHtml } from '@/utils/validate';
 import { Sparkles } from 'lucide-react';
 import { useState } from 'react';
+import { useFormContext } from 'react-hook-form';
 import { toast } from 'sonner';
-import { usePostStorage } from '../../../../../store/use-post-storage';
+import { PostSchema } from '../../../../../schema';
 
 const ExcerptInput = () => {
-  const { excerpt, setField, title, content } = usePostStorage();
+  const { register, watch, setValue } = useFormContext<PostSchema>();
+  const excerpt = watch('excerpt');
+  const title = watch('title');
+  const content = watch('content');
   const [isGenerating, setIsGenerating] = useState(false);
 
   const handleGenerateExcerpt = async () => {
@@ -35,9 +39,9 @@ const ExcerptInput = () => {
       }
 
       if (data.excerpt) {
-        setField('excerpt', data.excerpt);
-        setField('metaDescription', data.excerpt);
-        setField('xMetaDescription', data.excerpt);
+        setValue('excerpt', data.excerpt, { shouldDirty: true });
+        setValue('metaDescription', data.excerpt, { shouldDirty: true });
+        setValue('xMetaDescription', data.excerpt, { shouldDirty: true });
         toast.success('Excerpt generated successfully!');
       }
     } catch (error) {
@@ -69,8 +73,7 @@ const ExcerptInput = () => {
         id="excerpt"
         placeholder="Write a brief summary of the post..."
         className="min-h-[100px] resize-none"
-        value={excerpt || ''}
-        onChange={(e) => setField('excerpt', e.target.value)}
+        {...register('excerpt')}
       />
       <p className="text-xs text-muted-foreground">
         Recommended length: up to 145 characters. Current length:{' '}

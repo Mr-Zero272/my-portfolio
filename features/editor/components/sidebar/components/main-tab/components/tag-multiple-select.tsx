@@ -9,12 +9,17 @@ import { generateSlugWithUnique } from '@/utils/slug';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { isAxiosError } from 'axios';
 import { Tag } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useEffect, useEffectEvent, useState } from 'react';
+import { Controller, useFormContext } from 'react-hook-form';
 import { toast } from 'sonner';
-import { usePostStorage } from '../../../../../store/use-post-storage';
+import { PostSchema } from '../../../../../schema';
 
 export const TagMultipleSelect = () => {
-  const { tags: tagsFromStorage, setField, errors } = usePostStorage();
+  const {
+    control,
+    formState: { errors },
+  } = useFormContext<PostSchema>();
+
   const { data: tags, isLoading: isTagLoading } = useQuery({
     queryKey: ['tags'],
     queryFn: () => tagApi.getTags({ page: 1, limit: 100 }),
@@ -27,7 +32,7 @@ export const TagMultipleSelect = () => {
   // Existing tag options - make it stateful so we can add new ones
   const [tagOptions, setTagOptions] = useState<MultiSelectOption[]>([]);
 
-  useEffect(() => {
+  const setTagOptionsEffect = useEffectEvent(() => {
     if (!isTagLoading && tags) {
       setTagOptions(() => {
         return tags.data.map((tag) => ({
@@ -37,6 +42,10 @@ export const TagMultipleSelect = () => {
         }));
       });
     }
+  });
+
+  useEffect(() => {
+    setTagOptionsEffect();
   }, [isTagLoading, tags]);
 
   // Modified createNewTag to also update the options list
@@ -56,10 +65,8 @@ export const TagMultipleSelect = () => {
       };
 
       setTagOptions((prev) => [...prev, newTag]);
-      setField('tags', [...(tagsFromStorage || []), newTag.value]);
       return newTag;
     } catch (error) {
-      // case error same slug
       if (isAxiosError(error) && error.message.includes('exists')) {
         toast.error(error.message);
       } else {
@@ -76,21 +83,25 @@ export const TagMultipleSelect = () => {
       {isTagLoading ? (
         <Skeleton className="h-10 w-full rounded-md" />
       ) : (
-        <MultiSelect
-          options={tagOptions}
-          onValueChange={(value) => {
-            setField('tags', value);
-          }}
-          defaultValue={tagsFromStorage || []}
-          placeholder="Select tags..."
-          allowCreateOption={true}
-          onCreateOption={createNewTag}
-          createOptionLabel={(inputValue) => `Create tag "${inputValue}"`}
-          searchable={true}
-          className="w-full max-w-[300px]"
+        <Controller
+          name="tags"
+          control={control}
+          render={({ field }) => (
+            <MultiSelect
+              options={tagOptions}
+              onValueChange={field.onChange}
+              defaultValue={field.value || []}
+              placeholder="Select tags..."
+              allowCreateOption={true}
+              onCreateOption={createNewTag}
+              createOptionLabel={(inputValue) => `Create tag "${inputValue}"`}
+              searchable={true}
+              className="w-full max-w-[300px]"
+            />
+          )}
         />
       )}
-      <ErrorMessage message={errors.tags} />
+      <ErrorMessage message={errors.tags?.message} />
     </div>
   );
 };
