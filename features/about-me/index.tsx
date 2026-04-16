@@ -29,7 +29,7 @@ function AboutMeFeature({ profile, skills, experiences, educations }: AboutMeFea
     setActiveTab(tab as TabType);
   };
   return (
-    <section className="flex flex-col gap-24 p-5 sm:p-10 lg:flex-row">
+    <section className="flex flex-col gap-24 p-5 sm:p-10 md:h-[calc(100vh-8rem)] lg:flex-row">
       <article className="relative flex w-full flex-col md:flex-row lg:w-96 lg:flex-col">
         <h1 className="z-1 block w-full text-4xl font-bold sm:text-4xl md:w-1/2 lg:w-full lg:text-6xl">
           All over my details find here...

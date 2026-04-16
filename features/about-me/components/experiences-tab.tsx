@@ -1,4 +1,6 @@
+import { ScrollArea } from '@/components/ui/scroll-area';
 import { WorkExperience } from '@/components/work-experience';
+import { cn } from '@/lib/utils';
 import { IExperience } from '@/models';
 import { format } from 'date-fns';
 import { useMemo } from 'react';
@@ -21,14 +23,6 @@ interface ExperiencesTabProps {
 }
 
 const ExperiencesTab = ({ experiences }: ExperiencesTabProps) => {
-  // const { data: experiences = [], isLoading } = useQuery<IExperience[]>({
-  //   queryKey: ['experiences', 'list', { owner: true }],
-  //   queryFn: async () => {
-  //     const data = await experienceApi.getAll({ owner: true });
-  //     return data;
-  //   },
-  // });
-
   const formattedData = useMemo(() => {
     if (experiences) {
       return experiences.map((ex) => ({
@@ -45,22 +39,12 @@ const ExperiencesTab = ({ experiences }: ExperiencesTabProps) => {
   }, [experiences]);
 
   return (
-    <div>
+    <div className="flex h-full flex-col overflow-hidden">
       <h1 className="mb-2 text-2xl font-bold tracking-wider">Experiences</h1>
       <p className="mb-7 text-muted-foreground">Below is my work history and experience as a developer.</p>
-      <div className="pb-10">
-        {/* {isLoading &&
-          Array.from({ length: 3 }).map((_, index) => (
-            <div className="" key={index}>
-              <Skeleton className="mb-3 h-5 w-40" />
-              <Skeleton className="mb-2 h-5 w-56" />
-              <Skeleton className="mb-2 h-5 w-72" />
-              <Skeleton className="mb-2 h-5 w-56" />
-              <Skeleton className="mb-2 h-5 w-72" />
-            </div>
-          ))} */}
+      <ScrollArea className={cn('flex-1 overflow-y-auto', { 'md:pr-2.5': experiences.length > 3 })}>
         <WorkExperience experiences={formattedData as never} />
-      </div>
+      </ScrollArea>
     </div>
   );
 };

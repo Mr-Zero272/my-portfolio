@@ -1,5 +1,7 @@
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { cn } from '@/lib/utils';
 import { ISkill } from '@/models';
 import { motion } from 'motion/react';
 import Image from 'next/image';
@@ -28,12 +30,12 @@ interface SkillsTabProps {
 
 const SkillsTab = ({ skills }: SkillsTabProps) => {
   return (
-    <div>
+    <div className="flex h-full flex-col overflow-hidden">
       <h1 className="mb-2 text-2xl font-bold tracking-wider">Skills</h1>
-      <p className="mb-7 text-gray-500">
+      <p className="mb-7 text-muted-foreground">
         Below are the skills, technologies and programming languages ​​I am proficient in.
       </p>
-      <div className="pb-10">
+      <ScrollArea className={cn('flex-1 overflow-y-auto', { 'md:pr-2.5': skills.length > 6 })}>
         <motion.ul
           className="grid gap-5 md:grid-cols-2 xl:grid-cols-3"
           variants={containerVariants}
@@ -105,7 +107,7 @@ const SkillsTab = ({ skills }: SkillsTabProps) => {
             </motion.li>
           ))}
         </motion.ul>
-      </div>
+      </ScrollArea>
     </div>
   );
 };

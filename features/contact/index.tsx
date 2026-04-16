@@ -5,7 +5,7 @@ import ContactForm from './components/contact-form';
 
 const ContactFeature = () => {
   return (
-    <section className="flex flex-col gap-5 lg:flex-row lg:gap-10">
+    <section className="flex h-[calc(100vh-8rem)] flex-col gap-5 lg:flex-row lg:gap-10">
       <article className="relative flex-1 p-5 lg:p-10">
         <h4 className="mb-2 text-sm font-semibold">CONTACT</h4>
         <h1 className="z-20 mb-2 block w-full text-3xl font-bold md:text-6xl">Let&apos;s start a project together</h1>

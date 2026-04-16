@@ -41,14 +41,14 @@ const jsonLd = {
 export const metadata: Metadata = {
   metadataBase: new URL('https://pitithuong.vercel.app'),
   title: {
-    default: 'Thuong Phan Thanh - Full Stack Developer Portfolio',
+    default: 'Thuong Phan Thanh | Front-end Developer',
     template: '%s | Thuong Phan Thanh',
   },
   description:
-    'Full Stack Developer specialized in Next.js, React, Angular, Java Spring. 6+ months experience building modern web applications. Available for hire.',
+    'Front-end Developer specialized in Next.js, React, Angular, Java Spring. 6+ months experience building modern web applications. Available for hire.',
   keywords: [
     'Thuong Phan Thanh',
-    'Full Stack Developer',
+    'Front-end Developer',
     'Next.js Developer',
     'React Developer',
     'Angular Developer',
@@ -74,7 +74,7 @@ export const metadata: Metadata = {
         url: '/images/projects/portfolio/my-portfolio-h-1.png',
         width: 1200,
         height: 630,
-        alt: 'Thuong Phan Thanh - Full Stack Developer Portfolio',
+        alt: 'Thuong Phan Thanh - Front-end Developer Portfolio',
       },
     ],
     locale: 'en_US',
@@ -82,9 +82,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Thuong Phan Thanh - Full Stack Developer Portfolio',
+    title: 'Thuong Phan Thanh | Front-end Developer',
     description:
-      'Full Stack Developer specialized in Next.js, React, Angular, Java Spring. 6+ months experience building modern web applications. Available for hire.',
+      'Front-end Developer specialized in Next.js, React, Angular, Java Spring. 6+ months experience building modern web applications. Available for hire.',
     images: ['/images/projects/portfolio/my-portfolio-h-1.png'],
     creator: '@pitithuong',
   },
