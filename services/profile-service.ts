@@ -122,12 +122,8 @@ export class ProfileService {
       const profile = await Profile.findOneAndUpdate(
         { userId },
         { $set: data },
-        { new: true, runValidators: true },
+        { new: true, runValidators: true, upsert: true, setDefaultsOnInsert: true },
       ).populate('userId', 'username email avatar');
-
-      if (!profile) {
-        throw new Error('Profile not found');
-      }
 
       return profile;
     } catch (error) {

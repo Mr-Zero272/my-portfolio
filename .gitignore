@@ -44,3 +44,11 @@ next-env.d.ts
 .agent*
 .claude*
 
+# Graphify generated files - không commit lên git
+graphify-out/
+.cache/
+graph.json
+GRAPH_REPORT.md
+.graphifyignore
+obsidian/
+wiki/

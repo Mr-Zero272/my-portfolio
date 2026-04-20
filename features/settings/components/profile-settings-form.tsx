@@ -2,18 +2,44 @@
 
 import { profileApi } from '@/apis/profile';
 import PulsingLoader from '@/components/shared/pulsing-loader';
+import { badgeVariants } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import {
+  Combobox,
+  ComboboxChip,
+  ComboboxChips,
+  ComboboxChipsInput,
+  ComboboxContent,
+  ComboboxEmpty,
+  ComboboxItem,
+  ComboboxList,
+  ComboboxValue,
+  useComboboxAnchor,
+} from '@/components/ui/combobox';
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { InputGroup, InputGroupAddon, InputGroupButton, InputGroupInput } from '@/components/ui/input-group';
 import { Textarea } from '@/components/ui/textarea';
 import { cn } from '@/lib/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { Loader2 } from 'lucide-react';
-import { useCallback, useEffect } from 'react';
+import { Loader2, Plus, X } from 'lucide-react';
+import { useCallback, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import * as z from 'zod';
+
+const AVAILABLE_LANGUAGES = [
+  'Vietnamese',
+  'English',
+  'Japanese',
+  'Chinese',
+  'French',
+  'German',
+  'Spanish',
+  'Korean',
+  'Russian',
+];
 
 // Validation schema
 const profileSettingsSchema = z.object({
@@ -35,6 +61,9 @@ const profileSettingsSchema = z.object({
 type ProfileSettingsFormData = z.infer<typeof profileSettingsSchema>;
 
 export function ProfileSettingsForm() {
+  const [wordInput, setWordInput] = useState('');
+  const langAnchor = useComboboxAnchor();
+
   const queryClient = useQueryClient();
 
   const { data: profileData, isLoading: loading } = useQuery({
@@ -147,7 +176,14 @@ export function ProfileSettingsForm() {
                     <FormItem>
                       <FormLabel>Years of Experience *</FormLabel>
                       <FormControl>
-                        <Input type="number" placeholder="Years of Experience" {...field} />
+                        <Input
+                          type="number"
+                          placeholder="Years of Experience"
+                          {...field}
+                          onChange={(e) => {
+                            field.onChange(Number(e.target.value));
+                          }}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -259,6 +295,124 @@ export function ProfileSettingsForm() {
                   </FormItem>
                 )}
               />
+
+              <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                {/* Languages */}
+                <FormField
+                  control={form.control}
+                  name="languages"
+                  render={({ field }) => (
+                    <FormItem className="flex flex-col">
+                      <FormLabel>Languages</FormLabel>
+                      <FormControl>
+                        <Combobox
+                          multiple
+                          items={AVAILABLE_LANGUAGES}
+                          value={field.value}
+                          onValueChange={(val) => field.onChange(val)}
+                        >
+                          <ComboboxChips ref={langAnchor} className="w-full">
+                            <ComboboxValue>
+                              {(values: string[]) => (
+                                <>
+                                  {values.map((lang) => (
+                                    <ComboboxChip key={lang}>{lang}</ComboboxChip>
+                                  ))}
+                                  <ComboboxChipsInput placeholder="Select languages..." />
+                                </>
+                              )}
+                            </ComboboxValue>
+                          </ComboboxChips>
+                          <ComboboxContent anchor={langAnchor}>
+                            <ComboboxEmpty>No language found.</ComboboxEmpty>
+                            <ComboboxList>
+                              {(lang: string) => (
+                                <ComboboxItem key={lang} value={lang}>
+                                  {lang}
+                                </ComboboxItem>
+                              )}
+                            </ComboboxList>
+                          </ComboboxContent>
+                        </Combobox>
+                      </FormControl>
+                      <FormDescription>The languages you can communicate in</FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                {/* Rotating Words */}
+                <FormField
+                  control={form.control}
+                  name="rotatingWords"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Rotating Words</FormLabel>
+                      <div className="space-y-3">
+                        <InputGroup>
+                          <InputGroupInput
+                            placeholder="Add a word..."
+                            value={wordInput}
+                            onChange={(e) => setWordInput(e.target.value)}
+                            onKeyDown={(e) => {
+                              if (e.key === 'Enter') {
+                                e.preventDefault();
+                                if (wordInput.trim()) {
+                                  const currentWords = field.value || [];
+                                  if (!currentWords.includes(wordInput.trim())) {
+                                    field.onChange([...currentWords, wordInput.trim()]);
+                                  }
+                                  setWordInput('');
+                                }
+                              }
+                            }}
+                          />
+                          <InputGroupAddon align="inline-end">
+                            <InputGroupButton
+                              type="button"
+                              variant="ghost"
+                              size="icon-xs"
+                              onClick={() => {
+                                if (wordInput.trim()) {
+                                  const currentWords = field.value || [];
+                                  if (!currentWords.includes(wordInput.trim())) {
+                                    field.onChange([...currentWords, wordInput.trim()]);
+                                  }
+                                  setWordInput('');
+                                }
+                              }}
+                            >
+                              <Plus className="size-4" />
+                            </InputGroupButton>
+                          </InputGroupAddon>
+                        </InputGroup>
+
+                        <div className="flex flex-wrap gap-2">
+                          {field.value?.map((word, index) => (
+                            <div
+                              key={index}
+                              className={cn(badgeVariants({ variant: 'secondary' }), 'flex items-center gap-1 pr-1')}
+                            >
+                              {word}
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  field.onChange(field.value.filter((_, i) => i !== index));
+                                }}
+                                className="rounded-full p-0.5 hover:bg-muted-foreground/20"
+                              >
+                                <X className="size-3" />
+                              </button>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                      <FormDescription>Words that will rotate in your hero section</FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
 
               {/* SEO Section */}
               <div className="space-y-4 border-t pt-4">
