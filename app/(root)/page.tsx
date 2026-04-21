@@ -94,8 +94,6 @@ export default async function Home() {
       fetchSocialLinks(),
     ]);
 
-    const typingText = profileInfo.rotatingWords.map((word: string) => `${word} developer`);
-
     return (
       <section className="relative flex flex-col xl:flex-row">
         <div className="relative mb-7 flex flex-1 justify-evenly xl:mb-0 xl:w-5/12 xl:justify-center">
@@ -139,7 +137,7 @@ export default async function Home() {
           <div className="mb-8 flex justify-center p-2 sm:justify-around sm:p-0">
             <div className="relative mt-0 h-80 w-88 sm:w-120">
               <div className="h-64 w-full rounded-t-[4rem] rounded-br-[4rem] bg-slate-200/30 py-6 pr-5 pl-8 backdrop-blur-sm dark:bg-card">
-                <AnimatedTyping text={typingText} />
+                <AnimatedTyping text={profileInfo.rotatingWords || []} />
 
                 <AnimatedWords text="Hello I'm " className="text-left text-xl sm:text-3xl" />
                 <AnimatedWords text={profileInfo.name} className="text-left text-2xl text-primary sm:text-4xl" />
