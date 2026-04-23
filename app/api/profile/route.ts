@@ -83,11 +83,6 @@ export async function PATCH(req: Request) {
     }
 
     const data = await req.json();
-
-    console.log({
-      id: session.user.id,
-      data,
-    });
     const profile = await ProfileService.updateProfile(session.user.id, data);
 
     if (!profile) {
