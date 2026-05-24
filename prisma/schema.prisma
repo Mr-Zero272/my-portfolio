@@ -1,0 +1,420 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client"
+  output   = "../lib/generated/prisma"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+enum ExperiencePositionIconType {
+  code
+  design
+  business
+  education
+}
+
+enum ProjectType {
+  website
+  mobile
+  desktop
+  api
+  library
+  other
+}
+
+enum ProjectStatus {
+  planning
+  developing
+  completed
+  deployed
+  maintenance
+  archived
+}
+
+enum ProficiencyLevel {
+  Beginner
+  Intermediate
+  Proficient
+  Expert
+}
+
+enum SkillCategory {
+  Frontend
+  Backend
+  Database
+  DevOps
+  Tools
+  Language
+  Other
+}
+
+type ExperiencePosition {
+  title          String
+  employmentType String?
+  location       String?
+  startDate      DateTime
+  endDate        DateTime?
+  description    String?
+  icon           ExperiencePositionIconType @default(business)
+  skills         String[]                   @default([])
+}
+
+model User {
+  id            String   @id @map("_id")
+  name          String
+  email         String
+  emailVerified Boolean  @default(false)
+  image         String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  sessions      Session[]
+  accounts      Account[]
+  profile       Profile?
+  educations    Education[]
+  experiences   Experience[]
+  galleryImages GalleryImage[]
+  projects      Project[]
+  skills        Skill[]
+  socialLinks   SocialLink[]
+  comments      Comment[]
+  postAuthors   PostAuthor[]
+  postLikes     PostLike[]
+  siteSettings  SiteSetting[]
+
+  @@unique([email])
+  @@map("user")
+}
+
+model Session {
+  id        String   @id @map("_id")
+  expiresAt DateTime
+  token     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  ipAddress String?
+  userAgent String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([token])
+  @@index([userId])
+  @@map("session")
+}
+
+model Account {
+  id                    String    @id @map("_id")
+  accountId             String
+  providerId            String
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  @@index([userId])
+  @@map("account")
+}
+
+model Verification {
+  id         String   @id @map("_id")
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([identifier])
+  @@map("verification")
+}
+
+model Profile {
+  id                 String   @id @default(cuid()) @map("_id")
+  userId             String
+  user               User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name               String
+  phone              String?
+  nationality        String?
+  address            String?
+  yoe                Int?
+  resumePath         String?
+  tagline            String?
+  bio                String?
+  description        String?
+  freelanceAvailable Boolean  @default(true)
+  languages          String[] @default(["Vietnamese", "English"])
+  rotatingWords      String[] @default(["Web", "Software", "Mainframe"])
+  heroVideo          String?
+  metaTitle          String?
+  metaDescription    String?
+  ogImage            String?
+  isActive           Boolean  @default(true)
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  @@unique([userId])
+  @@map("profile")
+}
+
+model Education {
+  id           String    @id @default(cuid()) @map("_id")
+  userId       String
+  user         User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  institution  String
+  degree       String
+  fieldOfStudy String?
+  startDate    DateTime
+  endDate      DateTime?
+  description  String?
+  location     String?
+  displayOrder Int       @default(0)
+  isVisible    Boolean   @default(true)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  @@index([userId, displayOrder])
+  @@index([userId, isVisible])
+  @@map("education")
+}
+
+model Experience {
+  id                String               @id @default(cuid()) @map("_id")
+  userId            String
+  user              User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
+  companyName       String
+  companyLogo       String?
+  isCurrentEmployer Boolean              @default(false)
+  positions         ExperiencePosition[]
+  displayOrder      Int                  @default(0)
+  isVisible         Boolean              @default(true)
+  createdAt         DateTime             @default(now())
+  updatedAt         DateTime             @updatedAt
+
+  @@index([userId, displayOrder])
+  @@index([userId, isVisible])
+  @@map("experience")
+}
+
+model GalleryImage {
+  id          String   @id @default(cuid()) @map("_id")
+  url         String
+  name        String
+  size        Int
+  mimeType    String
+  caption     String?
+  userCreated String
+  user        User     @relation(fields: [userCreated], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([userCreated])
+  @@map("gallery")
+}
+
+model Post {
+  id               String   @id @default(cuid()) @map("_id")
+  title            String
+  slug             String
+  excerpt          String?
+  content          String
+  contentHtml      String?
+  keywords         String[] @default([])
+  featureImage     String?
+  imageCaption     String?
+  likes            Int      @default(0)
+  views            Int      @default(0)
+  shares           Int      @default(0)
+  metaTitle        String?
+  metaDescription  String?
+  xMetaTitle       String?
+  xMetaDescription String?
+  xMetaImage       String?
+  published        Boolean  @default(false)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  authors  PostAuthor[]
+  tags     PostTag[]
+  comments Comment[]
+  likedBy  PostLike[]
+
+  @@unique([slug])
+  @@index([published, createdAt])
+  @@map("post")
+}
+
+model PostAuthor {
+  id        String   @id @default(cuid()) @map("_id")
+  postId    String
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([postId, userId])
+  @@index([postId])
+  @@index([userId])
+  @@map("postAuthor")
+}
+
+model PostTag {
+  id        String   @id @default(cuid()) @map("_id")
+  postId    String
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  tagId     String
+  tag       Tag      @relation(fields: [tagId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([postId, tagId])
+  @@index([postId])
+  @@index([tagId])
+  @@map("postTag")
+}
+
+model PostLike {
+  id        String   @id @default(cuid()) @map("_id")
+  postId    String
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([postId, userId])
+  @@index([postId])
+  @@index([userId])
+  @@map("postLike")
+}
+
+model Comment {
+  id          String   @id @default(cuid()) @map("_id")
+  postId      String
+  post        Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  userId      String?
+  user        User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  authorName  String?
+  authorEmail String?
+  content     String
+  approved    Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([postId])
+  @@index([userId])
+  @@map("comment")
+}
+
+model Project {
+  id               String        @id @default(cuid()) @map("_id")
+  userId           String
+  user             User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name             String
+  slug             String
+  description      String
+  responsibilities String?
+  type             ProjectType   @default(website)
+  status           ProjectStatus @default(developing)
+  images           String[]      @default([])
+  thumbnailImage   String?
+  demoUrl          String?
+  sourceCodeUrl    String?
+  technologies     String[]      @default([])
+  databases        String[]      @default([])
+  startDate        DateTime?
+  endDate          DateTime?
+  isFeatured       Boolean       @default(false)
+  displayOrder     Int           @default(0)
+  isVisible        Boolean       @default(true)
+  metaTitle        String?
+  metaDescription  String?
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+
+  @@unique([slug])
+  @@index([userId, displayOrder])
+  @@index([userId, isVisible])
+  @@index([isFeatured, isVisible])
+  @@map("project")
+}
+
+model Skill {
+  id                String           @id @default(cuid()) @map("_id")
+  userId            String
+  user              User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name              String
+  proficiency       ProficiencyLevel
+  category          SkillCategory
+  icon              String?
+  iconColor         String?
+  description       String?
+  yearsOfExperience Int?
+  displayOrder      Int              @default(0)
+  isVisible         Boolean          @default(true)
+  createdAt         DateTime         @default(now())
+  updatedAt         DateTime         @updatedAt
+
+  @@index([userId, category, displayOrder])
+  @@index([userId, isVisible])
+  @@map("skill")
+}
+
+model SocialLink {
+  id           String   @id @default(cuid()) @map("_id")
+  userId       String
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  platform     String
+  url          String
+  username     String?
+  isActive     Boolean  @default(true)
+  displayOrder Int      @default(0)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@unique([userId, platform])
+  @@index([userId, displayOrder])
+  @@map("socialLink")
+}
+
+model Tag {
+  id        String    @id @default(cuid()) @map("_id")
+  name      String
+  slug      String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  posts     PostTag[]
+
+  @@unique([name])
+  @@unique([slug])
+  @@map("tag")
+}
+
+model SiteSetting {
+  id              String   @id @default(cuid()) @map("_id")
+  mainUserId      String
+  mainUser        User     @relation(fields: [mainUserId], references: [id], onDelete: Cascade)
+  siteName        String
+  siteDescription String?
+  siteUrl         String?
+  logo            String?
+  favicon         String?
+  defaultOgImage  String?
+  metaTitle       String?
+  metaDescription String?
+  setupCompleted  Boolean  @default(false)
+  theme           String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@unique([mainUserId])
+  @@map("siteSetting")
+}
