@@ -1,4 +1,4 @@
-import { OnboardingScreen } from '@/features/auth/screens/onboarding.screen';
+import { OnboardingScreen } from '@/features/site-settings/screens/onboarding.screen';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {

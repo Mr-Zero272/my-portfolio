@@ -110,8 +110,8 @@ function ConfirmDialog(props: ConfirmDialogProps) {
             </div>
           )}
           <DialogTitle>{title}</DialogTitle>
-          <DialogDescription asChild>
-            <div className="text-muted-foreground text-sm">{description}</div>
+          <DialogDescription render={<div className="text-muted-foreground text-sm" />}>
+            {description}
           </DialogDescription>
         </DialogHeader>
 

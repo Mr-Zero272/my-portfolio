@@ -6,7 +6,7 @@ const optionalTrimmedString = z
   .transform((value) => (value ? value : undefined));
 
 const optionalUrl = z
-  .union([z.string().trim().url(), z.literal('')])
+  .union([z.url(), z.literal('')])
   .optional()
   .transform((value) => (value ? value : undefined));
 

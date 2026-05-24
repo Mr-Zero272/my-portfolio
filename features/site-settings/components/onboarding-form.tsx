@@ -9,13 +9,15 @@ import type {
   SiteSettingOnboardingInput,
 } from '@/features/site-settings/schemas/site-setting.schema';
 import { siteSettingOnboardingSchema } from '@/features/site-settings/schemas/site-setting.schema';
+import { handleError } from '@/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
 import { Controller, useForm } from 'react-hook-form';
-import { toast } from 'sonner';
+import { useCreateOnboardingSettings } from '../hooks';
 
 export function OnboardingForm() {
   const router = useRouter();
+  const { mutateAsync: createOnboardingSettings, isPending } = useCreateOnboardingSettings();
   const form = useForm<SiteSettingOnboardingFormInput, unknown, SiteSettingOnboardingInput>({
     resolver: zodResolver(siteSettingOnboardingSchema),
     defaultValues: {
@@ -26,28 +28,15 @@ export function OnboardingForm() {
     },
   });
 
-  async function handleSubmit(data: SiteSettingOnboardingInput) {
-    const response = await fetch('/api/site-setting/onboarding', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data),
-    });
-
-    const result = await response.json();
-
-    if (!response.ok) {
-      const message = result?.error?.message ?? 'Could not complete onboarding';
-      toast.error(message);
-      form.setError('root', { message });
-      return;
+  const handleSubmit = async (data: SiteSettingOnboardingInput) => {
+    try {
+      await createOnboardingSettings(data);
+      router.replace('/admin/dashboard');
+      router.refresh();
+    } catch (error) {
+      handleError({ error });
     }
-
-    toast.success('Site setup completed');
-    router.replace('/admin/dashboard');
-    router.refresh();
-  }
+  };
 
   return (
     <form className="grid gap-5" onSubmit={form.handleSubmit(handleSubmit)}>
