@@ -30,13 +30,26 @@ export type SiteSettingMinAggregateOutputType = {
   siteName: string | null
   siteDescription: string | null
   siteUrl: string | null
+  siteLocale: string | null
+  siteAuthor: string | null
+  sitePublisher: string | null
   logo: string | null
   favicon: string | null
   defaultOgImage: string | null
+  ogType: string | null
+  ogImageAlt: string | null
   metaTitle: string | null
   metaDescription: string | null
+  twitterHandle: string | null
+  twitterCard: string | null
+  canonicalUrl: string | null
+  robotsIndex: boolean | null
+  robotsFollow: boolean | null
   setupCompleted: boolean | null
   theme: string | null
+  themeColor: string | null
+  githubUsername: string | null
+  githubAccessToken: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -47,13 +60,26 @@ export type SiteSettingMaxAggregateOutputType = {
   siteName: string | null
   siteDescription: string | null
   siteUrl: string | null
+  siteLocale: string | null
+  siteAuthor: string | null
+  sitePublisher: string | null
   logo: string | null
   favicon: string | null
   defaultOgImage: string | null
+  ogType: string | null
+  ogImageAlt: string | null
   metaTitle: string | null
   metaDescription: string | null
+  twitterHandle: string | null
+  twitterCard: string | null
+  canonicalUrl: string | null
+  robotsIndex: boolean | null
+  robotsFollow: boolean | null
   setupCompleted: boolean | null
   theme: string | null
+  themeColor: string | null
+  githubUsername: string | null
+  githubAccessToken: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -64,13 +90,28 @@ export type SiteSettingCountAggregateOutputType = {
   siteName: number
   siteDescription: number
   siteUrl: number
+  siteLocale: number
+  siteKeywords: number
+  siteAuthor: number
+  sitePublisher: number
   logo: number
   favicon: number
   defaultOgImage: number
+  ogType: number
+  ogImageAlt: number
   metaTitle: number
   metaDescription: number
+  twitterHandle: number
+  twitterCard: number
+  canonicalUrl: number
+  robotsIndex: number
+  robotsFollow: number
+  jsonLd: number
   setupCompleted: number
   theme: number
+  themeColor: number
+  githubUsername: number
+  githubAccessToken: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -83,13 +124,26 @@ export type SiteSettingMinAggregateInputType = {
   siteName?: true
   siteDescription?: true
   siteUrl?: true
+  siteLocale?: true
+  siteAuthor?: true
+  sitePublisher?: true
   logo?: true
   favicon?: true
   defaultOgImage?: true
+  ogType?: true
+  ogImageAlt?: true
   metaTitle?: true
   metaDescription?: true
+  twitterHandle?: true
+  twitterCard?: true
+  canonicalUrl?: true
+  robotsIndex?: true
+  robotsFollow?: true
   setupCompleted?: true
   theme?: true
+  themeColor?: true
+  githubUsername?: true
+  githubAccessToken?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -100,13 +154,26 @@ export type SiteSettingMaxAggregateInputType = {
   siteName?: true
   siteDescription?: true
   siteUrl?: true
+  siteLocale?: true
+  siteAuthor?: true
+  sitePublisher?: true
   logo?: true
   favicon?: true
   defaultOgImage?: true
+  ogType?: true
+  ogImageAlt?: true
   metaTitle?: true
   metaDescription?: true
+  twitterHandle?: true
+  twitterCard?: true
+  canonicalUrl?: true
+  robotsIndex?: true
+  robotsFollow?: true
   setupCompleted?: true
   theme?: true
+  themeColor?: true
+  githubUsername?: true
+  githubAccessToken?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -117,13 +184,28 @@ export type SiteSettingCountAggregateInputType = {
   siteName?: true
   siteDescription?: true
   siteUrl?: true
+  siteLocale?: true
+  siteKeywords?: true
+  siteAuthor?: true
+  sitePublisher?: true
   logo?: true
   favicon?: true
   defaultOgImage?: true
+  ogType?: true
+  ogImageAlt?: true
   metaTitle?: true
   metaDescription?: true
+  twitterHandle?: true
+  twitterCard?: true
+  canonicalUrl?: true
+  robotsIndex?: true
+  robotsFollow?: true
+  jsonLd?: true
   setupCompleted?: true
   theme?: true
+  themeColor?: true
+  githubUsername?: true
+  githubAccessToken?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -207,13 +289,28 @@ export type SiteSettingGroupByOutputType = {
   siteName: string
   siteDescription: string | null
   siteUrl: string | null
+  siteLocale: string | null
+  siteKeywords: string[]
+  siteAuthor: string | null
+  sitePublisher: string | null
   logo: string | null
   favicon: string | null
   defaultOgImage: string | null
+  ogType: string | null
+  ogImageAlt: string | null
   metaTitle: string | null
   metaDescription: string | null
+  twitterHandle: string | null
+  twitterCard: string | null
+  canonicalUrl: string | null
+  robotsIndex: boolean
+  robotsFollow: boolean
+  jsonLd: runtime.JsonValue | null
   setupCompleted: boolean
   theme: string | null
+  themeColor: string | null
+  githubUsername: string | null
+  githubAccessToken: string | null
   createdAt: Date
   updatedAt: Date
   _count: SiteSettingCountAggregateOutputType | null
@@ -245,13 +342,28 @@ export type SiteSettingWhereInput = {
   siteName?: Prisma.StringFilter<"SiteSetting"> | string
   siteDescription?: Prisma.StringNullableFilter<"SiteSetting"> | string | null
   siteUrl?: Prisma.StringNullableFilter<"SiteSetting"> | string | null
+  siteLocale?: Prisma.StringNullableFilter<"SiteSetting"> | string | null
+  siteKeywords?: Prisma.StringNullableListFilter<"SiteSetting">
+  siteAuthor?: Prisma.StringNullableFilter<"SiteSetting"> | string | null
+  sitePublisher?: Prisma.StringNullableFilter<"SiteSetting"> | string | null
   logo?: Prisma.StringNullableFilter<"SiteSetting"> | string | null
   favicon?: Prisma.StringNullableFilter<"SiteSetting"> | string | null
   defaultOgImage?: Prisma.StringNullableFilter<"SiteSetting"> | string | null
+  ogType?: Prisma.StringNullableFilter<"SiteSetting"> | string | null
+  ogImageAlt?: Prisma.StringNullableFilter<"SiteSetting"> | string | null
   metaTitle?: Prisma.StringNullableFilter<"SiteSetting"> | string | null
   metaDescription?: Prisma.StringNullableFilter<"SiteSetting"> | string | null
+  twitterHandle?: Prisma.StringNullableFilter<"SiteSetting"> | string | null
+  twitterCard?: Prisma.StringNullableFilter<"SiteSetting"> | string | null
+  canonicalUrl?: Prisma.StringNullableFilter<"SiteSetting"> | string | null
+  robotsIndex?: Prisma.BoolFilter<"SiteSetting"> | boolean
+  robotsFollow?: Prisma.BoolFilter<"SiteSetting"> | boolean
+  jsonLd?: Prisma.JsonNullableFilter<"SiteSetting">
   setupCompleted?: Prisma.BoolFilter<"SiteSetting"> | boolean
   theme?: Prisma.StringNullableFilter<"SiteSetting"> | string | null
+  themeColor?: Prisma.StringNullableFilter<"SiteSetting"> | string | null
+  githubUsername?: Prisma.StringNullableFilter<"SiteSetting"> | string | null
+  githubAccessToken?: Prisma.StringNullableFilter<"SiteSetting"> | string | null
   createdAt?: Prisma.DateTimeFilter<"SiteSetting"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"SiteSetting"> | Date | string
   mainUser?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
@@ -263,13 +375,28 @@ export type SiteSettingOrderByWithRelationInput = {
   siteName?: Prisma.SortOrder
   siteDescription?: Prisma.SortOrder
   siteUrl?: Prisma.SortOrder
+  siteLocale?: Prisma.SortOrder
+  siteKeywords?: Prisma.SortOrder
+  siteAuthor?: Prisma.SortOrder
+  sitePublisher?: Prisma.SortOrder
   logo?: Prisma.SortOrder
   favicon?: Prisma.SortOrder
   defaultOgImage?: Prisma.SortOrder
+  ogType?: Prisma.SortOrder
+  ogImageAlt?: Prisma.SortOrder
   metaTitle?: Prisma.SortOrder
   metaDescription?: Prisma.SortOrder
+  twitterHandle?: Prisma.SortOrder
+  twitterCard?: Prisma.SortOrder
+  canonicalUrl?: Prisma.SortOrder
+  robotsIndex?: Prisma.SortOrder
+  robotsFollow?: Prisma.SortOrder
+  jsonLd?: Prisma.SortOrder
   setupCompleted?: Prisma.SortOrder
   theme?: Prisma.SortOrder
+  themeColor?: Prisma.SortOrder
+  githubUsername?: Prisma.SortOrder
+  githubAccessToken?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   mainUser?: Prisma.UserOrderByWithRelationInput
@@ -284,13 +411,28 @@ export type SiteSettingWhereUniqueInput = Prisma.AtLeast<{
   siteName?: Prisma.StringFilter<"SiteSetting"> | string
   siteDescription?: Prisma.StringNullableFilter<"SiteSetting"> | string | null
   siteUrl?: Prisma.StringNullableFilter<"SiteSetting"> | string | null
+  siteLocale?: Prisma.StringNullableFilter<"SiteSetting"> | string | null
+  siteKeywords?: Prisma.StringNullableListFilter<"SiteSetting">
+  siteAuthor?: Prisma.StringNullableFilter<"SiteSetting"> | string | null
+  sitePublisher?: Prisma.StringNullableFilter<"SiteSetting"> | string | null
   logo?: Prisma.StringNullableFilter<"SiteSetting"> | string | null
   favicon?: Prisma.StringNullableFilter<"SiteSetting"> | string | null
   defaultOgImage?: Prisma.StringNullableFilter<"SiteSetting"> | string | null
+  ogType?: Prisma.StringNullableFilter<"SiteSetting"> | string | null
+  ogImageAlt?: Prisma.StringNullableFilter<"SiteSetting"> | string | null
   metaTitle?: Prisma.StringNullableFilter<"SiteSetting"> | string | null
   metaDescription?: Prisma.StringNullableFilter<"SiteSetting"> | string | null
+  twitterHandle?: Prisma.StringNullableFilter<"SiteSetting"> | string | null
+  twitterCard?: Prisma.StringNullableFilter<"SiteSetting"> | string | null
+  canonicalUrl?: Prisma.StringNullableFilter<"SiteSetting"> | string | null
+  robotsIndex?: Prisma.BoolFilter<"SiteSetting"> | boolean
+  robotsFollow?: Prisma.BoolFilter<"SiteSetting"> | boolean
+  jsonLd?: Prisma.JsonNullableFilter<"SiteSetting">
   setupCompleted?: Prisma.BoolFilter<"SiteSetting"> | boolean
   theme?: Prisma.StringNullableFilter<"SiteSetting"> | string | null
+  themeColor?: Prisma.StringNullableFilter<"SiteSetting"> | string | null
+  githubUsername?: Prisma.StringNullableFilter<"SiteSetting"> | string | null
+  githubAccessToken?: Prisma.StringNullableFilter<"SiteSetting"> | string | null
   createdAt?: Prisma.DateTimeFilter<"SiteSetting"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"SiteSetting"> | Date | string
   mainUser?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
@@ -302,13 +444,28 @@ export type SiteSettingOrderByWithAggregationInput = {
   siteName?: Prisma.SortOrder
   siteDescription?: Prisma.SortOrder
   siteUrl?: Prisma.SortOrder
+  siteLocale?: Prisma.SortOrder
+  siteKeywords?: Prisma.SortOrder
+  siteAuthor?: Prisma.SortOrder
+  sitePublisher?: Prisma.SortOrder
   logo?: Prisma.SortOrder
   favicon?: Prisma.SortOrder
   defaultOgImage?: Prisma.SortOrder
+  ogType?: Prisma.SortOrder
+  ogImageAlt?: Prisma.SortOrder
   metaTitle?: Prisma.SortOrder
   metaDescription?: Prisma.SortOrder
+  twitterHandle?: Prisma.SortOrder
+  twitterCard?: Prisma.SortOrder
+  canonicalUrl?: Prisma.SortOrder
+  robotsIndex?: Prisma.SortOrder
+  robotsFollow?: Prisma.SortOrder
+  jsonLd?: Prisma.SortOrder
   setupCompleted?: Prisma.SortOrder
   theme?: Prisma.SortOrder
+  themeColor?: Prisma.SortOrder
+  githubUsername?: Prisma.SortOrder
+  githubAccessToken?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.SiteSettingCountOrderByAggregateInput
@@ -325,13 +482,28 @@ export type SiteSettingScalarWhereWithAggregatesInput = {
   siteName?: Prisma.StringWithAggregatesFilter<"SiteSetting"> | string
   siteDescription?: Prisma.StringNullableWithAggregatesFilter<"SiteSetting"> | string | null
   siteUrl?: Prisma.StringNullableWithAggregatesFilter<"SiteSetting"> | string | null
+  siteLocale?: Prisma.StringNullableWithAggregatesFilter<"SiteSetting"> | string | null
+  siteKeywords?: Prisma.StringNullableListFilter<"SiteSetting">
+  siteAuthor?: Prisma.StringNullableWithAggregatesFilter<"SiteSetting"> | string | null
+  sitePublisher?: Prisma.StringNullableWithAggregatesFilter<"SiteSetting"> | string | null
   logo?: Prisma.StringNullableWithAggregatesFilter<"SiteSetting"> | string | null
   favicon?: Prisma.StringNullableWithAggregatesFilter<"SiteSetting"> | string | null
   defaultOgImage?: Prisma.StringNullableWithAggregatesFilter<"SiteSetting"> | string | null
+  ogType?: Prisma.StringNullableWithAggregatesFilter<"SiteSetting"> | string | null
+  ogImageAlt?: Prisma.StringNullableWithAggregatesFilter<"SiteSetting"> | string | null
   metaTitle?: Prisma.StringNullableWithAggregatesFilter<"SiteSetting"> | string | null
   metaDescription?: Prisma.StringNullableWithAggregatesFilter<"SiteSetting"> | string | null
+  twitterHandle?: Prisma.StringNullableWithAggregatesFilter<"SiteSetting"> | string | null
+  twitterCard?: Prisma.StringNullableWithAggregatesFilter<"SiteSetting"> | string | null
+  canonicalUrl?: Prisma.StringNullableWithAggregatesFilter<"SiteSetting"> | string | null
+  robotsIndex?: Prisma.BoolWithAggregatesFilter<"SiteSetting"> | boolean
+  robotsFollow?: Prisma.BoolWithAggregatesFilter<"SiteSetting"> | boolean
+  jsonLd?: Prisma.JsonNullableWithAggregatesFilter<"SiteSetting">
   setupCompleted?: Prisma.BoolWithAggregatesFilter<"SiteSetting"> | boolean
   theme?: Prisma.StringNullableWithAggregatesFilter<"SiteSetting"> | string | null
+  themeColor?: Prisma.StringNullableWithAggregatesFilter<"SiteSetting"> | string | null
+  githubUsername?: Prisma.StringNullableWithAggregatesFilter<"SiteSetting"> | string | null
+  githubAccessToken?: Prisma.StringNullableWithAggregatesFilter<"SiteSetting"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"SiteSetting"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"SiteSetting"> | Date | string
 }
@@ -341,13 +513,28 @@ export type SiteSettingCreateInput = {
   siteName: string
   siteDescription?: string | null
   siteUrl?: string | null
+  siteLocale?: string | null
+  siteKeywords?: Prisma.SiteSettingCreatesiteKeywordsInput | string[]
+  siteAuthor?: string | null
+  sitePublisher?: string | null
   logo?: string | null
   favicon?: string | null
   defaultOgImage?: string | null
+  ogType?: string | null
+  ogImageAlt?: string | null
   metaTitle?: string | null
   metaDescription?: string | null
+  twitterHandle?: string | null
+  twitterCard?: string | null
+  canonicalUrl?: string | null
+  robotsIndex?: boolean
+  robotsFollow?: boolean
+  jsonLd?: runtime.InputJsonValue | null
   setupCompleted?: boolean
   theme?: string | null
+  themeColor?: string | null
+  githubUsername?: string | null
+  githubAccessToken?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   mainUser: Prisma.UserCreateNestedOneWithoutSiteSettingsInput
@@ -359,13 +546,28 @@ export type SiteSettingUncheckedCreateInput = {
   siteName: string
   siteDescription?: string | null
   siteUrl?: string | null
+  siteLocale?: string | null
+  siteKeywords?: Prisma.SiteSettingCreatesiteKeywordsInput | string[]
+  siteAuthor?: string | null
+  sitePublisher?: string | null
   logo?: string | null
   favicon?: string | null
   defaultOgImage?: string | null
+  ogType?: string | null
+  ogImageAlt?: string | null
   metaTitle?: string | null
   metaDescription?: string | null
+  twitterHandle?: string | null
+  twitterCard?: string | null
+  canonicalUrl?: string | null
+  robotsIndex?: boolean
+  robotsFollow?: boolean
+  jsonLd?: runtime.InputJsonValue | null
   setupCompleted?: boolean
   theme?: string | null
+  themeColor?: string | null
+  githubUsername?: string | null
+  githubAccessToken?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -374,13 +576,28 @@ export type SiteSettingUpdateInput = {
   siteName?: Prisma.StringFieldUpdateOperationsInput | string
   siteDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   siteUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  siteLocale?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  siteKeywords?: Prisma.SiteSettingUpdatesiteKeywordsInput | string[]
+  siteAuthor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sitePublisher?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   favicon?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   defaultOgImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ogType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ogImageAlt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   metaTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   metaDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  twitterHandle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  twitterCard?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  canonicalUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  robotsIndex?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  robotsFollow?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  jsonLd?: runtime.InputJsonValue | runtime.InputJsonValue | null
   setupCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   theme?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  themeColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  githubUsername?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  githubAccessToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   mainUser?: Prisma.UserUpdateOneRequiredWithoutSiteSettingsNestedInput
@@ -391,13 +608,28 @@ export type SiteSettingUncheckedUpdateInput = {
   siteName?: Prisma.StringFieldUpdateOperationsInput | string
   siteDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   siteUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  siteLocale?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  siteKeywords?: Prisma.SiteSettingUpdatesiteKeywordsInput | string[]
+  siteAuthor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sitePublisher?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   favicon?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   defaultOgImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ogType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ogImageAlt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   metaTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   metaDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  twitterHandle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  twitterCard?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  canonicalUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  robotsIndex?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  robotsFollow?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  jsonLd?: runtime.InputJsonValue | runtime.InputJsonValue | null
   setupCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   theme?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  themeColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  githubUsername?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  githubAccessToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -408,13 +640,28 @@ export type SiteSettingCreateManyInput = {
   siteName: string
   siteDescription?: string | null
   siteUrl?: string | null
+  siteLocale?: string | null
+  siteKeywords?: Prisma.SiteSettingCreatesiteKeywordsInput | string[]
+  siteAuthor?: string | null
+  sitePublisher?: string | null
   logo?: string | null
   favicon?: string | null
   defaultOgImage?: string | null
+  ogType?: string | null
+  ogImageAlt?: string | null
   metaTitle?: string | null
   metaDescription?: string | null
+  twitterHandle?: string | null
+  twitterCard?: string | null
+  canonicalUrl?: string | null
+  robotsIndex?: boolean
+  robotsFollow?: boolean
+  jsonLd?: runtime.InputJsonValue | null
   setupCompleted?: boolean
   theme?: string | null
+  themeColor?: string | null
+  githubUsername?: string | null
+  githubAccessToken?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -423,13 +670,28 @@ export type SiteSettingUpdateManyMutationInput = {
   siteName?: Prisma.StringFieldUpdateOperationsInput | string
   siteDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   siteUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  siteLocale?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  siteKeywords?: Prisma.SiteSettingUpdatesiteKeywordsInput | string[]
+  siteAuthor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sitePublisher?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   favicon?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   defaultOgImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ogType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ogImageAlt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   metaTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   metaDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  twitterHandle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  twitterCard?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  canonicalUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  robotsIndex?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  robotsFollow?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  jsonLd?: runtime.InputJsonValue | runtime.InputJsonValue | null
   setupCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   theme?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  themeColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  githubUsername?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  githubAccessToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -439,13 +701,28 @@ export type SiteSettingUncheckedUpdateManyInput = {
   siteName?: Prisma.StringFieldUpdateOperationsInput | string
   siteDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   siteUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  siteLocale?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  siteKeywords?: Prisma.SiteSettingUpdatesiteKeywordsInput | string[]
+  siteAuthor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sitePublisher?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   favicon?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   defaultOgImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ogType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ogImageAlt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   metaTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   metaDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  twitterHandle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  twitterCard?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  canonicalUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  robotsIndex?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  robotsFollow?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  jsonLd?: runtime.InputJsonValue | runtime.InputJsonValue | null
   setupCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   theme?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  themeColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  githubUsername?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  githubAccessToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -466,13 +743,28 @@ export type SiteSettingCountOrderByAggregateInput = {
   siteName?: Prisma.SortOrder
   siteDescription?: Prisma.SortOrder
   siteUrl?: Prisma.SortOrder
+  siteLocale?: Prisma.SortOrder
+  siteKeywords?: Prisma.SortOrder
+  siteAuthor?: Prisma.SortOrder
+  sitePublisher?: Prisma.SortOrder
   logo?: Prisma.SortOrder
   favicon?: Prisma.SortOrder
   defaultOgImage?: Prisma.SortOrder
+  ogType?: Prisma.SortOrder
+  ogImageAlt?: Prisma.SortOrder
   metaTitle?: Prisma.SortOrder
   metaDescription?: Prisma.SortOrder
+  twitterHandle?: Prisma.SortOrder
+  twitterCard?: Prisma.SortOrder
+  canonicalUrl?: Prisma.SortOrder
+  robotsIndex?: Prisma.SortOrder
+  robotsFollow?: Prisma.SortOrder
+  jsonLd?: Prisma.SortOrder
   setupCompleted?: Prisma.SortOrder
   theme?: Prisma.SortOrder
+  themeColor?: Prisma.SortOrder
+  githubUsername?: Prisma.SortOrder
+  githubAccessToken?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -483,13 +775,26 @@ export type SiteSettingMaxOrderByAggregateInput = {
   siteName?: Prisma.SortOrder
   siteDescription?: Prisma.SortOrder
   siteUrl?: Prisma.SortOrder
+  siteLocale?: Prisma.SortOrder
+  siteAuthor?: Prisma.SortOrder
+  sitePublisher?: Prisma.SortOrder
   logo?: Prisma.SortOrder
   favicon?: Prisma.SortOrder
   defaultOgImage?: Prisma.SortOrder
+  ogType?: Prisma.SortOrder
+  ogImageAlt?: Prisma.SortOrder
   metaTitle?: Prisma.SortOrder
   metaDescription?: Prisma.SortOrder
+  twitterHandle?: Prisma.SortOrder
+  twitterCard?: Prisma.SortOrder
+  canonicalUrl?: Prisma.SortOrder
+  robotsIndex?: Prisma.SortOrder
+  robotsFollow?: Prisma.SortOrder
   setupCompleted?: Prisma.SortOrder
   theme?: Prisma.SortOrder
+  themeColor?: Prisma.SortOrder
+  githubUsername?: Prisma.SortOrder
+  githubAccessToken?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -500,13 +805,26 @@ export type SiteSettingMinOrderByAggregateInput = {
   siteName?: Prisma.SortOrder
   siteDescription?: Prisma.SortOrder
   siteUrl?: Prisma.SortOrder
+  siteLocale?: Prisma.SortOrder
+  siteAuthor?: Prisma.SortOrder
+  sitePublisher?: Prisma.SortOrder
   logo?: Prisma.SortOrder
   favicon?: Prisma.SortOrder
   defaultOgImage?: Prisma.SortOrder
+  ogType?: Prisma.SortOrder
+  ogImageAlt?: Prisma.SortOrder
   metaTitle?: Prisma.SortOrder
   metaDescription?: Prisma.SortOrder
+  twitterHandle?: Prisma.SortOrder
+  twitterCard?: Prisma.SortOrder
+  canonicalUrl?: Prisma.SortOrder
+  robotsIndex?: Prisma.SortOrder
+  robotsFollow?: Prisma.SortOrder
   setupCompleted?: Prisma.SortOrder
   theme?: Prisma.SortOrder
+  themeColor?: Prisma.SortOrder
+  githubUsername?: Prisma.SortOrder
+  githubAccessToken?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -553,18 +871,42 @@ export type SiteSettingUncheckedUpdateManyWithoutMainUserNestedInput = {
   deleteMany?: Prisma.SiteSettingScalarWhereInput | Prisma.SiteSettingScalarWhereInput[]
 }
 
+export type SiteSettingCreatesiteKeywordsInput = {
+  set: string[]
+}
+
+export type SiteSettingUpdatesiteKeywordsInput = {
+  set?: string[]
+  push?: string | string[]
+}
+
 export type SiteSettingCreateWithoutMainUserInput = {
   id?: string
   siteName: string
   siteDescription?: string | null
   siteUrl?: string | null
+  siteLocale?: string | null
+  siteKeywords?: Prisma.SiteSettingCreatesiteKeywordsInput | string[]
+  siteAuthor?: string | null
+  sitePublisher?: string | null
   logo?: string | null
   favicon?: string | null
   defaultOgImage?: string | null
+  ogType?: string | null
+  ogImageAlt?: string | null
   metaTitle?: string | null
   metaDescription?: string | null
+  twitterHandle?: string | null
+  twitterCard?: string | null
+  canonicalUrl?: string | null
+  robotsIndex?: boolean
+  robotsFollow?: boolean
+  jsonLd?: runtime.InputJsonValue | null
   setupCompleted?: boolean
   theme?: string | null
+  themeColor?: string | null
+  githubUsername?: string | null
+  githubAccessToken?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -574,13 +916,28 @@ export type SiteSettingUncheckedCreateWithoutMainUserInput = {
   siteName: string
   siteDescription?: string | null
   siteUrl?: string | null
+  siteLocale?: string | null
+  siteKeywords?: Prisma.SiteSettingCreatesiteKeywordsInput | string[]
+  siteAuthor?: string | null
+  sitePublisher?: string | null
   logo?: string | null
   favicon?: string | null
   defaultOgImage?: string | null
+  ogType?: string | null
+  ogImageAlt?: string | null
   metaTitle?: string | null
   metaDescription?: string | null
+  twitterHandle?: string | null
+  twitterCard?: string | null
+  canonicalUrl?: string | null
+  robotsIndex?: boolean
+  robotsFollow?: boolean
+  jsonLd?: runtime.InputJsonValue | null
   setupCompleted?: boolean
   theme?: string | null
+  themeColor?: string | null
+  githubUsername?: string | null
+  githubAccessToken?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -619,13 +976,28 @@ export type SiteSettingScalarWhereInput = {
   siteName?: Prisma.StringFilter<"SiteSetting"> | string
   siteDescription?: Prisma.StringNullableFilter<"SiteSetting"> | string | null
   siteUrl?: Prisma.StringNullableFilter<"SiteSetting"> | string | null
+  siteLocale?: Prisma.StringNullableFilter<"SiteSetting"> | string | null
+  siteKeywords?: Prisma.StringNullableListFilter<"SiteSetting">
+  siteAuthor?: Prisma.StringNullableFilter<"SiteSetting"> | string | null
+  sitePublisher?: Prisma.StringNullableFilter<"SiteSetting"> | string | null
   logo?: Prisma.StringNullableFilter<"SiteSetting"> | string | null
   favicon?: Prisma.StringNullableFilter<"SiteSetting"> | string | null
   defaultOgImage?: Prisma.StringNullableFilter<"SiteSetting"> | string | null
+  ogType?: Prisma.StringNullableFilter<"SiteSetting"> | string | null
+  ogImageAlt?: Prisma.StringNullableFilter<"SiteSetting"> | string | null
   metaTitle?: Prisma.StringNullableFilter<"SiteSetting"> | string | null
   metaDescription?: Prisma.StringNullableFilter<"SiteSetting"> | string | null
+  twitterHandle?: Prisma.StringNullableFilter<"SiteSetting"> | string | null
+  twitterCard?: Prisma.StringNullableFilter<"SiteSetting"> | string | null
+  canonicalUrl?: Prisma.StringNullableFilter<"SiteSetting"> | string | null
+  robotsIndex?: Prisma.BoolFilter<"SiteSetting"> | boolean
+  robotsFollow?: Prisma.BoolFilter<"SiteSetting"> | boolean
+  jsonLd?: Prisma.JsonNullableFilter<"SiteSetting">
   setupCompleted?: Prisma.BoolFilter<"SiteSetting"> | boolean
   theme?: Prisma.StringNullableFilter<"SiteSetting"> | string | null
+  themeColor?: Prisma.StringNullableFilter<"SiteSetting"> | string | null
+  githubUsername?: Prisma.StringNullableFilter<"SiteSetting"> | string | null
+  githubAccessToken?: Prisma.StringNullableFilter<"SiteSetting"> | string | null
   createdAt?: Prisma.DateTimeFilter<"SiteSetting"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"SiteSetting"> | Date | string
 }
@@ -635,13 +1007,28 @@ export type SiteSettingCreateManyMainUserInput = {
   siteName: string
   siteDescription?: string | null
   siteUrl?: string | null
+  siteLocale?: string | null
+  siteKeywords?: Prisma.SiteSettingCreatesiteKeywordsInput | string[]
+  siteAuthor?: string | null
+  sitePublisher?: string | null
   logo?: string | null
   favicon?: string | null
   defaultOgImage?: string | null
+  ogType?: string | null
+  ogImageAlt?: string | null
   metaTitle?: string | null
   metaDescription?: string | null
+  twitterHandle?: string | null
+  twitterCard?: string | null
+  canonicalUrl?: string | null
+  robotsIndex?: boolean
+  robotsFollow?: boolean
+  jsonLd?: runtime.InputJsonValue | null
   setupCompleted?: boolean
   theme?: string | null
+  themeColor?: string | null
+  githubUsername?: string | null
+  githubAccessToken?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -650,13 +1037,28 @@ export type SiteSettingUpdateWithoutMainUserInput = {
   siteName?: Prisma.StringFieldUpdateOperationsInput | string
   siteDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   siteUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  siteLocale?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  siteKeywords?: Prisma.SiteSettingUpdatesiteKeywordsInput | string[]
+  siteAuthor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sitePublisher?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   favicon?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   defaultOgImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ogType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ogImageAlt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   metaTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   metaDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  twitterHandle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  twitterCard?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  canonicalUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  robotsIndex?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  robotsFollow?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  jsonLd?: runtime.InputJsonValue | runtime.InputJsonValue | null
   setupCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   theme?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  themeColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  githubUsername?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  githubAccessToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -665,13 +1067,28 @@ export type SiteSettingUncheckedUpdateWithoutMainUserInput = {
   siteName?: Prisma.StringFieldUpdateOperationsInput | string
   siteDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   siteUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  siteLocale?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  siteKeywords?: Prisma.SiteSettingUpdatesiteKeywordsInput | string[]
+  siteAuthor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sitePublisher?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   favicon?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   defaultOgImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ogType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ogImageAlt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   metaTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   metaDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  twitterHandle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  twitterCard?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  canonicalUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  robotsIndex?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  robotsFollow?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  jsonLd?: runtime.InputJsonValue | runtime.InputJsonValue | null
   setupCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   theme?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  themeColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  githubUsername?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  githubAccessToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -680,13 +1097,28 @@ export type SiteSettingUncheckedUpdateManyWithoutMainUserInput = {
   siteName?: Prisma.StringFieldUpdateOperationsInput | string
   siteDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   siteUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  siteLocale?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  siteKeywords?: Prisma.SiteSettingUpdatesiteKeywordsInput | string[]
+  siteAuthor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sitePublisher?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   favicon?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   defaultOgImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ogType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ogImageAlt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   metaTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   metaDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  twitterHandle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  twitterCard?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  canonicalUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  robotsIndex?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  robotsFollow?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  jsonLd?: runtime.InputJsonValue | runtime.InputJsonValue | null
   setupCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   theme?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  themeColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  githubUsername?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  githubAccessToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -699,13 +1131,28 @@ export type SiteSettingSelect<ExtArgs extends runtime.Types.Extensions.InternalA
   siteName?: boolean
   siteDescription?: boolean
   siteUrl?: boolean
+  siteLocale?: boolean
+  siteKeywords?: boolean
+  siteAuthor?: boolean
+  sitePublisher?: boolean
   logo?: boolean
   favicon?: boolean
   defaultOgImage?: boolean
+  ogType?: boolean
+  ogImageAlt?: boolean
   metaTitle?: boolean
   metaDescription?: boolean
+  twitterHandle?: boolean
+  twitterCard?: boolean
+  canonicalUrl?: boolean
+  robotsIndex?: boolean
+  robotsFollow?: boolean
+  jsonLd?: boolean
   setupCompleted?: boolean
   theme?: boolean
+  themeColor?: boolean
+  githubUsername?: boolean
+  githubAccessToken?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   mainUser?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -719,18 +1166,33 @@ export type SiteSettingSelectScalar = {
   siteName?: boolean
   siteDescription?: boolean
   siteUrl?: boolean
+  siteLocale?: boolean
+  siteKeywords?: boolean
+  siteAuthor?: boolean
+  sitePublisher?: boolean
   logo?: boolean
   favicon?: boolean
   defaultOgImage?: boolean
+  ogType?: boolean
+  ogImageAlt?: boolean
   metaTitle?: boolean
   metaDescription?: boolean
+  twitterHandle?: boolean
+  twitterCard?: boolean
+  canonicalUrl?: boolean
+  robotsIndex?: boolean
+  robotsFollow?: boolean
+  jsonLd?: boolean
   setupCompleted?: boolean
   theme?: boolean
+  themeColor?: boolean
+  githubUsername?: boolean
+  githubAccessToken?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type SiteSettingOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "mainUserId" | "siteName" | "siteDescription" | "siteUrl" | "logo" | "favicon" | "defaultOgImage" | "metaTitle" | "metaDescription" | "setupCompleted" | "theme" | "createdAt" | "updatedAt", ExtArgs["result"]["siteSetting"]>
+export type SiteSettingOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "mainUserId" | "siteName" | "siteDescription" | "siteUrl" | "siteLocale" | "siteKeywords" | "siteAuthor" | "sitePublisher" | "logo" | "favicon" | "defaultOgImage" | "ogType" | "ogImageAlt" | "metaTitle" | "metaDescription" | "twitterHandle" | "twitterCard" | "canonicalUrl" | "robotsIndex" | "robotsFollow" | "jsonLd" | "setupCompleted" | "theme" | "themeColor" | "githubUsername" | "githubAccessToken" | "createdAt" | "updatedAt", ExtArgs["result"]["siteSetting"]>
 export type SiteSettingInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   mainUser?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
@@ -746,13 +1208,28 @@ export type $SiteSettingPayload<ExtArgs extends runtime.Types.Extensions.Interna
     siteName: string
     siteDescription: string | null
     siteUrl: string | null
+    siteLocale: string | null
+    siteKeywords: string[]
+    siteAuthor: string | null
+    sitePublisher: string | null
     logo: string | null
     favicon: string | null
     defaultOgImage: string | null
+    ogType: string | null
+    ogImageAlt: string | null
     metaTitle: string | null
     metaDescription: string | null
+    twitterHandle: string | null
+    twitterCard: string | null
+    canonicalUrl: string | null
+    robotsIndex: boolean
+    robotsFollow: boolean
+    jsonLd: runtime.JsonValue | null
     setupCompleted: boolean
     theme: string | null
+    themeColor: string | null
+    githubUsername: string | null
+    githubAccessToken: string | null
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["siteSetting"]>
@@ -1153,13 +1630,28 @@ export interface SiteSettingFieldRefs {
   readonly siteName: Prisma.FieldRef<"SiteSetting", 'String'>
   readonly siteDescription: Prisma.FieldRef<"SiteSetting", 'String'>
   readonly siteUrl: Prisma.FieldRef<"SiteSetting", 'String'>
+  readonly siteLocale: Prisma.FieldRef<"SiteSetting", 'String'>
+  readonly siteKeywords: Prisma.FieldRef<"SiteSetting", 'String[]'>
+  readonly siteAuthor: Prisma.FieldRef<"SiteSetting", 'String'>
+  readonly sitePublisher: Prisma.FieldRef<"SiteSetting", 'String'>
   readonly logo: Prisma.FieldRef<"SiteSetting", 'String'>
   readonly favicon: Prisma.FieldRef<"SiteSetting", 'String'>
   readonly defaultOgImage: Prisma.FieldRef<"SiteSetting", 'String'>
+  readonly ogType: Prisma.FieldRef<"SiteSetting", 'String'>
+  readonly ogImageAlt: Prisma.FieldRef<"SiteSetting", 'String'>
   readonly metaTitle: Prisma.FieldRef<"SiteSetting", 'String'>
   readonly metaDescription: Prisma.FieldRef<"SiteSetting", 'String'>
+  readonly twitterHandle: Prisma.FieldRef<"SiteSetting", 'String'>
+  readonly twitterCard: Prisma.FieldRef<"SiteSetting", 'String'>
+  readonly canonicalUrl: Prisma.FieldRef<"SiteSetting", 'String'>
+  readonly robotsIndex: Prisma.FieldRef<"SiteSetting", 'Boolean'>
+  readonly robotsFollow: Prisma.FieldRef<"SiteSetting", 'Boolean'>
+  readonly jsonLd: Prisma.FieldRef<"SiteSetting", 'Json'>
   readonly setupCompleted: Prisma.FieldRef<"SiteSetting", 'Boolean'>
   readonly theme: Prisma.FieldRef<"SiteSetting", 'String'>
+  readonly themeColor: Prisma.FieldRef<"SiteSetting", 'String'>
+  readonly githubUsername: Prisma.FieldRef<"SiteSetting", 'String'>
+  readonly githubAccessToken: Prisma.FieldRef<"SiteSetting", 'String'>
   readonly createdAt: Prisma.FieldRef<"SiteSetting", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"SiteSetting", 'DateTime'>
 }

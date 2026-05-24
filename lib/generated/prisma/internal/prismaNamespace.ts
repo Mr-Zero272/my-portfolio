@@ -2061,13 +2061,28 @@ export const SiteSettingScalarFieldEnum = {
   siteName: 'siteName',
   siteDescription: 'siteDescription',
   siteUrl: 'siteUrl',
+  siteLocale: 'siteLocale',
+  siteKeywords: 'siteKeywords',
+  siteAuthor: 'siteAuthor',
+  sitePublisher: 'sitePublisher',
   logo: 'logo',
   favicon: 'favicon',
   defaultOgImage: 'defaultOgImage',
+  ogType: 'ogType',
+  ogImageAlt: 'ogImageAlt',
   metaTitle: 'metaTitle',
   metaDescription: 'metaDescription',
+  twitterHandle: 'twitterHandle',
+  twitterCard: 'twitterCard',
+  canonicalUrl: 'canonicalUrl',
+  robotsIndex: 'robotsIndex',
+  robotsFollow: 'robotsFollow',
+  jsonLd: 'jsonLd',
   setupCompleted: 'setupCompleted',
   theme: 'theme',
+  themeColor: 'themeColor',
+  githubUsername: 'githubUsername',
+  githubAccessToken: 'githubAccessToken',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -2199,6 +2214,13 @@ export type EnumSkillCategoryFieldRefInput<$PrismaModel> = FieldRefInputType<$Pr
  * Reference to a field of type 'SkillCategory[]'
  */
 export type ListEnumSkillCategoryFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SkillCategory[]'>
+    
+
+
+/**
+ * Reference to a field of type 'Json'
+ */
+export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Json'>
     
 
 
