@@ -16,6 +16,7 @@ import { cn } from '@/lib/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { EyeClosedIcon, EyeIcon } from 'lucide-react';
 import Link from 'next/link';
+import { useQueryState } from 'nuqs';
 import { useState } from 'react';
 
 import { Controller, useForm } from 'react-hook-form';
@@ -41,6 +42,7 @@ type SignInFormData = z.infer<typeof signInSchema>;
 
 export const SignUpForm = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const [callBackUrl] = useQueryState('callbackUrl', { defaultValue: '/admin/dashboard' });
   const form = useForm<SignInFormData>({
     resolver: zodResolver(signInSchema),
     defaultValues: {
