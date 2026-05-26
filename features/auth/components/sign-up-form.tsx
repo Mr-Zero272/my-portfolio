@@ -16,7 +16,6 @@ import { cn } from '@/lib/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { EyeClosedIcon, EyeIcon } from 'lucide-react';
 import Link from 'next/link';
-import { useQueryState } from 'nuqs';
 import { useState } from 'react';
 
 import { Controller, useForm } from 'react-hook-form';
@@ -25,6 +24,10 @@ import z from 'zod';
 
 const signInSchema = z.object({
   email: z.email({ message: 'Invalid email address' }),
+  name: z
+    .string()
+    .min(1, { message: 'Name is required' })
+    .max(255, { message: 'Name must be at most 255 characters' }),
   password: z
     .string()
     .min(6, { message: 'Password must be at least 6 characters' })
@@ -36,23 +39,24 @@ const signInSchema = z.object({
 
 type SignInFormData = z.infer<typeof signInSchema>;
 
-export const SignInForm = () => {
+export const SignUpForm = () => {
   const [showPassword, setShowPassword] = useState(false);
-  const [callBackUrl] = useQueryState('callbackUrl', { defaultValue: '/admin/dashboard' });
   const form = useForm<SignInFormData>({
     resolver: zodResolver(signInSchema),
     defaultValues: {
       email: '',
+      name: '',
       password: '',
     },
   });
 
   const handleSubmitForm = async (data: SignInFormData) => {
-    await authClient.signIn.email(
+    await authClient.signUp.email(
       {
         email: data.email,
+        name: data.name,
         password: data.password,
-        callbackURL: callBackUrl,
+        callbackURL: '/onboarding',
       },
       {
         onError: (ctx) => {
@@ -62,7 +66,6 @@ export const SignInForm = () => {
             message: ctx.error.message,
           });
         },
-        onSuccess: (res) => {},
       },
     );
   };
@@ -87,11 +90,11 @@ export const SignInForm = () => {
   return (
     <form className={cn('flex flex-col gap-6')} onSubmit={form.handleSubmit(handleSubmitForm)}>
       <div className="flex flex-col items-center gap-2 text-center">
-        <h1 className="text-2xl font-bold">Sign in</h1>
+        <h1 className="text-2xl font-bold">Sign up</h1>
         <p className="text-muted-foreground text-sm text-balance">
-          Don&apos;t have an account?{' '}
-          <Link className="hover:underline" href="/auth/sign-up">
-            Sign up
+          Back to Sign in?{' '}
+          <Link className="hover:underline" href="/auth/sign-in">
+            Click here
           </Link>
         </p>
       </div>
@@ -105,6 +108,22 @@ export const SignInForm = () => {
               <Input
                 id="email"
                 placeholder="Enter your email"
+                data-error={fieldState.invalid}
+                {...field}
+              />
+              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+            </Field>
+          )}
+        />
+        <Controller
+          control={form.control}
+          name="name"
+          render={({ field, fieldState }) => (
+            <Field>
+              <FieldLabel htmlFor="name">Name</FieldLabel>
+              <Input
+                id="name"
+                placeholder="Enter your name"
                 data-error={fieldState.invalid}
                 {...field}
               />
@@ -141,7 +160,7 @@ export const SignInForm = () => {
           className="w-full cursor-pointer"
           disabled={form.formState.isSubmitting}
         >
-          {form.formState.isSubmitting ? 'Logging in...' : 'Login'}
+          {form.formState.isSubmitting ? 'Signing up...' : 'Sign up'}
         </Button>
         <div className="after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t">
           <span className="bg-background text-muted-foreground relative z-10 px-2">
@@ -169,7 +188,6 @@ export const SignInForm = () => {
           </Button>
         </div>
       </div>
-      <div className="text-center text-sm">Note: we now support for all users!!!</div>
     </form>
   );
 };
