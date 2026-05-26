@@ -1,5 +1,5 @@
-import { postAuthorUpdateSchema } from '@/features/posts/schemas';
-import { deletePostAuthor, getPostAuthor, updatePostAuthor } from '@/features/posts/server';
+import { postAuthorUpdateSchema } from '@/features/post-authors/schemas';
+import { deletePostAuthor, getPostAuthor, updatePostAuthor } from '@/features/post-authors/server';
 import { apiOk, withApiErrorHandling } from '@/lib/api';
 
 type PostAuthorRouteContext = {

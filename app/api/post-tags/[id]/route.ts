@@ -1,5 +1,5 @@
-import { postTagUpdateSchema } from '@/features/posts/schemas';
-import { deletePostTag, getPostTag, updatePostTag } from '@/features/posts/server';
+import { postTagUpdateSchema } from '@/features/post-tags/schemas';
+import { deletePostTag, getPostTag, updatePostTag } from '@/features/post-tags/server';
 import { apiOk, withApiErrorHandling } from '@/lib/api';
 
 type PostTagRouteContext = {

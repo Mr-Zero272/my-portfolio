@@ -1,5 +1,5 @@
-import { postLikeUpdateSchema } from '@/features/posts/schemas';
-import { deletePostLike, getPostLike, updatePostLike } from '@/features/posts/server';
+import { postLikeUpdateSchema } from '@/features/post-likes/schemas';
+import { deletePostLike, getPostLike, updatePostLike } from '@/features/post-likes/server';
 import { apiOk, withApiErrorHandling } from '@/lib/api';
 
 type PostLikeRouteContext = {

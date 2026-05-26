@@ -1,5 +1,5 @@
-import { tagUpdateSchema } from '@/features/posts/schemas';
-import { deleteTag, getTag, updateTag } from '@/features/posts/server';
+import { tagUpdateSchema } from '@/features/tags/schemas';
+import { deleteTag, getTag, updateTag } from '@/features/tags/server';
 import { apiOk, withApiErrorHandling } from '@/lib/api';
 
 type TagRouteContext = {

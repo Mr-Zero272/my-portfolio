@@ -1,5 +1,5 @@
-import { postTagCreateSchema } from '@/features/posts/schemas';
-import { createPostTag, getPostTags } from '@/features/posts/server';
+import { postTagCreateSchema } from '@/features/post-tags/schemas';
+import { createPostTag, getPostTags } from '@/features/post-tags/server';
 import { apiCreated, apiPaginated, withApiErrorHandling } from '@/lib/api';
 
 export const GET = withApiErrorHandling(async (request: Request) => {

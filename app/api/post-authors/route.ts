@@ -1,5 +1,5 @@
-import { postAuthorCreateSchema } from '@/features/posts/schemas';
-import { createPostAuthor, getPostAuthors } from '@/features/posts/server';
+import { postAuthorCreateSchema } from '@/features/post-authors/schemas';
+import { createPostAuthor, getPostAuthors } from '@/features/post-authors/server';
 import { apiCreated, apiPaginated, withApiErrorHandling } from '@/lib/api';
 
 export const GET = withApiErrorHandling(async (request: Request) => {

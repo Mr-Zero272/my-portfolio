@@ -1,5 +1,5 @@
-import { postLikeCreateSchema } from '@/features/posts/schemas';
-import { createPostLike, getPostLikes } from '@/features/posts/server';
+import { postLikeCreateSchema } from '@/features/post-likes/schemas';
+import { createPostLike, getPostLikes } from '@/features/post-likes/server';
 import { apiCreated, apiPaginated, withApiErrorHandling } from '@/lib/api';
 
 export const GET = withApiErrorHandling(async (request: Request) => {

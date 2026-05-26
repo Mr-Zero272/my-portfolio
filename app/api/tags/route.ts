@@ -1,5 +1,5 @@
-import { tagCreateSchema } from '@/features/posts/schemas';
-import { createTag, getTags } from '@/features/posts/server';
+import { tagCreateSchema } from '@/features/tags/schemas';
+import { createTag, getTags } from '@/features/tags/server';
 import { apiCreated, apiPaginated, withApiErrorHandling } from '@/lib/api';
 
 export const GET = withApiErrorHandling(async (request: Request) => {
