@@ -1,30 +1,37 @@
 'use client';
 
 import ConfirmDialog from '@/components/shared/confirm-dialog';
-import { Button } from '@/components/ui/button';
 import { LogOutIcon } from 'lucide-react';
 import * as React from 'react';
 import { useSignout } from '../hooks';
+import { mergeProps, useRender } from '@base-ui/react';
 
-type LogoutButtonProps = {
-  render?: (props: { onClick: () => void }) => React.ReactNode;
-  onClick?: () => void;
-} & React.ComponentProps<'button'>;
+type LogoutButtonProps = useRender.ComponentProps<'button'>;
 
 export function LogoutButton({ render, ...props }: LogoutButtonProps) {
   const [open, setOpen] = React.useState(false);
   const { handleSignOut } = useSignout();
 
+  const element = useRender({
+    defaultTagName: 'button',
+    render,
+    props: mergeProps<'button'>(
+      {
+        onClick: () => setOpen(true),
+        children: (
+          <>
+            <LogOutIcon />
+            Logout
+          </>
+        ),
+      },
+      props,
+    ),
+  });
+
   return (
     <>
-      {render ? (
-        render({ onClick: () => setOpen(true) })
-      ) : (
-        <Button variant="outline" onClick={() => setOpen(true)} {...props}>
-          <LogOutIcon />
-          Logout
-        </Button>
-      )}
+      {element}
 
       <ConfirmDialog
         icon={<LogOutIcon />}

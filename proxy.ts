@@ -7,7 +7,7 @@ import { auth } from './lib/auth';
 const authPaths = ['/api/auth/**', '/auth/**'];
 const publicPaths = ['/about-me', '/projects', '/contact', '/favorite', '/blog/**'];
 const apiPathsHandledByRoute = ['/api/site-setting/**'];
-const guardedPagePaths = ['/', '/admin/**', '/onboarding'];
+const guardedPagePaths = ['/', '/admin/**', '/onboarding', '/dashboard/**'];
 
 function redirectToSignIn(request: NextRequest) {
   const url = new URL('/auth/sign-in', request.url);
