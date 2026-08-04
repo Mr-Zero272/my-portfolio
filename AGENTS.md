@@ -1,29 +1,48 @@
-<!-- BEGIN:nextjs-agent-rules -->
+# AGENTS.md
 
-# This is NOT the Next.js you know
+## API Query Building
 
-This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` before writing any code. Heed deprecation notices.
+Every list GET endpoint **must** build its query with `buildListQuery` from `lib/api` (search / sort / filter / pagination). Never hand-roll `where`, `orderBy`, or pagination logic.
 
-<!-- END:nextjs-agent-rules -->
-
-<!-- BEGIN:project-architecture-rules -->
-
-# Project Architecture
-
-Use a feature-based structure for product code:
-
-```txt
-features/<feature>/
-  components/   # Client/server UI pieces owned by the feature
-  screens/      # Route-level compositions imported by app pages
-  schemas/      # Zod schemas and validation contracts
-  server/       # Server-only data access, auth checks, and secret handling
-  services/     # Client-safe service wrappers when needed
-  types/        # Feature-specific exported types
-  utils/        # Feature-local helpers
-  index.ts      # Public feature exports
+```ts
+const query = buildListQuery<Prisma.XWhereInput>(searchParams, {
+  searchFields: ['name', 'slug'],        // fields matched by `?search=`
+  sortableFields: ['createdAt', 'name'], // whitelist for `?sortBy=` / `?sortOrder=`
+  filterFields: {                        // `?filter.<key>=` -> Prisma where
+    published: { parse: parseBooleanParam },
+    likes: { operator: FilterOperator.GTE, parse: parseNumberParam },
+  },
+  baseWhere: { ... },                    // always-applied constraint
+});
 ```
 
-Keep shared design primitives in `components/ui`, app-wide providers in `components/providers`, shared infrastructure in `lib`, and route files in `app` thin. App route handlers should delegate business rules to `features/*/server` modules.
+Supported URL params: `search`, `sortBy`, `sortOrder`, `limit`, `page`, `filter.<key>` (or `filters.<key>`).
 
-<!-- END:project-architecture-rules -->
+## Server Services
+
+Each feature exposes **one service object** in `features/<feature>/server/<name>.service.ts`:
+
+```ts
+export const tagService = {
+  getAll(headers, searchParams), // buildListQuery + Promise.all(findMany, count)
+  getById(headers, id),
+  create(headers, input),
+  update(headers, id, input),
+  delete(headers, id),
+};
+```
+
+Rules:
+
+- `headers` is always the first argument (required by `requireAdmin`).
+- `getAll` returns `{ pagination, <pluralEntity>, total }`; `getById` / `create` / `update` return `{ <entity> }`; `delete` returns `{ id }`.
+- Write methods explicitly — do **not** use a CRUD factory/generator. Custom logic lives naturally inside each method.
+- Route files stay thin: parse params/body -> call `xService.*` -> wrap with `apiOk` / `apiCreated` / `apiPaginated`.
+
+## Auth — Single Admin
+
+This is a **single-admin** app: exactly one user (identified by `ADMIN_ID` in env) manages the portfolio.
+
+- Server services gate with `requireAdmin(headers)` from `lib/auth-guard.ts`.
+- `requireAdmin` reads the Better Auth session: no session -> `UNAUTHORIZED` (401); `session.user.id !== ADMIN_ID` -> `FORBIDDEN` (403).
+- Never authorize via `ADMIN_EMAIL` or `SiteSetting.mainUserId`.

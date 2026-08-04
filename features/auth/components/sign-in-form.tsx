@@ -52,7 +52,7 @@ export const SignInForm = () => {
       {
         email: data.email,
         password: data.password,
-        callbackURL: callBackUrl,
+        // callbackURL: callBackUrl,
       },
       {
         onError: (ctx) => {
@@ -169,7 +169,7 @@ export const SignInForm = () => {
           </Button>
         </div>
       </div>
-      <div className="text-center text-sm">Note: we now support for all users!!!</div>
+      {/* <div className="text-center text-sm">Note: we now support for all users!!!</div> */}
     </form>
   );
 };

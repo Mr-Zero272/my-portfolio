@@ -45,7 +45,6 @@ export async function proxy(request: NextRequest) {
   const setting = await prisma.siteSetting.findFirst({
     select: {
       id: true,
-      mainUserId: true,
       setupCompleted: true,
     },
     orderBy: {
@@ -53,11 +52,12 @@ export async function proxy(request: NextRequest) {
     },
   });
 
-  const isAdmin = Boolean(
-    process.env.ADMIN_EMAIL && session.user.email === process.env.ADMIN_EMAIL,
-  );
-  const isMainUser = Boolean(setting && setting.mainUserId === session.user.id);
+  const isAdmin = session.user.id === process.env.ADMIN_ID;
   const isOnboarding = pathname === '/onboarding';
+
+  if (!isAdmin) {
+    return NextResponse.redirect(new URL('/unauthorized', request.url));
+  }
 
   if (setting?.setupCompleted && isOnboarding) {
     return NextResponse.redirect(new URL('/admin/dashboard', request.url));
@@ -69,10 +69,6 @@ export async function proxy(request: NextRequest) {
     }
 
     return NextResponse.redirect(new URL('/onboarding', request.url));
-  }
-
-  if (!isAdmin && !isMainUser) {
-    return NextResponse.redirect(new URL('/unauthorized', request.url));
   }
 
   return NextResponse.next();

@@ -1,5 +1,5 @@
-import { requireSiteSettingUser } from '@/features/site-settings/server/site-setting.service';
 import { ApiErrorCode, buildListQuery, throwApiError } from '@/lib/api';
+import { requireAdmin } from '@/lib/auth-guard';
 import type { Prisma } from '@/lib/generated/prisma/client';
 import { prisma } from '@/lib/prisma';
 import type { PostAuthorCreateInput, PostAuthorUpdateInput } from '../schemas/post-author.schema';
@@ -25,7 +25,7 @@ const POST_AUTHOR_INCLUDE = {
 const POST_AUTHOR_SORTABLE_FIELDS = ['createdAt', 'postId', 'userId'] as const;
 
 export async function getPostAuthors(headers: Headers, searchParams: URLSearchParams) {
-  await requireSiteSettingUser(headers);
+  await requireAdmin(headers);
 
   const query = buildListQuery<Prisma.PostAuthorWhereInput>(searchParams, {
     filterFields: {
@@ -55,7 +55,7 @@ export async function getPostAuthors(headers: Headers, searchParams: URLSearchPa
 }
 
 export async function getPostAuthor(headers: Headers, id: string) {
-  await requireSiteSettingUser(headers);
+  await requireAdmin(headers);
 
   const postAuthor = await prisma.postAuthor.findUnique({
     include: POST_AUTHOR_INCLUDE,
@@ -70,7 +70,7 @@ export async function getPostAuthor(headers: Headers, id: string) {
 }
 
 export async function createPostAuthor(headers: Headers, input: PostAuthorCreateInput) {
-  await requireSiteSettingUser(headers);
+  await requireAdmin(headers);
 
   const postAuthor = await prisma.postAuthor.create({
     data: input,
@@ -81,7 +81,7 @@ export async function createPostAuthor(headers: Headers, input: PostAuthorCreate
 }
 
 export async function updatePostAuthor(headers: Headers, id: string, input: PostAuthorUpdateInput) {
-  await requireSiteSettingUser(headers);
+  await requireAdmin(headers);
 
   await ensurePostAuthorExists(id);
 
@@ -95,7 +95,7 @@ export async function updatePostAuthor(headers: Headers, id: string, input: Post
 }
 
 export async function deletePostAuthor(headers: Headers, id: string) {
-  await requireSiteSettingUser(headers);
+  await requireAdmin(headers);
 
   await ensurePostAuthorExists(id);
   await prisma.postAuthor.delete({ where: { id } });

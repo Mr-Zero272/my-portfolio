@@ -1,5 +1,5 @@
-import { requireSiteSettingUser } from '@/features/site-settings/server/site-setting.service';
+import { requireAdmin } from '@/lib/auth-guard';
 
 export async function requirePostManager(headers: Headers) {
-  return requireSiteSettingUser(headers);
+  return requireAdmin(headers);
 }

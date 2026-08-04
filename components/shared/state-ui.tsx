@@ -72,7 +72,7 @@ const StateUI = ({ variant = 'default', icon, title, description, actions, class
   const resolvedDescription = description ?? config.description;
 
   return (
-    <Empty className={className}>
+    <Empty className={cn('border border-dashed', className)}>
       <EmptyHeader>
         <EmptyMedia
           variant="icon"
@@ -81,7 +81,7 @@ const StateUI = ({ variant = 'default', icon, title, description, actions, class
           {resolvedIcon}
         </EmptyMedia>
         <EmptyTitle className={config.titleClassName}>{resolvedTitle}</EmptyTitle>
-        <EmptyDescription className={config.descriptionClassName}>
+        <EmptyDescription className={cn('max-w-64', config.descriptionClassName)}>
           {resolvedDescription}
         </EmptyDescription>
       </EmptyHeader>

@@ -1,5 +1,5 @@
-import { requireSiteSettingUser } from '@/features/site-settings/server/site-setting.service';
 import { ApiErrorCode, buildListQuery, throwApiError } from '@/lib/api';
+import { requireAdmin } from '@/lib/auth-guard';
 import type { Prisma } from '@/lib/generated/prisma/client';
 import { prisma } from '@/lib/prisma';
 import type { PostLikeCreateInput, PostLikeUpdateInput } from '../schemas/post-like.schema';
@@ -25,7 +25,7 @@ const POST_LIKE_INCLUDE = {
 const POST_LIKE_SORTABLE_FIELDS = ['createdAt', 'postId', 'userId'] as const;
 
 export async function getPostLikes(headers: Headers, searchParams: URLSearchParams) {
-  await requireSiteSettingUser(headers);
+  await requireAdmin(headers);
 
   const query = buildListQuery<Prisma.PostLikeWhereInput>(searchParams, {
     filterFields: {
@@ -55,7 +55,7 @@ export async function getPostLikes(headers: Headers, searchParams: URLSearchPara
 }
 
 export async function getPostLike(headers: Headers, id: string) {
-  await requireSiteSettingUser(headers);
+  await requireAdmin(headers);
 
   const postLike = await prisma.postLike.findUnique({
     include: POST_LIKE_INCLUDE,
@@ -70,7 +70,7 @@ export async function getPostLike(headers: Headers, id: string) {
 }
 
 export async function createPostLike(headers: Headers, input: PostLikeCreateInput) {
-  await requireSiteSettingUser(headers);
+  await requireAdmin(headers);
 
   const postLike = await prisma.postLike.create({
     data: input,
@@ -81,7 +81,7 @@ export async function createPostLike(headers: Headers, input: PostLikeCreateInpu
 }
 
 export async function updatePostLike(headers: Headers, id: string, input: PostLikeUpdateInput) {
-  await requireSiteSettingUser(headers);
+  await requireAdmin(headers);
 
   await ensurePostLikeExists(id);
 
@@ -95,7 +95,7 @@ export async function updatePostLike(headers: Headers, id: string, input: PostLi
 }
 
 export async function deletePostLike(headers: Headers, id: string) {
-  await requireSiteSettingUser(headers);
+  await requireAdmin(headers);
 
   await ensurePostLikeExists(id);
   await prisma.postLike.delete({ where: { id } });

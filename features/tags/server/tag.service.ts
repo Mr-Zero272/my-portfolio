@@ -1,5 +1,5 @@
-import { requireSiteSettingUser } from '@/features/site-settings/server/site-setting.service';
 import { ApiErrorCode, buildListQuery, throwApiError } from '@/lib/api';
+import { requireAdmin } from '@/lib/auth-guard';
 import type { Prisma } from '@/lib/generated/prisma/client';
 import { prisma } from '@/lib/prisma';
 import type { TagCreateInput, TagUpdateInput } from '../schemas/tag.schema';
@@ -13,81 +13,84 @@ const TAG_INCLUDE = {
 } satisfies Prisma.TagInclude;
 
 const TAG_SORTABLE_FIELDS = ['createdAt', 'updatedAt', 'name', 'slug'] as const;
+const TAG_SEARCH_FIELDS = ['name', 'slug'] as const;
 
-export async function getTags(headers: Headers, searchParams: URLSearchParams) {
-  await requireSiteSettingUser(headers);
+export const tagService = {
+  async getAll(headers: Headers, searchParams: URLSearchParams) {
+    await requireAdmin(headers);
 
-  const query = buildListQuery<Prisma.TagWhereInput>(searchParams, {
-    searchFields: ['name', 'slug'],
-    sortableFields: TAG_SORTABLE_FIELDS,
-  });
+    const query = buildListQuery<Prisma.TagWhereInput>(searchParams, {
+      searchFields: TAG_SEARCH_FIELDS,
+      sortableFields: TAG_SORTABLE_FIELDS,
+    });
 
-  const [tags, total] = await Promise.all([
-    prisma.tag.findMany({
+    const [tags, total] = await Promise.all([
+      prisma.tag.findMany({
+        include: TAG_INCLUDE,
+        orderBy: query.orderBy,
+        skip: query.pagination.skip,
+        take: query.pagination.take,
+        where: query.where,
+      }),
+      prisma.tag.count({ where: query.where }),
+    ]);
+
+    return {
+      pagination: query.pagination,
+      tags,
+      total,
+    };
+  },
+
+  async getById(headers: Headers, id: string) {
+    await requireAdmin(headers);
+
+    const tag = await prisma.tag.findUnique({
       include: TAG_INCLUDE,
-      orderBy: query.orderBy,
-      skip: query.pagination.skip,
-      take: query.pagination.take,
-      where: query.where,
-    }),
-    prisma.tag.count({ where: query.where }),
-  ]);
+      where: { id },
+    });
 
-  return {
-    pagination: query.pagination,
-    tags,
-    total,
-  };
-}
+    if (!tag) {
+      throwApiError(ApiErrorCode.NOT_FOUND, { message: 'Tag not found.' });
+    }
 
-export async function getTag(headers: Headers, id: string) {
-  await requireSiteSettingUser(headers);
+    return { tag };
+  },
 
-  const tag = await prisma.tag.findUnique({
-    include: TAG_INCLUDE,
-    where: { id },
-  });
+  async create(headers: Headers, input: TagCreateInput) {
+    await requireAdmin(headers);
 
-  if (!tag) {
-    throwApiError(ApiErrorCode.NOT_FOUND, { message: 'Tag not found.' });
-  }
+    const tag = await prisma.tag.create({
+      data: input,
+      include: TAG_INCLUDE,
+    });
 
-  return { tag };
-}
+    return { tag };
+  },
 
-export async function createTag(headers: Headers, input: TagCreateInput) {
-  await requireSiteSettingUser(headers);
+  async update(headers: Headers, id: string, input: TagUpdateInput) {
+    await requireAdmin(headers);
 
-  const tag = await prisma.tag.create({
-    data: input,
-    include: TAG_INCLUDE,
-  });
+    await ensureTagExists(id);
 
-  return { tag };
-}
+    const tag = await prisma.tag.update({
+      data: input,
+      include: TAG_INCLUDE,
+      where: { id },
+    });
 
-export async function updateTag(headers: Headers, id: string, input: TagUpdateInput) {
-  await requireSiteSettingUser(headers);
+    return { tag };
+  },
 
-  await ensureTagExists(id);
+  async delete(headers: Headers, id: string) {
+    await requireAdmin(headers);
 
-  const tag = await prisma.tag.update({
-    data: input,
-    include: TAG_INCLUDE,
-    where: { id },
-  });
+    await ensureTagExists(id);
+    await prisma.tag.delete({ where: { id } });
 
-  return { tag };
-}
-
-export async function deleteTag(headers: Headers, id: string) {
-  await requireSiteSettingUser(headers);
-
-  await ensureTagExists(id);
-  await prisma.tag.delete({ where: { id } });
-
-  return { id };
-}
+    return { id };
+  },
+};
 
 async function ensureTagExists(id: string) {
   const tag = await prisma.tag.findUnique({

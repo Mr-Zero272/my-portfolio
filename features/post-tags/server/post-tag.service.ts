@@ -1,5 +1,5 @@
-import { requireSiteSettingUser } from '@/features/site-settings/server/site-setting.service';
 import { ApiErrorCode, buildListQuery, throwApiError } from '@/lib/api';
+import { requireAdmin } from '@/lib/auth-guard';
 import type { Prisma } from '@/lib/generated/prisma/client';
 import { prisma } from '@/lib/prisma';
 import type { PostTagCreateInput, PostTagUpdateInput } from '../schemas/post-tag.schema';
@@ -18,7 +18,7 @@ const POST_TAG_INCLUDE = {
 const POST_TAG_SORTABLE_FIELDS = ['createdAt', 'postId', 'tagId'] as const;
 
 export async function getPostTags(headers: Headers, searchParams: URLSearchParams) {
-  await requireSiteSettingUser(headers);
+  await requireAdmin(headers);
 
   const query = buildListQuery<Prisma.PostTagWhereInput>(searchParams, {
     filterFields: {
@@ -48,7 +48,7 @@ export async function getPostTags(headers: Headers, searchParams: URLSearchParam
 }
 
 export async function getPostTag(headers: Headers, id: string) {
-  await requireSiteSettingUser(headers);
+  await requireAdmin(headers);
 
   const postTag = await prisma.postTag.findUnique({
     include: POST_TAG_INCLUDE,
@@ -63,7 +63,7 @@ export async function getPostTag(headers: Headers, id: string) {
 }
 
 export async function createPostTag(headers: Headers, input: PostTagCreateInput) {
-  await requireSiteSettingUser(headers);
+  await requireAdmin(headers);
 
   const postTag = await prisma.postTag.create({
     data: input,
@@ -74,7 +74,7 @@ export async function createPostTag(headers: Headers, input: PostTagCreateInput)
 }
 
 export async function updatePostTag(headers: Headers, id: string, input: PostTagUpdateInput) {
-  await requireSiteSettingUser(headers);
+  await requireAdmin(headers);
 
   await ensurePostTagExists(id);
 
@@ -88,7 +88,7 @@ export async function updatePostTag(headers: Headers, id: string, input: PostTag
 }
 
 export async function deletePostTag(headers: Headers, id: string) {
-  await requireSiteSettingUser(headers);
+  await requireAdmin(headers);
 
   await ensurePostTagExists(id);
   await prisma.postTag.delete({ where: { id } });

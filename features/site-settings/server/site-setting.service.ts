@@ -1,15 +1,13 @@
 import { ApiErrorCode, throwApiError } from '@/lib/api';
-import { auth } from '@/lib/auth';
-import type { Prisma, SiteSetting, User } from '@/lib/generated/prisma/client';
+import { requireAdmin } from '@/lib/auth-guard';
+import type { Prisma, SiteSetting } from '@/lib/generated/prisma/client';
 import { prisma } from '@/lib/prisma';
 import type {
-  SiteSettingOnboardingInput,
-  SiteSettingUpdateInput,
+    SiteSettingOnboardingInput,
+    SiteSettingUpdateInput,
 } from '../schemas/site-setting.schema';
 import type { SafeSiteSetting } from '../types/site-setting.types';
 import { encryptSecret, maskSecret } from './site-setting.crypto';
-
-type SessionUser = Pick<User, 'id' | 'email'>;
 
 const SAFE_SELECT = {
   id: true,
@@ -43,10 +41,6 @@ const SAFE_SELECT = {
   updatedAt: true,
 } satisfies Prisma.SiteSettingSelect;
 
-function isAdminUser(user: SessionUser) {
-  return Boolean(process.env.ADMIN_EMAIL && user.email === process.env.ADMIN_EMAIL);
-}
-
 function normalizeOptionalString(value: string | undefined) {
   return value?.trim() ? value.trim() : undefined;
 }
@@ -71,58 +65,18 @@ function assignIfPresent<T extends object, K extends keyof SiteSettingUpdateInpu
   }
 }
 
-async function getSessionUser(headers: Headers): Promise<SessionUser | null> {
-  const session = await auth.api.getSession({ headers });
-  const user = session?.user;
-
-  if (!user?.id || !user.email) {
-    return null;
-  }
-
-  return {
-    id: user.id,
-    email: user.email,
-  };
-}
-
-export async function requireSiteSettingUser(headers: Headers) {
-  const user = await getSessionUser(headers);
-
-  if (!user) {
-    throwApiError(ApiErrorCode.UNAUTHORIZED);
-  }
-
-  const setting = await findAuthorizedSiteSetting(user);
-
-  if (setting && (setting.mainUserId === user.id || isAdminUser(user))) {
-    return { user, setting };
-  }
-
-  if (isAdminUser(user)) {
-    return { user, setting: null };
-  }
-
-  throwApiError(ApiErrorCode.FORBIDDEN);
-}
-
-export async function findAuthorizedSiteSetting(user: SessionUser) {
-  const ownSetting = await prisma.siteSetting.findUnique({
-    where: { mainUserId: user.id },
-    select: SAFE_SELECT,
-  });
-
-  if (ownSetting) {
-    return ownSetting;
-  }
-
-  if (!isAdminUser(user)) {
-    return null;
-  }
-
+async function findSetting() {
   return prisma.siteSetting.findFirst({
     select: SAFE_SELECT,
     orderBy: { createdAt: 'asc' },
   });
+}
+
+async function requireSiteSettingUser(headers: Headers) {
+  const { user } = await requireAdmin(headers);
+  const setting = await findSetting();
+
+  return { user, setting };
 }
 
 export async function getSafeSiteSetting(headers: Headers) {
@@ -134,22 +88,7 @@ export async function getSafeSiteSetting(headers: Headers) {
 }
 
 export async function completeOnboarding(headers: Headers, input: SiteSettingOnboardingInput) {
-  const user = await getSessionUser(headers);
-
-  if (!user) {
-    throwApiError(ApiErrorCode.UNAUTHORIZED);
-  }
-
-  if (!isAdminUser(user)) {
-    const existingSetting = await prisma.siteSetting.findFirst({
-      where: { OR: [{ mainUserId: user.id }, { setupCompleted: true }] },
-      select: { mainUserId: true },
-    });
-
-    if (existingSetting && existingSetting.mainUserId !== user.id) {
-      throwApiError(ApiErrorCode.FORBIDDEN);
-    }
-  }
+  const { user } = await requireAdmin(headers);
 
   const data = {
     siteName: input.siteName,
