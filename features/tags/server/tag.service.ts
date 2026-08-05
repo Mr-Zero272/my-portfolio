@@ -54,7 +54,7 @@ export const tagService = {
       throwApiError(ApiErrorCode.NOT_FOUND, { message: 'Tag not found.' });
     }
 
-    return { tag };
+    return tag;
   },
 
   async create(headers: Headers, input: TagFormValues) {
@@ -65,7 +65,7 @@ export const tagService = {
       include: TAG_INCLUDE,
     });
 
-    return { tag };
+    return tag;
   },
 
   async update(headers: Headers, id: string, input: TagFormValues) {
@@ -79,7 +79,7 @@ export const tagService = {
       where: { id },
     });
 
-    return { tag };
+    return tag;
   },
 
   async delete(headers: Headers, id: string) {

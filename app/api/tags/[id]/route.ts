@@ -1,4 +1,4 @@
-import { tagUpdateSchema } from '@/features/tags/schemas';
+import { TagFormSchema } from '@/features/tags';
 import { tagService } from '@/features/tags/server';
 import { apiOk, withApiErrorHandling } from '@/lib/api';
 
@@ -18,7 +18,7 @@ export const GET = withApiErrorHandling(async (request: Request, context: TagRou
 export const PATCH = withApiErrorHandling(async (request: Request, context: TagRouteContext) => {
   const { id } = await context.params;
   const body = await request.json();
-  const input = tagUpdateSchema.parse(body);
+  const input = TagFormSchema.parse(body);
   const result = await tagService.update(request.headers, id, input);
 
   return apiOk(result);

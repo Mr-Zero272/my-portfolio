@@ -1,1 +1,1 @@
-export { ListTagsPage } from './list.page';
+export { ListTagsPage } from './list-tags.page';

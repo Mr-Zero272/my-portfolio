@@ -9,7 +9,7 @@ export interface PaginationResponseMeta {
 
 export interface ApiResponseMeta {
   pagination?: PaginationResponseMeta;
-  [key: string]: unknown;
+  // [key: string]: unknown;
 }
 
 export interface ApiResponse<T> {
@@ -22,7 +22,6 @@ export interface ApiResponse<T> {
 
 export interface ListResponse<T> {
   list: T[];
-  pagination?: PaginationResponseMeta;
   meta?: ApiResponseMeta;
 }
 

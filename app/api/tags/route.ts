@@ -1,4 +1,4 @@
-import { TagFromSchema } from '@/features/tags';
+import { TagFormSchema } from '@/features/tags';
 import { tagService } from '@/features/tags/server';
 import { apiCreated, apiPaginated, withApiErrorHandling } from '@/lib/api';
 
@@ -15,7 +15,7 @@ export const GET = withApiErrorHandling(async (request: Request) => {
 
 export const POST = withApiErrorHandling(async (request: Request) => {
   const body = await request.json();
-  const input = TagFromSchema.parse(body);
+  const input = TagFormSchema.parse(body);
   const result = await tagService.create(request.headers, input);
 
   return apiCreated(result);

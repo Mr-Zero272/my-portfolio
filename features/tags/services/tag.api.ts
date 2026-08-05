@@ -18,7 +18,6 @@ export const tagApi = {
 
     return {
       list: res.data?.data,
-      pagination: res.data?.meta?.pagination ?? undefined,
       meta: res.data?.meta,
     };
   },

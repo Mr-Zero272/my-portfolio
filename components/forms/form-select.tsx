@@ -50,14 +50,18 @@ export function FormSelect({
       name={name}
       render={({ field, fieldState }) => (
         <Field className={className}>
-          {label && <FieldLabel required={required}>{label}</FieldLabel>}
+          {label && (
+            <FieldLabel htmlFor={name} required={required}>
+              {label}
+            </FieldLabel>
+          )}
           <Select
             value={field.value?.toString() ?? ''}
             onValueChange={parseValueToNumber ? (v) => field.onChange(Number(v)) : field.onChange}
             disabled={disabled}
             items={options}
           >
-            <SelectTrigger className={triggerClassName} aria-invalid={fieldState.invalid}>
+            <SelectTrigger id={name} className={triggerClassName} aria-invalid={fieldState.invalid}>
               <SelectValue placeholder={placeholder} />
             </SelectTrigger>
             <SelectContent className={contentClassName}>

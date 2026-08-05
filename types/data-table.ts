@@ -1,6 +1,7 @@
 import { ActionItem } from '@/components/shared/responsive-actions';
 import { DataTableConfig } from '@/config/data-table';
 import type { FilterItemSchema } from '@/lib/parsers';
+import type { QueryKey } from '@tanstack/react-query';
 import type { ColumnSort, RowData } from '@tanstack/react-table';
 
 declare module '@tanstack/react-table' {
@@ -50,6 +51,6 @@ export interface ExtendedColumnFilter<TData> extends FilterItemSchema {
 
 export interface DataTableBaseProps<TData> {
   onRowClick?: (data: TData) => void;
-  onDeleteWithUndo?: (data: { queryKey: unknown[]; data: TData }) => void;
+  onOptimisticDelete?: (data: { queryKey: QueryKey; data: TData }) => void;
   actions?: ActionItem<TData>[];
 }

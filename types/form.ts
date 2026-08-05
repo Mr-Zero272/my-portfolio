@@ -53,6 +53,9 @@ export type BaseFormProps<TValues extends FieldValues, TContext = void> = {
 
   /** ClassName of the form container. */
   className?: string;
+
+  /** if true, form will be in edit mode */
+  isEditMode?: boolean;
 } & (TContext extends void
   ? {
       /** Submit function when no context is needed. */
