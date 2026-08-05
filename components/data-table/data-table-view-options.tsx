@@ -1,9 +1,5 @@
 'use client';
 
-import type { Table } from '@tanstack/react-table';
-import { Check, Settings2 } from 'lucide-react';
-import * as React from 'react';
-
 import { Button } from '@/components/ui/button';
 import {
   Command,
@@ -15,6 +11,9 @@ import {
 } from '@/components/ui/command';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { cn } from '@/lib/utils';
+import type { Table } from '@tanstack/react-table';
+import { Check, Settings2 } from 'lucide-react';
+import * as React from 'react';
 
 interface DataTableViewOptionsProps<TData> extends React.ComponentProps<typeof PopoverContent> {
   table: Table<TData>;
@@ -47,15 +46,15 @@ export function DataTableViewOptions<TData>({
             disabled={disabled}
           >
             <Settings2 className="text-muted-foreground" />
-            Cột
+            View
           </Button>
         }
       />
       <PopoverContent className="w-44 p-0" {...props}>
         <Command>
-          <CommandInput placeholder="Tìm cột..." />
+          <CommandInput placeholder="Search columns..." />
           <CommandList>
-            <CommandEmpty>Không tìm thấy cột.</CommandEmpty>
+            <CommandEmpty>No columns found.</CommandEmpty>
             <CommandGroup>
               {columns.map((column) => (
                 <CommandItem

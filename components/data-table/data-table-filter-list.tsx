@@ -1,3 +1,5 @@
+'use client';
+
 import type { Column, ColumnMeta, Table } from '@tanstack/react-table';
 import {
   CalendarIcon,
@@ -52,11 +54,11 @@ import {
 import { dataTableConfig } from '@/config/data-table';
 import { useDebouncedCallback } from '@/hooks/use-debounced-callback';
 import { getDefaultFilterOperator, getFilterOperators } from '@/lib/data-table';
+import { formatDate } from '@/lib/format';
 import { generateId } from '@/lib/id';
 import { getFiltersStateParser } from '@/lib/parsers';
 import { cn } from '@/lib/utils';
 import type { ExtendedColumnFilter, FilterOperator, JoinOperator } from '@/types/data-table';
-import { format } from 'date-fns';
 
 const DEBOUNCE_MS = 300;
 const THROTTLE_MS = 50;
@@ -353,11 +355,7 @@ function DataTableFilterItem<TData>({
           ) : index === 1 ? (
             <Select
               value={joinOperator}
-              onValueChange={(value: JoinOperator | null) => setJoinOperator(value as JoinOperator)}
-              items={dataTableConfig.joinOperators?.map((operator) => ({
-                label: operator,
-                value: operator,
-              }))}
+              onValueChange={(value: JoinOperator) => setJoinOperator(value)}
             >
               <SelectTrigger
                 aria-label="Select join operator"
@@ -369,19 +367,14 @@ function DataTableFilterItem<TData>({
               </SelectTrigger>
               <SelectContent
                 id={joinOperatorListboxId}
-                // popover=''
+                position="popper"
                 className="min-w-(--radix-select-trigger-width) lowercase"
               >
-                {dataTableConfig.joinOperators
-                  ?.map((operator) => ({
-                    label: operator,
-                    value: operator,
-                  }))
-                  ?.map((joinOperator) => (
-                    <SelectItem key={joinOperator.value} value={joinOperator.value}>
-                      {joinOperator.label}
-                    </SelectItem>
-                  ))}
+                {dataTableConfig.joinOperators.map((joinOperator) => (
+                  <SelectItem key={joinOperator} value={joinOperator}>
+                    {joinOperator}
+                  </SelectItem>
+                ))}
               </SelectContent>
             </Select>
           ) : (
@@ -446,13 +439,12 @@ function DataTableFilterItem<TData>({
           open={showOperatorSelector}
           onOpenChange={setShowOperatorSelector}
           value={filter.operator}
-          onValueChange={(value: FilterOperator | null) =>
+          onValueChange={(value: FilterOperator) =>
             onFilterUpdate(filter.filterId, {
-              operator: value as FilterOperator,
+              operator: value,
               value: value === 'isEmpty' || value === 'isNotEmpty' ? '' : filter.value,
             })
           }
-          items={filterOperators}
         >
           <SelectTrigger
             aria-controls={operatorListboxId}
@@ -586,19 +578,9 @@ function onFilterInputRender<TData>({
           value={filter.value}
           onValueChange={(value) =>
             onFilterUpdate(filter.filterId, {
-              value: value as string,
+              value,
             })
           }
-          items={[
-            {
-              label: 'True',
-              value: 'true',
-            },
-            {
-              label: 'False',
-              value: 'false',
-            },
-          ]}
         >
           <SelectTrigger
             id={inputId}
@@ -699,9 +681,9 @@ function onFilterInputRender<TData>({
 
       const displayValue =
         filter.operator === 'isBetween' && dateValue.length === 2 && !isSameDate
-          ? `${format(startDate ?? new Date(), 'MMM dd, yyyy')} - ${format(endDate ?? new Date(), 'MMM dd, yyyy')}`
+          ? `${formatDate(startDate, 'MMM, dd yyy')} - ${formatDate(endDate, 'MMM, dd yyy')}`
           : startDate
-            ? format(startDate, 'MMM dd, yyyy')
+            ? formatDate(startDate, 'MMM, dd yyy')
             : 'Pick a date';
 
       return (

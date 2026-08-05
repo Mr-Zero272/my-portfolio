@@ -1,12 +1,49 @@
-import { buildBaseCrudService, type CrudListParams } from '@/lib/api';
-import type { Tag } from '@/lib/generated/prisma/browser';
-import type { TagCreateInput, TagUpdateInput } from '../schemas';
+import axiosInstance from '@/lib/axios';
+import { Tag } from '@/lib/generated/prisma/client';
+import { normalizeQueryParams } from '@/utils/search-query';
+import {
+  CreateTagRequest,
+  DeleteTagRequest,
+  GetTagRequest,
+  GetTagsRequest,
+  UpdateTagRequest,
+} from '../types';
 
-export type TagListParams = CrudListParams;
+export const tagApi = {
+  getAll: async (request?: GetTagsRequest) => {
+    const queryParams = request?.query ? normalizeQueryParams(request?.query) : undefined;
+    const res = await axiosInstance.get('/tags', {
+      params: queryParams,
+    });
 
-export const tagServices = buildBaseCrudService<Tag, TagCreateInput, TagUpdateInput, TagListParams>(
-  {
-    basePath: '/tags',
-    dataKey: 'tag',
+    return {
+      list: res.data?.data,
+      pagination: res.data?.meta?.pagination ?? undefined,
+      meta: res.data?.meta,
+    };
   },
-);
+
+  getById: async (request: GetTagRequest) => {
+    const res = await axiosInstance.get(`/tags/${request.path?.id}`);
+
+    return res.data.data as Tag;
+  },
+
+  create: async (request: CreateTagRequest) => {
+    const res = await axiosInstance.post('/tags', request.body);
+
+    return res.data.data as Tag;
+  },
+
+  update: async (request: UpdateTagRequest) => {
+    const res = await axiosInstance.patch(`/tags/${request.path?.id}`, request.body);
+
+    return res.data.data as Tag;
+  },
+
+  delete: async (request: DeleteTagRequest) => {
+    const res = await axiosInstance.delete(`/tags/${request.path?.id}`);
+
+    return res.data.data as Tag;
+  },
+};

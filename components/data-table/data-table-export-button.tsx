@@ -104,22 +104,20 @@ export function DataTableExportButton<TData>({
       <TooltipTrigger
         render={
           <DropdownMenu>
-            <DropdownMenuTrigger
-              render={
-                <Button variant="outline" disabled={isExporting} aria-label="Export data">
-                  {isExporting ? <Spinner /> : <DownloadIcon />}
-                  <span className="hidden md:inline"> {isExporting ? 'Đang xuất...' : 'Xuất'}</span>
-                </Button>
-              }
-            />
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" disabled={isExporting} aria-label="Export data">
+                {isExporting ? <Spinner /> : <DownloadIcon />}
+                <span className="hidden md:inline"> {isExporting ? 'Exporting...' : 'Export'}</span>
+              </Button>
+            </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="min-w-40">
               <DropdownMenuItem onClick={() => handleExport('xlsx')}>
                 <FileSpreadsheetIcon />
-                Xuất Excel (.xlsx)
+                Excel file (.xlsx)
               </DropdownMenuItem>
               <DropdownMenuItem onClick={() => handleExport('csv')}>
                 <FileChartColumnIcon />
-                Xuất CSV (.csv)
+                CSV file (.csv)
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>

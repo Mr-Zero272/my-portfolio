@@ -1,6 +1,4 @@
-import type { Column } from '@tanstack/react-table';
-import { PlusCircle, XCircle } from 'lucide-react';
-import * as React from 'react';
+'use client';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -9,6 +7,9 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { Separator } from '@/components/ui/separator';
 import { Slider } from '@/components/ui/slider';
 import { cn } from '@/lib/utils';
+import type { Column } from '@tanstack/react-table';
+import { PlusCircle, XCircle } from 'lucide-react';
+import * as React from 'react';
 
 interface Range {
   min: number;
@@ -108,8 +109,8 @@ export function DataTableSliderFilter<TData>({ column, title }: DataTableSliderF
   );
 
   const onSliderValueChange = React.useCallback(
-    (value: RangeValue | null) => {
-      if (value && Array.isArray(value) && value.length === 2) {
+    (value: RangeValue) => {
+      if (Array.isArray(value) && value.length === 2) {
         column.setFilterValue(value);
       }
     },
@@ -222,11 +223,11 @@ export function DataTableSliderFilter<TData>({ column, title }: DataTableSliderF
             max={max}
             step={step}
             value={range}
-            onValueChange={(value) => onSliderValueChange(value as RangeValue)}
+            onValueChange={onSliderValueChange}
           />
         </div>
         <Button aria-label={`Clear ${title} filter`} variant="outline" size="sm" onClick={onReset}>
-          Xóa lọc
+          Clear
         </Button>
       </PopoverContent>
     </Popover>

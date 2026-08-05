@@ -1,50 +1,47 @@
-import type { Table } from '@tanstack/react-table';
-import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from 'lucide-react';
+import type { Table } from "@tanstack/react-table";
+import {
+  ChevronLeft,
+  ChevronRight,
+  ChevronsLeft,
+  ChevronsRight,
+} from "lucide-react";
 
-import { Button } from '@/components/ui/button';
+import { Button } from "@/components/ui/button";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
-import { cn } from '@/lib/utils';
+} from "@/components/ui/select";
+import { cn } from "@/lib/utils";
 
-interface DataTablePaginationProps<TData> extends React.ComponentProps<'div'> {
+interface DataTablePaginationProps<TData> extends React.ComponentProps<"div"> {
   table: Table<TData>;
   pageSizeOptions?: number[];
-  shouldShowSelectedCount?: boolean;
 }
 
 export function DataTablePagination<TData>({
   table,
   pageSizeOptions = [10, 20, 30, 40, 50],
   className,
-  shouldShowSelectedCount = true,
   ...props
 }: DataTablePaginationProps<TData>) {
   return (
     <div
       className={cn(
-        'flex w-full flex-col-reverse items-center justify-between gap-4 overflow-auto p-1 sm:flex-row sm:gap-8',
+        "flex w-full flex-col-reverse items-center justify-between gap-4 overflow-auto p-1 sm:flex-row sm:gap-8",
         className,
       )}
       {...props}
     >
-      {shouldShowSelectedCount && (
-        <div className="text-muted-foreground flex-1 text-sm whitespace-nowrap">
-          {table.getFilteredSelectedRowModel().rows.length} của{' '}
-          {table.getFilteredRowModel().rows.length} bản ghi đã chọn
-        </div>
-      )}
-      <div
-        className={cn('flex flex-col-reverse items-center gap-4 sm:flex-row sm:gap-6 lg:gap-8', {
-          'sm:flex-1 sm:justify-between': !shouldShowSelectedCount,
-        })}
-      >
+      <div className="flex-1 whitespace-nowrap text-muted-foreground text-sm">
+        {table.getFilteredSelectedRowModel().rows.length} of{" "}
+        {table.getFilteredRowModel().rows.length} row(s) selected.
+      </div>
+      <div className="flex flex-col-reverse items-center gap-4 sm:flex-row sm:gap-6 lg:gap-8">
         <div className="flex items-center space-x-2">
-          <p className="text-sm font-medium whitespace-nowrap">Hiển thị</p>
+          <p className="whitespace-nowrap font-medium text-sm">Rows per page</p>
           <Select
             value={`${table.getState().pagination.pageSize}`}
             onValueChange={(value) => {
@@ -63,8 +60,9 @@ export function DataTablePagination<TData>({
             </SelectContent>
           </Select>
         </div>
-        <div className="flex items-center justify-center text-sm font-medium">
-          Trang {table.getState().pagination.pageIndex + 1} của {table.getPageCount()}
+        <div className="flex items-center justify-center font-medium text-sm">
+          Page {table.getState().pagination.pageIndex + 1} of{" "}
+          {table.getPageCount()}
         </div>
         <div className="flex items-center space-x-2">
           <Button

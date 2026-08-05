@@ -1,3 +1,5 @@
+'use client';
+
 import type { ColumnSort, SortDirection, Table } from '@tanstack/react-table';
 import { ArrowDownUp, ChevronsUpDown, GripVertical, Trash2 } from 'lucide-react';
 import * as React from 'react';
@@ -318,7 +320,9 @@ function DataTableSortItem({
           open={showDirectionSelector}
           onOpenChange={setShowDirectionSelector}
           value={sort.desc ? 'desc' : 'asc'}
-          onValueChange={(value) => onSortUpdate(sort.id, { desc: value === 'desc' })}
+          onValueChange={(value: SortDirection) =>
+            onSortUpdate(sort.id, { desc: value === 'desc' })
+          }
         >
           <SelectTrigger aria-controls={directionListboxId} size="sm" className="w-24 rounded">
             <SelectValue />

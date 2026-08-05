@@ -1,1 +1,2 @@
-export * from './tag.hooks';
+export { useCreateTag, useDeleteTag, useUpdateTag } from './mutations';
+export { useTag, useTags } from './queries';

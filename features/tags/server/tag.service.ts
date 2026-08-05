@@ -2,7 +2,7 @@ import { ApiErrorCode, buildListQuery, throwApiError } from '@/lib/api';
 import { requireAdmin } from '@/lib/auth-guard';
 import type { Prisma } from '@/lib/generated/prisma/client';
 import { prisma } from '@/lib/prisma';
-import type { TagCreateInput, TagUpdateInput } from '../schemas/tag.schema';
+import { TagFormValues } from '../schemas';
 
 const TAG_INCLUDE = {
   _count: {
@@ -57,7 +57,7 @@ export const tagService = {
     return { tag };
   },
 
-  async create(headers: Headers, input: TagCreateInput) {
+  async create(headers: Headers, input: TagFormValues) {
     await requireAdmin(headers);
 
     const tag = await prisma.tag.create({
@@ -68,7 +68,7 @@ export const tagService = {
     return { tag };
   },
 
-  async update(headers: Headers, id: string, input: TagUpdateInput) {
+  async update(headers: Headers, id: string, input: TagFormValues) {
     await requireAdmin(headers);
 
     await ensureTagExists(id);

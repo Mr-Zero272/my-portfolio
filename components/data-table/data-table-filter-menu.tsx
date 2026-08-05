@@ -27,11 +27,11 @@ import {
 } from '@/components/ui/select';
 import { useDebouncedCallback } from '@/hooks/use-debounced-callback';
 import { getDefaultFilterOperator, getFilterOperators } from '@/lib/data-table';
+import { formatDate } from '@/lib/format';
 import { generateId } from '@/lib/id';
 import { getFiltersStateParser } from '@/lib/parsers';
 import { cn } from '@/lib/utils';
 import type { ExtendedColumnFilter, FilterOperator } from '@/types/data-table';
-import { format } from 'date-fns';
 
 const DEBOUNCE_MS = 300;
 const THROTTLE_MS = 50;
@@ -412,13 +412,12 @@ function DataTableFilterItem<TData>({
           open={showOperatorSelector}
           onOpenChange={setShowOperatorSelector}
           value={filter.operator}
-          onValueChange={(value: FilterOperator | null) =>
+          onValueChange={(value: FilterOperator) =>
             onFilterUpdate(filter.filterId, {
-              operator: value as FilterOperator,
+              operator: value,
               value: value === 'isEmpty' || value === 'isNotEmpty' ? '' : filter.value,
             })
           }
-          items={filterOperators}
         >
           <SelectTrigger
             aria-controls={operatorListboxId}
@@ -606,9 +605,7 @@ function onFilterInputRender<TData>({
           open={showValueSelector}
           onOpenChange={setShowValueSelector}
           value={typeof filter.value === 'string' ? filter.value : 'true'}
-          onValueChange={(value: string | null) =>
-            onFilterUpdate(filter.filterId, { value: value as 'true' | 'false' })
-          }
+          onValueChange={(value: 'true' | 'false') => onFilterUpdate(filter.filterId, { value })}
         >
           <SelectTrigger
             id={inputId}
@@ -731,9 +728,9 @@ function onFilterInputRender<TData>({
 
       const displayValue =
         filter.operator === 'isBetween' && dateValue.length === 2 && !isSameDate
-          ? `${format(startDate ?? new Date(), 'MMM dd, yyyy')} - ${format(endDate ?? new Date(), 'MMM dd, yyyy')}`
+          ? `${formatDate(startDate, 'MMM, dd yyyy')} - ${formatDate(endDate, 'MMM, dd yyyy')}`
           : startDate
-            ? format(startDate, 'MMM dd, yyyy')
+            ? formatDate(startDate, 'MMM, dd yyyy')
             : 'Pick date...';
 
       return (

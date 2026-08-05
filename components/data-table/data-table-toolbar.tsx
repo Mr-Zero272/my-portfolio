@@ -1,5 +1,7 @@
+'use client';
+
 import type { Column, Table } from '@tanstack/react-table';
-import { X, XIcon } from 'lucide-react';
+import { X } from 'lucide-react';
 import * as React from 'react';
 
 import { DataTableDateFilter } from '@/components/data-table/data-table-date-filter';
@@ -9,9 +11,6 @@ import { DataTableViewOptions } from '@/components/data-table/data-table-view-op
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
-
-import { InputGroup, InputGroupAddon, InputGroupButton, InputGroupInput } from '../ui/input-group';
-import { Switch } from '../ui/switch';
 
 interface DataTableToolbarProps<TData> extends React.ComponentProps<'div'> {
   table: Table<TData>;
@@ -51,7 +50,7 @@ export function DataTableToolbar<TData>({
             onClick={onReset}
           >
             <X />
-            Bỏ lọc
+            Reset
           </Button>
         )}
       </div>
@@ -74,27 +73,15 @@ function DataTableToolbarFilter<TData>({ column }: DataTableToolbarFilterProps<T
       if (!columnMeta?.variant) return null;
 
       switch (columnMeta.variant) {
-        case 'text': {
-          const value = (column.getFilterValue() as string) ?? '';
-
+        case 'text':
           return (
-            <InputGroup className="h-7 w-40 lg:w-56">
-              <InputGroupInput
-                placeholder={columnMeta.placeholder ?? columnMeta.label}
-                value={value}
-                onChange={(event) => column.setFilterValue(event.target.value)}
-                className="h-7"
-              />
-              {value && (
-                <InputGroupAddon align="inline-end">
-                  <InputGroupButton onClick={() => column.setFilterValue('')}>
-                    <XIcon />
-                  </InputGroupButton>
-                </InputGroupAddon>
-              )}
-            </InputGroup>
+            <Input
+              placeholder={columnMeta.placeholder ?? columnMeta.label}
+              value={(column.getFilterValue() as string) ?? ''}
+              onChange={(event) => column.setFilterValue(event.target.value)}
+              className="h-8 w-40 lg:w-56"
+            />
           );
-        }
 
         case 'number':
           return (
@@ -139,13 +126,6 @@ function DataTableToolbarFilter<TData>({ column }: DataTableToolbarFilterProps<T
             />
           );
 
-        case 'boolean':
-          return (
-            <Switch
-              checked={(column.getFilterValue() as boolean) ?? false}
-              onCheckedChange={column.setFilterValue}
-            />
-          );
         default:
           return null;
       }

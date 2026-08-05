@@ -1,7 +1,7 @@
-import type { ColumnSort, Row, RowData } from '@tanstack/react-table';
-
+import { ActionItem } from '@/components/shared/responsive-actions';
 import { DataTableConfig } from '@/config/data-table';
 import type { FilterItemSchema } from '@/lib/parsers';
+import type { ColumnSort, RowData } from '@tanstack/react-table';
 
 declare module '@tanstack/react-table' {
   // biome-ignore lint/correctness/noUnusedVariables: TData is used in the TableMeta interface
@@ -48,7 +48,8 @@ export interface ExtendedColumnFilter<TData> extends FilterItemSchema {
   id: Extract<keyof TData, string>;
 }
 
-export interface DataTableRowAction<TData> {
-  row: Row<TData>;
-  variant: 'update' | 'delete';
+export interface DataTableBaseProps<TData> {
+  onRowClick?: (data: TData) => void;
+  onDeleteWithUndo?: (data: { queryKey: unknown[]; data: TData }) => void;
+  actions?: ActionItem<TData>[];
 }
