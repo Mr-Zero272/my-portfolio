@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import {
   ResponsiveDialog,
   ResponsiveDialogContent,
+  ResponsiveDialogDescription,
   ResponsiveDialogFooter,
   ResponsiveDialogHeader,
   ResponsiveDialogTitle,
@@ -36,6 +37,9 @@ export const TagFormDialog = ({
       <ResponsiveDialogContent className="sm:max-w-md">
         <ResponsiveDialogHeader>
           <ResponsiveDialogTitle>{isEditMode ? 'Edit Tag' : 'Create Tag'}</ResponsiveDialogTitle>
+          <ResponsiveDialogDescription>
+            {isEditMode ? 'Update the tag details' : 'Add a new tag to the list'}
+          </ResponsiveDialogDescription>
         </ResponsiveDialogHeader>
 
         <StateWrapper

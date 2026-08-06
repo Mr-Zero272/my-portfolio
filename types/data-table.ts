@@ -19,6 +19,8 @@ declare module '@tanstack/react-table' {
     range?: [number, number];
     unit?: string;
     icon?: React.FC<React.SVGProps<SVGSVGElement>>;
+    headClassName?: string;
+    cellClassName?: string;
   }
 }
 
