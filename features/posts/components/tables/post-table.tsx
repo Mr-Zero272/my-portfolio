@@ -12,14 +12,13 @@ import { Post } from '@/lib/generated/prisma/client';
 import { DataTableBaseProps } from '@/types/data-table';
 import { RotateCwIcon } from 'lucide-react';
 import { parseAsInteger, useQueryState } from 'nuqs';
-import { Suspense } from 'react';
 import { usePostColumns } from './post-columns';
 
 const COLUMN_COUNT = 5;
 
 type TabTableProps = DataTableBaseProps<Post>;
 
-const TabTableSkeleton = ({ rowCount = 10 }: { rowCount?: number }) => {
+export const PostTableSkeleton = ({ rowCount = 10 }: { rowCount?: number }) => {
   return (
     <DataTableSkeleton
       columnCount={COLUMN_COUNT}
@@ -30,7 +29,7 @@ const TabTableSkeleton = ({ rowCount = 10 }: { rowCount?: number }) => {
   );
 };
 
-const PostTableContent = ({
+export const PostTable = ({
   data,
   pageCount,
   isLoading,
@@ -63,7 +62,7 @@ const PostTableContent = ({
       data="post-data" // use table object
       isLoading={isLoading}
       error={error}
-      fallbackLoading={<TabTableSkeleton rowCount={perPage} />}
+      fallbackLoading={<PostTableSkeleton rowCount={perPage} />}
       fallbackError={
         <StateUI
           variant="error"
@@ -91,10 +90,10 @@ const PostTableContent = ({
   );
 };
 
-export const PostTable = (props: TabTableProps) => {
-  return (
-    <Suspense fallback={<TabTableSkeleton rowCount={10} />}>
-      <PostTableContent {...props} />
-    </Suspense>
-  );
-};
+// export const PostTable = (props: TabTableProps) => {
+//   return (
+//     <Suspense fallback={<TabTableSkeleton rowCount={10} />}>
+//       <PostTableContent {...props} />
+//     </Suspense>
+//   );
+// };

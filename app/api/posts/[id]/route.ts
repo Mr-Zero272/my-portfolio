@@ -1,4 +1,4 @@
-import { postUpdateSchema } from '@/features/posts/schemas';
+import { PostFormSchema } from '@/features/posts';
 import { deletePost, getPost, updatePost } from '@/features/posts/server';
 import { apiOk, withApiErrorHandling } from '@/lib/api';
 
@@ -18,7 +18,7 @@ export const GET = withApiErrorHandling(async (request: Request, context: PostRo
 export const PATCH = withApiErrorHandling(async (request: Request, context: PostRouteContext) => {
   const { id } = await context.params;
   const body = await request.json();
-  const input = postUpdateSchema.parse(body);
+  const input = PostFormSchema.parse(body);
   const result = await updatePost(request.headers, id, input);
 
   return apiOk(result);

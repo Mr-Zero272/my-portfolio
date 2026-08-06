@@ -11,6 +11,7 @@ import { Button } from '../ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '../ui/dropdown-menu';
@@ -104,21 +105,28 @@ export function DataTableExportButton<TData>({
       <TooltipTrigger
         render={
           <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="outline" disabled={isExporting} aria-label="Export data">
-                {isExporting ? <Spinner /> : <DownloadIcon />}
-                <span className="hidden md:inline"> {isExporting ? 'Exporting...' : 'Export'}</span>
-              </Button>
-            </DropdownMenuTrigger>
+            <DropdownMenuTrigger
+              render={
+                <Button variant="outline" disabled={isExporting} aria-label="Export data">
+                  {isExporting ? <Spinner /> : <DownloadIcon />}
+                  <span className="hidden md:inline">
+                    {' '}
+                    {isExporting ? 'Exporting...' : 'Export'}
+                  </span>
+                </Button>
+              }
+            />
             <DropdownMenuContent align="end" className="min-w-40">
-              <DropdownMenuItem onClick={() => handleExport('xlsx')}>
-                <FileSpreadsheetIcon />
-                Excel file (.xlsx)
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => handleExport('csv')}>
-                <FileChartColumnIcon />
-                CSV file (.csv)
-              </DropdownMenuItem>
+              <DropdownMenuGroup>
+                <DropdownMenuItem onClick={() => handleExport('xlsx')}>
+                  <FileSpreadsheetIcon />
+                  Excel file (.xlsx)
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => handleExport('csv')}>
+                  <FileChartColumnIcon />
+                  CSV file (.csv)
+                </DropdownMenuItem>
+              </DropdownMenuGroup>
             </DropdownMenuContent>
           </DropdownMenu>
         }

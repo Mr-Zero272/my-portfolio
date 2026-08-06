@@ -1,1 +1,1 @@
-export { PostTable } from './post-table';
+export { PostTable, PostTableSkeleton } from './post-table';

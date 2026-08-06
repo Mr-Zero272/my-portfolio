@@ -1,12 +1,11 @@
 import { ActionItem } from '@/components/shared/responsive-actions';
-import { DataTableBaseProps } from '@/types/data-table';
 import type { QueryKey } from '@tanstack/react-query';
 import { Trash2Icon } from 'lucide-react';
 import { useMemo } from 'react';
 
 type UseTableActionsWithOptimisticDeleteOptions<T> = {
   actions?: ActionItem<T>[];
-  onOptimisticDelete?: DataTableBaseProps<T>['onOptimisticDelete'];
+  onOptimisticDelete?: (data: T, queryKey: QueryKey) => void;
   queryKey: QueryKey;
 };
 
@@ -25,7 +24,7 @@ export function useTableActionsWithOptimisticDelete<T>({
         key: 'optimistic-delete',
         label: 'Delete',
         icon: <Trash2Icon />,
-        onClick: (row: T) => onOptimisticDelete({ data: row, queryKey }),
+        onClick: (row: T) => onOptimisticDelete(row, queryKey),
         tooltip: 'Delete',
         variant: 'destructive',
       },

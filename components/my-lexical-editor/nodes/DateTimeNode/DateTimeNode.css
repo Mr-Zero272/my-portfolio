@@ -1,0 +1,50 @@
+/**
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ *
+ *
+ * Most pill & picker styles are now handled by Tailwind / shadcn/ui.
+ * This file only keeps:
+ *   1. Text-format modifier classes toggled by Lexical (bold, italic, …)
+ *   2. The combined underline+strikethrough rule that can't be expressed
+ *      with a single Tailwind class.
+ *   3. react-day-picker CSS variable overrides so the calendar accent
+ *      colour matches the app's design token.
+ */
+
+/* ─── Lexical text-format modifiers ──────────────────────────────────────── */
+
+.dateTimePill--bold {
+  font-weight: bold;
+}
+
+.dateTimePill--italic {
+  font-style: italic;
+}
+
+.dateTimePill--underline {
+  text-decoration: underline;
+}
+
+.dateTimePill--strikethrough {
+  text-decoration: line-through;
+}
+
+/* Both flags active at the same time */
+.dateTimePill--underline.dateTimePill--strikethrough {
+  text-decoration: underline line-through;
+}
+
+.dateTimePill--highlight {
+  background: rgba(255, 212, 0, 0.14);
+}
+
+/* ─── react-day-picker / DayPicker CSS variables ──────────────────────────── */
+/* https://daypicker.dev/docs/styling#css-variables                           */
+
+.dateTimePicker .rdp-root {
+  --rdp-accent-color: #76b6ff;
+  --rdp-accent-background-color: #f0f0f0;
+}

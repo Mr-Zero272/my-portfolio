@@ -7,12 +7,12 @@ import { useFormState } from '@/hooks/use-form-state';
 import { useTableActionsWithOptimisticDelete } from '@/hooks/use-table-actions-with-optimistic-delete';
 import { Tag } from '@/lib/generated/prisma/client';
 import { EditIcon, PlusIcon } from 'lucide-react';
-import { useCallback, useMemo } from 'react';
-import { TagFormDialog, TagTable } from '../components';
+import { Suspense, useCallback, useMemo } from 'react';
+import { TagFormDialog, TagTable, TagTableSkeleton } from '../components';
 import { useOptimisticDeleteTag, useTagForm, useTags, useTagTableParams } from '../hooks';
 import { tagQueryKeys } from '../services';
 
-export const ListTagsPage = () => {
+export const ListTagsPageContent = () => {
   // form
   const formState = useFormState<Tag>();
 
@@ -89,5 +89,20 @@ export const ListTagsPage = () => {
         error={error}
       />
     </div>
+  );
+};
+
+export const ListTagsPage = () => {
+  return (
+    <Suspense
+      fallback={
+        <div>
+          <PageHeader title="Tags" description="Manage tags" />
+          <TagTableSkeleton rowCount={10} />
+        </div>
+      }
+    >
+      <ListTagsPageContent />
+    </Suspense>
   );
 };

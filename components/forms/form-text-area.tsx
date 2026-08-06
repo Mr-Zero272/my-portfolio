@@ -1,34 +1,24 @@
 'use client';
 
-import { ReactNode } from 'react';
-import { Controller, useFormContext } from 'react-hook-form';
-
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { Textarea } from '@/components/ui/textarea';
 import { BaseInputProps } from '@/types/form';
+import { Controller, useFormContext } from 'react-hook-form';
+import { Field, FieldDescription, FieldError, FieldLabel } from '../ui/field';
 
-import { Field, FieldContent, FieldDescription, FieldError, FieldLabel } from '../ui/field';
-
-export interface FormRadioGroupOption {
-  value: string;
-  label: ReactNode;
-  description?: ReactNode;
-  disabled?: boolean;
+interface FormTextAreaProps extends BaseInputProps {
+  rows?: number;
 }
 
-interface FormRadioGroupProps extends BaseInputProps {
-  options: FormRadioGroupOption[];
-  className?: string;
-}
-
-export function FormRadioGroup({
+export function FormTextArea({
+  optional,
   required,
   name,
   label,
+  placeholder,
   description,
   disabled,
-  options,
-  className,
-}: FormRadioGroupProps) {
+  rows,
+}: FormTextAreaProps) {
   const { control } = useFormContext();
 
   return (
@@ -37,24 +27,20 @@ export function FormRadioGroup({
       name={name}
       render={({ field, fieldState }) => (
         <Field>
-          {label && <FieldLabel required={required}>{label}</FieldLabel>}
-          <RadioGroup
-            value={field.value ?? ''}
-            onValueChange={field.onChange}
+          {label && (
+            <FieldLabel htmlFor={name} required={required} optional={optional}>
+              {label}
+            </FieldLabel>
+          )}
+          <Textarea
+            {...field}
+            id={name}
+            placeholder={placeholder}
             disabled={disabled}
+            rows={rows}
+            value={field.value ?? ''}
             aria-invalid={fieldState.invalid}
-            className={className}
-          >
-            {options.map((option) => (
-              <Field key={option.value} orientation="horizontal">
-                <RadioGroupItem id={option.value} value={option.value} disabled={option.disabled} />
-                <FieldContent>
-                  <FieldLabel htmlFor={option.value}>{option.label}</FieldLabel>
-                  {option.description && <FieldDescription>{option.description}</FieldDescription>}
-                </FieldContent>
-              </Field>
-            ))}
-          </RadioGroup>
+          />
           {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
           {description && <FieldDescription>{description}</FieldDescription>}
         </Field>

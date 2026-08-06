@@ -5,11 +5,11 @@ import { ActionItem } from '@/components/shared/responsive-actions';
 import { useFormState } from '@/hooks/use-form-state';
 import { Post } from '@/lib/generated/prisma/client';
 import { EditIcon } from 'lucide-react';
-import { useMemo } from 'react';
-import { PostTable } from '../components';
+import { Suspense, useMemo } from 'react';
+import { PostTable, PostTableSkeleton } from '../components';
 import { usePosts, usePostTableParams } from '../hooks';
 
-export const ListPostsPage = () => {
+export const ListPostsPageContent = () => {
   // form
   const formState = useFormState<Post>();
 
@@ -86,5 +86,20 @@ export const ListPostsPage = () => {
         error={error}
       /> */}
     </div>
+  );
+};
+
+export const ListPostsPage = () => {
+  return (
+    <Suspense
+      fallback={
+        <div>
+          <PageHeader title="Posts" description="Manage posts" />
+          <PostTableSkeleton rowCount={10} />
+        </div>
+      }
+    >
+      <ListPostsPageContent />
+    </Suspense>
   );
 };

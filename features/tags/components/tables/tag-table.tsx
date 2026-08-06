@@ -12,14 +12,13 @@ import { Tag } from '@/lib/generated/prisma/client';
 import { DataTableBaseProps } from '@/types/data-table';
 import { RotateCwIcon } from 'lucide-react';
 import { parseAsInteger, useQueryState } from 'nuqs';
-import { Suspense } from 'react';
 import { useTagColumns } from './tag-columns';
 
 const COLUMN_COUNT = 5;
 
 type TabTableProps = DataTableBaseProps<Tag>;
 
-const TabTableSkeleton = ({ rowCount = 10 }: { rowCount?: number }) => {
+export const TagTableSkeleton = ({ rowCount = 10 }: { rowCount?: number }) => {
   return (
     <DataTableSkeleton
       columnCount={COLUMN_COUNT}
@@ -30,7 +29,7 @@ const TabTableSkeleton = ({ rowCount = 10 }: { rowCount?: number }) => {
   );
 };
 
-const TagTableContent = ({
+export const TagTable = ({
   data,
   pageCount,
   isLoading,
@@ -63,7 +62,7 @@ const TagTableContent = ({
       data="tag-data" // use table object
       isLoading={isLoading}
       error={error}
-      fallbackLoading={<TabTableSkeleton rowCount={perPage} />}
+      fallbackLoading={<TagTableSkeleton rowCount={perPage} />}
       fallbackError={
         <StateUI
           variant="error"
@@ -91,10 +90,10 @@ const TagTableContent = ({
   );
 };
 
-export const TagTable = (props: TabTableProps) => {
-  return (
-    <Suspense fallback={<TabTableSkeleton rowCount={10} />}>
-      <TagTableContent {...props} />
-    </Suspense>
-  );
-};
+// export const TagTable = (props: TabTableProps) => {
+//   return (
+//     <Suspense fallback={<TabTableSkeleton rowCount={10} />}>
+//       <TagTableContent {...props} />
+//     </Suspense>
+//   );
+// };
