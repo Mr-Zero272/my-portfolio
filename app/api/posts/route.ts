@@ -1,4 +1,4 @@
-import { postCreateSchema } from '@/features/posts/schemas';
+import { PostFormSchema } from '@/features/posts/schemas';
 import { createPost, getPosts } from '@/features/posts/server';
 import { apiCreated, apiPaginated, withApiErrorHandling } from '@/lib/api';
 
@@ -15,7 +15,7 @@ export const GET = withApiErrorHandling(async (request: Request) => {
 
 export const POST = withApiErrorHandling(async (request: Request) => {
   const body = await request.json();
-  const input = postCreateSchema.parse(body);
+  const input = PostFormSchema.parse(body);
   const result = await createPost(request.headers, input);
 
   return apiCreated(result);

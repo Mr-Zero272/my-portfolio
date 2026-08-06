@@ -1,36 +1,37 @@
 import { DataTableColumnHeader } from '@/components/data-table/data-table-column-header';
 import { ActionItem, ResponsiveActions } from '@/components/shared/responsive-actions';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { formatDateTime } from '@/lib/format';
-import { Tag } from '@/lib/generated/prisma/client';
+import { Post } from '@/lib/generated/prisma/client';
 import { ColumnDef } from '@tanstack/react-table';
-import { TentIcon } from 'lucide-react';
+import { CheckIcon, ClockIcon, TentIcon } from 'lucide-react';
 import { useMemo } from 'react';
 
-type UseTagColumnsProps = {
-  onRowClick?: (tag: Tag) => void;
-  actions?: ActionItem<Tag>[];
+type UsePostColumnsProps = {
+  onRowClick?: (post: Post) => void;
+  actions?: ActionItem<Post>[];
 };
 
-export const useTagColumns = ({ onRowClick, actions }: UseTagColumnsProps) => {
+export const usePostColumns = ({ onRowClick, actions }: UsePostColumnsProps) => {
   return useMemo(
-    (): ColumnDef<Tag>[] => [
+    (): ColumnDef<Post>[] => [
       {
-        id: 'name',
-        accessorKey: 'name',
-        header: ({ column }) => <DataTableColumnHeader column={column} label="Name" />,
+        id: 'title',
+        accessorKey: 'title',
+        header: ({ column }) => <DataTableColumnHeader column={column} label="Title" />,
         cell: ({ row }) => (
           <Button
             variant="link"
             className="p-0 font-medium"
             onClick={() => onRowClick?.(row.original)}
           >
-            {row.original.name}
+            {row.original.title}
           </Button>
         ),
         meta: {
-          label: 'Name',
-          placeholder: 'Search tag...',
+          label: 'Title',
+          placeholder: 'Search post...',
           variant: 'text',
           icon: TentIcon,
         },
@@ -38,14 +39,33 @@ export const useTagColumns = ({ onRowClick, actions }: UseTagColumnsProps) => {
         enableSorting: true,
       },
       {
-        id: 'slug',
-        accessorKey: 'slug',
-        header: ({ column }) => <DataTableColumnHeader column={column} label="Slug" />,
-        cell: ({ row }) => <div>{row.getValue('slug')}</div>,
-        meta: {
-          label: 'Slug',
+        id: 'published',
+        accessorKey: 'published',
+        header: ({ column }) => <DataTableColumnHeader column={column} label="Published" />,
+        cell: ({ row }) => {
+          const value = row.getValue('published') as boolean | undefined | null;
+          return (
+            <Badge variant={value ? 'default' : 'outline'}>
+              {value ? <CheckIcon /> : <ClockIcon />}
+              {value ? 'Published' : 'Draft'}
+            </Badge>
+          );
         },
-        enableColumnFilter: true,
+        meta: {
+          label: 'Published',
+        },
+        enableColumnFilter: false,
+        enableSorting: false,
+      },
+      {
+        id: 'views',
+        accessorKey: 'views',
+        header: ({ column }) => <DataTableColumnHeader column={column} label="Views" />,
+        cell: ({ row }) => <div>{row.getValue('views')}</div>,
+        meta: {
+          label: 'Views',
+        },
+        enableColumnFilter: false,
         enableSorting: true,
       },
       {
@@ -74,7 +94,7 @@ export const useTagColumns = ({ onRowClick, actions }: UseTagColumnsProps) => {
       {
         id: 'actions',
         cell: ({ row }) => {
-          return <ResponsiveActions<Tag> actions={actions ?? []} context={row.original} />;
+          return <ResponsiveActions<Post> actions={actions ?? []} context={row.original} />;
         },
         enableSorting: false,
         size: 32,

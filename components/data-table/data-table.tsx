@@ -99,9 +99,8 @@ export function DataTable<TData>({
                   <TableCell colSpan={table.getAllColumns().length} className="h-24 text-center">
                     <StateUI
                       variant="empty"
-                      title="Không có dữ liệu"
-                      description="Không tìm thấy dữ liệu nào phù hợp với tiêu chí của bạn."
-                      className="border-none"
+                      title="No data yet"
+                      description="Try to adjust your search query or filters."
                     />
                   </TableCell>
                 </TableRow>

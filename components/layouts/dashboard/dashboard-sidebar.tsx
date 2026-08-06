@@ -9,18 +9,10 @@ import {
   SidebarHeader,
   SidebarRail,
 } from '@/components/ui/sidebar';
-import {
-  BookOpenIcon,
-  FrameIcon,
-  MapIcon,
-  PieChartIcon,
-  Settings2Icon,
-  UserKeyIcon,
-  Users2,
-} from 'lucide-react';
+import { BookOpenIcon, Settings2Icon, UserKeyIcon } from 'lucide-react';
+import { AppSidebarHeader } from '../shared';
 import { NavMain } from '../shared/nav-main';
 import { NavUser } from '../shared/nav-user';
-import { AppSidebarHeader } from '../shared';
 
 const data = {
   navMain: [
@@ -35,8 +27,8 @@ const data = {
           url: '/dashboard/tags',
         },
         {
-          title: 'Projects',
-          url: '/dashboard/projects',
+          title: 'Posts',
+          url: '/dashboard/posts',
         },
       ],
     },

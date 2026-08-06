@@ -8,7 +8,7 @@ import {
 } from '@/lib/api';
 import type { Prisma } from '@/lib/generated/prisma/client';
 import { prisma } from '@/lib/prisma';
-import type { PostCreateInput, PostUpdateInput } from '../schemas/post.schema';
+import type { PostFormValues } from '../schemas/post.schema';
 import { requirePostManager } from './post-auth';
 
 const POST_INCLUDE = {
@@ -42,7 +42,7 @@ const POST_SORTABLE_FIELDS = [
   'shares',
 ] as const;
 
-function buildPostData(input: PostCreateInput | PostUpdateInput) {
+function buildPostData(input: PostFormValues) {
   return {
     title: input.title,
     slug: input.slug,
@@ -73,6 +73,8 @@ export async function getPosts(headers: Headers, searchParams: URLSearchParams) 
       likes: { operator: FilterOperator.GTE, parse: parseNumberParam },
       views: { operator: FilterOperator.GTE, parse: parseNumberParam },
       keyword: { field: 'keywords', operator: FilterOperator.HAS },
+      authorId: { field: 'authors.userId', operator: FilterOperator.EQUALS },
+      tagId: { field: 'tags.tagId', operator: FilterOperator.EQUALS },
     },
     searchFields: ['title', 'slug', 'excerpt', 'content'],
     sortableFields: POST_SORTABLE_FIELDS,
@@ -108,10 +110,10 @@ export async function getPost(headers: Headers, id: string) {
     throwApiError(ApiErrorCode.NOT_FOUND, { message: 'Post not found.' });
   }
 
-  return { post };
+  return post;
 }
 
-export async function createPost(headers: Headers, input: PostCreateInput) {
+export async function createPost(headers: Headers, input: PostFormValues) {
   await requirePostManager(headers);
 
   const post = await prisma.post.create({
@@ -119,10 +121,10 @@ export async function createPost(headers: Headers, input: PostCreateInput) {
     include: POST_INCLUDE,
   });
 
-  return { post };
+  return post;
 }
 
-export async function updatePost(headers: Headers, id: string, input: PostUpdateInput) {
+export async function updatePost(headers: Headers, id: string, input: PostFormValues) {
   await requirePostManager(headers);
 
   await ensurePostExists(id);
@@ -133,7 +135,7 @@ export async function updatePost(headers: Headers, id: string, input: PostUpdate
     where: { id },
   });
 
-  return { post };
+  return post;
 }
 
 export async function deletePost(headers: Headers, id: string) {

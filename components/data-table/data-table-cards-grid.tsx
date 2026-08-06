@@ -31,7 +31,7 @@ export function DataTableCardsGrid<TData>({
   if (!rows?.length) {
     return (
       <div className="text-muted-foreground flex h-24 items-center justify-center rounded-md border border-dashed text-center text-sm">
-        Không có dữ liệu.
+        No data.
       </div>
     );
   }

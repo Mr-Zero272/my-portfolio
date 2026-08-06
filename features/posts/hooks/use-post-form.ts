@@ -2,12 +2,12 @@
 
 import { handleError } from '@/utils';
 import { useCallback, useMemo, useState } from 'react';
-import { toTagFormValue } from '../data';
-import { TagFormValues } from '../schemas';
-import { useCreateTag, useUpdateTag } from './mutations';
-import { useTag } from './queries';
+import { toPostFormValue } from '../data';
+import { PostFormValues } from '../schemas';
+import { useCreatePost, useUpdatePost } from './mutations';
+import { usePost } from './queries';
 
-type UseTagFormProps = {
+type UsePostFormProps = {
   id?: string;
 
   // callbacks
@@ -15,29 +15,29 @@ type UseTagFormProps = {
   onError?: (error: unknown) => void | Promise<void>;
 };
 
-export const useTagForm = ({ id, onSuccess, onError }: UseTagFormProps) => {
+export const usePostForm = ({ id, onSuccess, onError }: UsePostFormProps) => {
   const [serverError, setServerError] = useState<string | null>(null);
 
   const isEditMode = !!id && id !== 'new';
 
-  const { data, isLoading, error } = useTag(
+  const { data, isLoading, error } = usePost(
     {
       path: { id: id ?? '' },
     },
     { enabled: isEditMode },
   );
 
-  const { mutateAsync: createTag, isPending: isPendingCreate } = useCreateTag();
-  const { mutateAsync: updateTag, isPending: isPendingUpdate } = useUpdateTag();
+  const { mutateAsync: createPost, isPending: isPendingCreate } = useCreatePost();
+  const { mutateAsync: updatePost, isPending: isPendingUpdate } = useUpdatePost();
 
   const handleSubmit = useCallback(
-    async (values: TagFormValues) => {
+    async (values: PostFormValues) => {
       try {
         if (serverError) setServerError(null);
         if (isEditMode) {
-          await updateTag({ path: { id: id }, body: values });
+          await updatePost({ path: { id: id }, body: values });
         } else {
-          await createTag({ body: values });
+          await createPost({ body: values });
         }
         onSuccess?.();
       } catch (error) {
@@ -45,12 +45,12 @@ export const useTagForm = ({ id, onSuccess, onError }: UseTagFormProps) => {
         setServerError(handleError({ error, withToast: true }));
       }
     },
-    [serverError, createTag, id, isEditMode, onError, onSuccess, updateTag],
+    [serverError, createPost, id, isEditMode, onError, onSuccess, updatePost],
   );
 
   const initialData = useMemo(() => {
     if (!data) return undefined;
-    return toTagFormValue(data);
+    return toPostFormValue(data);
   }, [data]);
 
   return {

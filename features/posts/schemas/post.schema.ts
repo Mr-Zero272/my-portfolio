@@ -7,7 +7,7 @@ const optionalString = z
 
 const stringList = z.array(z.string().trim().min(1)).optional();
 
-export const postCreateSchema = z.object({
+export const PostFormSchema = z.object({
   title: z.string().trim().min(1),
   slug: z.string().trim().min(1),
   excerpt: optionalString,
@@ -27,7 +27,24 @@ export const postCreateSchema = z.object({
   published: z.boolean().optional(),
 });
 
-export const postUpdateSchema = postCreateSchema.partial();
+export type PostFormValues = z.infer<typeof PostFormSchema>;
 
-export type PostCreateInput = z.infer<typeof postCreateSchema>;
-export type PostUpdateInput = z.infer<typeof postUpdateSchema>;
+export const DEFAULT_POST_FORM_VALUES: PostFormValues = {
+  title: '',
+  slug: '',
+  excerpt: '',
+  content: '',
+  contentHtml: '',
+  keywords: [],
+  featureImage: '',
+  imageCaption: '',
+  likes: 0,
+  views: 0,
+  shares: 0,
+  metaTitle: '',
+  metaDescription: '',
+  xMetaTitle: '',
+  xMetaDescription: '',
+  xMetaImage: '',
+  published: false,
+};

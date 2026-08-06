@@ -4,6 +4,7 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/component
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
@@ -85,25 +86,27 @@ export function NavMain({
                     <span>{item.title}</span>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent side="right" align="start" className="min-w-48">
-                    <DropdownMenuLabel>{item.title}</DropdownMenuLabel>
-                    <DropdownMenuSeparator />
-                    {item.items?.map((subItem) => (
-                      <DropdownMenuItem
-                        key={subItem.title}
-                        data-active={isSubItemActive(subItem.url)}
-                        render={
-                          <Link
-                            href={buildHref({
-                              url: subItem.url,
-                              applyBaseHref: subItem.applyBaseHref,
-                              baseHref,
-                            })}
-                          />
-                        }
-                      >
-                        {subItem.title}
-                      </DropdownMenuItem>
-                    ))}
+                    <DropdownMenuGroup>
+                      <DropdownMenuLabel>{item.title}</DropdownMenuLabel>
+                      <DropdownMenuSeparator />
+                      {item.items?.map((subItem) => (
+                        <DropdownMenuItem
+                          key={subItem.title}
+                          data-active={isSubItemActive(subItem.url)}
+                          render={
+                            <Link
+                              href={buildHref({
+                                url: subItem.url,
+                                applyBaseHref: subItem.applyBaseHref,
+                                baseHref,
+                              })}
+                            />
+                          }
+                        >
+                          {subItem.title}
+                        </DropdownMenuItem>
+                      ))}
+                    </DropdownMenuGroup>
                   </DropdownMenuContent>
                 </DropdownMenu>
               </SidebarMenuItem>

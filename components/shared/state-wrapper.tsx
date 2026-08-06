@@ -144,9 +144,9 @@ function DefaultEmpty({
       </div>
 
       <div className="space-y-1">
-        <p className="text-foreground text-base font-medium">{message ?? 'Không có dữ liệu'}</p>
+        <p className="text-foreground text-base font-medium">{message ?? 'No data'}</p>
         <p className="text-muted-foreground max-w-xs text-sm">
-          {description ?? 'Hiện tại chưa có nội dung nào để hiển thị.'}
+          {description ?? 'There was no data to display here!'}
         </p>
       </div>
 
