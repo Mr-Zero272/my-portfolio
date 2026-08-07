@@ -1,6 +1,7 @@
 'use client';
 
 import { Textarea } from '@/components/ui/textarea';
+import { cn } from '@/lib/utils';
 import { BaseInputProps } from '@/types/form';
 import { Controller, useFormContext } from 'react-hook-form';
 import { Field, FieldDescription, FieldError, FieldLabel } from '../ui/field';
@@ -18,6 +19,8 @@ export function FormTextArea({
   description,
   disabled,
   rows,
+  className,
+  'aria-invalid': ariaInvalid,
 }: FormTextAreaProps) {
   const { control } = useFormContext();
 
@@ -39,7 +42,8 @@ export function FormTextArea({
             disabled={disabled}
             rows={rows}
             value={field.value ?? ''}
-            aria-invalid={fieldState.invalid}
+            aria-invalid={fieldState.invalid || ariaInvalid}
+            className={cn(className)}
           />
           {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
           {description && <FieldDescription>{description}</FieldDescription>}

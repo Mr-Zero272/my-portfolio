@@ -4,7 +4,9 @@ import { Sidebar, SidebarContent, SidebarRail } from '@/components/ui/sidebar';
 import { Tabs, TabsContent } from '@/components/ui/tabs';
 import { useMediaQuery } from '@mantine/hooks';
 import { useState } from 'react';
-import { PostBaseFieldsTab } from './post-base-fields-tab';
+import { PostBaseFieldsTab } from './base-fields/post-base-fields-tab';
+import { PostMetaFields } from './meta-fields/post-meta-fields';
+import { PostXMetaFields } from './x-meta-fields/post-x-meta-fields';
 
 export const PostFormSidebar = () => {
   const isMobile = useMediaQuery(`(max-width: 768px)`);
@@ -34,8 +36,16 @@ export const PostFormSidebar = () => {
          {activeTab === 'main' && <MainTab onTabChange={setActiveTab} />}
          {activeTab === 'metadata' && <MetadataTab onTabChange={setActiveTab} />}
          {activeTab === 'x_metadata' && <XMetadataTab onTabChange={setActiveTab} />} */}
-          <TabsContent value="main">
+
+          {/* keep main tab mount to prevent re-fetch api for tags and author */}
+          <TabsContent value="main" keepMounted>
             <PostBaseFieldsTab onTabChange={setActiveTab} />
+          </TabsContent>
+          <TabsContent value="metadata">
+            <PostMetaFields onTabChange={setActiveTab} />
+          </TabsContent>
+          <TabsContent value="x_metadata">
+            <PostXMetaFields onTabChange={setActiveTab} />
           </TabsContent>
         </Tabs>
       </SidebarContent>

@@ -1,7 +1,9 @@
 import { FormTextArea } from '@/components/forms';
 import { FormSlugInput } from '@/components/forms/form-slug-input';
+import { GoogleBrand, XBrand } from '@/components/icons';
+import { FieldGroup } from '@/components/ui/field';
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
-import { ChevronRightIcon, GlobeIcon, XIcon } from 'lucide-react';
+import { ChevronRightIcon } from 'lucide-react';
 import { AuthorsInput } from './authors-input';
 import { PostKeywordsInput } from './post-keywords-input';
 import { TagsInput } from './tags-input';
@@ -13,7 +15,7 @@ export const PostBaseFieldsTab = ({
 }) => {
   return (
     <div className="flex h-full flex-1 flex-col justify-between">
-      <div className="space-y-4">
+      <FieldGroup>
         <FormSlugInput
           name="slug"
           label="Post slug"
@@ -33,26 +35,26 @@ export const PostBaseFieldsTab = ({
         />
 
         <AuthorsInput />
-      </div>
+      </FieldGroup>
 
       <SidebarMenu className="mt-auto">
         <SidebarMenuItem onClick={() => onTabChange('metadata')}>
           <SidebarMenuButton className="justify-between">
             <div className="flex items-center gap-2">
-              <GlobeIcon className="h-4 w-4 text-red-500" />
+              <GoogleBrand className="size-4" />
               <span>Metadata</span>
             </div>
-            <ChevronRightIcon className="h-4 w-4" />
+            <ChevronRightIcon className="size-4" />
           </SidebarMenuButton>
         </SidebarMenuItem>
 
         <SidebarMenuItem onClick={() => onTabChange('x_metadata')}>
           <SidebarMenuButton className="justify-between">
             <div className="flex items-center gap-2">
-              <XIcon className="h-4 w-4" />
+              <XBrand className="size-4" />
               <span>X Metadata</span>
             </div>
-            <ChevronRightIcon className="h-4 w-4" />
+            <ChevronRightIcon className="size-4" />
           </SidebarMenuButton>
         </SidebarMenuItem>
       </SidebarMenu>

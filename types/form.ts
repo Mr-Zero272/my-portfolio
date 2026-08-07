@@ -86,4 +86,7 @@ export interface BaseInputProps<TValue = void> {
   value?: TValue;
   onChange?: (value: TValue) => void;
   className?: string;
+
+  //
+  'aria-invalid'?: boolean | 'true' | 'false' | 'grammar' | 'spelling' | undefined;
 }
