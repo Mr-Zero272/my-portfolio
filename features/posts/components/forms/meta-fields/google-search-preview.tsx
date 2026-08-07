@@ -20,11 +20,13 @@ export const GoogleSearchPreview = ({
         </div>
       </div>
       <div className="max-w-2xl">
-        <div className="text-sm text-green-800">{url}</div>
+        <div className="text-sm text-green-800">{url || 'https://example.com/your-post-url'}</div>
         <div className="mb-1 cursor-pointer text-xl leading-6 text-blue-800 hover:underline dark:text-blue-600">
-          {title}
+          {title || 'Your post title'}
         </div>
-        <div className="text-muted-foreground line-clamp-3 text-sm leading-5">{description}</div>
+        <div className="text-muted-foreground line-clamp-3 text-sm leading-5">
+          {description || 'Your post description'}
+        </div>
       </div>
     </div>
   );

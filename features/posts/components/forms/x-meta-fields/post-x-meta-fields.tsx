@@ -1,7 +1,7 @@
 'use client';
 
 import { FormInput, FormTextArea } from '@/components/forms';
-import { Button } from '@/components/ui/button';
+import { ButtonWithTooltip } from '@/components/shared/button-with-tooltip';
 import { FieldGroup } from '@/components/ui/field';
 import { env } from '@/config/env';
 import { ChevronLeftIcon } from 'lucide-react';
@@ -30,9 +30,14 @@ export const PostXMetaFields = ({
   return (
     <div className="space-y-4 pb-10">
       <div className="flex items-center gap-2">
-        <Button size="icon" variant="ghost" onClick={() => onTabChange('main')}>
+        <ButtonWithTooltip
+          size="icon"
+          variant="ghost"
+          onClick={() => onTabChange('main')}
+          tooltip="Back"
+        >
           <ChevronLeftIcon />
-        </Button>
+        </ButtonWithTooltip>
         <h2 className="font-medium">X (Twitter) Metadata</h2>
       </div>
       <FieldGroup>
