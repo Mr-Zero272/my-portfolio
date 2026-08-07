@@ -1,9 +1,6 @@
 import { z } from 'zod';
 
-const optionalString = z
-  .union([z.string().trim().min(1), z.literal(''), z.null()])
-  .optional()
-  .transform((value) => (value ? value : null));
+const optionalString = z.string().optional();
 
 const stringList = z.array(z.string().trim().min(1)).optional();
 
@@ -25,6 +22,8 @@ export const PostFormSchema = z.object({
   xMetaDescription: optionalString,
   xMetaImage: optionalString,
   published: z.boolean().optional(),
+  authorIds: z.array(z.string()).optional(),
+  tagIds: z.array(z.string()).optional(),
 });
 
 export type PostFormValues = z.infer<typeof PostFormSchema>;

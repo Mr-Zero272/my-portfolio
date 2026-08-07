@@ -1,5 +1,6 @@
 import axiosInstance from '@/lib/axios';
 import { Tag } from '@/lib/generated/prisma/client';
+import { ListResponse } from '@/types/api';
 import { normalizeQueryParams } from '@/utils/search-query';
 import {
   CreateTagRequest,
@@ -19,7 +20,7 @@ export const tagApi = {
     return {
       list: res.data?.data,
       meta: res.data?.meta,
-    };
+    } as ListResponse<Tag>;
   },
 
   getById: async (request: GetTagRequest) => {

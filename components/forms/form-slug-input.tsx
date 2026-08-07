@@ -7,12 +7,14 @@ import { useSlugSync } from '@/hooks/use-slug-sync';
 import { slugify } from '@/lib/slug';
 import { BaseInputProps } from '@/types/form';
 
+import { InputHTMLAttributes } from 'react';
 import { Field, FieldDescription, FieldError, FieldLabel } from '../ui/field';
 import { InputGroup, InputGroupButton, InputGroupInput } from '../ui/input-group';
 
 interface FormSlugInputProps extends BaseInputProps {
   sourceName: string;
   isEditMode?: boolean;
+  autoComplete?: InputHTMLAttributes<HTMLInputElement>['autoComplete'];
 }
 
 export function FormSlugInput({
@@ -25,6 +27,7 @@ export function FormSlugInput({
   disabled,
   sourceName,
   isEditMode,
+  autoComplete,
 }: FormSlugInputProps) {
   const { control } = useFormContext();
   const { isManual, resetSlug } = useSlugSync({ name, sourceName, isEditMode });
@@ -51,6 +54,7 @@ export function FormSlugInput({
                 field.onChange(slugify(e.target.value, { keepTrailingHyphen: true }))
               }
               aria-invalid={fieldState.invalid}
+              autoComplete={autoComplete}
             />
             {isManual && !disabled && (
               <InputGroupButton

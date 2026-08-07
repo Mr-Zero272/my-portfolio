@@ -2,9 +2,12 @@
 
 import { PageHeader } from '@/components/shared/page-header copy';
 import { ActionItem } from '@/components/shared/responsive-actions';
+import { buttonVariants } from '@/components/ui/button';
+import { appPath } from '@/constants/path';
 import { useFormState } from '@/hooks/use-form-state';
 import { Post } from '@/lib/generated/prisma/client';
-import { EditIcon } from 'lucide-react';
+import { EditIcon, PlusIcon } from 'lucide-react';
+import Link from 'next/link';
 import { Suspense, useMemo } from 'react';
 import { PostTable, PostTableSkeleton } from '../components';
 import { usePosts, usePostTableParams } from '../hooks';
@@ -56,12 +59,12 @@ export const ListPostsPageContent = () => {
       <PageHeader
         title="Posts"
         description="Manage posts"
-        // actions={
-        //   <Button onClick={() => formState.create()}>
-        //     <PlusIcon />
-        //     Add posts
-        //   </Button>
-        // }
+        actions={
+          <Link href={appPath.post.new} className={buttonVariants({ variant: 'default' })}>
+            <PlusIcon />
+            New post
+          </Link>
+        }
       />
       <PostTable
         data={posts?.list ?? []}

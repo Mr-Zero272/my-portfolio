@@ -114,10 +114,24 @@ export async function getPost(headers: Headers, id: string) {
 }
 
 export async function createPost(headers: Headers, input: PostFormValues) {
-  await requirePostManager(headers);
+  const { user } = await requirePostManager(headers);
+
+  const authorIds = input.authorIds && input.authorIds.length > 0 ? input.authorIds : [user.id];
+
+  const tagIds = input.tagIds && input.tagIds.length > 0 ? input.tagIds : [];
+
+  const postData: Prisma.PostCreateInput = {
+    ...buildPostData(input),
+    authors: {
+      create: authorIds.map((userId) => ({ userId })),
+    },
+    tags: {
+      create: tagIds.map((tagId) => ({ tagId })),
+    },
+  };
 
   const post = await prisma.post.create({
-    data: buildPostData(input) as Prisma.PostCreateInput,
+    data: postData,
     include: POST_INCLUDE,
   });
 
@@ -129,8 +143,19 @@ export async function updatePost(headers: Headers, id: string, input: PostFormVa
 
   await ensurePostExists(id);
 
+  const updateData: Prisma.PostUpdateInput = {
+    ...buildPostData(input),
+  };
+
+  if (input.authorIds) {
+    updateData.authors = {
+      deleteMany: {},
+      create: input.authorIds.map((userId) => ({ userId })),
+    };
+  }
+
   const post = await prisma.post.update({
-    data: buildPostData(input) as Prisma.PostUpdateInput,
+    data: updateData,
     include: POST_INCLUDE,
     where: { id },
   });
