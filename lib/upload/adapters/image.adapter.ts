@@ -1,12 +1,13 @@
 import { postQueryKeys } from '@/features/posts/services';
+import { compressToWebP } from '@/lib/compress-image';
 import { getBrowserQueryClient } from '@/lib/query-client';
 import axios from 'axios';
 import type { UploadAdapter } from '../adapter';
 import type {
-    AdapterPresignResult,
-    UploadAdapterConfig,
-    UploadContext,
-    UploadResult,
+  AdapterPresignResult,
+  UploadAdapterConfig,
+  UploadContext,
+  UploadResult,
 } from '../types';
 
 // ─── Compression Config ─────────────────────────────────────────────────────
@@ -20,35 +21,6 @@ function toWebpFileName(name: string): string {
   const dot = name.lastIndexOf('.');
   const base = dot > 0 ? name.slice(0, dot) : name;
   return `${base}.webp`;
-}
-
-/** Resize (if needed) and re-encode an image File as WebP using the Canvas API. */
-async function compressToWebP(file: File): Promise<File> {
-  const bitmap = await createImageBitmap(file);
-  try {
-    const { width, height } = bitmap;
-    const scale = Math.min(1, MAX_DIMENSION / Math.max(width, height));
-    const targetWidth = Math.max(1, Math.round(width * scale));
-    const targetHeight = Math.max(1, Math.round(height * scale));
-
-    const canvas = document.createElement('canvas');
-    canvas.width = targetWidth;
-    canvas.height = targetHeight;
-
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return file;
-
-    ctx.drawImage(bitmap, 0, 0, targetWidth, targetHeight);
-
-    const blob = await new Promise<Blob | null>((resolve) =>
-      canvas.toBlob(resolve, 'image/webp', WEBP_QUALITY),
-    );
-    if (!blob) return file;
-
-    return new File([blob], toWebpFileName(file.name), { type: 'image/webp' });
-  } finally {
-    bitmap.close();
-  }
 }
 
 // ─── Image Adapter ──────────────────────────────────────────────────────────

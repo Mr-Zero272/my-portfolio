@@ -8,6 +8,7 @@ import { ArrowLeftIcon } from 'lucide-react';
 import { useId } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { DEFAULT_POST_FORM_VALUES, PostFormSchema, PostFormValues } from '../../schemas';
+import { FeatureImageInput } from './feature-image-input';
 import { PostFormSidebar } from './post-form-sidebar';
 
 const PostFormContent = ({
@@ -57,8 +58,18 @@ const PostFormContent = ({
           </header>
 
           <div className="flex flex-1 flex-col gap-4 p-4">
-            {/* <Editor /> */}
-            editor
+            <div
+              style={{
+                padding: '0 20px',
+              }}
+            >
+              <div className="mx-auto mt-5 mb-32 max-w-5xl overflow-hidden">
+                <div>
+                  <FeatureImageInput />
+                  edit
+                </div>
+              </div>
+            </div>
           </div>
         </form>
       </SidebarInset>

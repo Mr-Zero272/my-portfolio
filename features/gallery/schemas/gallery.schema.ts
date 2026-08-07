@@ -21,7 +21,7 @@ export const confirmUploadSchema = z.object({
 export type ConfirmUploadInput = z.infer<typeof confirmUploadSchema>;
 
 export const uploadFromUrlSchema = z.object({
-  url: z.string().url('Invalid image URL'),
+  url: z.url('Invalid image URL'),
   name: z.string().optional(),
   caption: z.string().optional(),
 });

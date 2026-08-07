@@ -54,7 +54,7 @@ class UploadManager {
    * Create a task from a File + config, add to store, and enqueue for upload.
    * @returns The generated task ID.
    */
-  enqueue(file: File, config: UploadAdapterConfig): string {
+  enqueue(file: File, config?: UploadAdapterConfig): string {
     const id = generateId({ length: 16 });
     const task: UploadTask = {
       id,
@@ -64,8 +64,8 @@ class UploadManager {
       error: null,
       retryCount: 0,
       maxRetries: MAX_AUTO_RETRIES,
-      context: config.context,
-      skipCompression: config.skipCompression,
+      context: config?.context || {},
+      skipCompression: config?.skipCompression || false,
       createdAt: new Date().toISOString(),
     };
 
