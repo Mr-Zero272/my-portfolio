@@ -1,6 +1,9 @@
+'use client';
+
 import { FormInput } from '@/components/forms';
 import { Button } from '@/components/ui/button';
 import { Spinner } from '@/components/ui/spinner';
+import { useDeleteGallery } from '@/features/gallery/hooks/mutations';
 import { GalleryImage } from '@/lib/generated/prisma/client';
 import { uploadManager } from '@/lib/upload';
 import { selectTaskById, useUploadStore } from '@/stores/upload';
@@ -10,7 +13,8 @@ import { useEffect, useRef, useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 
 export const FeatureImageInput = ({ featureImageFile }: { featureImageFile?: GalleryImage }) => {
-  const { setValue, formState } = useFormContext();
+  const { mutate: deleteGallery } = useDeleteGallery();
+  const { setValue } = useFormContext();
   const inputFileRef = useRef<HTMLInputElement>(null);
 
   const [imageFeatureFile, setImageFeatureFile] = useState<File | null>(null);
@@ -75,12 +79,15 @@ export const FeatureImageInput = ({ featureImageFile }: { featureImageFile?: Gal
 
   const handleRemoveImage = () => {
     if (task) uploadManager.cancel(task.id);
+    // Xóa ảnh đã lưu trên gallery (ảnh cũ của post) khi remove khỏi form
+    if (featureImageFile) {
+      deleteGallery({ path: { id: featureImageFile.id } });
+    }
     revokeBlobPreview();
     setImageFeatureFile(null);
     setPreviewUrl(null);
     setTaskId(null);
     setValue('featureImageId', '', { shouldDirty: true });
-    // TODO: gọi api xóa ảnh cũ (chưa có cronjob dọn file orphan)
   };
 
   const handleRetry = () => {
@@ -142,7 +149,7 @@ export const FeatureImageInput = ({ featureImageFile }: { featureImageFile?: Gal
           </div>
 
           {hasFinalError && (
-            <div className="bg-destructive/10 mt-3 flex items-center gap-2 rounded-md border border-destructive/30 px-3 py-2 text-sm text-destructive">
+            <div className="bg-destructive/10 border-destructive/30 text-destructive mt-3 flex items-center gap-2 rounded-md border px-3 py-2 text-sm">
               <TriangleAlertIcon className="size-4 shrink-0" />
               <span className="min-w-0 flex-1 truncate">Upload failed: {task?.error}</span>
               <Button onClick={handleRetry} variant="outline" size="sm">
