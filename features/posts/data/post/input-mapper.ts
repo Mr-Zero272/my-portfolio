@@ -11,7 +11,7 @@ export const toPostFormValue = (
     content: post.content,
     contentHtml: post.contentHtml ?? undefined,
     keywords: post.keywords,
-    featureImage: post.featureImage ?? undefined,
+    featureImageId: post.featureImageId ?? undefined,
     imageCaption: post.imageCaption ?? undefined,
     likes: post.likes,
     views: post.views,

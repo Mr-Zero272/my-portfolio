@@ -1,4 +1,4 @@
-import { GoogleBrand } from '@/components/icons';
+import { GoogleIcon } from '@/components/icons';
 import { SearchIcon } from 'lucide-react';
 
 export const GoogleSearchPreview = ({
@@ -13,7 +13,7 @@ export const GoogleSearchPreview = ({
   return (
     <div className="border-border w-full space-y-2 rounded-lg border p-4">
       <div className="flex max-w-2xl items-center gap-3">
-        <GoogleBrand className="size-5" />
+        <GoogleIcon className="size-5" />
 
         <div className="relative h-8 flex-1 rounded-full bg-[#f1f3f4] p-1 dark:bg-[#2e3338]">
           <SearchIcon className="absolute top-1/2 right-2 size-4 -translate-x-1/2 -translate-y-1/2 text-gray-500" />

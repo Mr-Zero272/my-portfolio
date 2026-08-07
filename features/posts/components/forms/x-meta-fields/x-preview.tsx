@@ -1,13 +1,15 @@
-import { XBrand } from '@/components/icons';
+import { XIcon } from '@/components/icons';
 import { HeartIcon, LinkIcon, MessageCircleIcon, RefreshCcwIcon, ShareIcon } from 'lucide-react';
 
 export const XPreview = ({ title, url }: { title: string; url: string }) => {
   return (
-    <div className="border-border w-full rounded-lg border p-4">
-      <div className="flex max-w-2xl items-start gap-3">
-        <XBrand className="size-12" />
+    <div className="border-border flex w-full overflow-hidden rounded-lg border p-4">
+      <div className="flex w-full flex-1 items-start gap-3 overflow-hidden">
+        <div>
+          <XIcon className="size-6" />
+        </div>
 
-        <div className="flex-1 space-y-2">
+        <div className="w-full flex-1 space-y-2 overflow-hidden">
           <div className="font-bold">
             Piti <span className="text-muted-foreground font-normal">12 hrs</span>
           </div>
@@ -16,11 +18,13 @@ export const XPreview = ({ title, url }: { title: string; url: string }) => {
             <div className="h-3 w-7/12 rounded-full bg-[#f1f3f4] dark:bg-[#2e3338]" />
           </div>
 
-          <div className="border-border rounded-2xl border p-4">
-            <div className="font-semibold">{title ?? 'Your story title'}</div>
-            <div className="text-muted-foreground flex items-center text-sm">
-              <LinkIcon className="me-1 size-3" />
-              {url}
+          <div className="border-border w-full overflow-hidden rounded-2xl border p-3">
+            <div className="font-semibold">{title || 'Your story title'}</div>
+            <div className="flex items-center gap-1 overflow-hidden">
+              <div>
+                <LinkIcon className="size-3" />
+              </div>
+              <span className="text-muted-foreground line-clamp-1 flex-1 truncate">{url}</span>
             </div>
           </div>
 

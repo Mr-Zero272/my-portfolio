@@ -1,4 +1,4 @@
-import { ApiErrorCode, buildListQuery, throwApiError } from '@/lib/api';
+import { ApiErrorCode, buildListQuery, FilterOperator, throwApiError } from '@/lib/api';
 import { requireAdmin } from '@/lib/auth-guard';
 import type { Prisma } from '@/lib/generated/prisma/client';
 import { generateId } from '@/lib/id';
@@ -28,6 +28,9 @@ export const galleryService = {
     const query = buildListQuery<Prisma.GalleryImageWhereInput>(searchParams, {
       searchFields: GALLERY_SEARCH_FIELDS,
       sortableFields: GALLERY_SORTABLE_FIELDS,
+      filterFields: {
+        mimeType: { field: 'mimeType', operator: FilterOperator.EQUALS },
+      },
     });
 
     const [galleryImages, total] = await Promise.all([

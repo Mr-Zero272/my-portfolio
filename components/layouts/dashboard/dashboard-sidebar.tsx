@@ -23,12 +23,16 @@ const data = {
       isActive: true,
       items: [
         {
-          title: 'Tags',
+          title: 'Post',
+          url: '/dashboard/posts',
+        },
+        {
+          title: 'Tag',
           url: '/dashboard/tags',
         },
         {
-          title: 'Posts',
-          url: '/dashboard/posts',
+          title: 'Gallery',
+          url: '/dashboard/galleries',
         },
       ],
     },

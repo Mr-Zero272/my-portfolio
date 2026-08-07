@@ -1,6 +1,6 @@
 import { FormTextArea } from '@/components/forms';
 import { FormSlugInput } from '@/components/forms/form-slug-input';
-import { GoogleBrand, XBrand } from '@/components/icons';
+import { GoogleIcon, XIcon } from '@/components/icons';
 import { FieldGroup } from '@/components/ui/field';
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
 import { ChevronRightIcon } from 'lucide-react';
@@ -41,7 +41,7 @@ export const PostBaseFieldsTab = ({
         <SidebarMenuItem onClick={() => onTabChange('metadata')}>
           <SidebarMenuButton className="justify-between">
             <div className="flex items-center gap-2">
-              <GoogleBrand className="size-4" />
+              <GoogleIcon className="size-4" />
               <span>Metadata</span>
             </div>
             <ChevronRightIcon className="size-4" />
@@ -51,7 +51,7 @@ export const PostBaseFieldsTab = ({
         <SidebarMenuItem onClick={() => onTabChange('x_metadata')}>
           <SidebarMenuButton className="justify-between">
             <div className="flex items-center gap-2">
-              <XBrand className="size-4" />
+              <XIcon className="size-4" />
               <span>X Metadata</span>
             </div>
             <ChevronRightIcon className="size-4" />

@@ -218,23 +218,26 @@ model GalleryImage {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
+  posts Post[]
+
   @@index([userCreated])
   @@map("gallery")
 }
 
 model Post {
-  id               String   @id @default(cuid()) @map("_id")
+  id               String        @id @default(cuid()) @map("_id")
   title            String
   slug             String
   excerpt          String?
   content          String
   contentHtml      String?
-  keywords         String[] @default([])
-  featureImage     String?
+  keywords         String[]      @default([])
+  featureImageId   String?
+  featureImage     GalleryImage? @relation(fields: [featureImageId], references: [id], onDelete: SetNull)
   imageCaption     String?
-  likes            Int      @default(0)
-  views            Int      @default(0)
-  shares           Int      @default(0)
+  likes            Int           @default(0)
+  views            Int           @default(0)
+  shares           Int           @default(0)
   metaTitle        String?
   metaDescription  String?
   xMetaTitle       String?

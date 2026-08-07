@@ -45,7 +45,7 @@ export type PostMinAggregateOutputType = {
   excerpt: string | null
   content: string | null
   contentHtml: string | null
-  featureImage: string | null
+  featureImageId: string | null
   imageCaption: string | null
   likes: number | null
   views: number | null
@@ -67,7 +67,7 @@ export type PostMaxAggregateOutputType = {
   excerpt: string | null
   content: string | null
   contentHtml: string | null
-  featureImage: string | null
+  featureImageId: string | null
   imageCaption: string | null
   likes: number | null
   views: number | null
@@ -90,7 +90,7 @@ export type PostCountAggregateOutputType = {
   content: number
   contentHtml: number
   keywords: number
-  featureImage: number
+  featureImageId: number
   imageCaption: number
   likes: number
   views: number
@@ -126,7 +126,7 @@ export type PostMinAggregateInputType = {
   excerpt?: true
   content?: true
   contentHtml?: true
-  featureImage?: true
+  featureImageId?: true
   imageCaption?: true
   likes?: true
   views?: true
@@ -148,7 +148,7 @@ export type PostMaxAggregateInputType = {
   excerpt?: true
   content?: true
   contentHtml?: true
-  featureImage?: true
+  featureImageId?: true
   imageCaption?: true
   likes?: true
   views?: true
@@ -171,7 +171,7 @@ export type PostCountAggregateInputType = {
   content?: true
   contentHtml?: true
   keywords?: true
-  featureImage?: true
+  featureImageId?: true
   imageCaption?: true
   likes?: true
   views?: true
@@ -281,7 +281,7 @@ export type PostGroupByOutputType = {
   content: string
   contentHtml: string | null
   keywords: string[]
-  featureImage: string | null
+  featureImageId: string | null
   imageCaption: string | null
   likes: number
   views: number
@@ -327,7 +327,7 @@ export type PostWhereInput = {
   content?: Prisma.StringFilter<"Post"> | string
   contentHtml?: Prisma.StringNullableFilter<"Post"> | string | null
   keywords?: Prisma.StringNullableListFilter<"Post">
-  featureImage?: Prisma.StringNullableFilter<"Post"> | string | null
+  featureImageId?: Prisma.StringNullableFilter<"Post"> | string | null
   imageCaption?: Prisma.StringNullableFilter<"Post"> | string | null
   likes?: Prisma.IntFilter<"Post"> | number
   views?: Prisma.IntFilter<"Post"> | number
@@ -340,6 +340,7 @@ export type PostWhereInput = {
   published?: Prisma.BoolFilter<"Post"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Post"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Post"> | Date | string
+  featureImage?: Prisma.XOR<Prisma.GalleryImageNullableScalarRelationFilter, Prisma.GalleryImageWhereInput> | null
   authors?: Prisma.PostAuthorListRelationFilter
   tags?: Prisma.PostTagListRelationFilter
   comments?: Prisma.CommentListRelationFilter
@@ -354,7 +355,7 @@ export type PostOrderByWithRelationInput = {
   content?: Prisma.SortOrder
   contentHtml?: Prisma.SortOrder
   keywords?: Prisma.SortOrder
-  featureImage?: Prisma.SortOrder
+  featureImageId?: Prisma.SortOrder
   imageCaption?: Prisma.SortOrder
   likes?: Prisma.SortOrder
   views?: Prisma.SortOrder
@@ -367,6 +368,7 @@ export type PostOrderByWithRelationInput = {
   published?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  featureImage?: Prisma.GalleryImageOrderByWithRelationInput
   authors?: Prisma.PostAuthorOrderByRelationAggregateInput
   tags?: Prisma.PostTagOrderByRelationAggregateInput
   comments?: Prisma.CommentOrderByRelationAggregateInput
@@ -384,7 +386,7 @@ export type PostWhereUniqueInput = Prisma.AtLeast<{
   content?: Prisma.StringFilter<"Post"> | string
   contentHtml?: Prisma.StringNullableFilter<"Post"> | string | null
   keywords?: Prisma.StringNullableListFilter<"Post">
-  featureImage?: Prisma.StringNullableFilter<"Post"> | string | null
+  featureImageId?: Prisma.StringNullableFilter<"Post"> | string | null
   imageCaption?: Prisma.StringNullableFilter<"Post"> | string | null
   likes?: Prisma.IntFilter<"Post"> | number
   views?: Prisma.IntFilter<"Post"> | number
@@ -397,6 +399,7 @@ export type PostWhereUniqueInput = Prisma.AtLeast<{
   published?: Prisma.BoolFilter<"Post"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Post"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Post"> | Date | string
+  featureImage?: Prisma.XOR<Prisma.GalleryImageNullableScalarRelationFilter, Prisma.GalleryImageWhereInput> | null
   authors?: Prisma.PostAuthorListRelationFilter
   tags?: Prisma.PostTagListRelationFilter
   comments?: Prisma.CommentListRelationFilter
@@ -411,7 +414,7 @@ export type PostOrderByWithAggregationInput = {
   content?: Prisma.SortOrder
   contentHtml?: Prisma.SortOrder
   keywords?: Prisma.SortOrder
-  featureImage?: Prisma.SortOrder
+  featureImageId?: Prisma.SortOrder
   imageCaption?: Prisma.SortOrder
   likes?: Prisma.SortOrder
   views?: Prisma.SortOrder
@@ -442,7 +445,7 @@ export type PostScalarWhereWithAggregatesInput = {
   content?: Prisma.StringWithAggregatesFilter<"Post"> | string
   contentHtml?: Prisma.StringNullableWithAggregatesFilter<"Post"> | string | null
   keywords?: Prisma.StringNullableListFilter<"Post">
-  featureImage?: Prisma.StringNullableWithAggregatesFilter<"Post"> | string | null
+  featureImageId?: Prisma.StringNullableWithAggregatesFilter<"Post"> | string | null
   imageCaption?: Prisma.StringNullableWithAggregatesFilter<"Post"> | string | null
   likes?: Prisma.IntWithAggregatesFilter<"Post"> | number
   views?: Prisma.IntWithAggregatesFilter<"Post"> | number
@@ -465,7 +468,6 @@ export type PostCreateInput = {
   content: string
   contentHtml?: string | null
   keywords?: Prisma.PostCreatekeywordsInput | string[]
-  featureImage?: string | null
   imageCaption?: string | null
   likes?: number
   views?: number
@@ -478,6 +480,7 @@ export type PostCreateInput = {
   published?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  featureImage?: Prisma.GalleryImageCreateNestedOneWithoutPostsInput
   authors?: Prisma.PostAuthorCreateNestedManyWithoutPostInput
   tags?: Prisma.PostTagCreateNestedManyWithoutPostInput
   comments?: Prisma.CommentCreateNestedManyWithoutPostInput
@@ -492,7 +495,7 @@ export type PostUncheckedCreateInput = {
   content: string
   contentHtml?: string | null
   keywords?: Prisma.PostCreatekeywordsInput | string[]
-  featureImage?: string | null
+  featureImageId?: string | null
   imageCaption?: string | null
   likes?: number
   views?: number
@@ -518,7 +521,6 @@ export type PostUpdateInput = {
   content?: Prisma.StringFieldUpdateOperationsInput | string
   contentHtml?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   keywords?: Prisma.PostUpdatekeywordsInput | string[]
-  featureImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   imageCaption?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   likes?: Prisma.IntFieldUpdateOperationsInput | number
   views?: Prisma.IntFieldUpdateOperationsInput | number
@@ -531,6 +533,7 @@ export type PostUpdateInput = {
   published?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  featureImage?: Prisma.GalleryImageUpdateOneWithoutPostsNestedInput
   authors?: Prisma.PostAuthorUpdateManyWithoutPostNestedInput
   tags?: Prisma.PostTagUpdateManyWithoutPostNestedInput
   comments?: Prisma.CommentUpdateManyWithoutPostNestedInput
@@ -544,7 +547,7 @@ export type PostUncheckedUpdateInput = {
   content?: Prisma.StringFieldUpdateOperationsInput | string
   contentHtml?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   keywords?: Prisma.PostUpdatekeywordsInput | string[]
-  featureImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  featureImageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   imageCaption?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   likes?: Prisma.IntFieldUpdateOperationsInput | number
   views?: Prisma.IntFieldUpdateOperationsInput | number
@@ -571,7 +574,7 @@ export type PostCreateManyInput = {
   content: string
   contentHtml?: string | null
   keywords?: Prisma.PostCreatekeywordsInput | string[]
-  featureImage?: string | null
+  featureImageId?: string | null
   imageCaption?: string | null
   likes?: number
   views?: number
@@ -593,7 +596,6 @@ export type PostUpdateManyMutationInput = {
   content?: Prisma.StringFieldUpdateOperationsInput | string
   contentHtml?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   keywords?: Prisma.PostUpdatekeywordsInput | string[]
-  featureImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   imageCaption?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   likes?: Prisma.IntFieldUpdateOperationsInput | number
   views?: Prisma.IntFieldUpdateOperationsInput | number
@@ -615,7 +617,7 @@ export type PostUncheckedUpdateManyInput = {
   content?: Prisma.StringFieldUpdateOperationsInput | string
   contentHtml?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   keywords?: Prisma.PostUpdatekeywordsInput | string[]
-  featureImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  featureImageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   imageCaption?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   likes?: Prisma.IntFieldUpdateOperationsInput | number
   views?: Prisma.IntFieldUpdateOperationsInput | number
@@ -630,6 +632,16 @@ export type PostUncheckedUpdateManyInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
+export type PostListRelationFilter = {
+  every?: Prisma.PostWhereInput
+  some?: Prisma.PostWhereInput
+  none?: Prisma.PostWhereInput
+}
+
+export type PostOrderByRelationAggregateInput = {
+  _count?: Prisma.SortOrder
+}
+
 export type PostCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   title?: Prisma.SortOrder
@@ -638,7 +650,7 @@ export type PostCountOrderByAggregateInput = {
   content?: Prisma.SortOrder
   contentHtml?: Prisma.SortOrder
   keywords?: Prisma.SortOrder
-  featureImage?: Prisma.SortOrder
+  featureImageId?: Prisma.SortOrder
   imageCaption?: Prisma.SortOrder
   likes?: Prisma.SortOrder
   views?: Prisma.SortOrder
@@ -666,7 +678,7 @@ export type PostMaxOrderByAggregateInput = {
   excerpt?: Prisma.SortOrder
   content?: Prisma.SortOrder
   contentHtml?: Prisma.SortOrder
-  featureImage?: Prisma.SortOrder
+  featureImageId?: Prisma.SortOrder
   imageCaption?: Prisma.SortOrder
   likes?: Prisma.SortOrder
   views?: Prisma.SortOrder
@@ -688,7 +700,7 @@ export type PostMinOrderByAggregateInput = {
   excerpt?: Prisma.SortOrder
   content?: Prisma.SortOrder
   contentHtml?: Prisma.SortOrder
-  featureImage?: Prisma.SortOrder
+  featureImageId?: Prisma.SortOrder
   imageCaption?: Prisma.SortOrder
   likes?: Prisma.SortOrder
   views?: Prisma.SortOrder
@@ -712,6 +724,48 @@ export type PostSumOrderByAggregateInput = {
 export type PostScalarRelationFilter = {
   is?: Prisma.PostWhereInput
   isNot?: Prisma.PostWhereInput
+}
+
+export type PostCreateNestedManyWithoutFeatureImageInput = {
+  create?: Prisma.XOR<Prisma.PostCreateWithoutFeatureImageInput, Prisma.PostUncheckedCreateWithoutFeatureImageInput> | Prisma.PostCreateWithoutFeatureImageInput[] | Prisma.PostUncheckedCreateWithoutFeatureImageInput[]
+  connectOrCreate?: Prisma.PostCreateOrConnectWithoutFeatureImageInput | Prisma.PostCreateOrConnectWithoutFeatureImageInput[]
+  createMany?: Prisma.PostCreateManyFeatureImageInputEnvelope
+  connect?: Prisma.PostWhereUniqueInput | Prisma.PostWhereUniqueInput[]
+}
+
+export type PostUncheckedCreateNestedManyWithoutFeatureImageInput = {
+  create?: Prisma.XOR<Prisma.PostCreateWithoutFeatureImageInput, Prisma.PostUncheckedCreateWithoutFeatureImageInput> | Prisma.PostCreateWithoutFeatureImageInput[] | Prisma.PostUncheckedCreateWithoutFeatureImageInput[]
+  connectOrCreate?: Prisma.PostCreateOrConnectWithoutFeatureImageInput | Prisma.PostCreateOrConnectWithoutFeatureImageInput[]
+  createMany?: Prisma.PostCreateManyFeatureImageInputEnvelope
+  connect?: Prisma.PostWhereUniqueInput | Prisma.PostWhereUniqueInput[]
+}
+
+export type PostUpdateManyWithoutFeatureImageNestedInput = {
+  create?: Prisma.XOR<Prisma.PostCreateWithoutFeatureImageInput, Prisma.PostUncheckedCreateWithoutFeatureImageInput> | Prisma.PostCreateWithoutFeatureImageInput[] | Prisma.PostUncheckedCreateWithoutFeatureImageInput[]
+  connectOrCreate?: Prisma.PostCreateOrConnectWithoutFeatureImageInput | Prisma.PostCreateOrConnectWithoutFeatureImageInput[]
+  upsert?: Prisma.PostUpsertWithWhereUniqueWithoutFeatureImageInput | Prisma.PostUpsertWithWhereUniqueWithoutFeatureImageInput[]
+  createMany?: Prisma.PostCreateManyFeatureImageInputEnvelope
+  set?: Prisma.PostWhereUniqueInput | Prisma.PostWhereUniqueInput[]
+  disconnect?: Prisma.PostWhereUniqueInput | Prisma.PostWhereUniqueInput[]
+  delete?: Prisma.PostWhereUniqueInput | Prisma.PostWhereUniqueInput[]
+  connect?: Prisma.PostWhereUniqueInput | Prisma.PostWhereUniqueInput[]
+  update?: Prisma.PostUpdateWithWhereUniqueWithoutFeatureImageInput | Prisma.PostUpdateWithWhereUniqueWithoutFeatureImageInput[]
+  updateMany?: Prisma.PostUpdateManyWithWhereWithoutFeatureImageInput | Prisma.PostUpdateManyWithWhereWithoutFeatureImageInput[]
+  deleteMany?: Prisma.PostScalarWhereInput | Prisma.PostScalarWhereInput[]
+}
+
+export type PostUncheckedUpdateManyWithoutFeatureImageNestedInput = {
+  create?: Prisma.XOR<Prisma.PostCreateWithoutFeatureImageInput, Prisma.PostUncheckedCreateWithoutFeatureImageInput> | Prisma.PostCreateWithoutFeatureImageInput[] | Prisma.PostUncheckedCreateWithoutFeatureImageInput[]
+  connectOrCreate?: Prisma.PostCreateOrConnectWithoutFeatureImageInput | Prisma.PostCreateOrConnectWithoutFeatureImageInput[]
+  upsert?: Prisma.PostUpsertWithWhereUniqueWithoutFeatureImageInput | Prisma.PostUpsertWithWhereUniqueWithoutFeatureImageInput[]
+  createMany?: Prisma.PostCreateManyFeatureImageInputEnvelope
+  set?: Prisma.PostWhereUniqueInput | Prisma.PostWhereUniqueInput[]
+  disconnect?: Prisma.PostWhereUniqueInput | Prisma.PostWhereUniqueInput[]
+  delete?: Prisma.PostWhereUniqueInput | Prisma.PostWhereUniqueInput[]
+  connect?: Prisma.PostWhereUniqueInput | Prisma.PostWhereUniqueInput[]
+  update?: Prisma.PostUpdateWithWhereUniqueWithoutFeatureImageInput | Prisma.PostUpdateWithWhereUniqueWithoutFeatureImageInput[]
+  updateMany?: Prisma.PostUpdateManyWithWhereWithoutFeatureImageInput | Prisma.PostUpdateManyWithWhereWithoutFeatureImageInput[]
+  deleteMany?: Prisma.PostScalarWhereInput | Prisma.PostScalarWhereInput[]
 }
 
 export type PostCreatekeywordsInput = {
@@ -779,7 +833,7 @@ export type PostUpdateOneRequiredWithoutCommentsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.PostUpdateToOneWithWhereWithoutCommentsInput, Prisma.PostUpdateWithoutCommentsInput>, Prisma.PostUncheckedUpdateWithoutCommentsInput>
 }
 
-export type PostCreateWithoutAuthorsInput = {
+export type PostCreateWithoutFeatureImageInput = {
   id?: string
   title: string
   slug: string
@@ -787,7 +841,6 @@ export type PostCreateWithoutAuthorsInput = {
   content: string
   contentHtml?: string | null
   keywords?: Prisma.PostCreatekeywordsInput | string[]
-  featureImage?: string | null
   imageCaption?: string | null
   likes?: number
   views?: number
@@ -800,6 +853,110 @@ export type PostCreateWithoutAuthorsInput = {
   published?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  authors?: Prisma.PostAuthorCreateNestedManyWithoutPostInput
+  tags?: Prisma.PostTagCreateNestedManyWithoutPostInput
+  comments?: Prisma.CommentCreateNestedManyWithoutPostInput
+  likedBy?: Prisma.PostLikeCreateNestedManyWithoutPostInput
+}
+
+export type PostUncheckedCreateWithoutFeatureImageInput = {
+  id?: string
+  title: string
+  slug: string
+  excerpt?: string | null
+  content: string
+  contentHtml?: string | null
+  keywords?: Prisma.PostCreatekeywordsInput | string[]
+  imageCaption?: string | null
+  likes?: number
+  views?: number
+  shares?: number
+  metaTitle?: string | null
+  metaDescription?: string | null
+  xMetaTitle?: string | null
+  xMetaDescription?: string | null
+  xMetaImage?: string | null
+  published?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  authors?: Prisma.PostAuthorUncheckedCreateNestedManyWithoutPostInput
+  tags?: Prisma.PostTagUncheckedCreateNestedManyWithoutPostInput
+  comments?: Prisma.CommentUncheckedCreateNestedManyWithoutPostInput
+  likedBy?: Prisma.PostLikeUncheckedCreateNestedManyWithoutPostInput
+}
+
+export type PostCreateOrConnectWithoutFeatureImageInput = {
+  where: Prisma.PostWhereUniqueInput
+  create: Prisma.XOR<Prisma.PostCreateWithoutFeatureImageInput, Prisma.PostUncheckedCreateWithoutFeatureImageInput>
+}
+
+export type PostCreateManyFeatureImageInputEnvelope = {
+  data: Prisma.PostCreateManyFeatureImageInput | Prisma.PostCreateManyFeatureImageInput[]
+}
+
+export type PostUpsertWithWhereUniqueWithoutFeatureImageInput = {
+  where: Prisma.PostWhereUniqueInput
+  update: Prisma.XOR<Prisma.PostUpdateWithoutFeatureImageInput, Prisma.PostUncheckedUpdateWithoutFeatureImageInput>
+  create: Prisma.XOR<Prisma.PostCreateWithoutFeatureImageInput, Prisma.PostUncheckedCreateWithoutFeatureImageInput>
+}
+
+export type PostUpdateWithWhereUniqueWithoutFeatureImageInput = {
+  where: Prisma.PostWhereUniqueInput
+  data: Prisma.XOR<Prisma.PostUpdateWithoutFeatureImageInput, Prisma.PostUncheckedUpdateWithoutFeatureImageInput>
+}
+
+export type PostUpdateManyWithWhereWithoutFeatureImageInput = {
+  where: Prisma.PostScalarWhereInput
+  data: Prisma.XOR<Prisma.PostUpdateManyMutationInput, Prisma.PostUncheckedUpdateManyWithoutFeatureImageInput>
+}
+
+export type PostScalarWhereInput = {
+  AND?: Prisma.PostScalarWhereInput | Prisma.PostScalarWhereInput[]
+  OR?: Prisma.PostScalarWhereInput[]
+  NOT?: Prisma.PostScalarWhereInput | Prisma.PostScalarWhereInput[]
+  id?: Prisma.StringFilter<"Post"> | string
+  title?: Prisma.StringFilter<"Post"> | string
+  slug?: Prisma.StringFilter<"Post"> | string
+  excerpt?: Prisma.StringNullableFilter<"Post"> | string | null
+  content?: Prisma.StringFilter<"Post"> | string
+  contentHtml?: Prisma.StringNullableFilter<"Post"> | string | null
+  keywords?: Prisma.StringNullableListFilter<"Post">
+  featureImageId?: Prisma.StringNullableFilter<"Post"> | string | null
+  imageCaption?: Prisma.StringNullableFilter<"Post"> | string | null
+  likes?: Prisma.IntFilter<"Post"> | number
+  views?: Prisma.IntFilter<"Post"> | number
+  shares?: Prisma.IntFilter<"Post"> | number
+  metaTitle?: Prisma.StringNullableFilter<"Post"> | string | null
+  metaDescription?: Prisma.StringNullableFilter<"Post"> | string | null
+  xMetaTitle?: Prisma.StringNullableFilter<"Post"> | string | null
+  xMetaDescription?: Prisma.StringNullableFilter<"Post"> | string | null
+  xMetaImage?: Prisma.StringNullableFilter<"Post"> | string | null
+  published?: Prisma.BoolFilter<"Post"> | boolean
+  createdAt?: Prisma.DateTimeFilter<"Post"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"Post"> | Date | string
+}
+
+export type PostCreateWithoutAuthorsInput = {
+  id?: string
+  title: string
+  slug: string
+  excerpt?: string | null
+  content: string
+  contentHtml?: string | null
+  keywords?: Prisma.PostCreatekeywordsInput | string[]
+  imageCaption?: string | null
+  likes?: number
+  views?: number
+  shares?: number
+  metaTitle?: string | null
+  metaDescription?: string | null
+  xMetaTitle?: string | null
+  xMetaDescription?: string | null
+  xMetaImage?: string | null
+  published?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  featureImage?: Prisma.GalleryImageCreateNestedOneWithoutPostsInput
   tags?: Prisma.PostTagCreateNestedManyWithoutPostInput
   comments?: Prisma.CommentCreateNestedManyWithoutPostInput
   likedBy?: Prisma.PostLikeCreateNestedManyWithoutPostInput
@@ -813,7 +970,7 @@ export type PostUncheckedCreateWithoutAuthorsInput = {
   content: string
   contentHtml?: string | null
   keywords?: Prisma.PostCreatekeywordsInput | string[]
-  featureImage?: string | null
+  featureImageId?: string | null
   imageCaption?: string | null
   likes?: number
   views?: number
@@ -854,7 +1011,6 @@ export type PostUpdateWithoutAuthorsInput = {
   content?: Prisma.StringFieldUpdateOperationsInput | string
   contentHtml?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   keywords?: Prisma.PostUpdatekeywordsInput | string[]
-  featureImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   imageCaption?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   likes?: Prisma.IntFieldUpdateOperationsInput | number
   views?: Prisma.IntFieldUpdateOperationsInput | number
@@ -867,6 +1023,7 @@ export type PostUpdateWithoutAuthorsInput = {
   published?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  featureImage?: Prisma.GalleryImageUpdateOneWithoutPostsNestedInput
   tags?: Prisma.PostTagUpdateManyWithoutPostNestedInput
   comments?: Prisma.CommentUpdateManyWithoutPostNestedInput
   likedBy?: Prisma.PostLikeUpdateManyWithoutPostNestedInput
@@ -879,7 +1036,7 @@ export type PostUncheckedUpdateWithoutAuthorsInput = {
   content?: Prisma.StringFieldUpdateOperationsInput | string
   contentHtml?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   keywords?: Prisma.PostUpdatekeywordsInput | string[]
-  featureImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  featureImageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   imageCaption?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   likes?: Prisma.IntFieldUpdateOperationsInput | number
   views?: Prisma.IntFieldUpdateOperationsInput | number
@@ -905,7 +1062,6 @@ export type PostCreateWithoutTagsInput = {
   content: string
   contentHtml?: string | null
   keywords?: Prisma.PostCreatekeywordsInput | string[]
-  featureImage?: string | null
   imageCaption?: string | null
   likes?: number
   views?: number
@@ -918,6 +1074,7 @@ export type PostCreateWithoutTagsInput = {
   published?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  featureImage?: Prisma.GalleryImageCreateNestedOneWithoutPostsInput
   authors?: Prisma.PostAuthorCreateNestedManyWithoutPostInput
   comments?: Prisma.CommentCreateNestedManyWithoutPostInput
   likedBy?: Prisma.PostLikeCreateNestedManyWithoutPostInput
@@ -931,7 +1088,7 @@ export type PostUncheckedCreateWithoutTagsInput = {
   content: string
   contentHtml?: string | null
   keywords?: Prisma.PostCreatekeywordsInput | string[]
-  featureImage?: string | null
+  featureImageId?: string | null
   imageCaption?: string | null
   likes?: number
   views?: number
@@ -972,7 +1129,6 @@ export type PostUpdateWithoutTagsInput = {
   content?: Prisma.StringFieldUpdateOperationsInput | string
   contentHtml?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   keywords?: Prisma.PostUpdatekeywordsInput | string[]
-  featureImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   imageCaption?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   likes?: Prisma.IntFieldUpdateOperationsInput | number
   views?: Prisma.IntFieldUpdateOperationsInput | number
@@ -985,6 +1141,7 @@ export type PostUpdateWithoutTagsInput = {
   published?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  featureImage?: Prisma.GalleryImageUpdateOneWithoutPostsNestedInput
   authors?: Prisma.PostAuthorUpdateManyWithoutPostNestedInput
   comments?: Prisma.CommentUpdateManyWithoutPostNestedInput
   likedBy?: Prisma.PostLikeUpdateManyWithoutPostNestedInput
@@ -997,7 +1154,7 @@ export type PostUncheckedUpdateWithoutTagsInput = {
   content?: Prisma.StringFieldUpdateOperationsInput | string
   contentHtml?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   keywords?: Prisma.PostUpdatekeywordsInput | string[]
-  featureImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  featureImageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   imageCaption?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   likes?: Prisma.IntFieldUpdateOperationsInput | number
   views?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1023,7 +1180,6 @@ export type PostCreateWithoutLikedByInput = {
   content: string
   contentHtml?: string | null
   keywords?: Prisma.PostCreatekeywordsInput | string[]
-  featureImage?: string | null
   imageCaption?: string | null
   likes?: number
   views?: number
@@ -1036,6 +1192,7 @@ export type PostCreateWithoutLikedByInput = {
   published?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  featureImage?: Prisma.GalleryImageCreateNestedOneWithoutPostsInput
   authors?: Prisma.PostAuthorCreateNestedManyWithoutPostInput
   tags?: Prisma.PostTagCreateNestedManyWithoutPostInput
   comments?: Prisma.CommentCreateNestedManyWithoutPostInput
@@ -1049,7 +1206,7 @@ export type PostUncheckedCreateWithoutLikedByInput = {
   content: string
   contentHtml?: string | null
   keywords?: Prisma.PostCreatekeywordsInput | string[]
-  featureImage?: string | null
+  featureImageId?: string | null
   imageCaption?: string | null
   likes?: number
   views?: number
@@ -1090,7 +1247,6 @@ export type PostUpdateWithoutLikedByInput = {
   content?: Prisma.StringFieldUpdateOperationsInput | string
   contentHtml?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   keywords?: Prisma.PostUpdatekeywordsInput | string[]
-  featureImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   imageCaption?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   likes?: Prisma.IntFieldUpdateOperationsInput | number
   views?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1103,6 +1259,7 @@ export type PostUpdateWithoutLikedByInput = {
   published?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  featureImage?: Prisma.GalleryImageUpdateOneWithoutPostsNestedInput
   authors?: Prisma.PostAuthorUpdateManyWithoutPostNestedInput
   tags?: Prisma.PostTagUpdateManyWithoutPostNestedInput
   comments?: Prisma.CommentUpdateManyWithoutPostNestedInput
@@ -1115,7 +1272,7 @@ export type PostUncheckedUpdateWithoutLikedByInput = {
   content?: Prisma.StringFieldUpdateOperationsInput | string
   contentHtml?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   keywords?: Prisma.PostUpdatekeywordsInput | string[]
-  featureImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  featureImageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   imageCaption?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   likes?: Prisma.IntFieldUpdateOperationsInput | number
   views?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1141,7 +1298,6 @@ export type PostCreateWithoutCommentsInput = {
   content: string
   contentHtml?: string | null
   keywords?: Prisma.PostCreatekeywordsInput | string[]
-  featureImage?: string | null
   imageCaption?: string | null
   likes?: number
   views?: number
@@ -1154,6 +1310,7 @@ export type PostCreateWithoutCommentsInput = {
   published?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  featureImage?: Prisma.GalleryImageCreateNestedOneWithoutPostsInput
   authors?: Prisma.PostAuthorCreateNestedManyWithoutPostInput
   tags?: Prisma.PostTagCreateNestedManyWithoutPostInput
   likedBy?: Prisma.PostLikeCreateNestedManyWithoutPostInput
@@ -1167,7 +1324,7 @@ export type PostUncheckedCreateWithoutCommentsInput = {
   content: string
   contentHtml?: string | null
   keywords?: Prisma.PostCreatekeywordsInput | string[]
-  featureImage?: string | null
+  featureImageId?: string | null
   imageCaption?: string | null
   likes?: number
   views?: number
@@ -1208,7 +1365,6 @@ export type PostUpdateWithoutCommentsInput = {
   content?: Prisma.StringFieldUpdateOperationsInput | string
   contentHtml?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   keywords?: Prisma.PostUpdatekeywordsInput | string[]
-  featureImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   imageCaption?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   likes?: Prisma.IntFieldUpdateOperationsInput | number
   views?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1221,6 +1377,7 @@ export type PostUpdateWithoutCommentsInput = {
   published?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  featureImage?: Prisma.GalleryImageUpdateOneWithoutPostsNestedInput
   authors?: Prisma.PostAuthorUpdateManyWithoutPostNestedInput
   tags?: Prisma.PostTagUpdateManyWithoutPostNestedInput
   likedBy?: Prisma.PostLikeUpdateManyWithoutPostNestedInput
@@ -1233,7 +1390,7 @@ export type PostUncheckedUpdateWithoutCommentsInput = {
   content?: Prisma.StringFieldUpdateOperationsInput | string
   contentHtml?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   keywords?: Prisma.PostUpdatekeywordsInput | string[]
-  featureImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  featureImageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   imageCaption?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   likes?: Prisma.IntFieldUpdateOperationsInput | number
   views?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1249,6 +1406,99 @@ export type PostUncheckedUpdateWithoutCommentsInput = {
   authors?: Prisma.PostAuthorUncheckedUpdateManyWithoutPostNestedInput
   tags?: Prisma.PostTagUncheckedUpdateManyWithoutPostNestedInput
   likedBy?: Prisma.PostLikeUncheckedUpdateManyWithoutPostNestedInput
+}
+
+export type PostCreateManyFeatureImageInput = {
+  id?: string
+  title: string
+  slug: string
+  excerpt?: string | null
+  content: string
+  contentHtml?: string | null
+  keywords?: Prisma.PostCreatekeywordsInput | string[]
+  imageCaption?: string | null
+  likes?: number
+  views?: number
+  shares?: number
+  metaTitle?: string | null
+  metaDescription?: string | null
+  xMetaTitle?: string | null
+  xMetaDescription?: string | null
+  xMetaImage?: string | null
+  published?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type PostUpdateWithoutFeatureImageInput = {
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  excerpt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  content?: Prisma.StringFieldUpdateOperationsInput | string
+  contentHtml?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  keywords?: Prisma.PostUpdatekeywordsInput | string[]
+  imageCaption?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  likes?: Prisma.IntFieldUpdateOperationsInput | number
+  views?: Prisma.IntFieldUpdateOperationsInput | number
+  shares?: Prisma.IntFieldUpdateOperationsInput | number
+  metaTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  metaDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  xMetaTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  xMetaDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  xMetaImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  published?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  authors?: Prisma.PostAuthorUpdateManyWithoutPostNestedInput
+  tags?: Prisma.PostTagUpdateManyWithoutPostNestedInput
+  comments?: Prisma.CommentUpdateManyWithoutPostNestedInput
+  likedBy?: Prisma.PostLikeUpdateManyWithoutPostNestedInput
+}
+
+export type PostUncheckedUpdateWithoutFeatureImageInput = {
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  excerpt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  content?: Prisma.StringFieldUpdateOperationsInput | string
+  contentHtml?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  keywords?: Prisma.PostUpdatekeywordsInput | string[]
+  imageCaption?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  likes?: Prisma.IntFieldUpdateOperationsInput | number
+  views?: Prisma.IntFieldUpdateOperationsInput | number
+  shares?: Prisma.IntFieldUpdateOperationsInput | number
+  metaTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  metaDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  xMetaTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  xMetaDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  xMetaImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  published?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  authors?: Prisma.PostAuthorUncheckedUpdateManyWithoutPostNestedInput
+  tags?: Prisma.PostTagUncheckedUpdateManyWithoutPostNestedInput
+  comments?: Prisma.CommentUncheckedUpdateManyWithoutPostNestedInput
+  likedBy?: Prisma.PostLikeUncheckedUpdateManyWithoutPostNestedInput
+}
+
+export type PostUncheckedUpdateManyWithoutFeatureImageInput = {
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  excerpt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  content?: Prisma.StringFieldUpdateOperationsInput | string
+  contentHtml?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  keywords?: Prisma.PostUpdatekeywordsInput | string[]
+  imageCaption?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  likes?: Prisma.IntFieldUpdateOperationsInput | number
+  views?: Prisma.IntFieldUpdateOperationsInput | number
+  shares?: Prisma.IntFieldUpdateOperationsInput | number
+  metaTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  metaDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  xMetaTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  xMetaDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  xMetaImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  published?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 
@@ -1317,7 +1567,7 @@ export type PostSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   content?: boolean
   contentHtml?: boolean
   keywords?: boolean
-  featureImage?: boolean
+  featureImageId?: boolean
   imageCaption?: boolean
   likes?: boolean
   views?: boolean
@@ -1330,6 +1580,7 @@ export type PostSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   published?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  featureImage?: boolean | Prisma.Post$featureImageArgs<ExtArgs>
   authors?: boolean | Prisma.Post$authorsArgs<ExtArgs>
   tags?: boolean | Prisma.Post$tagsArgs<ExtArgs>
   comments?: boolean | Prisma.Post$commentsArgs<ExtArgs>
@@ -1347,7 +1598,7 @@ export type PostSelectScalar = {
   content?: boolean
   contentHtml?: boolean
   keywords?: boolean
-  featureImage?: boolean
+  featureImageId?: boolean
   imageCaption?: boolean
   likes?: boolean
   views?: boolean
@@ -1362,8 +1613,9 @@ export type PostSelectScalar = {
   updatedAt?: boolean
 }
 
-export type PostOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "slug" | "excerpt" | "content" | "contentHtml" | "keywords" | "featureImage" | "imageCaption" | "likes" | "views" | "shares" | "metaTitle" | "metaDescription" | "xMetaTitle" | "xMetaDescription" | "xMetaImage" | "published" | "createdAt" | "updatedAt", ExtArgs["result"]["post"]>
+export type PostOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "slug" | "excerpt" | "content" | "contentHtml" | "keywords" | "featureImageId" | "imageCaption" | "likes" | "views" | "shares" | "metaTitle" | "metaDescription" | "xMetaTitle" | "xMetaDescription" | "xMetaImage" | "published" | "createdAt" | "updatedAt", ExtArgs["result"]["post"]>
 export type PostInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  featureImage?: boolean | Prisma.Post$featureImageArgs<ExtArgs>
   authors?: boolean | Prisma.Post$authorsArgs<ExtArgs>
   tags?: boolean | Prisma.Post$tagsArgs<ExtArgs>
   comments?: boolean | Prisma.Post$commentsArgs<ExtArgs>
@@ -1374,6 +1626,7 @@ export type PostInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
 export type $PostPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Post"
   objects: {
+    featureImage: Prisma.$GalleryImagePayload<ExtArgs> | null
     authors: Prisma.$PostAuthorPayload<ExtArgs>[]
     tags: Prisma.$PostTagPayload<ExtArgs>[]
     comments: Prisma.$CommentPayload<ExtArgs>[]
@@ -1387,7 +1640,7 @@ export type $PostPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     content: string
     contentHtml: string | null
     keywords: string[]
-    featureImage: string | null
+    featureImageId: string | null
     imageCaption: string | null
     likes: number
     views: number
@@ -1763,6 +2016,7 @@ readonly fields: PostFieldRefs;
  */
 export interface Prisma__PostClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  featureImage<T extends Prisma.Post$featureImageArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Post$featureImageArgs<ExtArgs>>): Prisma.Prisma__GalleryImageClient<runtime.Types.Result.GetResult<Prisma.$GalleryImagePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   authors<T extends Prisma.Post$authorsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Post$authorsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PostAuthorPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   tags<T extends Prisma.Post$tagsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Post$tagsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PostTagPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   comments<T extends Prisma.Post$commentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Post$commentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CommentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -1803,7 +2057,7 @@ export interface PostFieldRefs {
   readonly content: Prisma.FieldRef<"Post", 'String'>
   readonly contentHtml: Prisma.FieldRef<"Post", 'String'>
   readonly keywords: Prisma.FieldRef<"Post", 'String[]'>
-  readonly featureImage: Prisma.FieldRef<"Post", 'String'>
+  readonly featureImageId: Prisma.FieldRef<"Post", 'String'>
   readonly imageCaption: Prisma.FieldRef<"Post", 'String'>
   readonly likes: Prisma.FieldRef<"Post", 'Int'>
   readonly views: Prisma.FieldRef<"Post", 'Int'>
@@ -2183,6 +2437,25 @@ export type PostAggregateRawArgs<ExtArgs extends runtime.Types.Extensions.Intern
    * Additional options to pass to the `aggregate` command ${@link https://docs.mongodb.com/manual/reference/command/aggregate/#command-fields MongoDB Docs}.
    */
   options?: runtime.InputJsonValue
+}
+
+/**
+ * Post.featureImage
+ */
+export type Post$featureImageArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the GalleryImage
+   */
+  select?: Prisma.GalleryImageSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the GalleryImage
+   */
+  omit?: Prisma.GalleryImageOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.GalleryImageInclude<ExtArgs> | null
+  where?: Prisma.GalleryImageWhereInput
 }
 
 /**

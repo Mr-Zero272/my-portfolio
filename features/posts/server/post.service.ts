@@ -12,6 +12,7 @@ import type { PostFormValues } from '../schemas/post.schema';
 import { requirePostManager } from './post-auth';
 
 const POST_INCLUDE = {
+  featureImage: true,
   authors: {
     include: {
       user: {
@@ -50,7 +51,7 @@ function buildPostData(input: PostFormValues) {
     content: input.content,
     contentHtml: input.contentHtml,
     keywords: input.keywords,
-    featureImage: input.featureImage,
+    featureImageId: input.featureImageId,
     imageCaption: input.imageCaption,
     likes: input.likes,
     views: input.views,

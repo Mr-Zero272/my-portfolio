@@ -249,6 +249,7 @@ export type GalleryImageWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"GalleryImage"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"GalleryImage"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  posts?: Prisma.PostListRelationFilter
 }
 
 export type GalleryImageOrderByWithRelationInput = {
@@ -262,6 +263,7 @@ export type GalleryImageOrderByWithRelationInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   user?: Prisma.UserOrderByWithRelationInput
+  posts?: Prisma.PostOrderByRelationAggregateInput
 }
 
 export type GalleryImageWhereUniqueInput = Prisma.AtLeast<{
@@ -278,6 +280,7 @@ export type GalleryImageWhereUniqueInput = Prisma.AtLeast<{
   createdAt?: Prisma.DateTimeFilter<"GalleryImage"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"GalleryImage"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  posts?: Prisma.PostListRelationFilter
 }, "id">
 
 export type GalleryImageOrderByWithAggregationInput = {
@@ -322,6 +325,7 @@ export type GalleryImageCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutGalleryImagesInput
+  posts?: Prisma.PostCreateNestedManyWithoutFeatureImageInput
 }
 
 export type GalleryImageUncheckedCreateInput = {
@@ -334,6 +338,7 @@ export type GalleryImageUncheckedCreateInput = {
   userCreated: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  posts?: Prisma.PostUncheckedCreateNestedManyWithoutFeatureImageInput
 }
 
 export type GalleryImageUpdateInput = {
@@ -345,6 +350,7 @@ export type GalleryImageUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutGalleryImagesNestedInput
+  posts?: Prisma.PostUpdateManyWithoutFeatureImageNestedInput
 }
 
 export type GalleryImageUncheckedUpdateInput = {
@@ -356,6 +362,7 @@ export type GalleryImageUncheckedUpdateInput = {
   userCreated?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  posts?: Prisma.PostUncheckedUpdateManyWithoutFeatureImageNestedInput
 }
 
 export type GalleryImageCreateManyInput = {
@@ -445,6 +452,11 @@ export type GalleryImageSumOrderByAggregateInput = {
   size?: Prisma.SortOrder
 }
 
+export type GalleryImageNullableScalarRelationFilter = {
+  is?: Prisma.GalleryImageWhereInput | null
+  isNot?: Prisma.GalleryImageWhereInput | null
+}
+
 export type GalleryImageCreateNestedManyWithoutUserInput = {
   create?: Prisma.XOR<Prisma.GalleryImageCreateWithoutUserInput, Prisma.GalleryImageUncheckedCreateWithoutUserInput> | Prisma.GalleryImageCreateWithoutUserInput[] | Prisma.GalleryImageUncheckedCreateWithoutUserInput[]
   connectOrCreate?: Prisma.GalleryImageCreateOrConnectWithoutUserInput | Prisma.GalleryImageCreateOrConnectWithoutUserInput[]
@@ -487,6 +499,22 @@ export type GalleryImageUncheckedUpdateManyWithoutUserNestedInput = {
   deleteMany?: Prisma.GalleryImageScalarWhereInput | Prisma.GalleryImageScalarWhereInput[]
 }
 
+export type GalleryImageCreateNestedOneWithoutPostsInput = {
+  create?: Prisma.XOR<Prisma.GalleryImageCreateWithoutPostsInput, Prisma.GalleryImageUncheckedCreateWithoutPostsInput>
+  connectOrCreate?: Prisma.GalleryImageCreateOrConnectWithoutPostsInput
+  connect?: Prisma.GalleryImageWhereUniqueInput
+}
+
+export type GalleryImageUpdateOneWithoutPostsNestedInput = {
+  create?: Prisma.XOR<Prisma.GalleryImageCreateWithoutPostsInput, Prisma.GalleryImageUncheckedCreateWithoutPostsInput>
+  connectOrCreate?: Prisma.GalleryImageCreateOrConnectWithoutPostsInput
+  upsert?: Prisma.GalleryImageUpsertWithoutPostsInput
+  disconnect?: boolean
+  delete?: Prisma.GalleryImageWhereInput | boolean
+  connect?: Prisma.GalleryImageWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.GalleryImageUpdateToOneWithWhereWithoutPostsInput, Prisma.GalleryImageUpdateWithoutPostsInput>, Prisma.GalleryImageUncheckedUpdateWithoutPostsInput>
+}
+
 export type GalleryImageCreateWithoutUserInput = {
   id?: string
   url: string
@@ -496,6 +524,7 @@ export type GalleryImageCreateWithoutUserInput = {
   caption?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  posts?: Prisma.PostCreateNestedManyWithoutFeatureImageInput
 }
 
 export type GalleryImageUncheckedCreateWithoutUserInput = {
@@ -507,6 +536,7 @@ export type GalleryImageUncheckedCreateWithoutUserInput = {
   caption?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  posts?: Prisma.PostUncheckedCreateNestedManyWithoutFeatureImageInput
 }
 
 export type GalleryImageCreateOrConnectWithoutUserInput = {
@@ -549,6 +579,68 @@ export type GalleryImageScalarWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"GalleryImage"> | Date | string
 }
 
+export type GalleryImageCreateWithoutPostsInput = {
+  id?: string
+  url: string
+  name: string
+  size: number
+  mimeType: string
+  caption?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  user: Prisma.UserCreateNestedOneWithoutGalleryImagesInput
+}
+
+export type GalleryImageUncheckedCreateWithoutPostsInput = {
+  id?: string
+  url: string
+  name: string
+  size: number
+  mimeType: string
+  caption?: string | null
+  userCreated: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type GalleryImageCreateOrConnectWithoutPostsInput = {
+  where: Prisma.GalleryImageWhereUniqueInput
+  create: Prisma.XOR<Prisma.GalleryImageCreateWithoutPostsInput, Prisma.GalleryImageUncheckedCreateWithoutPostsInput>
+}
+
+export type GalleryImageUpsertWithoutPostsInput = {
+  update: Prisma.XOR<Prisma.GalleryImageUpdateWithoutPostsInput, Prisma.GalleryImageUncheckedUpdateWithoutPostsInput>
+  create: Prisma.XOR<Prisma.GalleryImageCreateWithoutPostsInput, Prisma.GalleryImageUncheckedCreateWithoutPostsInput>
+  where?: Prisma.GalleryImageWhereInput
+}
+
+export type GalleryImageUpdateToOneWithWhereWithoutPostsInput = {
+  where?: Prisma.GalleryImageWhereInput
+  data: Prisma.XOR<Prisma.GalleryImageUpdateWithoutPostsInput, Prisma.GalleryImageUncheckedUpdateWithoutPostsInput>
+}
+
+export type GalleryImageUpdateWithoutPostsInput = {
+  url?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  size?: Prisma.IntFieldUpdateOperationsInput | number
+  mimeType?: Prisma.StringFieldUpdateOperationsInput | string
+  caption?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  user?: Prisma.UserUpdateOneRequiredWithoutGalleryImagesNestedInput
+}
+
+export type GalleryImageUncheckedUpdateWithoutPostsInput = {
+  url?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  size?: Prisma.IntFieldUpdateOperationsInput | number
+  mimeType?: Prisma.StringFieldUpdateOperationsInput | string
+  caption?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  userCreated?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
 export type GalleryImageCreateManyUserInput = {
   id?: string
   url: string
@@ -568,6 +660,7 @@ export type GalleryImageUpdateWithoutUserInput = {
   caption?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  posts?: Prisma.PostUpdateManyWithoutFeatureImageNestedInput
 }
 
 export type GalleryImageUncheckedUpdateWithoutUserInput = {
@@ -578,6 +671,7 @@ export type GalleryImageUncheckedUpdateWithoutUserInput = {
   caption?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  posts?: Prisma.PostUncheckedUpdateManyWithoutFeatureImageNestedInput
 }
 
 export type GalleryImageUncheckedUpdateManyWithoutUserInput = {
@@ -591,6 +685,35 @@ export type GalleryImageUncheckedUpdateManyWithoutUserInput = {
 }
 
 
+/**
+ * Count Type GalleryImageCountOutputType
+ */
+
+export type GalleryImageCountOutputType = {
+  posts: number
+}
+
+export type GalleryImageCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  posts?: boolean | GalleryImageCountOutputTypeCountPostsArgs
+}
+
+/**
+ * GalleryImageCountOutputType without action
+ */
+export type GalleryImageCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the GalleryImageCountOutputType
+   */
+  select?: Prisma.GalleryImageCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * GalleryImageCountOutputType without action
+ */
+export type GalleryImageCountOutputTypeCountPostsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.PostWhereInput
+}
+
 
 export type GalleryImageSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -603,6 +726,8 @@ export type GalleryImageSelect<ExtArgs extends runtime.Types.Extensions.Internal
   createdAt?: boolean
   updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  posts?: boolean | Prisma.GalleryImage$postsArgs<ExtArgs>
+  _count?: boolean | Prisma.GalleryImageCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["galleryImage"]>
 
 
@@ -622,12 +747,15 @@ export type GalleryImageSelectScalar = {
 export type GalleryImageOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "url" | "name" | "size" | "mimeType" | "caption" | "userCreated" | "createdAt" | "updatedAt", ExtArgs["result"]["galleryImage"]>
 export type GalleryImageInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  posts?: boolean | Prisma.GalleryImage$postsArgs<ExtArgs>
+  _count?: boolean | Prisma.GalleryImageCountOutputTypeDefaultArgs<ExtArgs>
 }
 
 export type $GalleryImagePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "GalleryImage"
   objects: {
     user: Prisma.$UserPayload<ExtArgs>
+    posts: Prisma.$PostPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1003,6 +1131,7 @@ readonly fields: GalleryImageFieldRefs;
 export interface Prisma__GalleryImageClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   user<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  posts<T extends Prisma.GalleryImage$postsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.GalleryImage$postsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PostPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1408,6 +1537,30 @@ export type GalleryImageAggregateRawArgs<ExtArgs extends runtime.Types.Extension
    * Additional options to pass to the `aggregate` command ${@link https://docs.mongodb.com/manual/reference/command/aggregate/#command-fields MongoDB Docs}.
    */
   options?: runtime.InputJsonValue
+}
+
+/**
+ * GalleryImage.posts
+ */
+export type GalleryImage$postsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Post
+   */
+  select?: Prisma.PostSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Post
+   */
+  omit?: Prisma.PostOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PostInclude<ExtArgs> | null
+  where?: Prisma.PostWhereInput
+  orderBy?: Prisma.PostOrderByWithRelationInput | Prisma.PostOrderByWithRelationInput[]
+  cursor?: Prisma.PostWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.PostScalarFieldEnum | Prisma.PostScalarFieldEnum[]
 }
 
 /**
