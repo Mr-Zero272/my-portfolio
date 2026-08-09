@@ -61,7 +61,7 @@ function buildPostData(input: PostFormValues) {
     xMetaTitle: input.xMetaTitle,
     xMetaDescription: input.xMetaDescription,
     xMetaImage: input.xMetaImage,
-    published: input.published,
+    status: input.status,
   };
 }
 

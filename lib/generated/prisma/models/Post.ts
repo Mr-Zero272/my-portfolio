@@ -55,7 +55,7 @@ export type PostMinAggregateOutputType = {
   xMetaTitle: string | null
   xMetaDescription: string | null
   xMetaImage: string | null
-  published: boolean | null
+  status: $Enums.PostStatus | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -77,7 +77,7 @@ export type PostMaxAggregateOutputType = {
   xMetaTitle: string | null
   xMetaDescription: string | null
   xMetaImage: string | null
-  published: boolean | null
+  status: $Enums.PostStatus | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -100,7 +100,7 @@ export type PostCountAggregateOutputType = {
   xMetaTitle: number
   xMetaDescription: number
   xMetaImage: number
-  published: number
+  status: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -136,7 +136,7 @@ export type PostMinAggregateInputType = {
   xMetaTitle?: true
   xMetaDescription?: true
   xMetaImage?: true
-  published?: true
+  status?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -158,7 +158,7 @@ export type PostMaxAggregateInputType = {
   xMetaTitle?: true
   xMetaDescription?: true
   xMetaImage?: true
-  published?: true
+  status?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -181,7 +181,7 @@ export type PostCountAggregateInputType = {
   xMetaTitle?: true
   xMetaDescription?: true
   xMetaImage?: true
-  published?: true
+  status?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -291,7 +291,7 @@ export type PostGroupByOutputType = {
   xMetaTitle: string | null
   xMetaDescription: string | null
   xMetaImage: string | null
-  published: boolean
+  status: $Enums.PostStatus
   createdAt: Date
   updatedAt: Date
   _count: PostCountAggregateOutputType | null
@@ -337,7 +337,7 @@ export type PostWhereInput = {
   xMetaTitle?: Prisma.StringNullableFilter<"Post"> | string | null
   xMetaDescription?: Prisma.StringNullableFilter<"Post"> | string | null
   xMetaImage?: Prisma.StringNullableFilter<"Post"> | string | null
-  published?: Prisma.BoolFilter<"Post"> | boolean
+  status?: Prisma.EnumPostStatusFilter<"Post"> | $Enums.PostStatus
   createdAt?: Prisma.DateTimeFilter<"Post"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Post"> | Date | string
   featureImage?: Prisma.XOR<Prisma.GalleryImageNullableScalarRelationFilter, Prisma.GalleryImageWhereInput> | null
@@ -365,7 +365,7 @@ export type PostOrderByWithRelationInput = {
   xMetaTitle?: Prisma.SortOrder
   xMetaDescription?: Prisma.SortOrder
   xMetaImage?: Prisma.SortOrder
-  published?: Prisma.SortOrder
+  status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   featureImage?: Prisma.GalleryImageOrderByWithRelationInput
@@ -396,7 +396,7 @@ export type PostWhereUniqueInput = Prisma.AtLeast<{
   xMetaTitle?: Prisma.StringNullableFilter<"Post"> | string | null
   xMetaDescription?: Prisma.StringNullableFilter<"Post"> | string | null
   xMetaImage?: Prisma.StringNullableFilter<"Post"> | string | null
-  published?: Prisma.BoolFilter<"Post"> | boolean
+  status?: Prisma.EnumPostStatusFilter<"Post"> | $Enums.PostStatus
   createdAt?: Prisma.DateTimeFilter<"Post"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Post"> | Date | string
   featureImage?: Prisma.XOR<Prisma.GalleryImageNullableScalarRelationFilter, Prisma.GalleryImageWhereInput> | null
@@ -424,7 +424,7 @@ export type PostOrderByWithAggregationInput = {
   xMetaTitle?: Prisma.SortOrder
   xMetaDescription?: Prisma.SortOrder
   xMetaImage?: Prisma.SortOrder
-  published?: Prisma.SortOrder
+  status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.PostCountOrderByAggregateInput
@@ -455,7 +455,7 @@ export type PostScalarWhereWithAggregatesInput = {
   xMetaTitle?: Prisma.StringNullableWithAggregatesFilter<"Post"> | string | null
   xMetaDescription?: Prisma.StringNullableWithAggregatesFilter<"Post"> | string | null
   xMetaImage?: Prisma.StringNullableWithAggregatesFilter<"Post"> | string | null
-  published?: Prisma.BoolWithAggregatesFilter<"Post"> | boolean
+  status?: Prisma.EnumPostStatusWithAggregatesFilter<"Post"> | $Enums.PostStatus
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Post"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Post"> | Date | string
 }
@@ -477,7 +477,7 @@ export type PostCreateInput = {
   xMetaTitle?: string | null
   xMetaDescription?: string | null
   xMetaImage?: string | null
-  published?: boolean
+  status?: $Enums.PostStatus
   createdAt?: Date | string
   updatedAt?: Date | string
   featureImage?: Prisma.GalleryImageCreateNestedOneWithoutPostsInput
@@ -505,7 +505,7 @@ export type PostUncheckedCreateInput = {
   xMetaTitle?: string | null
   xMetaDescription?: string | null
   xMetaImage?: string | null
-  published?: boolean
+  status?: $Enums.PostStatus
   createdAt?: Date | string
   updatedAt?: Date | string
   authors?: Prisma.PostAuthorUncheckedCreateNestedManyWithoutPostInput
@@ -530,7 +530,7 @@ export type PostUpdateInput = {
   xMetaTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   xMetaDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   xMetaImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  published?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.EnumPostStatusFieldUpdateOperationsInput | $Enums.PostStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   featureImage?: Prisma.GalleryImageUpdateOneWithoutPostsNestedInput
@@ -557,7 +557,7 @@ export type PostUncheckedUpdateInput = {
   xMetaTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   xMetaDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   xMetaImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  published?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.EnumPostStatusFieldUpdateOperationsInput | $Enums.PostStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   authors?: Prisma.PostAuthorUncheckedUpdateManyWithoutPostNestedInput
@@ -584,7 +584,7 @@ export type PostCreateManyInput = {
   xMetaTitle?: string | null
   xMetaDescription?: string | null
   xMetaImage?: string | null
-  published?: boolean
+  status?: $Enums.PostStatus
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -605,7 +605,7 @@ export type PostUpdateManyMutationInput = {
   xMetaTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   xMetaDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   xMetaImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  published?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.EnumPostStatusFieldUpdateOperationsInput | $Enums.PostStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -627,7 +627,7 @@ export type PostUncheckedUpdateManyInput = {
   xMetaTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   xMetaDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   xMetaImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  published?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.EnumPostStatusFieldUpdateOperationsInput | $Enums.PostStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -660,7 +660,7 @@ export type PostCountOrderByAggregateInput = {
   xMetaTitle?: Prisma.SortOrder
   xMetaDescription?: Prisma.SortOrder
   xMetaImage?: Prisma.SortOrder
-  published?: Prisma.SortOrder
+  status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -688,7 +688,7 @@ export type PostMaxOrderByAggregateInput = {
   xMetaTitle?: Prisma.SortOrder
   xMetaDescription?: Prisma.SortOrder
   xMetaImage?: Prisma.SortOrder
-  published?: Prisma.SortOrder
+  status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -710,7 +710,7 @@ export type PostMinOrderByAggregateInput = {
   xMetaTitle?: Prisma.SortOrder
   xMetaDescription?: Prisma.SortOrder
   xMetaImage?: Prisma.SortOrder
-  published?: Prisma.SortOrder
+  status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -775,6 +775,10 @@ export type PostCreatekeywordsInput = {
 export type PostUpdatekeywordsInput = {
   set?: string[]
   push?: string | string[]
+}
+
+export type EnumPostStatusFieldUpdateOperationsInput = {
+  set?: $Enums.PostStatus
 }
 
 export type PostCreateNestedOneWithoutAuthorsInput = {
@@ -850,7 +854,7 @@ export type PostCreateWithoutFeatureImageInput = {
   xMetaTitle?: string | null
   xMetaDescription?: string | null
   xMetaImage?: string | null
-  published?: boolean
+  status?: $Enums.PostStatus
   createdAt?: Date | string
   updatedAt?: Date | string
   authors?: Prisma.PostAuthorCreateNestedManyWithoutPostInput
@@ -876,7 +880,7 @@ export type PostUncheckedCreateWithoutFeatureImageInput = {
   xMetaTitle?: string | null
   xMetaDescription?: string | null
   xMetaImage?: string | null
-  published?: boolean
+  status?: $Enums.PostStatus
   createdAt?: Date | string
   updatedAt?: Date | string
   authors?: Prisma.PostAuthorUncheckedCreateNestedManyWithoutPostInput
@@ -931,7 +935,7 @@ export type PostScalarWhereInput = {
   xMetaTitle?: Prisma.StringNullableFilter<"Post"> | string | null
   xMetaDescription?: Prisma.StringNullableFilter<"Post"> | string | null
   xMetaImage?: Prisma.StringNullableFilter<"Post"> | string | null
-  published?: Prisma.BoolFilter<"Post"> | boolean
+  status?: Prisma.EnumPostStatusFilter<"Post"> | $Enums.PostStatus
   createdAt?: Prisma.DateTimeFilter<"Post"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Post"> | Date | string
 }
@@ -953,7 +957,7 @@ export type PostCreateWithoutAuthorsInput = {
   xMetaTitle?: string | null
   xMetaDescription?: string | null
   xMetaImage?: string | null
-  published?: boolean
+  status?: $Enums.PostStatus
   createdAt?: Date | string
   updatedAt?: Date | string
   featureImage?: Prisma.GalleryImageCreateNestedOneWithoutPostsInput
@@ -980,7 +984,7 @@ export type PostUncheckedCreateWithoutAuthorsInput = {
   xMetaTitle?: string | null
   xMetaDescription?: string | null
   xMetaImage?: string | null
-  published?: boolean
+  status?: $Enums.PostStatus
   createdAt?: Date | string
   updatedAt?: Date | string
   tags?: Prisma.PostTagUncheckedCreateNestedManyWithoutPostInput
@@ -1020,7 +1024,7 @@ export type PostUpdateWithoutAuthorsInput = {
   xMetaTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   xMetaDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   xMetaImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  published?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.EnumPostStatusFieldUpdateOperationsInput | $Enums.PostStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   featureImage?: Prisma.GalleryImageUpdateOneWithoutPostsNestedInput
@@ -1046,7 +1050,7 @@ export type PostUncheckedUpdateWithoutAuthorsInput = {
   xMetaTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   xMetaDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   xMetaImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  published?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.EnumPostStatusFieldUpdateOperationsInput | $Enums.PostStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tags?: Prisma.PostTagUncheckedUpdateManyWithoutPostNestedInput
@@ -1071,7 +1075,7 @@ export type PostCreateWithoutTagsInput = {
   xMetaTitle?: string | null
   xMetaDescription?: string | null
   xMetaImage?: string | null
-  published?: boolean
+  status?: $Enums.PostStatus
   createdAt?: Date | string
   updatedAt?: Date | string
   featureImage?: Prisma.GalleryImageCreateNestedOneWithoutPostsInput
@@ -1098,7 +1102,7 @@ export type PostUncheckedCreateWithoutTagsInput = {
   xMetaTitle?: string | null
   xMetaDescription?: string | null
   xMetaImage?: string | null
-  published?: boolean
+  status?: $Enums.PostStatus
   createdAt?: Date | string
   updatedAt?: Date | string
   authors?: Prisma.PostAuthorUncheckedCreateNestedManyWithoutPostInput
@@ -1138,7 +1142,7 @@ export type PostUpdateWithoutTagsInput = {
   xMetaTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   xMetaDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   xMetaImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  published?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.EnumPostStatusFieldUpdateOperationsInput | $Enums.PostStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   featureImage?: Prisma.GalleryImageUpdateOneWithoutPostsNestedInput
@@ -1164,7 +1168,7 @@ export type PostUncheckedUpdateWithoutTagsInput = {
   xMetaTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   xMetaDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   xMetaImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  published?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.EnumPostStatusFieldUpdateOperationsInput | $Enums.PostStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   authors?: Prisma.PostAuthorUncheckedUpdateManyWithoutPostNestedInput
@@ -1189,7 +1193,7 @@ export type PostCreateWithoutLikedByInput = {
   xMetaTitle?: string | null
   xMetaDescription?: string | null
   xMetaImage?: string | null
-  published?: boolean
+  status?: $Enums.PostStatus
   createdAt?: Date | string
   updatedAt?: Date | string
   featureImage?: Prisma.GalleryImageCreateNestedOneWithoutPostsInput
@@ -1216,7 +1220,7 @@ export type PostUncheckedCreateWithoutLikedByInput = {
   xMetaTitle?: string | null
   xMetaDescription?: string | null
   xMetaImage?: string | null
-  published?: boolean
+  status?: $Enums.PostStatus
   createdAt?: Date | string
   updatedAt?: Date | string
   authors?: Prisma.PostAuthorUncheckedCreateNestedManyWithoutPostInput
@@ -1256,7 +1260,7 @@ export type PostUpdateWithoutLikedByInput = {
   xMetaTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   xMetaDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   xMetaImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  published?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.EnumPostStatusFieldUpdateOperationsInput | $Enums.PostStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   featureImage?: Prisma.GalleryImageUpdateOneWithoutPostsNestedInput
@@ -1282,7 +1286,7 @@ export type PostUncheckedUpdateWithoutLikedByInput = {
   xMetaTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   xMetaDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   xMetaImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  published?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.EnumPostStatusFieldUpdateOperationsInput | $Enums.PostStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   authors?: Prisma.PostAuthorUncheckedUpdateManyWithoutPostNestedInput
@@ -1307,7 +1311,7 @@ export type PostCreateWithoutCommentsInput = {
   xMetaTitle?: string | null
   xMetaDescription?: string | null
   xMetaImage?: string | null
-  published?: boolean
+  status?: $Enums.PostStatus
   createdAt?: Date | string
   updatedAt?: Date | string
   featureImage?: Prisma.GalleryImageCreateNestedOneWithoutPostsInput
@@ -1334,7 +1338,7 @@ export type PostUncheckedCreateWithoutCommentsInput = {
   xMetaTitle?: string | null
   xMetaDescription?: string | null
   xMetaImage?: string | null
-  published?: boolean
+  status?: $Enums.PostStatus
   createdAt?: Date | string
   updatedAt?: Date | string
   authors?: Prisma.PostAuthorUncheckedCreateNestedManyWithoutPostInput
@@ -1374,7 +1378,7 @@ export type PostUpdateWithoutCommentsInput = {
   xMetaTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   xMetaDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   xMetaImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  published?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.EnumPostStatusFieldUpdateOperationsInput | $Enums.PostStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   featureImage?: Prisma.GalleryImageUpdateOneWithoutPostsNestedInput
@@ -1400,7 +1404,7 @@ export type PostUncheckedUpdateWithoutCommentsInput = {
   xMetaTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   xMetaDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   xMetaImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  published?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.EnumPostStatusFieldUpdateOperationsInput | $Enums.PostStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   authors?: Prisma.PostAuthorUncheckedUpdateManyWithoutPostNestedInput
@@ -1425,7 +1429,7 @@ export type PostCreateManyFeatureImageInput = {
   xMetaTitle?: string | null
   xMetaDescription?: string | null
   xMetaImage?: string | null
-  published?: boolean
+  status?: $Enums.PostStatus
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -1446,7 +1450,7 @@ export type PostUpdateWithoutFeatureImageInput = {
   xMetaTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   xMetaDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   xMetaImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  published?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.EnumPostStatusFieldUpdateOperationsInput | $Enums.PostStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   authors?: Prisma.PostAuthorUpdateManyWithoutPostNestedInput
@@ -1471,7 +1475,7 @@ export type PostUncheckedUpdateWithoutFeatureImageInput = {
   xMetaTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   xMetaDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   xMetaImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  published?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.EnumPostStatusFieldUpdateOperationsInput | $Enums.PostStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   authors?: Prisma.PostAuthorUncheckedUpdateManyWithoutPostNestedInput
@@ -1496,7 +1500,7 @@ export type PostUncheckedUpdateManyWithoutFeatureImageInput = {
   xMetaTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   xMetaDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   xMetaImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  published?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.EnumPostStatusFieldUpdateOperationsInput | $Enums.PostStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -1577,7 +1581,7 @@ export type PostSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   xMetaTitle?: boolean
   xMetaDescription?: boolean
   xMetaImage?: boolean
-  published?: boolean
+  status?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   featureImage?: boolean | Prisma.Post$featureImageArgs<ExtArgs>
@@ -1608,12 +1612,12 @@ export type PostSelectScalar = {
   xMetaTitle?: boolean
   xMetaDescription?: boolean
   xMetaImage?: boolean
-  published?: boolean
+  status?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type PostOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "slug" | "excerpt" | "content" | "contentHtml" | "keywords" | "featureImageId" | "imageCaption" | "likes" | "views" | "shares" | "metaTitle" | "metaDescription" | "xMetaTitle" | "xMetaDescription" | "xMetaImage" | "published" | "createdAt" | "updatedAt", ExtArgs["result"]["post"]>
+export type PostOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "slug" | "excerpt" | "content" | "contentHtml" | "keywords" | "featureImageId" | "imageCaption" | "likes" | "views" | "shares" | "metaTitle" | "metaDescription" | "xMetaTitle" | "xMetaDescription" | "xMetaImage" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["post"]>
 export type PostInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   featureImage?: boolean | Prisma.Post$featureImageArgs<ExtArgs>
   authors?: boolean | Prisma.Post$authorsArgs<ExtArgs>
@@ -1650,7 +1654,7 @@ export type $PostPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     xMetaTitle: string | null
     xMetaDescription: string | null
     xMetaImage: string | null
-    published: boolean
+    status: $Enums.PostStatus
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["post"]>
@@ -2067,7 +2071,7 @@ export interface PostFieldRefs {
   readonly xMetaTitle: Prisma.FieldRef<"Post", 'String'>
   readonly xMetaDescription: Prisma.FieldRef<"Post", 'String'>
   readonly xMetaImage: Prisma.FieldRef<"Post", 'String'>
-  readonly published: Prisma.FieldRef<"Post", 'Boolean'>
+  readonly status: Prisma.FieldRef<"Post", 'PostStatus'>
   readonly createdAt: Prisma.FieldRef<"Post", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Post", 'DateTime'>
 }

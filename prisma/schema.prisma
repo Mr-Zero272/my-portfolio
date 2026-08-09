@@ -53,6 +53,13 @@ enum SkillCategory {
   Other
 }
 
+enum PostStatus {
+  Draft
+  Scheduled
+  Published
+  Archived
+}
+
 type ExperiencePosition {
   title          String
   employmentType String?
@@ -243,7 +250,7 @@ model Post {
   xMetaTitle       String?
   xMetaDescription String?
   xMetaImage       String?
-  published        Boolean  @default(false)
+  status           PostStatus @default(Draft)
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
 
@@ -253,7 +260,7 @@ model Post {
   likedBy  PostLike[]
 
   @@unique([slug])
-  @@index([published, createdAt])
+  @@index([status, createdAt])
   @@map("post")
 }
 

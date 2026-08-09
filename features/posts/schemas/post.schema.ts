@@ -1,3 +1,4 @@
+import { PostStatus } from '@/lib/generated/prisma/enums';
 import { z } from 'zod';
 
 const optionalString = z.string().optional();
@@ -21,7 +22,7 @@ export const PostFormSchema = z.object({
   xMetaTitle: optionalString,
   xMetaDescription: optionalString,
   xMetaImage: optionalString,
-  published: z.boolean().optional(),
+  status: z.enum(PostStatus).optional(),
   authorIds: z.array(z.string()).optional(),
   tagIds: z.array(z.string()).optional(),
 });
@@ -45,5 +46,5 @@ export const DEFAULT_POST_FORM_VALUES: PostFormValues = {
   xMetaTitle: '',
   xMetaDescription: '',
   xMetaImage: '',
-  published: false,
+  status: 'Draft',
 };

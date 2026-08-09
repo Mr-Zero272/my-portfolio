@@ -64,3 +64,13 @@ export const SkillCategory = {
 } as const
 
 export type SkillCategory = (typeof SkillCategory)[keyof typeof SkillCategory]
+
+
+export const PostStatus = {
+  Draft: 'Draft',
+  Scheduled: 'Scheduled',
+  Published: 'Published',
+  Archived: 'Archived'
+} as const
+
+export type PostStatus = (typeof PostStatus)[keyof typeof PostStatus]

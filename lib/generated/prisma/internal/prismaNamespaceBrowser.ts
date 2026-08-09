@@ -227,7 +227,7 @@ export const PostScalarFieldEnum = {
   xMetaTitle: 'xMetaTitle',
   xMetaDescription: 'xMetaDescription',
   xMetaImage: 'xMetaImage',
-  published: 'published',
+  status: 'status',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
