@@ -1,15 +1,16 @@
+import { PostStatus } from '@/lib/generated/prisma/enums';
 import { BaseQuery, RequestConfig } from '@/types/api';
 import { PostFormValues } from '../schemas';
 
 export type GetPostsRequest = RequestConfig<
   undefined,
   BaseQuery<{
-    published?: boolean;
     likes?: number;
     views?: number;
     keyword?: string;
     tagId?: string;
     authorId?: string;
+    status?: PostStatus;
   }>,
   undefined
 >;

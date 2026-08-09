@@ -3,6 +3,7 @@ import {
   FilterOperator,
   buildListQuery,
   parseBooleanParam,
+  parseEnumParam,
   parseNumberParam,
   throwApiError,
 } from '@/lib/api';
@@ -76,6 +77,10 @@ export async function getPosts(headers: Headers, searchParams: URLSearchParams) 
       keyword: { field: 'keywords', operator: FilterOperator.HAS },
       authorId: { field: 'authors.userId', operator: FilterOperator.EQUALS },
       tagId: { field: 'tags.tagId', operator: FilterOperator.EQUALS },
+      status: {
+        operator: FilterOperator.EQUALS,
+        parse: parseEnumParam(['Draft', 'Published']),
+      },
     },
     searchFields: ['title', 'slug', 'excerpt', 'content'],
     sortableFields: POST_SORTABLE_FIELDS,

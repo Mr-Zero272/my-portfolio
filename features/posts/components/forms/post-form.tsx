@@ -1,13 +1,21 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
+import {
+  ResponsiveDialog,
+  ResponsiveDialogContent,
+  ResponsiveDialogHeader,
+  ResponsiveDialogTitle,
+} from '@/components/ui/responsive-dialog';
 import { SidebarInset, SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
+import { PostStatus } from '@/lib/generated/prisma/enums';
 import { BaseFormProps } from '@/types/form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ArrowLeftIcon } from 'lucide-react';
-import { useId } from 'react';
+import { useCallback, useId, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { DEFAULT_POST_FORM_VALUES, PostFormSchema, PostFormValues } from '../../schemas';
+import { PostEditorInput } from './post-editor-input';
 import { PostFeatureImageInput } from './post-feature-image-input';
 import { PostFormSidebar } from './post-form-sidebar';
 import { TitleFormInput } from './post-title-form-input';
@@ -15,15 +23,16 @@ import { TitleFormInput } from './post-title-form-input';
 const PostFormContent = ({
   initialData,
   onSubmit,
-  onCancel,
-  renderSubmitPart,
-  className,
+  // onCancel,
+  // renderSubmitPart,
+  // className,
   isSubmitting,
-  serverErrors,
+  // serverErrors,
   isEditMode,
 }: BaseFormProps<PostFormValues>) => {
   const id = useId();
   const formId = `tag-form-${id}`;
+  const [isSaveDialogOpen, setIsSaveDialogOpen] = useState(false);
 
   const form = useForm<PostFormValues>({
     resolver: zodResolver(PostFormSchema),
@@ -33,49 +42,120 @@ const PostFormContent = ({
 
   const isLocalSubmitting = form.formState.isSubmitting || isSubmitting || false;
 
+  // handle submit
+  const handleSubmitForm = useCallback(
+    (status?: PostStatus) => {
+      if (status) form.setValue('status', status, { shouldDirty: true });
+      form.handleSubmit((values) => {
+        onSubmit(values);
+      })();
+    },
+    [form, onSubmit],
+  );
+
+  const handlePublish = useCallback(() => {
+    handleSubmitForm(PostStatus.Published);
+  }, [handleSubmitForm]);
+
+  const handleSaveAsDraft = useCallback(() => {
+    handleSubmitForm(PostStatus.Draft);
+  }, [handleSubmitForm]);
+
   return (
-    <FormProvider {...form}>
-      <SidebarInset>
-        <form id={formId} onSubmit={form.handleSubmit(onSubmit)} className="flex flex-1 flex-col">
-          <header className="bg-background sticky top-0 z-10 flex h-16 shrink-0 items-center justify-between gap-2 border-b px-4">
-            <div className="flex items-center gap-2">
-              <Button variant="ghost">
-                <ArrowLeftIcon />
-                Back
-              </Button>
-              {/* <Separator orientation="vertical" className="data-[orientation=vertical]:h-4" />
-              <Button variant="ghost" disabled={isSyncing || isLoading}>
-                {isSyncing ? <RefreshCcw className="animate-spin" /> : null}
-                {isSyncing ? 'Saving...' : 'Synced'}
-              </Button> */}
-            </div>
-            <div className="flex items-center gap-2">
-              <Button className="fixed right-4 bottom-4 z-50 active:scale-90 md:static">
-                Create
-              </Button>
+    <>
+      {/** Main form */}
+      <FormProvider {...form}>
+        <SidebarInset>
+          <form id={formId} className="flex flex-1 flex-col">
+            <header className="bg-background sticky top-0 z-10 flex h-16 shrink-0 items-center justify-between gap-2 border-b px-4">
+              <div className="flex items-center gap-2">
+                <Button variant="ghost">
+                  <ArrowLeftIcon />
+                  Back
+                </Button>
+                {/* <Separator orientation="vertical" className="data-[orientation=vertical]:h-4" />
+                <Button variant="ghost" disabled={isSyncing || isLoading}>
+                  {isSyncing ? <RefreshCcw className="animate-spin" /> : null}
+                  {isSyncing ? 'Saving...' : 'Synced'}
+                </Button> */}
+              </div>
+              <div className="flex items-center gap-2">
+                <Button
+                  className="fixed right-4 bottom-4 z-50 md:static"
+                  onClick={() => setIsSaveDialogOpen(true)}
+                >
+                  {isEditMode ? 'Update' : 'Create'}
+                </Button>
 
-              <SidebarTrigger className="-mr-1 ml-auto rotate-180" />
-            </div>
-          </header>
+                <SidebarTrigger className="-mr-1 ml-auto rotate-180" />
+              </div>
+            </header>
 
-          <div className="flex flex-1 flex-col gap-4 p-4">
-            <div
-              style={{
-                padding: '0 20px',
-              }}
-            >
-              <div className="mx-auto mt-5 mb-32 max-w-5xl overflow-hidden">
-                <div>
-                  <PostFeatureImageInput />
-                  <TitleFormInput />
+            <div className="flex flex-1 flex-col gap-4 p-4">
+              <div
+                style={{
+                  padding: '0 20px',
+                }}
+              >
+                <div className="mx-auto mt-5 mb-32 max-w-5xl overflow-hidden">
+                  <div>
+                    <PostFeatureImageInput />
+                    <TitleFormInput />
+                    <PostEditorInput />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </form>
+        </SidebarInset>
+        <PostFormSidebar />
+      </FormProvider>
+
+      {/** Dialogs */}
+      <ResponsiveDialog open={isSaveDialogOpen} onOpenChange={setIsSaveDialogOpen}>
+        <ResponsiveDialogContent className="rounded-none border-none shadow-none max-md:px-5 max-md:pb-5 sm:grid-cols-1 sm:grid-rows-1 md:h-screen md:max-w-screen">
+          <ResponsiveDialogHeader className="sr-only">
+            <ResponsiveDialogTitle>Publish</ResponsiveDialogTitle>
+          </ResponsiveDialogHeader>
+          <div>
+            <div className="font-semibold">Publish post</div>
+            <div className="row-span-10 flex h-full w-full justify-center md:mt-40">
+              <div className="max-w-2xl space-y-5">
+                <div className="space-y-2">
+                  <h2 className="text-2xl font-semibold">
+                    Ready to {isEditMode ? 'update' : 'create'} your post?
+                  </h2>
+                  <p className="text-muted-foreground text-sm">
+                    You can save as draft or publish immediately. Published posts will be visible to
+                    everyone.
+                  </p>
+                </div>
+                <div className="flex justify-end gap-2">
+                  <Button
+                    variant="ghost"
+                    onClick={() => setIsSaveDialogOpen(false)}
+                    disabled={isLocalSubmitting}
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    variant="outline"
+                    onClick={handleSaveAsDraft}
+                    disabled={isLocalSubmitting}
+                  >
+                    Save as draft
+                  </Button>
+
+                  <Button onClick={handlePublish} disabled={isLocalSubmitting}>
+                    {isLocalSubmitting ? 'Processing...' : 'Publish'}
+                  </Button>
                 </div>
               </div>
             </div>
           </div>
-        </form>
-      </SidebarInset>
-      <PostFormSidebar />
-    </FormProvider>
+        </ResponsiveDialogContent>
+      </ResponsiveDialog>
+    </>
   );
 };
 

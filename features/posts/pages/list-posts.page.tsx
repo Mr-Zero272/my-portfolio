@@ -8,11 +8,13 @@ import { useFormState } from '@/hooks/use-form-state';
 import { Post } from '@/lib/generated/prisma/client';
 import { EditIcon, PlusIcon } from 'lucide-react';
 import Link from 'next/link';
+import { useRouter } from 'nextjs-toploader/app';
 import { Suspense, useMemo } from 'react';
 import { PostTable, PostTableSkeleton } from '../components';
 import { usePosts, usePostTableParams } from '../hooks';
 
 export const ListPostsPageContent = () => {
+  const router = useRouter();
   // form
   const formState = useFormState<Post>();
 
@@ -38,12 +40,12 @@ export const ListPostsPageContent = () => {
       {
         key: 'edit',
         label: 'Edit',
-        onClick: formState.edit,
+        onClick: (post) => router.push(appPath.admin.post.edit(post.id)),
         tooltip: 'Edit',
         icon: <EditIcon />,
       },
     ],
-    [formState.edit],
+    [router],
   );
 
   // const optimisticDeletePost = useOptimisticDeletePost();
@@ -60,7 +62,7 @@ export const ListPostsPageContent = () => {
         title="Posts"
         description="Manage posts"
         actions={
-          <Link href={appPath.post.new} className={buttonVariants({ variant: 'default' })}>
+          <Link href={appPath.admin.post.new} className={buttonVariants({ variant: 'default' })}>
             <PlusIcon />
             New post
           </Link>

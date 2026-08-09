@@ -73,6 +73,15 @@ export function parseNumberParam(value: string) {
   return Number.isFinite(numberValue) ? numberValue : value;
 }
 
+export function parseEnumParam<T extends string>(enumValues: T[]) {
+  return (value: string) => {
+    if (!enumValues.includes(value as T)) {
+      throw new Error(`Invalid enum value: ${value}`);
+    }
+    return value as T;
+  };
+}
+
 export function parseCsvParam(value: string) {
   return value
     .split(',')

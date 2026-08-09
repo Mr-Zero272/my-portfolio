@@ -1,7 +1,7 @@
 import type { JSX } from 'react';
 
-import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
 import { $generateHtmlFromNodes } from '@lexical/html';
+import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
 import { EditorState } from 'lexical';
 import { debounce } from 'lodash';
 import { useEffect, useMemo, useRef, useState } from 'react';
@@ -69,7 +69,11 @@ function InitializeContentPlugin({ content }: { content?: string }) {
   return null;
 }
 
-function DebouncedOnChangePlugin({ onChange }: { onChange?: (json: string, html: string) => void }) {
+function DebouncedOnChangePlugin({
+  onChange,
+}: {
+  onChange?: (json: string, html: string) => void;
+}) {
   const [editor] = useLexicalComposerContext();
 
   const debouncedOnChange = useMemo(() => {
@@ -94,10 +98,10 @@ function DebouncedOnChangePlugin({ onChange }: { onChange?: (json: string, html:
 }
 
 function GhostLikeEditorInner({
-  content,
+  initialContent,
   onChange,
 }: {
-  content?: string;
+  initialContent?: string;
   onChange?: (json: string, html: string) => void;
 }): JSX.Element {
   const [floatingAnchorElem, setFloatingAnchorElem] = useState<HTMLDivElement | null>(null);
@@ -125,7 +129,7 @@ function GhostLikeEditorInner({
       <DateTimePlugin />
       <TableCellResizer />
       <LinkPlugin />
-      <InitializeContentPlugin content={content} />
+      <InitializeContentPlugin content={initialContent} />
       <DebouncedOnChangePlugin onChange={onChange} />
       <div className="editor-scroller">
         <div
@@ -140,7 +144,10 @@ function GhostLikeEditorInner({
       {floatingAnchorElem && !isSmallWidthViewport && (
         <>
           <DraggableBlockPlugin anchorElem={floatingAnchorElem} />
-          <FloatingTextFormatToolbarPlugin anchorElem={floatingAnchorElem} setIsLinkEditMode={setIsLinkEditMode} />
+          <FloatingTextFormatToolbarPlugin
+            anchorElem={floatingAnchorElem}
+            setIsLinkEditMode={setIsLinkEditMode}
+          />
         </>
       )}
     </div>
@@ -148,15 +155,15 @@ function GhostLikeEditorInner({
 }
 
 export default function GhostLikeEditor({
-  content,
+  initialContent,
   onChange,
 }: {
-  content?: string;
+  initialContent?: string;
   onChange?: (json: string, html: string) => void;
 }): JSX.Element {
   return (
     <LexicalExtensionComposer extension={ghostEditorExtension} contentEditable={null}>
-      <GhostLikeEditorInner content={content} onChange={onChange} />
+      <GhostLikeEditorInner initialContent={initialContent} onChange={onChange} />
     </LexicalExtensionComposer>
   );
 }
