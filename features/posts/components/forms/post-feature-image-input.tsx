@@ -12,7 +12,11 @@ import Image from 'next/image';
 import { useEffect, useRef, useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 
-export const FeatureImageInput = ({ featureImageFile }: { featureImageFile?: GalleryImage }) => {
+export const PostFeatureImageInput = ({
+  featureImageFile,
+}: {
+  featureImageFile?: GalleryImage;
+}) => {
   const { mutate: deleteGallery } = useDeleteGallery();
   const { setValue } = useFormContext();
   const inputFileRef = useRef<HTMLInputElement>(null);

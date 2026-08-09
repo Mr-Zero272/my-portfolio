@@ -8,8 +8,9 @@ import { ArrowLeftIcon } from 'lucide-react';
 import { useId } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { DEFAULT_POST_FORM_VALUES, PostFormSchema, PostFormValues } from '../../schemas';
-import { FeatureImageInput } from './feature-image-input';
+import { PostFeatureImageInput } from './post-feature-image-input';
 import { PostFormSidebar } from './post-form-sidebar';
+import { TitleFormInput } from './post-title-form-input';
 
 const PostFormContent = ({
   initialData,
@@ -65,8 +66,8 @@ const PostFormContent = ({
             >
               <div className="mx-auto mt-5 mb-32 max-w-5xl overflow-hidden">
                 <div>
-                  <FeatureImageInput />
-                  edit
+                  <PostFeatureImageInput />
+                  <TitleFormInput />
                 </div>
               </div>
             </div>

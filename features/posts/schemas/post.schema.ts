@@ -6,10 +6,10 @@ const optionalString = z.string().optional();
 const stringList = z.array(z.string().trim().min(1)).optional();
 
 export const PostFormSchema = z.object({
-  title: z.string().trim().min(1),
-  slug: z.string().trim().min(1),
+  title: z.string().trim().min(1, 'Post title is required.'),
+  slug: z.string().trim().min(1, 'Post slug is required.'),
   excerpt: optionalString,
-  content: z.string().trim().min(1),
+  content: z.string().trim().min(1, 'Post content is required.'),
   contentHtml: optionalString,
   keywords: stringList,
   featureImageId: optionalString,
