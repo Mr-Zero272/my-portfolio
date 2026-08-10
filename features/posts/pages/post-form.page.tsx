@@ -46,6 +46,9 @@ export const PostFormPage = ({ postId }: { postId?: string }) => {
     );
   }
 
+  console.log("data is ready")
+  console.log("mode : " + postId ? 'edit' : 'create')
+
   return (
     <PostForm
       initialData={initialData}

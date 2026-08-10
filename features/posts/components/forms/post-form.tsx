@@ -41,12 +41,17 @@ const PostFormContent = ({
   const formId = `tag-form-${id}`;
   const [isSaveDialogOpen, setIsSaveDialogOpen] = useState(false);
 
+  console.log({
+    values: initialData ? (initialData as PostFormValues) : DEFAULT_POST_FORM_VALUES,
+
+  })
+
   const form = useForm<PostFormValues>({
     resolver: zodResolver(PostFormSchema),
-    values: initialData ? (initialData as PostFormValues) : DEFAULT_POST_FORM_VALUES,
-    resetOptions: {
-      keepDirtyValues: true, // Keep user's modified values if data updates in the background
-    },
+    defaultValues: initialData ? (initialData as PostFormValues) : DEFAULT_POST_FORM_VALUES,
+    // resetOptions: {
+    //   keepDirtyValues: true, // Keep user's modified values if data updates in the background
+    // },
     mode: 'onTouched',
   });
 

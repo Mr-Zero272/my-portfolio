@@ -1,11 +1,11 @@
-import { GalleryImage, Post } from '@/lib/generated/prisma/client';
+import { GalleryImage, Post, PostTag } from '@/lib/generated/prisma/client';
 import { PostFormValues } from '../../schemas';
 
 export const toPostFormValue = (
   post: Post & {
     authors?: { userId: string }[];
     featureImage?: GalleryImage | null;
-    tags?: { id: string }[];
+    tags?: PostTag[];
   },
 ): PostFormValues & { featureImage?: GalleryImage | null } => {
   return {
@@ -27,7 +27,7 @@ export const toPostFormValue = (
     xMetaImage: post.xMetaImage ?? undefined,
     status: post.status,
     authorIds: post.authors?.map((a) => a.userId) ?? [],
-    tagIds: post.tags?.map((t) => t.id) ?? [],
+    tagIds: post.tags?.map((t) => t.tagId) ?? [],
     featureImage: post.featureImage,
   };
 };

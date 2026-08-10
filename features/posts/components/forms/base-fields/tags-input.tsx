@@ -9,15 +9,19 @@ import { Kbd } from '@/components/ui/kbd';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { useCreateTag, useTags } from '@/features/tags/hooks';
+import { tagApi, tagQueryKeys } from '@/features/tags/services';
+import { GetTagsBatchRequest } from '@/features/tags/types';
 import { Tag } from '@/lib/generated/prisma/client';
 import { slugify } from '@/lib/slug';
 import { handleError } from '@/utils';
 import { useDebouncedValue } from '@mantine/hooks';
+import { useQueryClient } from '@tanstack/react-query';
 import { PlusIcon, XIcon } from 'lucide-react';
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
 export const TagsInput = () => {
+  const queryClient = useQueryClient();
   const { control, setValue } = useFormContext();
   const tagIds: string[] =
     useWatch({
@@ -25,11 +29,42 @@ export const TagsInput = () => {
       name: 'tagIds',
       defaultValue: [],
     }) || [];
+ 
+  const initialTagIdsRef = useRef<string[]>(tagIds);
 
+  console.log({
+    tagIds
+  })
+  
   const inputRef = useRef<HTMLInputElement>(null);
   const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
   const [inputValue, setInputValue] = useState('');
   const [debouncedInputValue] = useDebouncedValue(inputValue, 500);
+
+   
+  useEffect(() => {
+  if (!initialTagIdsRef.current.length) return;
+
+  const syncTags = async () => {
+    const ids = initialTagIdsRef.current;
+
+    const request = {
+      query: {
+        ids,
+        limit: ids.length,
+      },
+    } satisfies GetTagsBatchRequest;
+
+    const tagsBatchData = await queryClient.fetchQuery({
+      queryKey: tagQueryKeys.batch(request),
+      queryFn: () => tagApi.getBatch(request),
+    });
+
+    setSelectedTags(tagsBatchData.list);
+  };
+
+  syncTags();
+}, [queryClient]);
 
   const {
     data: tagsData,

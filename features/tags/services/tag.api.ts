@@ -6,6 +6,7 @@ import {
   CreateTagRequest,
   DeleteTagRequest,
   GetTagRequest,
+  GetTagsBatchRequest,
   GetTagsRequest,
   UpdateTagRequest,
 } from '../types';
@@ -15,6 +16,21 @@ export const tagApi = {
     const queryParams = request?.query ? normalizeQueryParams(request?.query) : undefined;
     const res = await axiosInstance.get('/tags', {
       params: queryParams,
+    });
+
+    return {
+      list: res.data?.data,
+      meta: res.data?.meta,
+    } as ListResponse<Tag>;
+  },
+
+  getBatch: async (request?: GetTagsBatchRequest) => {
+    const res = await axiosInstance.get('/tags/batch', {
+      params: {
+        ids: request?.query?.ids,
+        limit: request?.query?.limit,
+        page: request?.query?.page,
+      },
     });
 
     return {

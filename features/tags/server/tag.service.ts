@@ -42,6 +42,20 @@ export const tagService = {
     };
   },
 
+  async getBatch(headers: Headers, searchParams: URLSearchParams) {
+    requireAdmin(headers);
+
+    const ids = searchParams.getAll('ids');
+    const tags = await  prisma.tag.findMany({
+        include: TAG_INCLUDE,
+        where: { id: { in: ids } },
+      })
+
+    return {
+      tags,
+    }
+  },
+
   async getById(headers: Headers, id: string) {
     await requireAdmin(headers);
 
