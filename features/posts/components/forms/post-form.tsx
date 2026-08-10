@@ -17,7 +17,6 @@ import { ArrowLeftIcon } from 'lucide-react';
 import { useCallback, useId, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { DEFAULT_POST_FORM_VALUES, PostFormSchema, PostFormValues } from '../../schemas';
-import { PostEditorInput } from './post-editor-input';
 import { PostFeatureImageInput } from './post-feature-image-input';
 import { PostFormSidebar } from './post-form-sidebar';
 import { TitleFormInput } from './post-title-form-input';
@@ -116,7 +115,8 @@ const PostFormContent = ({
                   <div>
                     <PostFeatureImageInput featureImageFile={context.featureImage} />
                     <TitleFormInput />
-                    <PostEditorInput />
+                    {/* FIXME: thí component is not stable yet and have some error fix it later */}
+                    {/* <PostEditorInput /> */}
                   </div>
                 </div>
               </div>

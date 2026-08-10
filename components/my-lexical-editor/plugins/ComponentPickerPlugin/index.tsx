@@ -48,10 +48,9 @@ import {
   ListChecks,
   ListOrdered,
   Minus,
-  PenLine,
   Pilcrow,
   Quote,
-  Scissors,
+  Scissors
 } from 'lucide-react';
 import { useCallback, useMemo, useState } from 'react';
 import { createPortal } from 'react-dom';
@@ -62,7 +61,7 @@ import useModal from '../../hooks/useModal';
 import { EmbedConfigs } from '../AutoEmbedPlugin';
 import { INSERT_COLLAPSIBLE_COMMAND } from '../CollapsiblePlugin';
 import { INSERT_DATETIME_COMMAND } from '../DateTimePlugin';
-import { INSERT_EXCALIDRAW_COMMAND } from '../ExcalidrawPlugin';
+// import { INSERT_EXCALIDRAW_COMMAND } from '../ExcalidrawPlugin';
 import { InsertImageDialog } from '../ImagesPlugin';
 import InsertLayoutDialog from '../LayoutPlugin/InsertLayoutDialog';
 import { INSERT_PAGE_BREAK } from '../PageBreakPlugin';
@@ -255,11 +254,11 @@ export function getBaseOptions(editor: LexicalEditor, showModal: ShowModal) {
       keywords: ['page break', 'divider'],
       onSelect: () => editor.dispatchCommand(INSERT_PAGE_BREAK, undefined),
     }),
-    new ComponentPickerOption('Excalidraw', {
-      icon: <PenLine />,
-      keywords: ['excalidraw', 'diagram', 'drawing'],
-      onSelect: () => editor.dispatchCommand(INSERT_EXCALIDRAW_COMMAND, undefined),
-    }),
+    // new ComponentPickerOption('Excalidraw', {
+    //   icon: <PenLine />,
+    //   keywords: ['excalidraw', 'diagram', 'drawing'],
+    //   onSelect: () => editor.dispatchCommand(INSERT_EXCALIDRAW_COMMAND, undefined),
+    // }),
     new ComponentPickerOption('Poll', {
       icon: <BarChart2 />,
       keywords: ['poll', 'vote'],

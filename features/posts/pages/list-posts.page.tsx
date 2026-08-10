@@ -60,7 +60,7 @@ export const ListPostsPageContent = () => {
     <div>
       <PageHeader
         title="Posts"
-        description="Manage posts"
+        description="Manage posts here"
         actions={
           <Link href={appPath.admin.post.new} className={buttonVariants({ variant: 'default' })}>
             <PlusIcon />

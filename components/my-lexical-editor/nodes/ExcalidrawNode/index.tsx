@@ -17,14 +17,11 @@ import type {
   SerializedLexicalNode,
   Spread,
 } from 'lexical';
-import type {JSX} from 'react';
+import type { JSX } from 'react';
 
-import {DecoratorNode} from 'lexical';
-import * as React from 'react';
+import { DecoratorNode } from 'lexical';
 
 type Dimension = number | 'inherit';
-
-const ExcalidrawComponent = React.lazy(() => import('./ExcalidrawComponent'));
 
 export type SerializedExcalidrawNode = Spread<
   {
@@ -180,16 +177,16 @@ export class ExcalidrawNode extends DecoratorNode<JSX.Element> {
     return self;
   }
 
-  decorate(editor: LexicalEditor, config: EditorConfig): JSX.Element {
-    return (
-      <ExcalidrawComponent
-        nodeKey={this.getKey()}
-        data={this.__data}
-        width={this.__width}
-        height={this.__height}
-      />
-    );
-  }
+  // decorate(editor: LexicalEditor, config: EditorConfig): JSX.Element {
+  //   return (
+  //     <ExcalidrawComponent
+  //       nodeKey={this.getKey()}
+  //       data={this.__data}
+  //       width={this.__width}
+  //       height={this.__height}
+  //     />
+  //   );
+  // }
 }
 
 export function $createExcalidrawNode(
