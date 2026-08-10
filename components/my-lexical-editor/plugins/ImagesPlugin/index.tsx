@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * Copyright (c) Meta Platforms, Inc. and affiliates.
  *
@@ -38,7 +40,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { CheckIcon, Loader2 } from 'lucide-react';
 import { $createImageNode, $isImageNode, ImageNode, ImagePayload } from '../../nodes/ImageNode';
-import { DialogActions, DialogButtonsList } from '../../ui/Dialog';
+import { DialogActions } from '../../ui/Dialog';
 
 export type InsertImagePayload = Readonly<ImagePayload>;
 
@@ -249,7 +251,7 @@ export function InsertImageDialog({
   return (
     <>
       {!mode && (
-        <DialogButtonsList>
+        <div className="space-y-2">
           {/* <Button
             data-test-id="image-modal-option-sample"
             onClick={() =>
@@ -282,7 +284,7 @@ export function InsertImageDialog({
           >
             File
           </Button>
-        </DialogButtonsList>
+        </div>
       )}
       {mode === 'url' && <InsertImageUriDialogBody onClick={onClick} />}
       {mode === 'file' && <InsertImageUploadedDialogBody onClick={onClick} />}

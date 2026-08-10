@@ -118,6 +118,7 @@ export function withApiErrorHandling<Args extends unknown[]>(handler: RouteHandl
     try {
       return await handler(...args);
     } catch (error) {
+      console.error(error);
       return handleApiError(error);
     }
   };

@@ -160,6 +160,13 @@ export async function updatePost(headers: Headers, id: string, input: PostFormVa
     };
   }
 
+  if (input.tagIds && input.tagIds.length > 0) {
+    updateData.tags = {
+      deleteMany: {},
+      create: input.tagIds.map((tagId) => ({ tagId })),
+    };
+  }
+
   const post = await prisma.post.update({
     data: updateData,
     include: POST_INCLUDE,

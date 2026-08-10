@@ -8,6 +8,8 @@ import {
   ResponsiveDialogTitle,
 } from '@/components/ui/responsive-dialog';
 import { SidebarInset, SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
+import { Spinner } from '@/components/ui/spinner';
+import { GalleryImage } from '@/lib/generated/prisma/client';
 import { PostStatus } from '@/lib/generated/prisma/enums';
 import { BaseFormProps } from '@/types/form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -29,14 +31,23 @@ const PostFormContent = ({
   isSubmitting,
   // serverErrors,
   isEditMode,
-}: BaseFormProps<PostFormValues>) => {
+  context,
+}: BaseFormProps<
+  PostFormValues,
+  {
+    featureImage?: GalleryImage | null;
+  }
+>) => {
   const id = useId();
   const formId = `tag-form-${id}`;
   const [isSaveDialogOpen, setIsSaveDialogOpen] = useState(false);
 
   const form = useForm<PostFormValues>({
     resolver: zodResolver(PostFormSchema),
-    defaultValues: initialData ?? DEFAULT_POST_FORM_VALUES,
+    values: initialData ? (initialData as PostFormValues) : DEFAULT_POST_FORM_VALUES,
+    resetOptions: {
+      keepDirtyValues: true, // Keep user's modified values if data updates in the background
+    },
     mode: 'onTouched',
   });
 
@@ -47,6 +58,10 @@ const PostFormContent = ({
     (status?: PostStatus) => {
       if (status) form.setValue('status', status, { shouldDirty: true });
       form.handleSubmit((values) => {
+        // console.log({
+        //   values,
+        // });
+        // return;
         onSubmit(values);
       })();
     },
@@ -99,7 +114,7 @@ const PostFormContent = ({
               >
                 <div className="mx-auto mt-5 mb-32 max-w-5xl overflow-hidden">
                   <div>
-                    <PostFeatureImageInput />
+                    <PostFeatureImageInput featureImageFile={context.featureImage} />
                     <TitleFormInput />
                     <PostEditorInput />
                   </div>
@@ -122,9 +137,7 @@ const PostFormContent = ({
             <div className="row-span-10 flex h-full w-full justify-center md:mt-40">
               <div className="max-w-2xl space-y-5">
                 <div className="space-y-2">
-                  <h2 className="text-2xl font-semibold">
-                    Ready to {isEditMode ? 'update' : 'create'} your post?
-                  </h2>
+                  <h2 className="text-2xl font-semibold">Ready to publish your post?</h2>
                   <p className="text-muted-foreground text-sm">
                     You can save as draft or publish immediately. Published posts will be visible to
                     everyone.
@@ -138,17 +151,21 @@ const PostFormContent = ({
                   >
                     Cancel
                   </Button>
-                  <Button
-                    variant="outline"
-                    onClick={handleSaveAsDraft}
-                    disabled={isLocalSubmitting}
-                  >
-                    Save as draft
-                  </Button>
 
-                  <Button onClick={handlePublish} disabled={isLocalSubmitting}>
-                    {isLocalSubmitting ? 'Processing...' : 'Publish'}
-                  </Button>
+                  {isLocalSubmitting ? (
+                    <Button disabled variant="outline">
+                      <Spinner />
+                      Processing...
+                    </Button>
+                  ) : (
+                    <div className="flex justify-end gap-2">
+                      <Button variant="outline" onClick={handleSaveAsDraft}>
+                        Save as draft
+                      </Button>
+
+                      <Button onClick={handlePublish}>Publish</Button>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -159,7 +176,14 @@ const PostFormContent = ({
   );
 };
 
-export const PostForm = (props: BaseFormProps<PostFormValues>) => {
+export const PostForm = (
+  props: BaseFormProps<
+    PostFormValues,
+    {
+      featureImage: GalleryImage | null;
+    }
+  >,
+) => {
   return (
     <SidebarProvider style={{ '--sidebar-width': '350px' } as React.CSSProperties}>
       <PostFormContent {...props} />

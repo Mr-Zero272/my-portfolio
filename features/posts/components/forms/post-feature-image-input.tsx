@@ -15,7 +15,7 @@ import { useFormContext } from 'react-hook-form';
 export const PostFeatureImageInput = ({
   featureImageFile,
 }: {
-  featureImageFile?: GalleryImage;
+  featureImageFile?: GalleryImage | null;
 }) => {
   const { mutate: deleteGallery } = useDeleteGallery();
   const { setValue } = useFormContext();

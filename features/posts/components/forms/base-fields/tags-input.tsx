@@ -19,10 +19,10 @@ import { useFormContext, useWatch } from 'react-hook-form';
 
 export const TagsInput = () => {
   const { control, setValue } = useFormContext();
-  const tags: string[] =
+  const tagIds: string[] =
     useWatch({
       control,
-      name: 'tags',
+      name: 'tagIds',
       defaultValue: [],
     }) || [];
 
@@ -49,7 +49,7 @@ export const TagsInput = () => {
     const isSelected = selectedTags.some((t) => t.id === tag.id);
     if (isSelected) return;
     setSelectedTags((prev) => [...prev, tag]);
-    setValue('tags', [...tags, tag.id], {
+    setValue('tagIds', [...tagIds, tag.id], {
       shouldValidate: true,
       shouldDirty: true,
     });
@@ -58,8 +58,8 @@ export const TagsInput = () => {
   const handleRemoveTag = (tagId: string) => {
     setSelectedTags((prev) => prev.filter((t) => t.id !== tagId));
     setValue(
-      'tags',
-      tags.filter((t: string) => t !== tagId),
+      'tagIds',
+      tagIds.filter((t: string) => t !== tagId),
       { shouldValidate: true, shouldDirty: true },
     );
   };
@@ -69,7 +69,7 @@ export const TagsInput = () => {
       const tag = await createTag({ body: { name: inputValue, slug: slugify(inputValue) } });
       if (!tag) return;
       setSelectedTags((prev) => [...prev, tag]);
-      setValue('tags', [...tags, tag.id], {
+      setValue('tagIds', [...tagIds, tag.id], {
         shouldValidate: true,
         shouldDirty: true,
       });

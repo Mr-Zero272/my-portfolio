@@ -6,27 +6,21 @@
  *
  */
 
-import type {ExcalidrawInitialElements} from '../../ui/ExcalidrawModal';
-import type {AppState, BinaryFiles} from '@excalidraw/excalidraw/types';
-import type {NodeKey} from 'lexical';
-import type {JSX} from 'react';
+import type { AppState, BinaryFiles } from '@excalidraw/excalidraw/types';
+import type { NodeKey } from 'lexical';
+import type { JSX } from 'react';
+import type { ExcalidrawInitialElements } from '../../ui/ExcalidrawModal';
 
-import {useLexicalComposerContext} from '@lexical/react/LexicalComposerContext';
-import {useLexicalEditable} from '@lexical/react/useLexicalEditable';
-import {useLexicalNodeSelection} from '@lexical/react/useLexicalNodeSelection';
-import {mergeRegister} from '@lexical/utils';
-import {
-  $getNodeByKey,
-  CLICK_COMMAND,
-  COMMAND_PRIORITY_LOW,
-  isDOMNode,
-} from 'lexical';
-import {useCallback, useEffect, useMemo, useRef, useState} from 'react';
-import * as React from 'react';
+import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
+import { useLexicalEditable } from '@lexical/react/useLexicalEditable';
+import { useLexicalNodeSelection } from '@lexical/react/useLexicalNodeSelection';
+import { mergeRegister } from '@lexical/utils';
+import { $getNodeByKey, CLICK_COMMAND, COMMAND_PRIORITY_LOW, isDOMNode } from 'lexical';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
+import { $isExcalidrawNode } from '.';
 import ExcalidrawModal from '../../ui/ExcalidrawModal';
 import ImageResizer from '../../ui/ImageResizer';
-import {$isExcalidrawNode} from '.';
 import ExcalidrawImage from './ExcalidrawImage';
 
 export default function ExcalidrawComponent({
@@ -42,14 +36,11 @@ export default function ExcalidrawComponent({
 }): JSX.Element {
   const [editor] = useLexicalComposerContext();
   const isEditable = useLexicalEditable();
-  const [isModalOpen, setModalOpen] = useState<boolean>(
-    data === '[]' && editor.isEditable(),
-  );
+  const [isModalOpen, setModalOpen] = useState<boolean>(data === '[]' && editor.isEditable());
   const imageContainerRef = useRef<HTMLDivElement | null>(null);
   const buttonRef = useRef<HTMLButtonElement | null>(null);
   const captionButtonRef = useRef<HTMLButtonElement | null>(null);
-  const [isSelected, setSelected, clearSelection] =
-    useLexicalNodeSelection(nodeKey);
+  const [isSelected, setSelected, clearSelection] = useLexicalNodeSelection(nodeKey);
   const [isResizing, setIsResizing] = useState<boolean>(false);
 
   useEffect(() => {
@@ -70,11 +61,7 @@ export default function ExcalidrawComponent({
             return true;
           }
 
-          if (
-            buttonElem !== null &&
-            isDOMNode(eventTarget) &&
-            buttonElem.contains(eventTarget)
-          ) {
+          if (buttonElem !== null && isDOMNode(eventTarget) && buttonElem.contains(eventTarget)) {
             if (!event.shiftKey) {
               clearSelection();
             }
@@ -102,11 +89,7 @@ export default function ExcalidrawComponent({
     });
   }, [editor, nodeKey]);
 
-  const setData = (
-    els: ExcalidrawInitialElements,
-    aps: Partial<AppState>,
-    fls: BinaryFiles,
-  ) => {
+  const setData = (els: ExcalidrawInitialElements, aps: Partial<AppState>, fls: BinaryFiles) => {
     return editor.update(() => {
       const node = $getNodeByKey(nodeKey);
       if ($isExcalidrawNode(node)) {
@@ -129,10 +112,7 @@ export default function ExcalidrawComponent({
     setIsResizing(true);
   };
 
-  const onResizeEnd = (
-    nextWidth: 'inherit' | number,
-    nextHeight: 'inherit' | number,
-  ) => {
+  const onResizeEnd = (nextWidth: 'inherit' | number, nextHeight: 'inherit' | number) => {
     // Delay hiding the resize bars for click case
     setTimeout(() => {
       setIsResizing(false);
@@ -152,11 +132,7 @@ export default function ExcalidrawComponent({
     setModalOpen(true);
   }, []);
 
-  const {
-    elements = [],
-    files = {},
-    appState = {},
-  } = useMemo(() => JSON.parse(data), [data]);
+  const { elements = [], files = {}, appState = {} } = useMemo(() => JSON.parse(data), [data]);
 
   const closeModal = useCallback(() => {
     setModalOpen(false);
@@ -188,9 +164,7 @@ export default function ExcalidrawComponent({
         />
       )}
       {elements.length > 0 && (
-        <button
-          ref={buttonRef}
-          className={`excalidraw-button ${isSelected ? 'selected' : ''}`}>
+        <button ref={buttonRef} className={`excalidraw-button ${isSelected ? 'selected' : ''}`}>
           <ExcalidrawImage
             imageContainerRef={imageContainerRef}
             className="image"

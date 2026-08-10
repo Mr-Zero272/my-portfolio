@@ -53,6 +53,9 @@ export const PostFormPage = ({ postId }: { postId?: string }) => {
       isSubmitting={isSubmitting}
       serverErrors={serverError ? { root: serverError } : undefined}
       isEditMode={isEditMode}
+      context={{
+        featureImage: initialData?.featureImage ?? null,
+      }}
     />
   );
 };

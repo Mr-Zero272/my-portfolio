@@ -7,23 +7,12 @@ import { Spinner } from '@/components/ui/spinner';
 import { PlusIcon, SparklesIcon, XIcon } from 'lucide-react';
 import React, { useState } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
+import { toast } from 'sonner';
 
 export const PostKeywordsInput = () => {
-  const { control, setValue } = useFormContext();
+  const { control, setValue, getValues } = useFormContext();
   const [inputValue, setInputValue] = useState('');
   const [isGenerating, setIsGenerating] = useState(false);
-
-  const title = useWatch({
-    control,
-    name: 'title',
-    defaultValue: '',
-  });
-
-  const content = useWatch({
-    control,
-    name: 'content',
-    defaultValue: '',
-  });
 
   const keywords: string[] =
     useWatch({
@@ -59,6 +48,16 @@ export const PostKeywordsInput = () => {
   };
 
   const generateKeywordsWithAI = async () => {
+    const title = getValues('title');
+    const content = getValues('content');
+
+    if (!title || !content) {
+      toast.warning(
+        'Please enter a title and content for the post before generating keywords with AI.',
+      );
+      return;
+    }
+
     setIsGenerating(true);
     try {
       // AI keyword extraction placeholder
@@ -99,7 +98,7 @@ export const PostKeywordsInput = () => {
         size="sm"
         variant="secondary"
         type="button"
-        disabled={isGenerating || (!title.trim() && !content.trim())}
+        disabled={isGenerating}
         className="w-full"
       >
         {isGenerating ? <Spinner /> : <SparklesIcon />}
@@ -109,8 +108,12 @@ export const PostKeywordsInput = () => {
       {keywords.length > 0 && (
         <div className="space-y-2">
           <div className="flex flex-wrap gap-2">
-            {keywords.map((keyword: string, index: number) => (
-              <Badge key={index} variant="secondary" className="flex items-center gap-1 px-2 py-1">
+            {keywords.map((keyword) => (
+              <Badge
+                key={keyword}
+                variant="secondary"
+                className="flex items-center gap-1 px-2 py-1"
+              >
                 <span className="text-xs">{keyword}</span>
                 <button
                   onClick={() => handleRemoveKeyword(keyword)}
