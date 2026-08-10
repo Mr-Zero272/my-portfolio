@@ -254,10 +254,16 @@ export const ImagesExtension = defineExtension({
 
 const TRANSPARENT_IMAGE =
   'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
-const img = document.createElement('img');
-img.src = TRANSPARENT_IMAGE;
+const img = typeof document !== 'undefined' ? document.createElement('img') : null;
+if (img) {
+  img.src = TRANSPARENT_IMAGE;
+}
 
 function $onDragStart(event: DragEvent): boolean {
+  if (!img) {
+    return false;
+  }
+
   const node = $getImageNodeInSelection();
   if (!node) {
     return false;

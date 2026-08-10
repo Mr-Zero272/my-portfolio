@@ -8,7 +8,12 @@ import {
   REMOVE_LIST_COMMAND,
 } from '@lexical/list';
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
-import { $createHeadingNode, $createQuoteNode, $isHeadingNode, HeadingTagType } from '@lexical/rich-text';
+import {
+  $createHeadingNode,
+  $createQuoteNode,
+  $isHeadingNode,
+  HeadingTagType,
+} from '@lexical/rich-text';
 import { $setBlocksType } from '@lexical/selection';
 import { $findMatchingParent, $getNearestNodeOfType, mergeRegister } from '@lexical/utils';
 import {
@@ -36,7 +41,6 @@ import {
   Link,
   List,
   ListOrdered,
-  MessageSquarePlus,
   Pencil,
   Quote,
   Strikethrough,
@@ -52,14 +56,19 @@ import { createPortal } from 'react-dom';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import { Separator } from '@/components/ui/separator';
 import { Toggle } from '@/components/ui/toggle';
 import { blockTypeToBlockName } from '../../context/ToolbarContext';
 import { getDOMRangeRect } from '../../utils/getDOMRangeRect';
 import { getSelectedNode } from '../../utils/getSelectedNode';
 import { setFloatingElemPosition } from '../../utils/setFloatingElemPosition';
-import { INSERT_INLINE_COMMAND } from '../CommentPlugin';
 
 const blockTypeIcons = {
   bullet: List,
@@ -156,7 +165,7 @@ function BlockTypeSelect({
       }}
     >
       <SelectTrigger
-        className="h-8 w-[130px] border-none bg-transparent px-2 hover:bg-muted focus:ring-0"
+        className="hover:bg-muted h-8 w-[130px] border-none bg-transparent px-2 focus:ring-0"
         onMouseDown={(e) => e.preventDefault()}
       >
         <SelectValue placeholder="Block Type">
@@ -224,7 +233,13 @@ function BlockTypeSelect({
   );
 }
 
-function LinkEditor({ editor, setIsEditMode }: { editor: LexicalEditor; setIsEditMode: (val: boolean) => void }) {
+function LinkEditor({
+  editor,
+  setIsEditMode,
+}: {
+  editor: LexicalEditor;
+  setIsEditMode: (val: boolean) => void;
+}) {
   const [linkUrl, setLinkUrl] = useState('');
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -277,7 +292,7 @@ function LinkEditor({ editor, setIsEditMode }: { editor: LexicalEditor; setIsEdi
         onChange={(e) => setLinkUrl(e.target.value)}
         onKeyDown={handleKeyDown}
         placeholder="Enter URL..."
-        className="h-7 w-[180px] border-none bg-muted px-2 py-0 text-xs focus-visible:ring-0"
+        className="bg-muted h-7 w-[180px] border-none px-2 py-0 text-xs focus-visible:ring-0"
       />
       <Button
         size="icon"
@@ -291,7 +306,7 @@ function LinkEditor({ editor, setIsEditMode }: { editor: LexicalEditor; setIsEdi
       <Button
         size="icon"
         variant="ghost"
-        className="h-7 w-7 text-destructive hover:text-destructive"
+        className="text-destructive hover:text-destructive h-7 w-7"
         onClick={removeLink}
         onMouseDown={(e) => e.preventDefault()}
         title="Remove Link"
@@ -348,7 +363,7 @@ function LinkViewer({
         <Button
           size="icon"
           variant="ghost"
-          className="h-7 w-7 text-destructive hover:text-destructive"
+          className="text-destructive hover:text-destructive h-7 w-7"
           onClick={removeLink}
           onMouseDown={(e) => e.preventDefault()}
           title="Remove Link"
@@ -405,10 +420,6 @@ function TextFormatFloatingToolbar({
   const toggleLink = useCallback(() => {
     setIsEditLink(true);
   }, []);
-
-  const insertComment = () => {
-    editor.dispatchCommand(INSERT_INLINE_COMMAND, undefined);
-  };
 
   function mouseMoveListener(e: MouseEvent) {
     if (popupCharStylesEditorRef?.current && (e.buttons === 1 || e.buttons === 3)) {
@@ -531,7 +542,7 @@ function TextFormatFloatingToolbar({
   return (
     <div
       ref={popupCharStylesEditorRef}
-      className="lexical-floating-toolbar absolute top-0 left-0 z-20 flex items-center gap-0.5 rounded-lg border bg-background p-1 opacity-0 shadow-lg transition-opacity duration-300 will-change-transform"
+      className="lexical-floating-toolbar bg-background absolute top-0 left-0 z-20 flex items-center gap-0.5 rounded-lg border p-1 opacity-0 shadow-lg transition-opacity duration-300 will-change-transform"
     >
       {editor.isEditable() && (
         <>
@@ -571,7 +582,9 @@ function TextFormatFloatingToolbar({
                 <Toggle
                   size="sm"
                   pressed={isStrikethrough}
-                  onPressedChange={() => editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'strikethrough')}
+                  onPressedChange={() =>
+                    editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'strikethrough')
+                  }
                   onMouseDown={(e) => e.preventDefault()}
                 >
                   <Strikethrough className="h-4 w-4" />
@@ -584,7 +597,12 @@ function TextFormatFloatingToolbar({
                 >
                   <Code className="h-4 w-4" />
                 </Toggle>
-                <Toggle size="sm" pressed={isLink} onPressedChange={toggleLink} onMouseDown={(e) => e.preventDefault()}>
+                <Toggle
+                  size="sm"
+                  pressed={isLink}
+                  onPressedChange={toggleLink}
+                  onMouseDown={(e) => e.preventDefault()}
+                >
                   <Link className="h-4 w-4" />
                 </Toggle>
               </div>
@@ -633,19 +651,6 @@ function TextFormatFloatingToolbar({
                   <Superscript className="h-4 w-4" />
                 </Toggle>
               </div>
-
-              <Separator orientation="vertical" className="mx-1 h-6 max-lg:hidden" />
-
-              <Button
-                variant="ghost"
-                size="icon"
-                className="h-8 w-8 max-lg:hidden"
-                onClick={insertComment}
-                onMouseDown={(e) => e.preventDefault()}
-                title="Insert comment"
-              >
-                <MessageSquarePlus className="h-4 w-4" />
-              </Button>
             </>
           )}
         </>
@@ -690,7 +695,9 @@ function useFloatingTextFormatToolbar(
 
       if (
         nativeSelection !== null &&
-        (!$isRangeSelection(selection) || rootElement === null || !rootElement.contains(nativeSelection.anchorNode))
+        (!$isRangeSelection(selection) ||
+          rootElement === null ||
+          !rootElement.contains(nativeSelection.anchorNode))
       ) {
         setIsText(false);
         return;
@@ -719,7 +726,7 @@ function useFloatingTextFormatToolbar(
       setIsLink(isLinkNode);
 
       if (isLinkNode) {
-        setLinkUrl($isLinkNode(parent) ? parent.getURL() : ($isLinkNode(node) ? node.getURL() : ''));
+        setLinkUrl($isLinkNode(parent) ? parent.getURL() : $isLinkNode(node) ? node.getURL() : '');
       } else {
         setLinkUrl('');
       }

@@ -16,6 +16,7 @@ import { RichTextExtension } from '@lexical/rich-text';
 import { defineExtension } from 'lexical';
 import TableCellResizer from './plugins/TableCellResizer';
 
+import ImagesPluginDynamic from 'next/dynamic';
 import PlaygroundNodes from './nodes/PlaygroundNodes';
 import CollapsiblePlugin from './plugins/CollapsiblePlugin';
 import ComponentPickerPlugin from './plugins/ComponentPickerPlugin';
@@ -23,10 +24,14 @@ import DateTimePlugin from './plugins/DateTimePlugin';
 import DraggableBlockPlugin from './plugins/draggable-block-plugin';
 import FloatingTextFormatToolbarPlugin from './plugins/FloatingTextFormatToolbarPlugin';
 import { ImagesExtension } from './plugins/ImagesExtension';
-import ImagesPlugin from './plugins/ImagesPlugin';
 import PlaygroundEditorTheme from './themes/PlaygroundEditorTheme';
 // import './themes/PlaygroundEditorTheme.css';
 import ContentEditable from './ui/ContentEditable';
+
+const ImagesPlugin = ImagesPluginDynamic(() => import('./plugins/ImagesPlugin'), {
+  ssr: false,
+  loading: () => <div>Loading...</div>,
+});
 
 const ghostEditorExtension = defineExtension({
   namespace: 'GhostLikeEditor',

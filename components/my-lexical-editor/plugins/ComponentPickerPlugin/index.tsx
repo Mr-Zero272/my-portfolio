@@ -10,8 +10,11 @@ import type { JSX } from 'react';
 
 import { $createCodeNode } from '@lexical/code';
 import { INSERT_HORIZONTAL_RULE_COMMAND } from '@lexical/extension';
-import { INSERT_CHECK_LIST_COMMAND, INSERT_ORDERED_LIST_COMMAND, INSERT_UNORDERED_LIST_COMMAND } from '@lexical/list';
-import { INSERT_EMBED_COMMAND } from '@lexical/react/LexicalAutoEmbedPlugin';
+import {
+  INSERT_CHECK_LIST_COMMAND,
+  INSERT_ORDERED_LIST_COMMAND,
+  INSERT_UNORDERED_LIST_COMMAND,
+} from '@lexical/list';
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
 import {
   LexicalTypeaheadMenuPlugin,
@@ -50,7 +53,7 @@ import {
   Minus,
   Pilcrow,
   Quote,
-  Scissors
+  Scissors,
 } from 'lucide-react';
 import { useCallback, useMemo, useState } from 'react';
 import { createPortal } from 'react-dom';
@@ -58,7 +61,6 @@ import { createPortal } from 'react-dom';
 import { ScrollArea } from '@/components/ui/scroll-area';
 
 import useModal from '../../hooks/useModal';
-import { EmbedConfigs } from '../AutoEmbedPlugin';
 import { INSERT_COLLAPSIBLE_COMMAND } from '../CollapsiblePlugin';
 import { INSERT_DATETIME_COMMAND } from '../DateTimePlugin';
 // import { INSERT_EXCALIDRAW_COMMAND } from '../ExcalidrawPlugin';
@@ -118,7 +120,7 @@ export function ComponentPickerMenuItem({
       className={`flex cursor-pointer items-center gap-2 px-3 py-2 text-sm transition-colors ${
         isSelected ? 'bg-accent text-accent-foreground' : 'hover:bg-muted'
       }`}
-      ref={option.setRefElement}
+      // ref={option.setRefElement}
       role="option"
       aria-selected={isSelected}
       id={'typeahead-item-' + index}
@@ -126,7 +128,7 @@ export function ComponentPickerMenuItem({
       onClick={onClick}
     >
       {option.icon && (
-        <span className="flex size-4 shrink-0 items-center justify-center text-muted-foreground [&_svg]:size-4">
+        <span className="text-muted-foreground flex size-4 shrink-0 items-center justify-center [&_svg]:size-4">
           {option.icon}
         </span>
       )}
@@ -146,7 +148,9 @@ export function getDynamicOptions(editor: LexicalEditor, queryString: string) {
 
   if (tableMatch !== null) {
     const rows = tableMatch[1];
-    const colOptions = tableMatch[2] ? [tableMatch[2]] : [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(String);
+    const colOptions = tableMatch[2]
+      ? [tableMatch[2]]
+      : [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(String);
 
     options.push(
       ...colOptions.map(
@@ -196,7 +200,9 @@ export function getBaseOptions(editor: LexicalEditor, showModal: ShowModal) {
       icon: <Grid2x2 />,
       keywords: ['table', 'grid', 'spreadsheet', 'rows', 'columns'],
       onSelect: () =>
-        showModal('Insert Table', (onClose) => <InsertTableDialog activeEditor={editor} onClose={onClose} />),
+        showModal('Insert Table', (onClose) => (
+          <InsertTableDialog activeEditor={editor} onClose={onClose} />
+        )),
     }),
     new ComponentPickerOption('Numbered List', {
       icon: <ListOrdered />,
@@ -263,16 +269,10 @@ export function getBaseOptions(editor: LexicalEditor, showModal: ShowModal) {
       icon: <BarChart2 />,
       keywords: ['poll', 'vote'],
       onSelect: () =>
-        showModal('Insert Poll', (onClose) => <InsertPollDialog activeEditor={editor} onClose={onClose} />),
+        showModal('Insert Poll', (onClose) => (
+          <InsertPollDialog activeEditor={editor} onClose={onClose} />
+        )),
     }),
-    ...EmbedConfigs.map(
-      (embedConfig) =>
-        new ComponentPickerOption(`Embed ${embedConfig.contentName}`, {
-          icon: embedConfig.icon,
-          keywords: [...embedConfig.keywords, 'embed'],
-          onSelect: () => editor.dispatchCommand(INSERT_EMBED_COMMAND, embedConfig.type),
-        }),
-    ),
     new ComponentPickerOption('Date', {
       icon: <Calendar />,
       keywords: ['date', 'calendar', 'time'],
@@ -315,7 +315,9 @@ export function getBaseOptions(editor: LexicalEditor, showModal: ShowModal) {
       icon: <ImageIcon />,
       keywords: ['image', 'photo', 'picture', 'file'],
       onSelect: () =>
-        showModal('Insert Image', (onClose) => <InsertImageDialog activeEditor={editor} onClose={onClose} />),
+        showModal('Insert Image', (onClose) => (
+          <InsertImageDialog activeEditor={editor} onClose={onClose} />
+        )),
     }),
     new ComponentPickerOption('Collapsible', {
       icon: <ChevronRight />,
@@ -326,7 +328,9 @@ export function getBaseOptions(editor: LexicalEditor, showModal: ShowModal) {
       icon: <Columns3 />,
       keywords: ['columns', 'layout', 'grid'],
       onSelect: () =>
-        showModal('Insert Columns Layout', (onClose) => <InsertLayoutDialog activeEditor={editor} onClose={onClose} />),
+        showModal('Insert Columns Layout', (onClose) => (
+          <InsertLayoutDialog activeEditor={editor} onClose={onClose} />
+        )),
     }),
     ...(['left', 'center', 'right', 'justify'] as const).map(
       (alignment) =>
@@ -370,7 +374,8 @@ export default function ComponentPickerMenuPlugin(): JSX.Element {
     return [
       ...getDynamicOptions(editor, queryString),
       ...baseOptions.filter(
-        (option) => regex.test(option.title) || option.keywords.some((keyword) => regex.test(keyword)),
+        (option) =>
+          regex.test(option.title) || option.keywords.some((keyword) => regex.test(keyword)),
       ),
     ];
   }, [editor, queryString, showModal]);
@@ -399,7 +404,10 @@ export default function ComponentPickerMenuPlugin(): JSX.Element {
         onSelectOption={onSelectOption}
         triggerFn={checkForTriggerMatch}
         options={options}
-        menuRenderFn={(anchorElementRef, { selectedIndex, selectOptionAndCleanUp, setHighlightedIndex }) =>
+        menuRenderFn={(
+          anchorElementRef,
+          { selectedIndex, selectOptionAndCleanUp, setHighlightedIndex },
+        ) =>
           anchorElementRef.current && options.length
             ? createPortal(
                 <div className="w-65 overflow-hidden rounded-lg border bg-white shadow-md dark:bg-zinc-900">
