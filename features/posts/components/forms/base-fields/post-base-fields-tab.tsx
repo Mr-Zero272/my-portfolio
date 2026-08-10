@@ -1,4 +1,3 @@
-import { FormTextArea } from '@/components/forms';
 import { FormSlugInput } from '@/components/forms/form-slug-input';
 import { GoogleIcon, XIcon } from '@/components/icons';
 import { FieldGroup } from '@/components/ui/field';
@@ -6,6 +5,7 @@ import { SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui
 import { ChevronRightIcon } from 'lucide-react';
 import { PostContext } from '../post-form';
 import { AuthorsInput } from './authors-input';
+import { PostExcerptInput } from './post-excerpt-input';
 import { PostKeywordsInput } from './post-keywords-input';
 import { TagsInput } from './tags-input';
 
@@ -17,7 +17,7 @@ export const PostBaseFieldsTab = ({
   formContextData?: PostContext;
 }) => {
   return (
-    <div className="flex h-full flex-1 flex-col justify-between">
+    <div className="flex h-full flex-1 flex-col justify-between gap-4">
       <FieldGroup>
         <FormSlugInput
           name="slug"
@@ -31,16 +31,12 @@ export const PostBaseFieldsTab = ({
 
         <PostKeywordsInput />
 
-        <FormTextArea
-          name="excerpt"
-          label="Excerpt"
-          placeholder="Write a short summary of your post..."
-        />
+        <PostExcerptInput />
 
         <AuthorsInput />
       </FieldGroup>
 
-      <SidebarMenu className="mt-auto">
+      <SidebarMenu className="bg-sidebar sticky -bottom-4 mt-auto py-4">
         <SidebarMenuItem onClick={() => onTabChange('metadata')}>
           <SidebarMenuButton className="justify-between">
             <div className="flex items-center gap-2">

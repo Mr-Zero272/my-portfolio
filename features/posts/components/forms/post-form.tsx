@@ -14,6 +14,7 @@ import { PostStatus } from '@/lib/generated/prisma/enums';
 import { BaseFormProps } from '@/types/form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ArrowLeftIcon } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import { useCallback, useId, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { DEFAULT_POST_FORM_VALUES, PostFormSchema, PostFormValues } from '../../schemas';
@@ -43,6 +44,7 @@ const PostFormContent = ({
   const id = useId();
   const formId = `tag-form-${id}`;
   const [isSaveDialogOpen, setIsSaveDialogOpen] = useState(false);
+  const router = useRouter();
 
   const form = useForm<PostFormValues>({
     resolver: zodResolver(PostFormSchema),
@@ -86,7 +88,7 @@ const PostFormContent = ({
           <form id={formId} className="flex flex-1 flex-col">
             <header className="bg-background sticky top-0 z-10 flex h-16 shrink-0 items-center justify-between gap-2 border-b px-4">
               <div className="flex items-center gap-2">
-                <Button variant="ghost">
+                <Button variant="ghost" onClick={() => router.back()}>
                   <ArrowLeftIcon />
                   Back
                 </Button>

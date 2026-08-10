@@ -4,17 +4,19 @@ import { Button } from '@/components/ui/button';
 import { Field, FieldLabel } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 import { Spinner } from '@/components/ui/spinner';
+import { useGenerateKeywords } from '@/features/posts/hooks';
+import { handleError } from '@/utils';
 import { PlusIcon, SparklesIcon, XIcon } from 'lucide-react';
 import { useState } from 'react';
-import { Controller, useFormContext } from 'react-hook-form';
+import { Controller, ControllerRenderProps, FieldValues, useFormContext } from 'react-hook-form';
 import { toast } from 'sonner';
 
 export const PostKeywordsInput = () => {
   const { control, getValues } = useFormContext();
   const [inputValue, setInputValue] = useState('');
-  const [isGenerating, setIsGenerating] = useState(false);
+  const { isPending: isGeneratingWithAI, mutateAsync: aiGenerateKeywords } = useGenerateKeywords();
 
-  const generateKeywordsWithAI = async () => {
+  const generateKeywordsWithAI = async (field: ControllerRenderProps<FieldValues, 'keywords'>) => {
     const title = getValues('title');
     const content = getValues('content');
 
@@ -25,11 +27,14 @@ export const PostKeywordsInput = () => {
       return;
     }
 
-    setIsGenerating(true);
     try {
-      // AI keyword extraction placeholder
-    } finally {
-      setIsGenerating(false);
+      const keywords = await aiGenerateKeywords({ body: { content, title } });
+      field.onChange([...field.value, ...keywords]);
+    } catch (error) {
+      handleError({
+        error,
+        withToast: true,
+      });
     }
   };
 
@@ -89,15 +94,15 @@ export const PostKeywordsInput = () => {
             </div>
 
             <Button
-              onClick={generateKeywordsWithAI}
+              onClick={() => generateKeywordsWithAI(field)}
               size="sm"
               variant="secondary"
               type="button"
-              disabled={isGenerating}
+              disabled={isGeneratingWithAI}
               className="w-full"
             >
-              {isGenerating ? <Spinner /> : <SparklesIcon />}
-              {isGenerating ? 'Generating...' : 'Generate with AI'}
+              {isGeneratingWithAI ? <Spinner /> : <SparklesIcon />}
+              {isGeneratingWithAI ? 'Generating...' : 'Generate with AI'}
             </Button>
 
             {field.value?.length > 0 && (

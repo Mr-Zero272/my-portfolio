@@ -5,6 +5,8 @@ import { normalizeQueryParams } from '@/utils/search-query';
 import {
   CreatePostRequest,
   DeletePostRequest,
+  GenerateExcerptRequest,
+  GenerateKeywordsRequest,
   GetPostRequest,
   GetPostsRequest,
   PostWithAllRelations,
@@ -46,5 +48,18 @@ export const postApi = {
     const res = await axiosInstance.delete(`/posts/${request.path?.id}`);
 
     return res.data.data as Post;
+  },
+
+  // ai routes
+  generateExcerpt: async (request: GenerateExcerptRequest) => {
+    const res = await axiosInstance.post('/ai/posts/excerpt', request.body);
+
+    return res.data?.excerpt as string;
+  },
+
+  generateKeywords: async (request: GenerateKeywordsRequest) => {
+    const res = await axiosInstance.post('/ai/posts/keywords', request.body);
+
+    return res.data?.keywords as string[];
   },
 };

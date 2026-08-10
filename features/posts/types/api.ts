@@ -31,6 +31,18 @@ export type GetPostsRequest = RequestConfig<
 
 export type GetPostRequest = RequestConfig<{ id: string }, undefined, undefined>;
 
+export type GenerateKeywordsRequest = RequestConfig<
+  undefined,
+  undefined,
+  { content: string; title: string }
+>;
+
+export type GenerateExcerptRequest = RequestConfig<
+  undefined,
+  undefined,
+  { content: string; title: string }
+>;
+
 export type CreatePostRequest = RequestConfig<undefined, undefined, PostFormValues>;
 
 export type UpdatePostRequest = RequestConfig<{ id: string }, undefined, PostFormValues>;
