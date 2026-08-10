@@ -9,7 +9,7 @@ import {
 } from '@/components/ui/responsive-dialog';
 import { SidebarInset, SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
 import { Spinner } from '@/components/ui/spinner';
-import { GalleryImage } from '@/lib/generated/prisma/client';
+import { GalleryImage, Tag } from '@/lib/generated/prisma/client';
 import { PostStatus } from '@/lib/generated/prisma/enums';
 import { BaseFormProps } from '@/types/form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -21,6 +21,13 @@ import { PostFeatureImageInput } from './post-feature-image-input';
 import { PostFormSidebar } from './post-form-sidebar';
 import { TitleFormInput } from './post-title-form-input';
 
+export type PostContext = {
+  featureImage?: GalleryImage | null;
+  selectedTags?: Tag[];
+};
+
+export type PostFormProps = BaseFormProps<PostFormValues, PostContext>;
+
 const PostFormContent = ({
   initialData,
   onSubmit,
@@ -31,20 +38,10 @@ const PostFormContent = ({
   // serverErrors,
   isEditMode,
   context,
-}: BaseFormProps<
-  PostFormValues,
-  {
-    featureImage?: GalleryImage | null;
-  }
->) => {
+}: PostFormProps) => {
   const id = useId();
   const formId = `tag-form-${id}`;
   const [isSaveDialogOpen, setIsSaveDialogOpen] = useState(false);
-
-  console.log({
-    values: initialData ? (initialData as PostFormValues) : DEFAULT_POST_FORM_VALUES,
-
-  })
 
   const form = useForm<PostFormValues>({
     resolver: zodResolver(PostFormSchema),
@@ -128,7 +125,7 @@ const PostFormContent = ({
             </div>
           </form>
         </SidebarInset>
-        <PostFormSidebar />
+        <PostFormSidebar formContextData={context} />
       </FormProvider>
 
       {/** Dialogs */}
@@ -181,14 +178,7 @@ const PostFormContent = ({
   );
 };
 
-export const PostForm = (
-  props: BaseFormProps<
-    PostFormValues,
-    {
-      featureImage: GalleryImage | null;
-    }
-  >,
-) => {
+export const PostForm = (props: PostFormProps) => {
   return (
     <SidebarProvider style={{ '--sidebar-width': '350px' } as React.CSSProperties}>
       <PostFormContent {...props} />

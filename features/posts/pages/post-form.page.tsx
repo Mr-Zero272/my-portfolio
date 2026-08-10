@@ -16,8 +16,16 @@ export const PostFormPage = ({ postId }: { postId?: string }) => {
     router.push(appPath.admin.post.list);
   }, [router]);
 
-  const { serverError, isEditMode, isLoading, error, initialData, onSubmit, isSubmitting } =
-    usePostForm({ id: postId, onSuccess: handleSuccess });
+  const {
+    serverError,
+    isEditMode,
+    isLoading,
+    error,
+    initialData,
+    onSubmit,
+    isSubmitting,
+    originalData,
+  } = usePostForm({ id: postId, onSuccess: handleSuccess });
 
   if (isLoading) {
     return (
@@ -46,9 +54,6 @@ export const PostFormPage = ({ postId }: { postId?: string }) => {
     );
   }
 
-  console.log("data is ready")
-  console.log("mode : " + postId ? 'edit' : 'create')
-
   return (
     <PostForm
       initialData={initialData}
@@ -57,7 +62,8 @@ export const PostFormPage = ({ postId }: { postId?: string }) => {
       serverErrors={serverError ? { root: serverError } : undefined}
       isEditMode={isEditMode}
       context={{
-        featureImage: initialData?.featureImage ?? null,
+        featureImage: originalData?.featureImage,
+        selectedTags: originalData?.tags?.map((tag) => tag.tag),
       }}
     />
   );

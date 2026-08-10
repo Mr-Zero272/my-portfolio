@@ -44,10 +44,6 @@ export function DataTable<TData>({
   const [queryLayout] = useQueryState('layout', parseAsString.withDefault('table'));
 
   const currentLayout: DataTableLayout = layout ?? (queryLayout === 'cards' ? 'cards' : 'table');
-  console.log({
-    queryLayout,
-    currentLayout,
-  });
 
   return (
     <div className={cn('flex w-full flex-col gap-2.5', className)} {...props}>

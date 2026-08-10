@@ -1,11 +1,13 @@
 import axiosInstance from '@/lib/axios';
 import { Post } from '@/lib/generated/prisma/client';
+import { ListResponse } from '@/types/api';
 import { normalizeQueryParams } from '@/utils/search-query';
 import {
   CreatePostRequest,
   DeletePostRequest,
   GetPostRequest,
   GetPostsRequest,
+  PostWithAllRelations,
   UpdatePostRequest,
 } from '../types';
 
@@ -19,25 +21,25 @@ export const postApi = {
     return {
       list: res.data?.data,
       meta: res.data?.meta,
-    };
+    } as ListResponse<PostWithAllRelations>;
   },
 
   getById: async (request: GetPostRequest) => {
     const res = await axiosInstance.get(`/posts/${request.path?.id}`);
 
-    return res.data.data as Post;
+    return res.data.data as PostWithAllRelations;
   },
 
   create: async (request: CreatePostRequest) => {
     const res = await axiosInstance.post('/posts', request.body);
 
-    return res.data.data as Post;
+    return res.data.data as PostWithAllRelations;
   },
 
   update: async (request: UpdatePostRequest) => {
     const res = await axiosInstance.patch(`/posts/${request.path?.id}`, request.body);
 
-    return res.data.data as Post;
+    return res.data.data as PostWithAllRelations;
   },
 
   delete: async (request: DeletePostRequest) => {

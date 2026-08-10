@@ -61,5 +61,6 @@ export const usePostForm = ({ id, onSuccess, onError }: UsePostFormProps) => {
     initialData,
     onSubmit: handleSubmit,
     isSubmitting: isPendingCreate || isPendingUpdate,
+    originalData: data,
   };
 };

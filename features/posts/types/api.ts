@@ -1,6 +1,20 @@
-import { PostStatus } from '@/lib/generated/prisma/enums';
+import {
+  GalleryImage,
+  Post,
+  PostAuthor,
+  PostStatus,
+  PostTag,
+  Tag,
+  User,
+} from '@/lib/generated/prisma/client';
 import { BaseQuery, RequestConfig } from '@/types/api';
 import { PostFormValues } from '../schemas';
+
+export interface PostWithAllRelations extends Post {
+  featureImage?: GalleryImage;
+  tags?: (PostTag & { tag: Tag })[];
+  authors?: (PostAuthor & { author: User })[];
+}
 
 export type GetPostsRequest = RequestConfig<
   undefined,

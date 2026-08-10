@@ -4,14 +4,17 @@ import { GoogleIcon, XIcon } from '@/components/icons';
 import { FieldGroup } from '@/components/ui/field';
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
 import { ChevronRightIcon } from 'lucide-react';
+import { PostContext } from '../post-form';
 import { AuthorsInput } from './authors-input';
 import { PostKeywordsInput } from './post-keywords-input';
 import { TagsInput } from './tags-input';
 
 export const PostBaseFieldsTab = ({
   onTabChange,
+  formContextData,
 }: {
   onTabChange: (tab: 'main' | 'metadata' | 'x_metadata') => void;
+  formContextData?: PostContext;
 }) => {
   return (
     <div className="flex h-full flex-1 flex-col justify-between">
@@ -24,7 +27,7 @@ export const PostBaseFieldsTab = ({
           autoComplete="off"
         />
 
-        <TagsInput />
+        <TagsInput defaultSelectedTags={formContextData?.selectedTags ?? []} />
 
         <PostKeywordsInput />
 

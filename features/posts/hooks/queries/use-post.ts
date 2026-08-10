@@ -1,10 +1,14 @@
-import { Post } from '@/lib/generated/prisma/client';
 import { useQuery, UseQueryOptions } from '@tanstack/react-query';
 import { postApi, postQueryKeys } from '../../services';
-import { GetPostRequest } from '../../types';
+import { GetPostRequest, PostWithAllRelations } from '../../types';
 
 type UsePostOptions = Omit<
-  UseQueryOptions<Post, Error, Post, ReturnType<typeof postQueryKeys.detail>>,
+  UseQueryOptions<
+    PostWithAllRelations,
+    Error,
+    PostWithAllRelations,
+    ReturnType<typeof postQueryKeys.detail>
+  >,
   'queryKey' | 'queryFn'
 >;
 

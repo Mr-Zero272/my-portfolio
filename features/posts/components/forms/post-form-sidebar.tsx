@@ -6,9 +6,10 @@ import { useMediaQuery } from '@mantine/hooks';
 import { useState } from 'react';
 import { PostBaseFieldsTab } from './base-fields/post-base-fields-tab';
 import { PostMetaFields } from './meta-fields/post-meta-fields';
+import { PostContext } from './post-form';
 import { PostXMetaFields } from './x-meta-fields/post-x-meta-fields';
 
-export const PostFormSidebar = () => {
+export const PostFormSidebar = ({ formContextData }: { formContextData?: PostContext }) => {
   const isMobile = useMediaQuery(`(max-width: 768px)`);
   const [activeTab, setActiveTab] = useState<'main' | 'metadata' | 'x_metadata'>('main');
   return (
@@ -39,7 +40,7 @@ export const PostFormSidebar = () => {
 
           {/* keep main tab mount to prevent re-fetch api for tags and author */}
           <TabsContent value="main" keepMounted>
-            <PostBaseFieldsTab onTabChange={setActiveTab} />
+            <PostBaseFieldsTab onTabChange={setActiveTab} formContextData={formContextData} />
           </TabsContent>
           <TabsContent value="metadata">
             <PostMetaFields onTabChange={setActiveTab} />
