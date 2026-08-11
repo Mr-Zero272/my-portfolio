@@ -6,5 +6,11 @@ export const appPath = {
       // detail: (id: string) => `/posts/${id}`,
       edit: (id: string) => `/posts/${id}/edit`,
     },
+    tag: {
+      list: '/dashboard/tags',
+    },
+    gallery: {
+      list: '/dashboard/galleries',
+    },
   },
 };

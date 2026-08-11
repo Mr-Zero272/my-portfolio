@@ -9,81 +9,98 @@ import {
   SidebarHeader,
   SidebarRail,
 } from '@/components/ui/sidebar';
-import { BookOpenIcon, Settings2Icon, UserKeyIcon } from 'lucide-react';
+import { appPath } from '@/constants/path';
+import { SidebarGroup } from '@/types';
+import {
+  BookOpenIcon,
+  ImagesIcon,
+  LineSquiggleIcon,
+  PenLineIcon,
+  Settings2Icon,
+  TagIcon,
+} from 'lucide-react';
 import { AppSidebarHeader } from '../shared';
 import { NavMain } from '../shared/nav-main';
 import { NavUser } from '../shared/nav-user';
 
-const data = {
-  navMain: [
-    {
-      title: 'Dashboard',
-      url: '#',
-      icon: <UserKeyIcon />,
-      isActive: true,
-      items: [
-        {
-          title: 'Post',
-          url: '/dashboard/posts',
-        },
-        {
-          title: 'Tag',
-          url: '/dashboard/tags',
-        },
-        {
-          title: 'Gallery',
-          url: '/dashboard/galleries',
-        },
-      ],
-    },
-    {
-      title: 'Documentation',
-      url: '#',
-      icon: <BookOpenIcon />,
-      items: [
-        {
-          title: 'Introduction',
-          url: '#',
-        },
-        {
-          title: 'Get Started',
-          url: '#',
-        },
-        {
-          title: 'Tutorials',
-          url: '#',
-        },
-        {
-          title: 'Changelog',
-          url: '#',
-        },
-      ],
-    },
-    {
-      title: 'Settings',
-      url: '#',
-      icon: <Settings2Icon />,
-      items: [
-        {
-          title: 'General',
-          url: '#',
-        },
-        {
-          title: 'Team',
-          url: '#',
-        },
-        {
-          title: 'Billing',
-          url: '#',
-        },
-        {
-          title: 'Limits',
-          url: '#',
-        },
-      ],
-    },
-  ],
-};
+const sidebarGroups: SidebarGroup[] = [
+  {
+    groupSidebarLabel: 'Quick actions',
+    items: [
+      {
+        title: 'Quick post',
+        url: appPath.admin.post.new,
+        icon: <LineSquiggleIcon />,
+      },
+    ],
+  },
+  {
+    groupSidebarLabel: 'Content Management',
+    items: [
+      {
+        title: 'Posts',
+        url: appPath.admin.post.list,
+        icon: <PenLineIcon />,
+      },
+      {
+        title: 'Tags',
+        url: appPath.admin.tag.list,
+        icon: <TagIcon />,
+      },
+      {
+        title: 'Galleries',
+        url: appPath.admin.gallery.list,
+        icon: <ImagesIcon />,
+      },
+      {
+        title: 'Documentation',
+        url: '#',
+        icon: <BookOpenIcon />,
+        items: [
+          {
+            title: 'Introduction',
+            url: '#',
+          },
+          {
+            title: 'Get Started',
+            url: '#',
+          },
+          {
+            title: 'Tutorials',
+            url: '#',
+          },
+          {
+            title: 'Changelog',
+            url: '#',
+          },
+        ],
+      },
+      {
+        title: 'Settings',
+        url: '#',
+        icon: <Settings2Icon />,
+        items: [
+          {
+            title: 'General',
+            url: '#',
+          },
+          {
+            title: 'Team',
+            url: '#',
+          },
+          {
+            title: 'Billing',
+            url: '#',
+          },
+          {
+            title: 'Limits',
+            url: '#',
+          },
+        ],
+      },
+    ],
+  },
+];
 
 export function DashboardSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
@@ -92,8 +109,13 @@ export function DashboardSidebar({ ...props }: React.ComponentProps<typeof Sideb
         <AppSidebarHeader subTitle="Administrator" redirectLink="/admin" />
       </SidebarHeader>
       <SidebarContent>
-        <NavMain items={data.navMain} />
-        {/* <NavProjects projects={data.projects} /> */}
+        {sidebarGroups.map((group) => (
+          <NavMain
+            key={group.groupSidebarLabel}
+            sidebarGroupLabel={group.groupSidebarLabel}
+            items={group.items}
+          />
+        ))}
       </SidebarContent>
       <SidebarFooter>
         <NavUser />
