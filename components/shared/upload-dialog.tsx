@@ -151,7 +151,7 @@ export function UploadAreaDialog({
     <ResponsiveDialog open={open} onOpenChange={onOpenChange}>
       <ResponsiveDialogContent className="sm:max-w-lg">
         <ResponsiveDialogHeader>
-          <ResponsiveDialogTitle>Upload Attachments</ResponsiveDialogTitle>
+          <ResponsiveDialogTitle>Upload Files</ResponsiveDialogTitle>
           <ResponsiveDialogDescription>
             Drag and drop or select files to upload.
           </ResponsiveDialogDescription>

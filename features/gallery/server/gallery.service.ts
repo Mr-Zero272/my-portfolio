@@ -9,7 +9,6 @@ import {
   extractKeyFromR2Url,
   generatePresignedPutUrl,
   getR2PublicUrl,
-  uploadBufferToR2,
 } from '@/lib/r2';
 import axios from 'axios';
 import type {
@@ -181,15 +180,15 @@ export const galleryService = {
       filename = `image.${ext}`;
     }
 
-    const fileId = generateId();
-    const sanitizedFilename = filename.replace(/[^a-zA-Z0-9._-]/g, '_');
-    const key = `gallery/${fileId}-${sanitizedFilename}`;
+    // const fileId = generateId();
+    // const sanitizedFilename = filename.replace(/[^a-zA-Z0-9._-]/g, '_');
+    // const key = `gallery/${fileId}-${sanitizedFilename}`;
 
-    const publicUrl = await uploadBufferToR2({
-      buffer,
-      key,
-      mimeType: contentType,
-    });
+    // const publicUrl = await uploadBufferToR2({
+    //   buffer,
+    //   key,
+    //   mimeType: contentType,
+    // });
 
     const galleryImage = await prisma.galleryImage.create({
       data: {
@@ -197,7 +196,7 @@ export const galleryService = {
         mimeType: contentType,
         name: filename,
         size,
-        url: publicUrl,
+        url: input.url,
         userCreated: user.id,
       },
     });

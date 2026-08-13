@@ -4,7 +4,7 @@ import { UploadFromUrlInput } from '../schemas/gallery.schema';
 export type GetGalleryImagesRequest = RequestConfig<
   undefined,
   BaseQuery<{
-    mineType?: string;
+    mimeType?: string;
   }>,
   undefined
 >;

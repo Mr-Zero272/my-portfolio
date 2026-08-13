@@ -9,5 +9,3 @@ export const XIcon = (props: SVGProps<SVGSVGElement>) => (
     />
   </svg>
 );
-
-export default XIcon;
