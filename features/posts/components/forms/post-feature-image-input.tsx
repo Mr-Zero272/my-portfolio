@@ -2,12 +2,14 @@
 
 import { FormInput } from '@/components/forms';
 import { Button } from '@/components/ui/button';
+import { Separator } from '@/components/ui/separator';
 import { Spinner } from '@/components/ui/spinner';
+import { GalleryPickerDialog } from '@/features/gallery/components/gallery-picker-dialog';
 import { useDeleteGallery } from '@/features/gallery/hooks/mutations';
 import { GalleryImage } from '@/lib/generated/prisma/client';
 import { uploadManager } from '@/lib/upload';
 import { selectTaskById, useUploadStore } from '@/stores/upload';
-import { PlusIcon, RotateCwIcon, TriangleAlertIcon, XIcon } from 'lucide-react';
+import { ImageIcon, PlusIcon, RotateCwIcon, TriangleAlertIcon, XIcon } from 'lucide-react';
 import Image from 'next/image';
 import { useEffect, useRef, useState } from 'react';
 import { useFormContext } from 'react-hook-form';
@@ -24,6 +26,9 @@ export const PostFeatureImageInput = ({
   const [imageFeatureFile, setImageFeatureFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(() => featureImageFile?.url ?? null);
   const [taskId, setTaskId] = useState<string | null>(null);
+  // When true, the current preview came from the gallery picker (not a new upload)
+  const [pickedFromGallery, setPickedFromGallery] = useState(false);
+  const [galleryPickerOpen, setGalleryPickerOpen] = useState(false);
 
   // Blob URL được tạo 1 lần khi chọn file, revoke khi thay thế/unmount
   // → không còn tạo object URL mới mỗi lần render (tránh rò rỉ bộ nhớ)
@@ -56,9 +61,27 @@ export const PostFeatureImageInput = ({
     setImageFeatureFile(file);
     setPreviewUrl(url);
     setTaskId(uploadManager.enqueue(file));
+    setPickedFromGallery(false);
 
     // Reset input để chọn lại đúng file đó vẫn trigger onChange
     e.target.value = '';
+  };
+
+  // ── Gallery picker ────────────────────────────────────────────────────────
+  const handlePickFromGallery = (image: GalleryImage) => {
+    // Cancel any in-progress upload
+    if (task) uploadManager.cancel(task.id);
+    revokeBlobPreview();
+
+    setImageFeatureFile(null);
+    setTaskId(null);
+    setPreviewUrl(image.url);
+    setPickedFromGallery(true);
+
+    setValue('featureImageId', image.id, {
+      shouldValidate: true,
+      shouldDirty: true,
+    });
   };
 
   // Upload thành công: chỉ cần ghi fileId vào form, preview giữ nguyên blob local
@@ -84,13 +107,15 @@ export const PostFeatureImageInput = ({
   const handleRemoveImage = () => {
     if (task) uploadManager.cancel(task.id);
     // Xóa ảnh đã lưu trên gallery (ảnh cũ của post) khi remove khỏi form
-    if (featureImageFile) {
+    // nhưng KHÔNG xóa ảnh từ gallery picker (vì ảnh đó được dùng chung)
+    if (featureImageFile && !pickedFromGallery) {
       deleteGallery({ path: { id: featureImageFile.id } });
     }
     revokeBlobPreview();
     setImageFeatureFile(null);
     setPreviewUrl(null);
     setTaskId(null);
+    setPickedFromGallery(false);
     setValue('featureImageId', '', { shouldDirty: true });
   };
 
@@ -98,9 +123,11 @@ export const PostFeatureImageInput = ({
     if (task) uploadManager.retry(task.id);
   };
 
+  const hasImage = Boolean(imageFeatureFile || previewUrl);
+
   return (
     <div className="md:px-20">
-      {imageFeatureFile || previewUrl ? (
+      {hasImage ? (
         <div className="mb-4">
           <div className="relative inline-block w-full rounded-lg">
             <Image
@@ -143,6 +170,15 @@ export const PostFeatureImageInput = ({
               Change image
             </Button>
             <Button
+              onClick={() => setGalleryPickerOpen(true)}
+              variant="outline"
+              size="sm"
+              disabled={isUploading}
+            >
+              <ImageIcon />
+              Pick from gallery
+            </Button>
+            <Button
               onClick={handleRemoveImage}
               variant="ghost"
               size="sm"
@@ -164,7 +200,7 @@ export const PostFeatureImageInput = ({
           )}
         </div>
       ) : (
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1">
           <Button
             onClick={() => inputFileRef.current?.click()}
             variant="ghost"
@@ -172,6 +208,17 @@ export const PostFeatureImageInput = ({
           >
             {isUploading ? <Spinner /> : <PlusIcon />}
             {isUploading ? (isRetrying ? 'Retrying...' : 'Uploading...') : 'Upload feature image'}
+          </Button>
+
+          <Separator orientation="vertical" className="h-5" />
+
+          <Button
+            onClick={() => setGalleryPickerOpen(true)}
+            variant="ghost"
+            disabled={isUploading}
+          >
+            <ImageIcon />
+            Pick from gallery
           </Button>
         </div>
       )}
@@ -183,6 +230,14 @@ export const PostFeatureImageInput = ({
         onChange={handleSelectFeatureImage}
         ref={inputFileRef}
       />
+
+      <GalleryPickerDialog
+        open={galleryPickerOpen}
+        onOpenChange={setGalleryPickerOpen}
+        onSelect={handlePickFromGallery}
+        title="Pick feature image"
+      />
     </div>
   );
 };
+

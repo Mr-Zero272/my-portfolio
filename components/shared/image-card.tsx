@@ -121,7 +121,7 @@ export default ImageCard;
 export const ImageCardSkeleton = () => {
   const [height] = useState(() => Math.floor(Math.random() * (500 - 200 + 1)) + 200);
   return (
-    <Card className="m-0 cursor-pointer overflow-hidden border-none p-0 shadow-none transition-all duration-300">
+    <Card className="m-0 w-full cursor-pointer overflow-hidden border-none p-0 shadow-none transition-all duration-300">
       <div className="relative">
         <Skeleton
           className="w-full"
@@ -129,21 +129,6 @@ export const ImageCardSkeleton = () => {
             height,
           }}
         />
-
-        {/* Top overlay */}
-        <div className="absolute inset-x-0 top-0 bg-linear-to-b from-black/50 to-transparent p-3 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-          <div className="flex justify-end">
-            <Skeleton className="h-8 w-8 rounded-md" />
-          </div>
-        </div>
-
-        {/* Bottom overlay */}
-        <div className="absolute inset-x-0 bottom-0 bg-linear-to-t from-black/50 to-transparent p-3 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-          <div className="flex items-end justify-between">
-            <Skeleton className="h-6 w-16 rounded-md" />
-            <Skeleton className="h-8 w-8 rounded-md" />
-          </div>
-        </div>
       </div>
     </Card>
   );

@@ -30,44 +30,35 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { Masonry, MasonryItem } from '@/components/ui/masonry';
 import { Spinner } from '@/components/ui/spinner';
 import { useDownloadFile } from '@/hooks/use-download-file';
 import { GalleryImage } from '@/lib/generated/prisma/client';
 import { uploadManager } from '@/lib/upload';
-import { cn } from '@/lib/utils';
 import { useUploadStore } from '@/stores/upload';
 
 import { UploadFromUrlDialog } from '@/components/shared/upload-from-url-dialog';
 import { ButtonGroup } from '@/components/ui/button-group';
 import { handleError } from '@/utils';
+import Masonry, { ResponsiveMasonry } from 'react-responsive-masonry';
 import { AttachmentFilterToolbar } from '../components/gallery-filter-toolbar';
 import { GalleryImageDetailDrawer } from '../components/gallery-image-detail-drawer';
 import { useDeleteGallery, useGalleryFilterParams, useInfiniteGalleries } from '../hooks';
 import { useUploadGalleryFormUrl } from '../hooks/mutations';
 import { galleryQueryKeys } from '../services';
 
-// ─── Constants ──────────────────────────────────────────────────────────────
-
-const MASONRY_COLUMN_WIDTH = 240;
-const MASONRY_GAP = 16;
-const MASONRY_ITEM_HEIGHT = 260;
-
 // ─── Skeleton grid ──────────────────────────────────────────────────────────
 
 const GalleryMasonrySkeleton = () => (
-  <Masonry
-    columnWidth={MASONRY_COLUMN_WIDTH}
-    gap={MASONRY_GAP}
-    itemHeight={MASONRY_ITEM_HEIGHT}
-    style={{ height: 'auto' }}
+  <ResponsiveMasonry
+    columnsCountBreakPoints={{ 640: 1, 768: 2, 1024: 4, 1536: 6, 2560: 8 }}
+    gutterBreakPoints={{ 640: 16, 768: 16, 1024: 16, 1536: 16, 2560: 16 }}
   >
-    {Array.from({ length: 8 }).map((_, index) => (
-      <MasonryItem key={index}>
-        <ImageCardSkeleton />
-      </MasonryItem>
-    ))}
-  </Masonry>
+    <Masonry>
+      {Array.from({ length: 8 }).map((_, index) => (
+        <ImageCardSkeleton key={index} />
+      ))}
+    </Masonry>
+  </ResponsiveMasonry>
 );
 
 // ─── Page content ───────────────────────────────────────────────────────────
@@ -216,121 +207,119 @@ export const GalleryImageListPageContent = () => {
   );
 
   return (
-    <div className="flex flex-col gap-4">
+    <div>
       <PageHeader title="Galleries" subTitle="Manage your gallery images" />
 
-      <AttachmentFilterToolbar
-        params={params}
-        onPatchParams={onPatchParams}
-        hasFilters={hasFilters}
-        rightSlot={
-          <ButtonGroup>
-            <Button variant="outline" onClick={() => setUploadOpen(true)}>
-              <UploadIcon />
-              Upload
-            </Button>
-            <DropdownMenu>
-              <DropdownMenuTrigger render={<Button variant="outline" size="icon" />}>
-                <ChevronDownIcon />
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-42">
-                <DropdownMenuGroup>
-                  <DropdownMenuItem onClick={() => setUploadFromUrlOpen(true)}>
-                    <Link2Icon />
-                    Upload from URL
-                  </DropdownMenuItem>
-                </DropdownMenuGroup>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </ButtonGroup>
-        }
-      />
-
-      {isLoading ? (
-        <GalleryMasonrySkeleton />
-      ) : error ? (
-        <StateUI
-          variant="error"
-          title="Failed to load images"
-          description="There was an error loading your gallery. Please try again."
-          actions={
-            <Button variant="outline" onClick={() => refetch()}>
-              <RefreshCwIcon />
-              Retry
-            </Button>
-          }
-        />
-      ) : images.length === 0 ? (
-        <StateUI
-          variant="empty"
-          title="No images found"
-          description={
-            hasFilters
-              ? 'No images match your current filters.'
-              : 'Your gallery is empty. Upload your first image to get started.'
-          }
-          actions={
-            hasFilters ? (
-              <Button
-                variant="outline"
-                onClick={() => onPatchParams({ page: 1, search: '', mimeType: 'all-mine-types' })}
-              >
-                <RefreshCwIcon />
-                Reset filters
-              </Button>
-            ) : (
-              <Button onClick={() => setUploadOpen(true)}>
+      <div className="flex flex-col gap-4">
+        <AttachmentFilterToolbar
+          params={params}
+          onPatchParams={onPatchParams}
+          hasFilters={hasFilters}
+          rightSlot={
+            <ButtonGroup>
+              <Button variant="outline" onClick={() => setUploadOpen(true)}>
                 <UploadIcon />
                 Upload
               </Button>
-            )
+              <DropdownMenu>
+                <DropdownMenuTrigger render={<Button variant="outline" size="icon" />}>
+                  <ChevronDownIcon />
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-42">
+                  <DropdownMenuGroup>
+                    <DropdownMenuItem onClick={() => setUploadFromUrlOpen(true)}>
+                      <Link2Icon />
+                      Upload from URL
+                    </DropdownMenuItem>
+                  </DropdownMenuGroup>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </ButtonGroup>
           }
         />
-      ) : (
-        <Masonry
-          columnWidth={MASONRY_COLUMN_WIDTH}
-          gap={MASONRY_GAP}
-          itemHeight={MASONRY_ITEM_HEIGHT}
-          maxColumnCount={8}
-          style={{ height: 'auto' }}
-          className={cn(
-            'transition-opacity duration-300',
-            isFetching && !isFetchingNextPage && 'opacity-60',
-          )}
-        >
-          {images.map((image) => (
-            <MasonryItem key={image.id}>
-              <ImageCard
-                src={image.url}
-                alt={image.name}
-                mineType={image.mimeType}
-                mode="view"
-                menu={renderCardMenu(image)}
-                isDownloading={downloadingId === image.id}
-                onDownload={() => handleDownload(image)}
-                onClick={() => setSelectedImage(image)}
-              />
-            </MasonryItem>
-          ))}
-        </Masonry>
-      )}
 
-      {!isLoading && !error && images.length > 0 && (
-        <div ref={loadMoreRef} className="flex min-h-16 items-center justify-center py-4">
-          {isFetchingNextPage ? (
-            <div className="text-muted-foreground flex items-center gap-2 text-sm">
-              <Spinner size="sm" />
-              Loading more…
-            </div>
-          ) : !hasNextPage ? (
-            <span className="text-muted-foreground text-sm">
-              {total != null ? `Showing all ${total} images` : 'You reached the end of the gallery'}
-            </span>
-          ) : (
-            <span className="text-muted-foreground text-sm">Scroll to load more</span>
-          )}
-        </div>
-      )}
+        {isLoading ? (
+          <GalleryMasonrySkeleton />
+        ) : error ? (
+          <StateUI
+            variant="error"
+            title="Failed to load images"
+            description="There was an error loading your gallery. Please try again."
+            actions={
+              <Button variant="outline" onClick={() => refetch()}>
+                <RefreshCwIcon />
+                Retry
+              </Button>
+            }
+          />
+        ) : images.length === 0 ? (
+          <StateUI
+            variant="empty"
+            title="No images found"
+            description={
+              hasFilters
+                ? 'No images match your current filters.'
+                : 'Your gallery is empty. Upload your first image to get started.'
+            }
+            actions={
+              hasFilters ? (
+                <Button
+                  variant="outline"
+                  onClick={() => onPatchParams({ page: 1, search: '', mimeType: 'all-mine-types' })}
+                >
+                  <RefreshCwIcon />
+                  Reset filters
+                </Button>
+              ) : (
+                <Button onClick={() => setUploadOpen(true)}>
+                  <UploadIcon />
+                  Upload
+                </Button>
+              )
+            }
+          />
+        ) : (
+          <ResponsiveMasonry
+            columnsCountBreakPoints={{ 640: 1, 768: 2, 1024: 4, 1536: 6, 2560: 8 }}
+            gutterBreakPoints={{ 640: 16, 768: 16, 1024: 16, 1536: 16, 2560: 16 }}
+          >
+            <Masonry>
+              {images.map((image) => (
+                <ImageCard
+                  key={image.id}
+                  src={image.url}
+                  alt={image.name}
+                  mineType={image.mimeType}
+                  mode="view"
+                  menu={renderCardMenu(image)}
+                  isDownloading={downloadingId === image.id}
+                  onDownload={() => handleDownload(image)}
+                  onClick={() => setSelectedImage(image)}
+                />
+              ))}
+            </Masonry>
+          </ResponsiveMasonry>
+        )}
+
+        {!isLoading && !error && images.length > 0 && (
+          <div ref={loadMoreRef} className="flex min-h-16 items-center justify-center py-4">
+            {isFetchingNextPage ? (
+              <div className="text-muted-foreground flex items-center gap-2 text-sm">
+                <Spinner size="sm" />
+                Loading more…
+              </div>
+            ) : !hasNextPage ? (
+              <span className="text-muted-foreground text-sm">
+                {total != null
+                  ? `Showing all ${total} images`
+                  : 'You reached the end of the gallery'}
+              </span>
+            ) : (
+              <span className="text-muted-foreground text-sm">Scroll to load more</span>
+            )}
+          </div>
+        )}
+      </div>
 
       {/* Detail drawer */}
       <GalleryImageDetailDrawer
