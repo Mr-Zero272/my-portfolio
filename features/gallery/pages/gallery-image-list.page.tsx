@@ -4,8 +4,10 @@ import { useIntersection } from '@mantine/hooks';
 import { useQueryClient } from '@tanstack/react-query';
 import {
   AlertTriangleIcon,
+  ChevronDownIcon,
   DownloadIcon,
   EyeIcon,
+  Link2Icon,
   MoreHorizontalIcon,
   RefreshCwIcon,
   TrashIcon,
@@ -36,9 +38,13 @@ import { uploadManager } from '@/lib/upload';
 import { cn } from '@/lib/utils';
 import { useUploadStore } from '@/stores/upload';
 
+import { UploadFromUrlDialog } from '@/components/shared/upload-from-url-dialog';
+import { ButtonGroup } from '@/components/ui/button-group';
+import { handleError } from '@/utils';
 import { AttachmentFilterToolbar } from '../components/gallery-filter-toolbar';
 import { GalleryImageDetailDrawer } from '../components/gallery-image-detail-drawer';
 import { useDeleteGallery, useGalleryFilterParams, useInfiniteGalleries } from '../hooks';
+import { useUploadGalleryFormUrl } from '../hooks/mutations';
 import { galleryQueryKeys } from '../services';
 
 // ─── Constants ──────────────────────────────────────────────────────────────
@@ -126,6 +132,24 @@ export const GalleryImageListPageContent = () => {
     [download],
   );
 
+  const [uploadFromUrlOpen, setUploadFromUrlOpen] = useState(false);
+  const { mutateAsync: uploadGalleryFormUrl, isPending: isUploadingGalleryFormUrl } =
+    useUploadGalleryFormUrl({
+      onSuccess: () => {
+        setUploadFromUrlOpen(false);
+      },
+    });
+
+  const handleUploadFromUrl = useCallback(
+    (url: string) => {
+      try {
+        uploadGalleryFormUrl({ body: { url } });
+      } catch (error) {
+        handleError({ error, withToast: true });
+      }
+    },
+    [uploadGalleryFormUrl],
+  );
   // upload → invalidate the gallery list when a task finishes
   const uploadTasksMap = useUploadStore((s) => s.tasks);
   const uploadTasks = useMemo(() => Array.from(uploadTasksMap.values()), [uploadTasksMap]);
@@ -200,10 +224,25 @@ export const GalleryImageListPageContent = () => {
         onPatchParams={onPatchParams}
         hasFilters={hasFilters}
         rightSlot={
-          <Button onClick={() => setUploadOpen(true)}>
-            <UploadIcon />
-            Upload
-          </Button>
+          <ButtonGroup>
+            <Button variant="outline" onClick={() => setUploadOpen(true)}>
+              <UploadIcon />
+              Upload
+            </Button>
+            <DropdownMenu>
+              <DropdownMenuTrigger render={<Button variant="outline" size="icon" />}>
+                <ChevronDownIcon />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-42">
+                <DropdownMenuGroup>
+                  <DropdownMenuItem onClick={() => setUploadFromUrlOpen(true)}>
+                    <Link2Icon />
+                    Upload from URL
+                  </DropdownMenuItem>
+                </DropdownMenuGroup>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </ButtonGroup>
         }
       />
 
@@ -333,6 +372,13 @@ export const GalleryImageListPageContent = () => {
         onOpenChange={setUploadOpen}
         onSubmit={handleUpload}
         multiple
+      />
+
+      <UploadFromUrlDialog
+        open={uploadFromUrlOpen}
+        onOpenChange={setUploadFromUrlOpen}
+        isSubmitting={isUploadingGalleryFormUrl}
+        onSubmit={handleUploadFromUrl}
       />
     </div>
   );
