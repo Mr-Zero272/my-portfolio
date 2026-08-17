@@ -77,26 +77,8 @@ const sidebarGroups: SidebarGroup[] = [
       },
       {
         title: 'Settings',
-        url: '#',
+        url: appPath.admin.settings.profile,
         icon: <Settings2Icon />,
-        items: [
-          {
-            title: 'General',
-            url: '#',
-          },
-          {
-            title: 'Team',
-            url: '#',
-          },
-          {
-            title: 'Billing',
-            url: '#',
-          },
-          {
-            title: 'Limits',
-            url: '#',
-          },
-        ],
       },
     ],
   },

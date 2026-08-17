@@ -1,6 +1,7 @@
 export { FormBadgeGroup } from './form-badge-group';
 export * from './form-checkbox';
 export * from './form-color-picker';
+export * from './form-combobox-multi';
 export * from './form-date-picker';
 export * from './form-date-time-picker';
 export * from './form-input';

@@ -12,5 +12,15 @@ export const appPath = {
     gallery: {
       list: '/dashboard/galleries',
     },
+    settings: {
+      profile: '/settings/profile',
+      appearance: '/settings/appearance',
+      session: '/settings/session',
+      experience: '/settings/experience',
+      project: '/settings/project',
+      education: '/settings/education',
+      skill: '/settings/skill',
+      socialLink: '/settings/social-link',
+    },
   },
 };
