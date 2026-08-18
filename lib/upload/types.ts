@@ -45,7 +45,7 @@ export interface UploadResult {
 // ─── Adapter Config ─────────────────────────────────────────────────────────
 
 export interface UploadAdapterConfig<C extends UploadContext = UploadContext> {
-  context: C;
+  context?: C;
   skipCompression?: boolean;
 }
 

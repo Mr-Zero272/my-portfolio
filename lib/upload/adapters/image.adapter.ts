@@ -122,7 +122,7 @@ export const imageAdapter: UploadAdapter<UploadContext> = {
 
   invalidateCache(config: UploadAdapterConfig<UploadContext>): void {
     const queryClient = getBrowserQueryClient();
-    const { postId } = config.context;
+    const { postId } = config.context || {};
 
     // Uploading creates a GalleryImage — refresh post lists (feature images may
     // reference gallery images) and the detail of the post being edited.

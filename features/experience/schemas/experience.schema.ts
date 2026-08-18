@@ -15,7 +15,7 @@ export const ExperiencePositionSchema = z.object({
 
 export const ExperienceFormSchema = z.object({
   companyName: z.string().trim().min(1, "Company name can't be empty."),
-  companyLogo: z.string().trim().nullable().optional(),
+  companyLogoId: z.string().trim().nullable().optional(),
   isCurrentEmployer: z.boolean().default(false),
   positions: z.array(ExperiencePositionSchema).default([]),
   displayOrder: z.number().int().default(0),

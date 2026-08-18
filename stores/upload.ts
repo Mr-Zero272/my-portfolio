@@ -75,3 +75,9 @@ export const selectTaskById =
   (id: string) =>
   (state: UploadStoreState): UploadTask | undefined =>
     state.tasks.get(id);
+
+/** Subscribe nhiều task một lúc (multiple upload) — dùng kèm `useShallow`. */
+export const selectTasksByIds =
+  (ids: string[]) =>
+  (state: UploadStoreState): UploadTask[] =>
+    ids.map((id) => state.tasks.get(id)).filter((task): task is UploadTask => Boolean(task));

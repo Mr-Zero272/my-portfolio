@@ -1,7 +1,13 @@
 import { ApiErrorCode, throwApiError } from '@/lib/api';
 import { requireAdmin } from '@/lib/auth-guard';
+import type { Prisma } from '@/lib/generated/prisma/client';
 import { prisma } from '@/lib/prisma';
 import { ProfileFormValues } from '../schemas';
+
+const PROFILE_INCLUDE = {
+  ogImage: true,
+  heroImage: true,
+} satisfies Prisma.ProfileInclude;
 
 export const profileService = {
   async getMe(headers: Headers) {
@@ -9,6 +15,7 @@ export const profileService = {
 
     const profile = await prisma.profile.findUnique({
       where: { userId: user.id },
+      include: PROFILE_INCLUDE,
     });
 
     if (!profile) {
@@ -31,6 +38,7 @@ export const profileService = {
         ...input,
       },
       update: input,
+      include: PROFILE_INCLUDE,
     });
 
     return profile;

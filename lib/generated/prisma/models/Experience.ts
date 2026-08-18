@@ -38,7 +38,7 @@ export type ExperienceMinAggregateOutputType = {
   id: string | null
   userId: string | null
   companyName: string | null
-  companyLogo: string | null
+  companyLogoId: string | null
   isCurrentEmployer: boolean | null
   displayOrder: number | null
   isVisible: boolean | null
@@ -50,7 +50,7 @@ export type ExperienceMaxAggregateOutputType = {
   id: string | null
   userId: string | null
   companyName: string | null
-  companyLogo: string | null
+  companyLogoId: string | null
   isCurrentEmployer: boolean | null
   displayOrder: number | null
   isVisible: boolean | null
@@ -62,7 +62,7 @@ export type ExperienceCountAggregateOutputType = {
   id: number
   userId: number
   companyName: number
-  companyLogo: number
+  companyLogoId: number
   isCurrentEmployer: number
   displayOrder: number
   isVisible: number
@@ -84,7 +84,7 @@ export type ExperienceMinAggregateInputType = {
   id?: true
   userId?: true
   companyName?: true
-  companyLogo?: true
+  companyLogoId?: true
   isCurrentEmployer?: true
   displayOrder?: true
   isVisible?: true
@@ -96,7 +96,7 @@ export type ExperienceMaxAggregateInputType = {
   id?: true
   userId?: true
   companyName?: true
-  companyLogo?: true
+  companyLogoId?: true
   isCurrentEmployer?: true
   displayOrder?: true
   isVisible?: true
@@ -108,7 +108,7 @@ export type ExperienceCountAggregateInputType = {
   id?: true
   userId?: true
   companyName?: true
-  companyLogo?: true
+  companyLogoId?: true
   isCurrentEmployer?: true
   displayOrder?: true
   isVisible?: true
@@ -207,7 +207,7 @@ export type ExperienceGroupByOutputType = {
   id: string
   userId: string
   companyName: string
-  companyLogo: string | null
+  companyLogoId: string | null
   isCurrentEmployer: boolean
   displayOrder: number
   isVisible: boolean
@@ -242,7 +242,7 @@ export type ExperienceWhereInput = {
   id?: Prisma.StringFilter<"Experience"> | string
   userId?: Prisma.StringFilter<"Experience"> | string
   companyName?: Prisma.StringFilter<"Experience"> | string
-  companyLogo?: Prisma.StringNullableFilter<"Experience"> | string | null
+  companyLogoId?: Prisma.StringNullableFilter<"Experience"> | string | null
   isCurrentEmployer?: Prisma.BoolFilter<"Experience"> | boolean
   positions?: Prisma.ExperiencePositionCompositeListFilter | Prisma.ExperiencePositionObjectEqualityInput[]
   displayOrder?: Prisma.IntFilter<"Experience"> | number
@@ -250,13 +250,14 @@ export type ExperienceWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"Experience"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Experience"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  companyLogo?: Prisma.XOR<Prisma.GalleryImageNullableScalarRelationFilter, Prisma.GalleryImageWhereInput> | null
 }
 
 export type ExperienceOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   companyName?: Prisma.SortOrder
-  companyLogo?: Prisma.SortOrder
+  companyLogoId?: Prisma.SortOrder
   isCurrentEmployer?: Prisma.SortOrder
   positions?: Prisma.ExperiencePositionOrderByCompositeAggregateInput
   displayOrder?: Prisma.SortOrder
@@ -264,6 +265,7 @@ export type ExperienceOrderByWithRelationInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   user?: Prisma.UserOrderByWithRelationInput
+  companyLogo?: Prisma.GalleryImageOrderByWithRelationInput
 }
 
 export type ExperienceWhereUniqueInput = Prisma.AtLeast<{
@@ -273,7 +275,7 @@ export type ExperienceWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.ExperienceWhereInput | Prisma.ExperienceWhereInput[]
   userId?: Prisma.StringFilter<"Experience"> | string
   companyName?: Prisma.StringFilter<"Experience"> | string
-  companyLogo?: Prisma.StringNullableFilter<"Experience"> | string | null
+  companyLogoId?: Prisma.StringNullableFilter<"Experience"> | string | null
   isCurrentEmployer?: Prisma.BoolFilter<"Experience"> | boolean
   positions?: Prisma.ExperiencePositionCompositeListFilter | Prisma.ExperiencePositionObjectEqualityInput[]
   displayOrder?: Prisma.IntFilter<"Experience"> | number
@@ -281,13 +283,14 @@ export type ExperienceWhereUniqueInput = Prisma.AtLeast<{
   createdAt?: Prisma.DateTimeFilter<"Experience"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Experience"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  companyLogo?: Prisma.XOR<Prisma.GalleryImageNullableScalarRelationFilter, Prisma.GalleryImageWhereInput> | null
 }, "id">
 
 export type ExperienceOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   companyName?: Prisma.SortOrder
-  companyLogo?: Prisma.SortOrder
+  companyLogoId?: Prisma.SortOrder
   isCurrentEmployer?: Prisma.SortOrder
   displayOrder?: Prisma.SortOrder
   isVisible?: Prisma.SortOrder
@@ -307,7 +310,7 @@ export type ExperienceScalarWhereWithAggregatesInput = {
   id?: Prisma.StringWithAggregatesFilter<"Experience"> | string
   userId?: Prisma.StringWithAggregatesFilter<"Experience"> | string
   companyName?: Prisma.StringWithAggregatesFilter<"Experience"> | string
-  companyLogo?: Prisma.StringNullableWithAggregatesFilter<"Experience"> | string | null
+  companyLogoId?: Prisma.StringNullableWithAggregatesFilter<"Experience"> | string | null
   isCurrentEmployer?: Prisma.BoolWithAggregatesFilter<"Experience"> | boolean
   displayOrder?: Prisma.IntWithAggregatesFilter<"Experience"> | number
   isVisible?: Prisma.BoolWithAggregatesFilter<"Experience"> | boolean
@@ -318,7 +321,6 @@ export type ExperienceScalarWhereWithAggregatesInput = {
 export type ExperienceCreateInput = {
   id?: string
   companyName: string
-  companyLogo?: string | null
   isCurrentEmployer?: boolean
   positions?: Prisma.XOR<Prisma.ExperiencePositionListCreateEnvelopeInput, Prisma.ExperiencePositionCreateInput> | Prisma.ExperiencePositionCreateInput[]
   displayOrder?: number
@@ -326,13 +328,14 @@ export type ExperienceCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutExperiencesInput
+  companyLogo?: Prisma.GalleryImageCreateNestedOneWithoutExperienceCompanyLogoInput
 }
 
 export type ExperienceUncheckedCreateInput = {
   id?: string
   userId: string
   companyName: string
-  companyLogo?: string | null
+  companyLogoId?: string | null
   isCurrentEmployer?: boolean
   positions?: Prisma.XOR<Prisma.ExperiencePositionListCreateEnvelopeInput, Prisma.ExperiencePositionCreateInput> | Prisma.ExperiencePositionCreateInput[]
   displayOrder?: number
@@ -343,7 +346,6 @@ export type ExperienceUncheckedCreateInput = {
 
 export type ExperienceUpdateInput = {
   companyName?: Prisma.StringFieldUpdateOperationsInput | string
-  companyLogo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isCurrentEmployer?: Prisma.BoolFieldUpdateOperationsInput | boolean
   positions?: Prisma.XOR<Prisma.ExperiencePositionListUpdateEnvelopeInput, Prisma.ExperiencePositionCreateInput> | Prisma.ExperiencePositionCreateInput[]
   displayOrder?: Prisma.IntFieldUpdateOperationsInput | number
@@ -351,12 +353,13 @@ export type ExperienceUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutExperiencesNestedInput
+  companyLogo?: Prisma.GalleryImageUpdateOneWithoutExperienceCompanyLogoNestedInput
 }
 
 export type ExperienceUncheckedUpdateInput = {
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   companyName?: Prisma.StringFieldUpdateOperationsInput | string
-  companyLogo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  companyLogoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isCurrentEmployer?: Prisma.BoolFieldUpdateOperationsInput | boolean
   positions?: Prisma.XOR<Prisma.ExperiencePositionListUpdateEnvelopeInput, Prisma.ExperiencePositionCreateInput> | Prisma.ExperiencePositionCreateInput[]
   displayOrder?: Prisma.IntFieldUpdateOperationsInput | number
@@ -369,7 +372,7 @@ export type ExperienceCreateManyInput = {
   id?: string
   userId: string
   companyName: string
-  companyLogo?: string | null
+  companyLogoId?: string | null
   isCurrentEmployer?: boolean
   positions?: Prisma.XOR<Prisma.ExperiencePositionListCreateEnvelopeInput, Prisma.ExperiencePositionCreateInput> | Prisma.ExperiencePositionCreateInput[]
   displayOrder?: number
@@ -380,7 +383,6 @@ export type ExperienceCreateManyInput = {
 
 export type ExperienceUpdateManyMutationInput = {
   companyName?: Prisma.StringFieldUpdateOperationsInput | string
-  companyLogo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isCurrentEmployer?: Prisma.BoolFieldUpdateOperationsInput | boolean
   positions?: Prisma.XOR<Prisma.ExperiencePositionListUpdateEnvelopeInput, Prisma.ExperiencePositionCreateInput> | Prisma.ExperiencePositionCreateInput[]
   displayOrder?: Prisma.IntFieldUpdateOperationsInput | number
@@ -392,7 +394,7 @@ export type ExperienceUpdateManyMutationInput = {
 export type ExperienceUncheckedUpdateManyInput = {
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   companyName?: Prisma.StringFieldUpdateOperationsInput | string
-  companyLogo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  companyLogoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isCurrentEmployer?: Prisma.BoolFieldUpdateOperationsInput | boolean
   positions?: Prisma.XOR<Prisma.ExperiencePositionListUpdateEnvelopeInput, Prisma.ExperiencePositionCreateInput> | Prisma.ExperiencePositionCreateInput[]
   displayOrder?: Prisma.IntFieldUpdateOperationsInput | number
@@ -426,7 +428,7 @@ export type ExperienceCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   companyName?: Prisma.SortOrder
-  companyLogo?: Prisma.SortOrder
+  companyLogoId?: Prisma.SortOrder
   isCurrentEmployer?: Prisma.SortOrder
   displayOrder?: Prisma.SortOrder
   isVisible?: Prisma.SortOrder
@@ -442,7 +444,7 @@ export type ExperienceMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   companyName?: Prisma.SortOrder
-  companyLogo?: Prisma.SortOrder
+  companyLogoId?: Prisma.SortOrder
   isCurrentEmployer?: Prisma.SortOrder
   displayOrder?: Prisma.SortOrder
   isVisible?: Prisma.SortOrder
@@ -454,7 +456,7 @@ export type ExperienceMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   companyName?: Prisma.SortOrder
-  companyLogo?: Prisma.SortOrder
+  companyLogoId?: Prisma.SortOrder
   isCurrentEmployer?: Prisma.SortOrder
   displayOrder?: Prisma.SortOrder
   isVisible?: Prisma.SortOrder
@@ -519,22 +521,64 @@ export type ExperiencePositionCreateInput = {
   skills?: Prisma.ExperiencePositionCreateskillsInput | string[]
 }
 
+export type ExperienceCreateNestedManyWithoutCompanyLogoInput = {
+  create?: Prisma.XOR<Prisma.ExperienceCreateWithoutCompanyLogoInput, Prisma.ExperienceUncheckedCreateWithoutCompanyLogoInput> | Prisma.ExperienceCreateWithoutCompanyLogoInput[] | Prisma.ExperienceUncheckedCreateWithoutCompanyLogoInput[]
+  connectOrCreate?: Prisma.ExperienceCreateOrConnectWithoutCompanyLogoInput | Prisma.ExperienceCreateOrConnectWithoutCompanyLogoInput[]
+  createMany?: Prisma.ExperienceCreateManyCompanyLogoInputEnvelope
+  connect?: Prisma.ExperienceWhereUniqueInput | Prisma.ExperienceWhereUniqueInput[]
+}
+
+export type ExperienceUncheckedCreateNestedManyWithoutCompanyLogoInput = {
+  create?: Prisma.XOR<Prisma.ExperienceCreateWithoutCompanyLogoInput, Prisma.ExperienceUncheckedCreateWithoutCompanyLogoInput> | Prisma.ExperienceCreateWithoutCompanyLogoInput[] | Prisma.ExperienceUncheckedCreateWithoutCompanyLogoInput[]
+  connectOrCreate?: Prisma.ExperienceCreateOrConnectWithoutCompanyLogoInput | Prisma.ExperienceCreateOrConnectWithoutCompanyLogoInput[]
+  createMany?: Prisma.ExperienceCreateManyCompanyLogoInputEnvelope
+  connect?: Prisma.ExperienceWhereUniqueInput | Prisma.ExperienceWhereUniqueInput[]
+}
+
+export type ExperienceUpdateManyWithoutCompanyLogoNestedInput = {
+  create?: Prisma.XOR<Prisma.ExperienceCreateWithoutCompanyLogoInput, Prisma.ExperienceUncheckedCreateWithoutCompanyLogoInput> | Prisma.ExperienceCreateWithoutCompanyLogoInput[] | Prisma.ExperienceUncheckedCreateWithoutCompanyLogoInput[]
+  connectOrCreate?: Prisma.ExperienceCreateOrConnectWithoutCompanyLogoInput | Prisma.ExperienceCreateOrConnectWithoutCompanyLogoInput[]
+  upsert?: Prisma.ExperienceUpsertWithWhereUniqueWithoutCompanyLogoInput | Prisma.ExperienceUpsertWithWhereUniqueWithoutCompanyLogoInput[]
+  createMany?: Prisma.ExperienceCreateManyCompanyLogoInputEnvelope
+  set?: Prisma.ExperienceWhereUniqueInput | Prisma.ExperienceWhereUniqueInput[]
+  disconnect?: Prisma.ExperienceWhereUniqueInput | Prisma.ExperienceWhereUniqueInput[]
+  delete?: Prisma.ExperienceWhereUniqueInput | Prisma.ExperienceWhereUniqueInput[]
+  connect?: Prisma.ExperienceWhereUniqueInput | Prisma.ExperienceWhereUniqueInput[]
+  update?: Prisma.ExperienceUpdateWithWhereUniqueWithoutCompanyLogoInput | Prisma.ExperienceUpdateWithWhereUniqueWithoutCompanyLogoInput[]
+  updateMany?: Prisma.ExperienceUpdateManyWithWhereWithoutCompanyLogoInput | Prisma.ExperienceUpdateManyWithWhereWithoutCompanyLogoInput[]
+  deleteMany?: Prisma.ExperienceScalarWhereInput | Prisma.ExperienceScalarWhereInput[]
+}
+
+export type ExperienceUncheckedUpdateManyWithoutCompanyLogoNestedInput = {
+  create?: Prisma.XOR<Prisma.ExperienceCreateWithoutCompanyLogoInput, Prisma.ExperienceUncheckedCreateWithoutCompanyLogoInput> | Prisma.ExperienceCreateWithoutCompanyLogoInput[] | Prisma.ExperienceUncheckedCreateWithoutCompanyLogoInput[]
+  connectOrCreate?: Prisma.ExperienceCreateOrConnectWithoutCompanyLogoInput | Prisma.ExperienceCreateOrConnectWithoutCompanyLogoInput[]
+  upsert?: Prisma.ExperienceUpsertWithWhereUniqueWithoutCompanyLogoInput | Prisma.ExperienceUpsertWithWhereUniqueWithoutCompanyLogoInput[]
+  createMany?: Prisma.ExperienceCreateManyCompanyLogoInputEnvelope
+  set?: Prisma.ExperienceWhereUniqueInput | Prisma.ExperienceWhereUniqueInput[]
+  disconnect?: Prisma.ExperienceWhereUniqueInput | Prisma.ExperienceWhereUniqueInput[]
+  delete?: Prisma.ExperienceWhereUniqueInput | Prisma.ExperienceWhereUniqueInput[]
+  connect?: Prisma.ExperienceWhereUniqueInput | Prisma.ExperienceWhereUniqueInput[]
+  update?: Prisma.ExperienceUpdateWithWhereUniqueWithoutCompanyLogoInput | Prisma.ExperienceUpdateWithWhereUniqueWithoutCompanyLogoInput[]
+  updateMany?: Prisma.ExperienceUpdateManyWithWhereWithoutCompanyLogoInput | Prisma.ExperienceUpdateManyWithWhereWithoutCompanyLogoInput[]
+  deleteMany?: Prisma.ExperienceScalarWhereInput | Prisma.ExperienceScalarWhereInput[]
+}
+
 export type ExperienceCreateWithoutUserInput = {
   id?: string
   companyName: string
-  companyLogo?: string | null
   isCurrentEmployer?: boolean
   positions?: Prisma.XOR<Prisma.ExperiencePositionListCreateEnvelopeInput, Prisma.ExperiencePositionCreateInput> | Prisma.ExperiencePositionCreateInput[]
   displayOrder?: number
   isVisible?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  companyLogo?: Prisma.GalleryImageCreateNestedOneWithoutExperienceCompanyLogoInput
 }
 
 export type ExperienceUncheckedCreateWithoutUserInput = {
   id?: string
   companyName: string
-  companyLogo?: string | null
+  companyLogoId?: string | null
   isCurrentEmployer?: boolean
   positions?: Prisma.XOR<Prisma.ExperiencePositionListCreateEnvelopeInput, Prisma.ExperiencePositionCreateInput> | Prisma.ExperiencePositionCreateInput[]
   displayOrder?: number
@@ -575,7 +619,7 @@ export type ExperienceScalarWhereInput = {
   id?: Prisma.StringFilter<"Experience"> | string
   userId?: Prisma.StringFilter<"Experience"> | string
   companyName?: Prisma.StringFilter<"Experience"> | string
-  companyLogo?: Prisma.StringNullableFilter<"Experience"> | string | null
+  companyLogoId?: Prisma.StringNullableFilter<"Experience"> | string | null
   isCurrentEmployer?: Prisma.BoolFilter<"Experience"> | boolean
   displayOrder?: Prisma.IntFilter<"Experience"> | number
   isVisible?: Prisma.BoolFilter<"Experience"> | boolean
@@ -583,10 +627,59 @@ export type ExperienceScalarWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"Experience"> | Date | string
 }
 
+export type ExperienceCreateWithoutCompanyLogoInput = {
+  id?: string
+  companyName: string
+  isCurrentEmployer?: boolean
+  positions?: Prisma.XOR<Prisma.ExperiencePositionListCreateEnvelopeInput, Prisma.ExperiencePositionCreateInput> | Prisma.ExperiencePositionCreateInput[]
+  displayOrder?: number
+  isVisible?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  user: Prisma.UserCreateNestedOneWithoutExperiencesInput
+}
+
+export type ExperienceUncheckedCreateWithoutCompanyLogoInput = {
+  id?: string
+  userId: string
+  companyName: string
+  isCurrentEmployer?: boolean
+  positions?: Prisma.XOR<Prisma.ExperiencePositionListCreateEnvelopeInput, Prisma.ExperiencePositionCreateInput> | Prisma.ExperiencePositionCreateInput[]
+  displayOrder?: number
+  isVisible?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type ExperienceCreateOrConnectWithoutCompanyLogoInput = {
+  where: Prisma.ExperienceWhereUniqueInput
+  create: Prisma.XOR<Prisma.ExperienceCreateWithoutCompanyLogoInput, Prisma.ExperienceUncheckedCreateWithoutCompanyLogoInput>
+}
+
+export type ExperienceCreateManyCompanyLogoInputEnvelope = {
+  data: Prisma.ExperienceCreateManyCompanyLogoInput | Prisma.ExperienceCreateManyCompanyLogoInput[]
+}
+
+export type ExperienceUpsertWithWhereUniqueWithoutCompanyLogoInput = {
+  where: Prisma.ExperienceWhereUniqueInput
+  update: Prisma.XOR<Prisma.ExperienceUpdateWithoutCompanyLogoInput, Prisma.ExperienceUncheckedUpdateWithoutCompanyLogoInput>
+  create: Prisma.XOR<Prisma.ExperienceCreateWithoutCompanyLogoInput, Prisma.ExperienceUncheckedCreateWithoutCompanyLogoInput>
+}
+
+export type ExperienceUpdateWithWhereUniqueWithoutCompanyLogoInput = {
+  where: Prisma.ExperienceWhereUniqueInput
+  data: Prisma.XOR<Prisma.ExperienceUpdateWithoutCompanyLogoInput, Prisma.ExperienceUncheckedUpdateWithoutCompanyLogoInput>
+}
+
+export type ExperienceUpdateManyWithWhereWithoutCompanyLogoInput = {
+  where: Prisma.ExperienceScalarWhereInput
+  data: Prisma.XOR<Prisma.ExperienceUpdateManyMutationInput, Prisma.ExperienceUncheckedUpdateManyWithoutCompanyLogoInput>
+}
+
 export type ExperienceCreateManyUserInput = {
   id?: string
   companyName: string
-  companyLogo?: string | null
+  companyLogoId?: string | null
   isCurrentEmployer?: boolean
   positions?: Prisma.XOR<Prisma.ExperiencePositionListCreateEnvelopeInput, Prisma.ExperiencePositionCreateInput> | Prisma.ExperiencePositionCreateInput[]
   displayOrder?: number
@@ -597,18 +690,18 @@ export type ExperienceCreateManyUserInput = {
 
 export type ExperienceUpdateWithoutUserInput = {
   companyName?: Prisma.StringFieldUpdateOperationsInput | string
-  companyLogo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isCurrentEmployer?: Prisma.BoolFieldUpdateOperationsInput | boolean
   positions?: Prisma.XOR<Prisma.ExperiencePositionListUpdateEnvelopeInput, Prisma.ExperiencePositionCreateInput> | Prisma.ExperiencePositionCreateInput[]
   displayOrder?: Prisma.IntFieldUpdateOperationsInput | number
   isVisible?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  companyLogo?: Prisma.GalleryImageUpdateOneWithoutExperienceCompanyLogoNestedInput
 }
 
 export type ExperienceUncheckedUpdateWithoutUserInput = {
   companyName?: Prisma.StringFieldUpdateOperationsInput | string
-  companyLogo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  companyLogoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isCurrentEmployer?: Prisma.BoolFieldUpdateOperationsInput | boolean
   positions?: Prisma.XOR<Prisma.ExperiencePositionListUpdateEnvelopeInput, Prisma.ExperiencePositionCreateInput> | Prisma.ExperiencePositionCreateInput[]
   displayOrder?: Prisma.IntFieldUpdateOperationsInput | number
@@ -619,7 +712,52 @@ export type ExperienceUncheckedUpdateWithoutUserInput = {
 
 export type ExperienceUncheckedUpdateManyWithoutUserInput = {
   companyName?: Prisma.StringFieldUpdateOperationsInput | string
-  companyLogo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  companyLogoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isCurrentEmployer?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  positions?: Prisma.XOR<Prisma.ExperiencePositionListUpdateEnvelopeInput, Prisma.ExperiencePositionCreateInput> | Prisma.ExperiencePositionCreateInput[]
+  displayOrder?: Prisma.IntFieldUpdateOperationsInput | number
+  isVisible?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type ExperienceCreateManyCompanyLogoInput = {
+  id?: string
+  userId: string
+  companyName: string
+  isCurrentEmployer?: boolean
+  positions?: Prisma.XOR<Prisma.ExperiencePositionListCreateEnvelopeInput, Prisma.ExperiencePositionCreateInput> | Prisma.ExperiencePositionCreateInput[]
+  displayOrder?: number
+  isVisible?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type ExperienceUpdateWithoutCompanyLogoInput = {
+  companyName?: Prisma.StringFieldUpdateOperationsInput | string
+  isCurrentEmployer?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  positions?: Prisma.XOR<Prisma.ExperiencePositionListUpdateEnvelopeInput, Prisma.ExperiencePositionCreateInput> | Prisma.ExperiencePositionCreateInput[]
+  displayOrder?: Prisma.IntFieldUpdateOperationsInput | number
+  isVisible?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  user?: Prisma.UserUpdateOneRequiredWithoutExperiencesNestedInput
+}
+
+export type ExperienceUncheckedUpdateWithoutCompanyLogoInput = {
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  companyName?: Prisma.StringFieldUpdateOperationsInput | string
+  isCurrentEmployer?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  positions?: Prisma.XOR<Prisma.ExperiencePositionListUpdateEnvelopeInput, Prisma.ExperiencePositionCreateInput> | Prisma.ExperiencePositionCreateInput[]
+  displayOrder?: Prisma.IntFieldUpdateOperationsInput | number
+  isVisible?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type ExperienceUncheckedUpdateManyWithoutCompanyLogoInput = {
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  companyName?: Prisma.StringFieldUpdateOperationsInput | string
   isCurrentEmployer?: Prisma.BoolFieldUpdateOperationsInput | boolean
   positions?: Prisma.XOR<Prisma.ExperiencePositionListUpdateEnvelopeInput, Prisma.ExperiencePositionCreateInput> | Prisma.ExperiencePositionCreateInput[]
   displayOrder?: Prisma.IntFieldUpdateOperationsInput | number
@@ -634,7 +772,7 @@ export type ExperienceSelect<ExtArgs extends runtime.Types.Extensions.InternalAr
   id?: boolean
   userId?: boolean
   companyName?: boolean
-  companyLogo?: boolean
+  companyLogoId?: boolean
   isCurrentEmployer?: boolean
   positions?: boolean | Prisma.ExperiencePositionDefaultArgs<ExtArgs>
   displayOrder?: boolean
@@ -642,6 +780,7 @@ export type ExperienceSelect<ExtArgs extends runtime.Types.Extensions.InternalAr
   createdAt?: boolean
   updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  companyLogo?: boolean | Prisma.Experience$companyLogoArgs<ExtArgs>
 }, ExtArgs["result"]["experience"]>
 
 
@@ -650,7 +789,7 @@ export type ExperienceSelectScalar = {
   id?: boolean
   userId?: boolean
   companyName?: boolean
-  companyLogo?: boolean
+  companyLogoId?: boolean
   isCurrentEmployer?: boolean
   displayOrder?: boolean
   isVisible?: boolean
@@ -658,21 +797,23 @@ export type ExperienceSelectScalar = {
   updatedAt?: boolean
 }
 
-export type ExperienceOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "companyName" | "companyLogo" | "isCurrentEmployer" | "positions" | "displayOrder" | "isVisible" | "createdAt" | "updatedAt", ExtArgs["result"]["experience"]>
+export type ExperienceOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "companyName" | "companyLogoId" | "isCurrentEmployer" | "positions" | "displayOrder" | "isVisible" | "createdAt" | "updatedAt", ExtArgs["result"]["experience"]>
 export type ExperienceInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  companyLogo?: boolean | Prisma.Experience$companyLogoArgs<ExtArgs>
 }
 
 export type $ExperiencePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Experience"
   objects: {
     user: Prisma.$UserPayload<ExtArgs>
+    companyLogo: Prisma.$GalleryImagePayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     userId: string
     companyName: string
-    companyLogo: string | null
+    companyLogoId: string | null
     isCurrentEmployer: boolean
     displayOrder: number
     isVisible: boolean
@@ -1044,6 +1185,7 @@ readonly fields: ExperienceFieldRefs;
 export interface Prisma__ExperienceClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   user<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  companyLogo<T extends Prisma.Experience$companyLogoArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Experience$companyLogoArgs<ExtArgs>>): Prisma.Prisma__GalleryImageClient<runtime.Types.Result.GetResult<Prisma.$GalleryImagePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1076,7 +1218,7 @@ export interface ExperienceFieldRefs {
   readonly id: Prisma.FieldRef<"Experience", 'String'>
   readonly userId: Prisma.FieldRef<"Experience", 'String'>
   readonly companyName: Prisma.FieldRef<"Experience", 'String'>
-  readonly companyLogo: Prisma.FieldRef<"Experience", 'String'>
+  readonly companyLogoId: Prisma.FieldRef<"Experience", 'String'>
   readonly isCurrentEmployer: Prisma.FieldRef<"Experience", 'Boolean'>
   readonly displayOrder: Prisma.FieldRef<"Experience", 'Int'>
   readonly isVisible: Prisma.FieldRef<"Experience", 'Boolean'>
@@ -1449,6 +1591,25 @@ export type ExperienceAggregateRawArgs<ExtArgs extends runtime.Types.Extensions.
    * Additional options to pass to the `aggregate` command ${@link https://docs.mongodb.com/manual/reference/command/aggregate/#command-fields MongoDB Docs}.
    */
   options?: runtime.InputJsonValue
+}
+
+/**
+ * Experience.companyLogo
+ */
+export type Experience$companyLogoArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the GalleryImage
+   */
+  select?: Prisma.GalleryImageSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the GalleryImage
+   */
+  omit?: Prisma.GalleryImageOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.GalleryImageInclude<ExtArgs> | null
+  where?: Prisma.GalleryImageWhereInput
 }
 
 /**

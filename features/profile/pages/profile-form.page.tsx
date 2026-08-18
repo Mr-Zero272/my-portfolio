@@ -6,7 +6,7 @@ import { ProfileForm } from '../components';
 import { useProfileForm } from '../hooks';
 
 export const ProfileFormPage = () => {
-  const { serverError, isLoading, error, onSubmit, isSubmitting, initialData } = useProfileForm();
+  const { serverError, isLoading, error, onSubmit, isSubmitting, initialData, originalData } = useProfileForm();
 
   return (
     <div className="max-w-2xl pb-20">
@@ -19,6 +19,9 @@ export const ProfileFormPage = () => {
               serverErrors={{ root: serverError ?? '' }}
               isSubmitting={isSubmitting}
               onSubmit={onSubmit}
+              context={{
+                heroImage: originalData?.heroImage ?? undefined,
+              }}
             />
           );
         }}

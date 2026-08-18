@@ -7,6 +7,10 @@ import { ExperienceFormValues } from '../schemas';
 const EXPERIENCE_SORTABLE_FIELDS = ['displayOrder', 'companyName', 'createdAt'] as const;
 const EXPERIENCE_SEARCH_FIELDS = ['companyName'] as const;
 
+const EXPERIENCE_INCLUDE = {
+  companyLogo: true,
+} satisfies Prisma.ExperienceInclude;
+
 export const experienceService = {
   async getAll(headers: Headers, searchParams: URLSearchParams) {
     const { user } = await requireAdmin(headers);
@@ -28,6 +32,7 @@ export const experienceService = {
         skip: query.pagination.skip,
         take: query.pagination.take,
         where: query.where,
+        include: EXPERIENCE_INCLUDE,
       }),
       prisma.experience.count({ where: query.where }),
     ]);
@@ -44,6 +49,7 @@ export const experienceService = {
 
     const experience = await prisma.experience.findFirst({
       where: { id, userId: user.id },
+      include: EXPERIENCE_INCLUDE,
     });
 
     if (!experience) {
@@ -61,6 +67,7 @@ export const experienceService = {
         ...input,
         userId: user.id,
       },
+      include: EXPERIENCE_INCLUDE,
     });
 
     return experience;
@@ -74,6 +81,7 @@ export const experienceService = {
     const experience = await prisma.experience.update({
       data: input,
       where: { id },
+      include: EXPERIENCE_INCLUDE,
     });
 
     return experience;

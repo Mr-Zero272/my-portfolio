@@ -52,7 +52,7 @@ export const SignInForm = () => {
       {
         email: data.email,
         password: data.password,
-        // callbackURL: callBackUrl,
+        callbackURL: callBackUrl,
       },
       {
         onError: (ctx) => {

@@ -1,13 +1,13 @@
 import axiosInstance from '@/lib/axios';
-import { Experience } from '@/lib/generated/prisma/client';
 import { ListResponse } from '@/types/api';
 import { normalizeQueryParams } from '@/utils/search-query';
 import {
-  CreateExperienceRequest,
-  DeleteExperienceRequest,
-  GetExperienceRequest,
-  GetExperiencesRequest,
-  UpdateExperienceRequest,
+    CreateExperienceRequest,
+    DeleteExperienceRequest,
+    ExperienceWithAllRelations,
+    GetExperienceRequest,
+    GetExperiencesRequest,
+    UpdateExperienceRequest,
 } from '../types';
 
 export const experienceApi = {
@@ -20,22 +20,22 @@ export const experienceApi = {
     return {
       list: res.data?.data,
       meta: res.data?.meta,
-    } as ListResponse<Experience>;
+    } as ListResponse<ExperienceWithAllRelations>;
   },
 
   getById: async (request: GetExperienceRequest) => {
     const res = await axiosInstance.get(`/experience/${request.path?.id}`);
-    return res.data?.data as Experience;
+    return res.data?.data as ExperienceWithAllRelations;
   },
 
   create: async (request: CreateExperienceRequest) => {
     const res = await axiosInstance.post('/experience', request.body);
-    return res.data?.data as Experience;
+    return res.data?.data as ExperienceWithAllRelations;
   },
 
   update: async (request: UpdateExperienceRequest) => {
     const res = await axiosInstance.patch(`/experience/${request.path?.id}`, request.body);
-    return res.data?.data as Experience;
+    return res.data?.data as ExperienceWithAllRelations;
   },
 
   delete: async (request: DeleteExperienceRequest) => {

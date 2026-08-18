@@ -162,10 +162,12 @@ model Profile {
   freelanceAvailable Boolean  @default(true)
   languages          String[] @default(["Vietnamese", "English"])
   rotatingWords      String[] @default(["Web", "Software", "Mainframe"])
-  heroVideo          String?
   metaTitle          String?
   metaDescription    String?
-  ogImage            String?
+  ogImageId          String?
+  ogImage            GalleryImage? @relation("ProfileOgImage", fields: [ogImageId], references: [id], onDelete: SetNull)
+  heroImageId        String?
+  heroImage          GalleryImage? @relation("ProfileHeroImage", fields: [heroImageId], references: [id], onDelete: SetNull)
   isActive           Boolean  @default(true)
   createdAt          DateTime @default(now())
   updatedAt          DateTime @updatedAt
@@ -200,7 +202,8 @@ model Experience {
   userId            String
   user              User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
   companyName       String
-  companyLogo       String?
+  companyLogoId     String?
+  companyLogo       GalleryImage? @relation("ExperienceCompanyLogo", fields: [companyLogoId], references: [id], onDelete: SetNull)
   isCurrentEmployer Boolean              @default(false)
   positions         ExperiencePosition[]
   displayOrder      Int                  @default(0)
@@ -222,10 +225,13 @@ model GalleryImage {
   caption     String?
   userCreated String
   user        User     @relation(fields: [userCreated], references: [id], onDelete: Cascade)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
 
-  posts Post[]
+  posts                Post[]
+  profileOgImage       Profile[]  @relation("ProfileOgImage")
+  profileHeroImage     Profile[]  @relation("ProfileHeroImage")
+  experienceCompanyLogo Experience[] @relation("ExperienceCompanyLogo")
 
   @@index([userCreated])
   @@map("gallery")

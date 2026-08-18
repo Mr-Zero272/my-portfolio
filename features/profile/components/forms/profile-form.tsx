@@ -1,10 +1,11 @@
 'use client';
 
-import { FormComboboxMulti, FormInput, FormNumber, FormTextArea } from '@/components/forms';
+import { FormComboboxMulti, FormGalleryInput, FormInput, FormNumber, FormTextArea } from '@/components/forms';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { FieldGroup } from '@/components/ui/field';
 import { Spinner } from '@/components/ui/spinner';
+import { GalleryImage } from '@/lib/generated/prisma/client';
 import { cn } from '@/lib/utils';
 import { BaseFormProps } from '@/types/form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -22,8 +23,10 @@ export const ProfileForm = ({
   className,
   isSubmitting,
   serverErrors,
-  isEditMode,
-}: BaseFormProps<ProfileFormValues>) => {
+  context,
+}: BaseFormProps<ProfileFormValues, {
+  heroImage?: GalleryImage
+}>) => {
   const id = useId();
   const formId = `profile-form-${id}`;
 
@@ -70,7 +73,6 @@ export const ProfileForm = ({
               <FormInput name="nationality" label="Nationality" placeholder="eg: Indian" />
             </div>
             <FormInput name="address" label="Address" placeholder="eg: 123 Main St" />
-
             <FormInput
               name="tagline"
               label="Tagline"
@@ -89,7 +91,6 @@ export const ProfileForm = ({
               placeholder="eg: I am a full stack developer"
               description="A longer, more detailed description. Recommended 210 characters."
             />
-
             <RotatingWordsInput />
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               <FormComboboxMulti
@@ -115,14 +116,13 @@ export const ProfileForm = ({
                 ]}
               />
             </div>
-            {/* <FormInput name="resumePath" label="Resume Path" placeholder="eg: /resume.pdf" />
-            <FormInput name="metaTitle" label="Meta Title" placeholder="eg: John Doe" />
-            <FormInput
-              name="metaDescription"
-              label="Meta Description"
-              placeholder="eg: I am a full stack developer"
+            <FormGalleryInput
+              name="heroImageId"
+              label="Hero Image"
+              accept="image/*"
+              multiple={false}
+              existing={context?.heroImage}
             />
-            <FormInput name="ogImage" label="OG Image" placeholder="eg: /og.png" /> */}
           </FieldGroup>
 
           {renderSubmitPart?.({ isSubmitting: !!isLocalSubmitting, formId }) ?? (

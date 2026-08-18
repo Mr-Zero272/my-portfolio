@@ -47,10 +47,10 @@ export type ProfileMinAggregateOutputType = {
   bio: string | null
   description: string | null
   freelanceAvailable: boolean | null
-  heroVideo: string | null
   metaTitle: string | null
   metaDescription: string | null
-  ogImage: string | null
+  ogImageId: string | null
+  heroImageId: string | null
   isActive: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -69,10 +69,10 @@ export type ProfileMaxAggregateOutputType = {
   bio: string | null
   description: string | null
   freelanceAvailable: boolean | null
-  heroVideo: string | null
   metaTitle: string | null
   metaDescription: string | null
-  ogImage: string | null
+  ogImageId: string | null
+  heroImageId: string | null
   isActive: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -93,10 +93,10 @@ export type ProfileCountAggregateOutputType = {
   freelanceAvailable: number
   languages: number
   rotatingWords: number
-  heroVideo: number
   metaTitle: number
   metaDescription: number
-  ogImage: number
+  ogImageId: number
+  heroImageId: number
   isActive: number
   createdAt: number
   updatedAt: number
@@ -125,10 +125,10 @@ export type ProfileMinAggregateInputType = {
   bio?: true
   description?: true
   freelanceAvailable?: true
-  heroVideo?: true
   metaTitle?: true
   metaDescription?: true
-  ogImage?: true
+  ogImageId?: true
+  heroImageId?: true
   isActive?: true
   createdAt?: true
   updatedAt?: true
@@ -147,10 +147,10 @@ export type ProfileMaxAggregateInputType = {
   bio?: true
   description?: true
   freelanceAvailable?: true
-  heroVideo?: true
   metaTitle?: true
   metaDescription?: true
-  ogImage?: true
+  ogImageId?: true
+  heroImageId?: true
   isActive?: true
   createdAt?: true
   updatedAt?: true
@@ -171,10 +171,10 @@ export type ProfileCountAggregateInputType = {
   freelanceAvailable?: true
   languages?: true
   rotatingWords?: true
-  heroVideo?: true
   metaTitle?: true
   metaDescription?: true
-  ogImage?: true
+  ogImageId?: true
+  heroImageId?: true
   isActive?: true
   createdAt?: true
   updatedAt?: true
@@ -282,10 +282,10 @@ export type ProfileGroupByOutputType = {
   freelanceAvailable: boolean
   languages: string[]
   rotatingWords: string[]
-  heroVideo: string | null
   metaTitle: string | null
   metaDescription: string | null
-  ogImage: string | null
+  ogImageId: string | null
+  heroImageId: string | null
   isActive: boolean
   createdAt: Date
   updatedAt: Date
@@ -329,14 +329,16 @@ export type ProfileWhereInput = {
   freelanceAvailable?: Prisma.BoolFilter<"Profile"> | boolean
   languages?: Prisma.StringNullableListFilter<"Profile">
   rotatingWords?: Prisma.StringNullableListFilter<"Profile">
-  heroVideo?: Prisma.StringNullableFilter<"Profile"> | string | null
   metaTitle?: Prisma.StringNullableFilter<"Profile"> | string | null
   metaDescription?: Prisma.StringNullableFilter<"Profile"> | string | null
-  ogImage?: Prisma.StringNullableFilter<"Profile"> | string | null
+  ogImageId?: Prisma.StringNullableFilter<"Profile"> | string | null
+  heroImageId?: Prisma.StringNullableFilter<"Profile"> | string | null
   isActive?: Prisma.BoolFilter<"Profile"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Profile"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Profile"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  ogImage?: Prisma.XOR<Prisma.GalleryImageNullableScalarRelationFilter, Prisma.GalleryImageWhereInput> | null
+  heroImage?: Prisma.XOR<Prisma.GalleryImageNullableScalarRelationFilter, Prisma.GalleryImageWhereInput> | null
 }
 
 export type ProfileOrderByWithRelationInput = {
@@ -354,14 +356,16 @@ export type ProfileOrderByWithRelationInput = {
   freelanceAvailable?: Prisma.SortOrder
   languages?: Prisma.SortOrder
   rotatingWords?: Prisma.SortOrder
-  heroVideo?: Prisma.SortOrder
   metaTitle?: Prisma.SortOrder
   metaDescription?: Prisma.SortOrder
-  ogImage?: Prisma.SortOrder
+  ogImageId?: Prisma.SortOrder
+  heroImageId?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   user?: Prisma.UserOrderByWithRelationInput
+  ogImage?: Prisma.GalleryImageOrderByWithRelationInput
+  heroImage?: Prisma.GalleryImageOrderByWithRelationInput
 }
 
 export type ProfileWhereUniqueInput = Prisma.AtLeast<{
@@ -382,14 +386,16 @@ export type ProfileWhereUniqueInput = Prisma.AtLeast<{
   freelanceAvailable?: Prisma.BoolFilter<"Profile"> | boolean
   languages?: Prisma.StringNullableListFilter<"Profile">
   rotatingWords?: Prisma.StringNullableListFilter<"Profile">
-  heroVideo?: Prisma.StringNullableFilter<"Profile"> | string | null
   metaTitle?: Prisma.StringNullableFilter<"Profile"> | string | null
   metaDescription?: Prisma.StringNullableFilter<"Profile"> | string | null
-  ogImage?: Prisma.StringNullableFilter<"Profile"> | string | null
+  ogImageId?: Prisma.StringNullableFilter<"Profile"> | string | null
+  heroImageId?: Prisma.StringNullableFilter<"Profile"> | string | null
   isActive?: Prisma.BoolFilter<"Profile"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Profile"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Profile"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  ogImage?: Prisma.XOR<Prisma.GalleryImageNullableScalarRelationFilter, Prisma.GalleryImageWhereInput> | null
+  heroImage?: Prisma.XOR<Prisma.GalleryImageNullableScalarRelationFilter, Prisma.GalleryImageWhereInput> | null
 }, "id" | "userId">
 
 export type ProfileOrderByWithAggregationInput = {
@@ -407,10 +413,10 @@ export type ProfileOrderByWithAggregationInput = {
   freelanceAvailable?: Prisma.SortOrder
   languages?: Prisma.SortOrder
   rotatingWords?: Prisma.SortOrder
-  heroVideo?: Prisma.SortOrder
   metaTitle?: Prisma.SortOrder
   metaDescription?: Prisma.SortOrder
-  ogImage?: Prisma.SortOrder
+  ogImageId?: Prisma.SortOrder
+  heroImageId?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -439,10 +445,10 @@ export type ProfileScalarWhereWithAggregatesInput = {
   freelanceAvailable?: Prisma.BoolWithAggregatesFilter<"Profile"> | boolean
   languages?: Prisma.StringNullableListFilter<"Profile">
   rotatingWords?: Prisma.StringNullableListFilter<"Profile">
-  heroVideo?: Prisma.StringNullableWithAggregatesFilter<"Profile"> | string | null
   metaTitle?: Prisma.StringNullableWithAggregatesFilter<"Profile"> | string | null
   metaDescription?: Prisma.StringNullableWithAggregatesFilter<"Profile"> | string | null
-  ogImage?: Prisma.StringNullableWithAggregatesFilter<"Profile"> | string | null
+  ogImageId?: Prisma.StringNullableWithAggregatesFilter<"Profile"> | string | null
+  heroImageId?: Prisma.StringNullableWithAggregatesFilter<"Profile"> | string | null
   isActive?: Prisma.BoolWithAggregatesFilter<"Profile"> | boolean
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Profile"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Profile"> | Date | string
@@ -462,14 +468,14 @@ export type ProfileCreateInput = {
   freelanceAvailable?: boolean
   languages?: Prisma.ProfileCreatelanguagesInput | string[]
   rotatingWords?: Prisma.ProfileCreaterotatingWordsInput | string[]
-  heroVideo?: string | null
   metaTitle?: string | null
   metaDescription?: string | null
-  ogImage?: string | null
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutProfileInput
+  ogImage?: Prisma.GalleryImageCreateNestedOneWithoutProfileOgImageInput
+  heroImage?: Prisma.GalleryImageCreateNestedOneWithoutProfileHeroImageInput
 }
 
 export type ProfileUncheckedCreateInput = {
@@ -487,10 +493,10 @@ export type ProfileUncheckedCreateInput = {
   freelanceAvailable?: boolean
   languages?: Prisma.ProfileCreatelanguagesInput | string[]
   rotatingWords?: Prisma.ProfileCreaterotatingWordsInput | string[]
-  heroVideo?: string | null
   metaTitle?: string | null
   metaDescription?: string | null
-  ogImage?: string | null
+  ogImageId?: string | null
+  heroImageId?: string | null
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -509,14 +515,14 @@ export type ProfileUpdateInput = {
   freelanceAvailable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   languages?: Prisma.ProfileUpdatelanguagesInput | string[]
   rotatingWords?: Prisma.ProfileUpdaterotatingWordsInput | string[]
-  heroVideo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   metaTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   metaDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  ogImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutProfileNestedInput
+  ogImage?: Prisma.GalleryImageUpdateOneWithoutProfileOgImageNestedInput
+  heroImage?: Prisma.GalleryImageUpdateOneWithoutProfileHeroImageNestedInput
 }
 
 export type ProfileUncheckedUpdateInput = {
@@ -533,10 +539,10 @@ export type ProfileUncheckedUpdateInput = {
   freelanceAvailable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   languages?: Prisma.ProfileUpdatelanguagesInput | string[]
   rotatingWords?: Prisma.ProfileUpdaterotatingWordsInput | string[]
-  heroVideo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   metaTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   metaDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  ogImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ogImageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  heroImageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -557,10 +563,10 @@ export type ProfileCreateManyInput = {
   freelanceAvailable?: boolean
   languages?: Prisma.ProfileCreatelanguagesInput | string[]
   rotatingWords?: Prisma.ProfileCreaterotatingWordsInput | string[]
-  heroVideo?: string | null
   metaTitle?: string | null
   metaDescription?: string | null
-  ogImage?: string | null
+  ogImageId?: string | null
+  heroImageId?: string | null
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -579,10 +585,8 @@ export type ProfileUpdateManyMutationInput = {
   freelanceAvailable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   languages?: Prisma.ProfileUpdatelanguagesInput | string[]
   rotatingWords?: Prisma.ProfileUpdaterotatingWordsInput | string[]
-  heroVideo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   metaTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   metaDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  ogImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -602,10 +606,10 @@ export type ProfileUncheckedUpdateManyInput = {
   freelanceAvailable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   languages?: Prisma.ProfileUpdatelanguagesInput | string[]
   rotatingWords?: Prisma.ProfileUpdaterotatingWordsInput | string[]
-  heroVideo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   metaTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   metaDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  ogImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ogImageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  heroImageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -639,10 +643,10 @@ export type ProfileCountOrderByAggregateInput = {
   freelanceAvailable?: Prisma.SortOrder
   languages?: Prisma.SortOrder
   rotatingWords?: Prisma.SortOrder
-  heroVideo?: Prisma.SortOrder
   metaTitle?: Prisma.SortOrder
   metaDescription?: Prisma.SortOrder
-  ogImage?: Prisma.SortOrder
+  ogImageId?: Prisma.SortOrder
+  heroImageId?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -665,10 +669,10 @@ export type ProfileMaxOrderByAggregateInput = {
   bio?: Prisma.SortOrder
   description?: Prisma.SortOrder
   freelanceAvailable?: Prisma.SortOrder
-  heroVideo?: Prisma.SortOrder
   metaTitle?: Prisma.SortOrder
   metaDescription?: Prisma.SortOrder
-  ogImage?: Prisma.SortOrder
+  ogImageId?: Prisma.SortOrder
+  heroImageId?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -687,10 +691,10 @@ export type ProfileMinOrderByAggregateInput = {
   bio?: Prisma.SortOrder
   description?: Prisma.SortOrder
   freelanceAvailable?: Prisma.SortOrder
-  heroVideo?: Prisma.SortOrder
   metaTitle?: Prisma.SortOrder
   metaDescription?: Prisma.SortOrder
-  ogImage?: Prisma.SortOrder
+  ogImageId?: Prisma.SortOrder
+  heroImageId?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -698,6 +702,16 @@ export type ProfileMinOrderByAggregateInput = {
 
 export type ProfileSumOrderByAggregateInput = {
   yoe?: Prisma.SortOrder
+}
+
+export type ProfileListRelationFilter = {
+  every?: Prisma.ProfileWhereInput
+  some?: Prisma.ProfileWhereInput
+  none?: Prisma.ProfileWhereInput
+}
+
+export type ProfileOrderByRelationAggregateInput = {
+  _count?: Prisma.SortOrder
 }
 
 export type ProfileCreateNestedOneWithoutUserInput = {
@@ -759,6 +773,90 @@ export type ProfileUpdaterotatingWordsInput = {
   push?: string | string[]
 }
 
+export type ProfileCreateNestedManyWithoutOgImageInput = {
+  create?: Prisma.XOR<Prisma.ProfileCreateWithoutOgImageInput, Prisma.ProfileUncheckedCreateWithoutOgImageInput> | Prisma.ProfileCreateWithoutOgImageInput[] | Prisma.ProfileUncheckedCreateWithoutOgImageInput[]
+  connectOrCreate?: Prisma.ProfileCreateOrConnectWithoutOgImageInput | Prisma.ProfileCreateOrConnectWithoutOgImageInput[]
+  createMany?: Prisma.ProfileCreateManyOgImageInputEnvelope
+  connect?: Prisma.ProfileWhereUniqueInput | Prisma.ProfileWhereUniqueInput[]
+}
+
+export type ProfileCreateNestedManyWithoutHeroImageInput = {
+  create?: Prisma.XOR<Prisma.ProfileCreateWithoutHeroImageInput, Prisma.ProfileUncheckedCreateWithoutHeroImageInput> | Prisma.ProfileCreateWithoutHeroImageInput[] | Prisma.ProfileUncheckedCreateWithoutHeroImageInput[]
+  connectOrCreate?: Prisma.ProfileCreateOrConnectWithoutHeroImageInput | Prisma.ProfileCreateOrConnectWithoutHeroImageInput[]
+  createMany?: Prisma.ProfileCreateManyHeroImageInputEnvelope
+  connect?: Prisma.ProfileWhereUniqueInput | Prisma.ProfileWhereUniqueInput[]
+}
+
+export type ProfileUncheckedCreateNestedManyWithoutOgImageInput = {
+  create?: Prisma.XOR<Prisma.ProfileCreateWithoutOgImageInput, Prisma.ProfileUncheckedCreateWithoutOgImageInput> | Prisma.ProfileCreateWithoutOgImageInput[] | Prisma.ProfileUncheckedCreateWithoutOgImageInput[]
+  connectOrCreate?: Prisma.ProfileCreateOrConnectWithoutOgImageInput | Prisma.ProfileCreateOrConnectWithoutOgImageInput[]
+  createMany?: Prisma.ProfileCreateManyOgImageInputEnvelope
+  connect?: Prisma.ProfileWhereUniqueInput | Prisma.ProfileWhereUniqueInput[]
+}
+
+export type ProfileUncheckedCreateNestedManyWithoutHeroImageInput = {
+  create?: Prisma.XOR<Prisma.ProfileCreateWithoutHeroImageInput, Prisma.ProfileUncheckedCreateWithoutHeroImageInput> | Prisma.ProfileCreateWithoutHeroImageInput[] | Prisma.ProfileUncheckedCreateWithoutHeroImageInput[]
+  connectOrCreate?: Prisma.ProfileCreateOrConnectWithoutHeroImageInput | Prisma.ProfileCreateOrConnectWithoutHeroImageInput[]
+  createMany?: Prisma.ProfileCreateManyHeroImageInputEnvelope
+  connect?: Prisma.ProfileWhereUniqueInput | Prisma.ProfileWhereUniqueInput[]
+}
+
+export type ProfileUpdateManyWithoutOgImageNestedInput = {
+  create?: Prisma.XOR<Prisma.ProfileCreateWithoutOgImageInput, Prisma.ProfileUncheckedCreateWithoutOgImageInput> | Prisma.ProfileCreateWithoutOgImageInput[] | Prisma.ProfileUncheckedCreateWithoutOgImageInput[]
+  connectOrCreate?: Prisma.ProfileCreateOrConnectWithoutOgImageInput | Prisma.ProfileCreateOrConnectWithoutOgImageInput[]
+  upsert?: Prisma.ProfileUpsertWithWhereUniqueWithoutOgImageInput | Prisma.ProfileUpsertWithWhereUniqueWithoutOgImageInput[]
+  createMany?: Prisma.ProfileCreateManyOgImageInputEnvelope
+  set?: Prisma.ProfileWhereUniqueInput | Prisma.ProfileWhereUniqueInput[]
+  disconnect?: Prisma.ProfileWhereUniqueInput | Prisma.ProfileWhereUniqueInput[]
+  delete?: Prisma.ProfileWhereUniqueInput | Prisma.ProfileWhereUniqueInput[]
+  connect?: Prisma.ProfileWhereUniqueInput | Prisma.ProfileWhereUniqueInput[]
+  update?: Prisma.ProfileUpdateWithWhereUniqueWithoutOgImageInput | Prisma.ProfileUpdateWithWhereUniqueWithoutOgImageInput[]
+  updateMany?: Prisma.ProfileUpdateManyWithWhereWithoutOgImageInput | Prisma.ProfileUpdateManyWithWhereWithoutOgImageInput[]
+  deleteMany?: Prisma.ProfileScalarWhereInput | Prisma.ProfileScalarWhereInput[]
+}
+
+export type ProfileUpdateManyWithoutHeroImageNestedInput = {
+  create?: Prisma.XOR<Prisma.ProfileCreateWithoutHeroImageInput, Prisma.ProfileUncheckedCreateWithoutHeroImageInput> | Prisma.ProfileCreateWithoutHeroImageInput[] | Prisma.ProfileUncheckedCreateWithoutHeroImageInput[]
+  connectOrCreate?: Prisma.ProfileCreateOrConnectWithoutHeroImageInput | Prisma.ProfileCreateOrConnectWithoutHeroImageInput[]
+  upsert?: Prisma.ProfileUpsertWithWhereUniqueWithoutHeroImageInput | Prisma.ProfileUpsertWithWhereUniqueWithoutHeroImageInput[]
+  createMany?: Prisma.ProfileCreateManyHeroImageInputEnvelope
+  set?: Prisma.ProfileWhereUniqueInput | Prisma.ProfileWhereUniqueInput[]
+  disconnect?: Prisma.ProfileWhereUniqueInput | Prisma.ProfileWhereUniqueInput[]
+  delete?: Prisma.ProfileWhereUniqueInput | Prisma.ProfileWhereUniqueInput[]
+  connect?: Prisma.ProfileWhereUniqueInput | Prisma.ProfileWhereUniqueInput[]
+  update?: Prisma.ProfileUpdateWithWhereUniqueWithoutHeroImageInput | Prisma.ProfileUpdateWithWhereUniqueWithoutHeroImageInput[]
+  updateMany?: Prisma.ProfileUpdateManyWithWhereWithoutHeroImageInput | Prisma.ProfileUpdateManyWithWhereWithoutHeroImageInput[]
+  deleteMany?: Prisma.ProfileScalarWhereInput | Prisma.ProfileScalarWhereInput[]
+}
+
+export type ProfileUncheckedUpdateManyWithoutOgImageNestedInput = {
+  create?: Prisma.XOR<Prisma.ProfileCreateWithoutOgImageInput, Prisma.ProfileUncheckedCreateWithoutOgImageInput> | Prisma.ProfileCreateWithoutOgImageInput[] | Prisma.ProfileUncheckedCreateWithoutOgImageInput[]
+  connectOrCreate?: Prisma.ProfileCreateOrConnectWithoutOgImageInput | Prisma.ProfileCreateOrConnectWithoutOgImageInput[]
+  upsert?: Prisma.ProfileUpsertWithWhereUniqueWithoutOgImageInput | Prisma.ProfileUpsertWithWhereUniqueWithoutOgImageInput[]
+  createMany?: Prisma.ProfileCreateManyOgImageInputEnvelope
+  set?: Prisma.ProfileWhereUniqueInput | Prisma.ProfileWhereUniqueInput[]
+  disconnect?: Prisma.ProfileWhereUniqueInput | Prisma.ProfileWhereUniqueInput[]
+  delete?: Prisma.ProfileWhereUniqueInput | Prisma.ProfileWhereUniqueInput[]
+  connect?: Prisma.ProfileWhereUniqueInput | Prisma.ProfileWhereUniqueInput[]
+  update?: Prisma.ProfileUpdateWithWhereUniqueWithoutOgImageInput | Prisma.ProfileUpdateWithWhereUniqueWithoutOgImageInput[]
+  updateMany?: Prisma.ProfileUpdateManyWithWhereWithoutOgImageInput | Prisma.ProfileUpdateManyWithWhereWithoutOgImageInput[]
+  deleteMany?: Prisma.ProfileScalarWhereInput | Prisma.ProfileScalarWhereInput[]
+}
+
+export type ProfileUncheckedUpdateManyWithoutHeroImageNestedInput = {
+  create?: Prisma.XOR<Prisma.ProfileCreateWithoutHeroImageInput, Prisma.ProfileUncheckedCreateWithoutHeroImageInput> | Prisma.ProfileCreateWithoutHeroImageInput[] | Prisma.ProfileUncheckedCreateWithoutHeroImageInput[]
+  connectOrCreate?: Prisma.ProfileCreateOrConnectWithoutHeroImageInput | Prisma.ProfileCreateOrConnectWithoutHeroImageInput[]
+  upsert?: Prisma.ProfileUpsertWithWhereUniqueWithoutHeroImageInput | Prisma.ProfileUpsertWithWhereUniqueWithoutHeroImageInput[]
+  createMany?: Prisma.ProfileCreateManyHeroImageInputEnvelope
+  set?: Prisma.ProfileWhereUniqueInput | Prisma.ProfileWhereUniqueInput[]
+  disconnect?: Prisma.ProfileWhereUniqueInput | Prisma.ProfileWhereUniqueInput[]
+  delete?: Prisma.ProfileWhereUniqueInput | Prisma.ProfileWhereUniqueInput[]
+  connect?: Prisma.ProfileWhereUniqueInput | Prisma.ProfileWhereUniqueInput[]
+  update?: Prisma.ProfileUpdateWithWhereUniqueWithoutHeroImageInput | Prisma.ProfileUpdateWithWhereUniqueWithoutHeroImageInput[]
+  updateMany?: Prisma.ProfileUpdateManyWithWhereWithoutHeroImageInput | Prisma.ProfileUpdateManyWithWhereWithoutHeroImageInput[]
+  deleteMany?: Prisma.ProfileScalarWhereInput | Prisma.ProfileScalarWhereInput[]
+}
+
 export type ProfileCreateWithoutUserInput = {
   id?: string
   name: string
@@ -773,13 +871,13 @@ export type ProfileCreateWithoutUserInput = {
   freelanceAvailable?: boolean
   languages?: Prisma.ProfileCreatelanguagesInput | string[]
   rotatingWords?: Prisma.ProfileCreaterotatingWordsInput | string[]
-  heroVideo?: string | null
   metaTitle?: string | null
   metaDescription?: string | null
-  ogImage?: string | null
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  ogImage?: Prisma.GalleryImageCreateNestedOneWithoutProfileOgImageInput
+  heroImage?: Prisma.GalleryImageCreateNestedOneWithoutProfileHeroImageInput
 }
 
 export type ProfileUncheckedCreateWithoutUserInput = {
@@ -796,10 +894,10 @@ export type ProfileUncheckedCreateWithoutUserInput = {
   freelanceAvailable?: boolean
   languages?: Prisma.ProfileCreatelanguagesInput | string[]
   rotatingWords?: Prisma.ProfileCreaterotatingWordsInput | string[]
-  heroVideo?: string | null
   metaTitle?: string | null
   metaDescription?: string | null
-  ogImage?: string | null
+  ogImageId?: string | null
+  heroImageId?: string | null
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -834,13 +932,13 @@ export type ProfileUpdateWithoutUserInput = {
   freelanceAvailable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   languages?: Prisma.ProfileUpdatelanguagesInput | string[]
   rotatingWords?: Prisma.ProfileUpdaterotatingWordsInput | string[]
-  heroVideo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   metaTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   metaDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  ogImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  ogImage?: Prisma.GalleryImageUpdateOneWithoutProfileOgImageNestedInput
+  heroImage?: Prisma.GalleryImageUpdateOneWithoutProfileHeroImageNestedInput
 }
 
 export type ProfileUncheckedUpdateWithoutUserInput = {
@@ -856,10 +954,357 @@ export type ProfileUncheckedUpdateWithoutUserInput = {
   freelanceAvailable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   languages?: Prisma.ProfileUpdatelanguagesInput | string[]
   rotatingWords?: Prisma.ProfileUpdaterotatingWordsInput | string[]
-  heroVideo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   metaTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   metaDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  ogImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ogImageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  heroImageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type ProfileCreateWithoutOgImageInput = {
+  id?: string
+  name: string
+  phone?: string | null
+  nationality?: string | null
+  address?: string | null
+  yoe?: number | null
+  resumePath?: string | null
+  tagline?: string | null
+  bio?: string | null
+  description?: string | null
+  freelanceAvailable?: boolean
+  languages?: Prisma.ProfileCreatelanguagesInput | string[]
+  rotatingWords?: Prisma.ProfileCreaterotatingWordsInput | string[]
+  metaTitle?: string | null
+  metaDescription?: string | null
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  user: Prisma.UserCreateNestedOneWithoutProfileInput
+  heroImage?: Prisma.GalleryImageCreateNestedOneWithoutProfileHeroImageInput
+}
+
+export type ProfileUncheckedCreateWithoutOgImageInput = {
+  id?: string
+  userId: string
+  name: string
+  phone?: string | null
+  nationality?: string | null
+  address?: string | null
+  yoe?: number | null
+  resumePath?: string | null
+  tagline?: string | null
+  bio?: string | null
+  description?: string | null
+  freelanceAvailable?: boolean
+  languages?: Prisma.ProfileCreatelanguagesInput | string[]
+  rotatingWords?: Prisma.ProfileCreaterotatingWordsInput | string[]
+  metaTitle?: string | null
+  metaDescription?: string | null
+  heroImageId?: string | null
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type ProfileCreateOrConnectWithoutOgImageInput = {
+  where: Prisma.ProfileWhereUniqueInput
+  create: Prisma.XOR<Prisma.ProfileCreateWithoutOgImageInput, Prisma.ProfileUncheckedCreateWithoutOgImageInput>
+}
+
+export type ProfileCreateManyOgImageInputEnvelope = {
+  data: Prisma.ProfileCreateManyOgImageInput | Prisma.ProfileCreateManyOgImageInput[]
+}
+
+export type ProfileCreateWithoutHeroImageInput = {
+  id?: string
+  name: string
+  phone?: string | null
+  nationality?: string | null
+  address?: string | null
+  yoe?: number | null
+  resumePath?: string | null
+  tagline?: string | null
+  bio?: string | null
+  description?: string | null
+  freelanceAvailable?: boolean
+  languages?: Prisma.ProfileCreatelanguagesInput | string[]
+  rotatingWords?: Prisma.ProfileCreaterotatingWordsInput | string[]
+  metaTitle?: string | null
+  metaDescription?: string | null
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  user: Prisma.UserCreateNestedOneWithoutProfileInput
+  ogImage?: Prisma.GalleryImageCreateNestedOneWithoutProfileOgImageInput
+}
+
+export type ProfileUncheckedCreateWithoutHeroImageInput = {
+  id?: string
+  userId: string
+  name: string
+  phone?: string | null
+  nationality?: string | null
+  address?: string | null
+  yoe?: number | null
+  resumePath?: string | null
+  tagline?: string | null
+  bio?: string | null
+  description?: string | null
+  freelanceAvailable?: boolean
+  languages?: Prisma.ProfileCreatelanguagesInput | string[]
+  rotatingWords?: Prisma.ProfileCreaterotatingWordsInput | string[]
+  metaTitle?: string | null
+  metaDescription?: string | null
+  ogImageId?: string | null
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type ProfileCreateOrConnectWithoutHeroImageInput = {
+  where: Prisma.ProfileWhereUniqueInput
+  create: Prisma.XOR<Prisma.ProfileCreateWithoutHeroImageInput, Prisma.ProfileUncheckedCreateWithoutHeroImageInput>
+}
+
+export type ProfileCreateManyHeroImageInputEnvelope = {
+  data: Prisma.ProfileCreateManyHeroImageInput | Prisma.ProfileCreateManyHeroImageInput[]
+}
+
+export type ProfileUpsertWithWhereUniqueWithoutOgImageInput = {
+  where: Prisma.ProfileWhereUniqueInput
+  update: Prisma.XOR<Prisma.ProfileUpdateWithoutOgImageInput, Prisma.ProfileUncheckedUpdateWithoutOgImageInput>
+  create: Prisma.XOR<Prisma.ProfileCreateWithoutOgImageInput, Prisma.ProfileUncheckedCreateWithoutOgImageInput>
+}
+
+export type ProfileUpdateWithWhereUniqueWithoutOgImageInput = {
+  where: Prisma.ProfileWhereUniqueInput
+  data: Prisma.XOR<Prisma.ProfileUpdateWithoutOgImageInput, Prisma.ProfileUncheckedUpdateWithoutOgImageInput>
+}
+
+export type ProfileUpdateManyWithWhereWithoutOgImageInput = {
+  where: Prisma.ProfileScalarWhereInput
+  data: Prisma.XOR<Prisma.ProfileUpdateManyMutationInput, Prisma.ProfileUncheckedUpdateManyWithoutOgImageInput>
+}
+
+export type ProfileScalarWhereInput = {
+  AND?: Prisma.ProfileScalarWhereInput | Prisma.ProfileScalarWhereInput[]
+  OR?: Prisma.ProfileScalarWhereInput[]
+  NOT?: Prisma.ProfileScalarWhereInput | Prisma.ProfileScalarWhereInput[]
+  id?: Prisma.StringFilter<"Profile"> | string
+  userId?: Prisma.StringFilter<"Profile"> | string
+  name?: Prisma.StringFilter<"Profile"> | string
+  phone?: Prisma.StringNullableFilter<"Profile"> | string | null
+  nationality?: Prisma.StringNullableFilter<"Profile"> | string | null
+  address?: Prisma.StringNullableFilter<"Profile"> | string | null
+  yoe?: Prisma.IntNullableFilter<"Profile"> | number | null
+  resumePath?: Prisma.StringNullableFilter<"Profile"> | string | null
+  tagline?: Prisma.StringNullableFilter<"Profile"> | string | null
+  bio?: Prisma.StringNullableFilter<"Profile"> | string | null
+  description?: Prisma.StringNullableFilter<"Profile"> | string | null
+  freelanceAvailable?: Prisma.BoolFilter<"Profile"> | boolean
+  languages?: Prisma.StringNullableListFilter<"Profile">
+  rotatingWords?: Prisma.StringNullableListFilter<"Profile">
+  metaTitle?: Prisma.StringNullableFilter<"Profile"> | string | null
+  metaDescription?: Prisma.StringNullableFilter<"Profile"> | string | null
+  ogImageId?: Prisma.StringNullableFilter<"Profile"> | string | null
+  heroImageId?: Prisma.StringNullableFilter<"Profile"> | string | null
+  isActive?: Prisma.BoolFilter<"Profile"> | boolean
+  createdAt?: Prisma.DateTimeFilter<"Profile"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"Profile"> | Date | string
+}
+
+export type ProfileUpsertWithWhereUniqueWithoutHeroImageInput = {
+  where: Prisma.ProfileWhereUniqueInput
+  update: Prisma.XOR<Prisma.ProfileUpdateWithoutHeroImageInput, Prisma.ProfileUncheckedUpdateWithoutHeroImageInput>
+  create: Prisma.XOR<Prisma.ProfileCreateWithoutHeroImageInput, Prisma.ProfileUncheckedCreateWithoutHeroImageInput>
+}
+
+export type ProfileUpdateWithWhereUniqueWithoutHeroImageInput = {
+  where: Prisma.ProfileWhereUniqueInput
+  data: Prisma.XOR<Prisma.ProfileUpdateWithoutHeroImageInput, Prisma.ProfileUncheckedUpdateWithoutHeroImageInput>
+}
+
+export type ProfileUpdateManyWithWhereWithoutHeroImageInput = {
+  where: Prisma.ProfileScalarWhereInput
+  data: Prisma.XOR<Prisma.ProfileUpdateManyMutationInput, Prisma.ProfileUncheckedUpdateManyWithoutHeroImageInput>
+}
+
+export type ProfileCreateManyOgImageInput = {
+  id?: string
+  userId: string
+  name: string
+  phone?: string | null
+  nationality?: string | null
+  address?: string | null
+  yoe?: number | null
+  resumePath?: string | null
+  tagline?: string | null
+  bio?: string | null
+  description?: string | null
+  freelanceAvailable?: boolean
+  languages?: Prisma.ProfileCreatelanguagesInput | string[]
+  rotatingWords?: Prisma.ProfileCreaterotatingWordsInput | string[]
+  metaTitle?: string | null
+  metaDescription?: string | null
+  heroImageId?: string | null
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type ProfileCreateManyHeroImageInput = {
+  id?: string
+  userId: string
+  name: string
+  phone?: string | null
+  nationality?: string | null
+  address?: string | null
+  yoe?: number | null
+  resumePath?: string | null
+  tagline?: string | null
+  bio?: string | null
+  description?: string | null
+  freelanceAvailable?: boolean
+  languages?: Prisma.ProfileCreatelanguagesInput | string[]
+  rotatingWords?: Prisma.ProfileCreaterotatingWordsInput | string[]
+  metaTitle?: string | null
+  metaDescription?: string | null
+  ogImageId?: string | null
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type ProfileUpdateWithoutOgImageInput = {
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nationality?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  yoe?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  resumePath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tagline?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  freelanceAvailable?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  languages?: Prisma.ProfileUpdatelanguagesInput | string[]
+  rotatingWords?: Prisma.ProfileUpdaterotatingWordsInput | string[]
+  metaTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  metaDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  user?: Prisma.UserUpdateOneRequiredWithoutProfileNestedInput
+  heroImage?: Prisma.GalleryImageUpdateOneWithoutProfileHeroImageNestedInput
+}
+
+export type ProfileUncheckedUpdateWithoutOgImageInput = {
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nationality?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  yoe?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  resumePath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tagline?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  freelanceAvailable?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  languages?: Prisma.ProfileUpdatelanguagesInput | string[]
+  rotatingWords?: Prisma.ProfileUpdaterotatingWordsInput | string[]
+  metaTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  metaDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  heroImageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type ProfileUncheckedUpdateManyWithoutOgImageInput = {
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nationality?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  yoe?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  resumePath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tagline?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  freelanceAvailable?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  languages?: Prisma.ProfileUpdatelanguagesInput | string[]
+  rotatingWords?: Prisma.ProfileUpdaterotatingWordsInput | string[]
+  metaTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  metaDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  heroImageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type ProfileUpdateWithoutHeroImageInput = {
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nationality?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  yoe?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  resumePath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tagline?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  freelanceAvailable?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  languages?: Prisma.ProfileUpdatelanguagesInput | string[]
+  rotatingWords?: Prisma.ProfileUpdaterotatingWordsInput | string[]
+  metaTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  metaDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  user?: Prisma.UserUpdateOneRequiredWithoutProfileNestedInput
+  ogImage?: Prisma.GalleryImageUpdateOneWithoutProfileOgImageNestedInput
+}
+
+export type ProfileUncheckedUpdateWithoutHeroImageInput = {
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nationality?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  yoe?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  resumePath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tagline?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  freelanceAvailable?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  languages?: Prisma.ProfileUpdatelanguagesInput | string[]
+  rotatingWords?: Prisma.ProfileUpdaterotatingWordsInput | string[]
+  metaTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  metaDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ogImageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type ProfileUncheckedUpdateManyWithoutHeroImageInput = {
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nationality?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  yoe?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  resumePath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tagline?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  freelanceAvailable?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  languages?: Prisma.ProfileUpdatelanguagesInput | string[]
+  rotatingWords?: Prisma.ProfileUpdaterotatingWordsInput | string[]
+  metaTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  metaDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ogImageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -882,14 +1327,16 @@ export type ProfileSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   freelanceAvailable?: boolean
   languages?: boolean
   rotatingWords?: boolean
-  heroVideo?: boolean
   metaTitle?: boolean
   metaDescription?: boolean
-  ogImage?: boolean
+  ogImageId?: boolean
+  heroImageId?: boolean
   isActive?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  ogImage?: boolean | Prisma.Profile$ogImageArgs<ExtArgs>
+  heroImage?: boolean | Prisma.Profile$heroImageArgs<ExtArgs>
 }, ExtArgs["result"]["profile"]>
 
 
@@ -909,24 +1356,28 @@ export type ProfileSelectScalar = {
   freelanceAvailable?: boolean
   languages?: boolean
   rotatingWords?: boolean
-  heroVideo?: boolean
   metaTitle?: boolean
   metaDescription?: boolean
-  ogImage?: boolean
+  ogImageId?: boolean
+  heroImageId?: boolean
   isActive?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type ProfileOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "name" | "phone" | "nationality" | "address" | "yoe" | "resumePath" | "tagline" | "bio" | "description" | "freelanceAvailable" | "languages" | "rotatingWords" | "heroVideo" | "metaTitle" | "metaDescription" | "ogImage" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["profile"]>
+export type ProfileOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "name" | "phone" | "nationality" | "address" | "yoe" | "resumePath" | "tagline" | "bio" | "description" | "freelanceAvailable" | "languages" | "rotatingWords" | "metaTitle" | "metaDescription" | "ogImageId" | "heroImageId" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["profile"]>
 export type ProfileInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  ogImage?: boolean | Prisma.Profile$ogImageArgs<ExtArgs>
+  heroImage?: boolean | Prisma.Profile$heroImageArgs<ExtArgs>
 }
 
 export type $ProfilePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Profile"
   objects: {
     user: Prisma.$UserPayload<ExtArgs>
+    ogImage: Prisma.$GalleryImagePayload<ExtArgs> | null
+    heroImage: Prisma.$GalleryImagePayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -943,10 +1394,10 @@ export type $ProfilePayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     freelanceAvailable: boolean
     languages: string[]
     rotatingWords: string[]
-    heroVideo: string | null
     metaTitle: string | null
     metaDescription: string | null
-    ogImage: string | null
+    ogImageId: string | null
+    heroImageId: string | null
     isActive: boolean
     createdAt: Date
     updatedAt: Date
@@ -1314,6 +1765,8 @@ readonly fields: ProfileFieldRefs;
 export interface Prisma__ProfileClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   user<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  ogImage<T extends Prisma.Profile$ogImageArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Profile$ogImageArgs<ExtArgs>>): Prisma.Prisma__GalleryImageClient<runtime.Types.Result.GetResult<Prisma.$GalleryImagePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  heroImage<T extends Prisma.Profile$heroImageArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Profile$heroImageArgs<ExtArgs>>): Prisma.Prisma__GalleryImageClient<runtime.Types.Result.GetResult<Prisma.$GalleryImagePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1357,10 +1810,10 @@ export interface ProfileFieldRefs {
   readonly freelanceAvailable: Prisma.FieldRef<"Profile", 'Boolean'>
   readonly languages: Prisma.FieldRef<"Profile", 'String[]'>
   readonly rotatingWords: Prisma.FieldRef<"Profile", 'String[]'>
-  readonly heroVideo: Prisma.FieldRef<"Profile", 'String'>
   readonly metaTitle: Prisma.FieldRef<"Profile", 'String'>
   readonly metaDescription: Prisma.FieldRef<"Profile", 'String'>
-  readonly ogImage: Prisma.FieldRef<"Profile", 'String'>
+  readonly ogImageId: Prisma.FieldRef<"Profile", 'String'>
+  readonly heroImageId: Prisma.FieldRef<"Profile", 'String'>
   readonly isActive: Prisma.FieldRef<"Profile", 'Boolean'>
   readonly createdAt: Prisma.FieldRef<"Profile", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Profile", 'DateTime'>
@@ -1731,6 +2184,44 @@ export type ProfileAggregateRawArgs<ExtArgs extends runtime.Types.Extensions.Int
    * Additional options to pass to the `aggregate` command ${@link https://docs.mongodb.com/manual/reference/command/aggregate/#command-fields MongoDB Docs}.
    */
   options?: runtime.InputJsonValue
+}
+
+/**
+ * Profile.ogImage
+ */
+export type Profile$ogImageArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the GalleryImage
+   */
+  select?: Prisma.GalleryImageSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the GalleryImage
+   */
+  omit?: Prisma.GalleryImageOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.GalleryImageInclude<ExtArgs> | null
+  where?: Prisma.GalleryImageWhereInput
+}
+
+/**
+ * Profile.heroImage
+ */
+export type Profile$heroImageArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the GalleryImage
+   */
+  select?: Prisma.GalleryImageSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the GalleryImage
+   */
+  omit?: Prisma.GalleryImageOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.GalleryImageInclude<ExtArgs> | null
+  where?: Prisma.GalleryImageWhereInput
 }
 
 /**

@@ -13,10 +13,10 @@ export const ProfileFormSchema = z.object({
   freelanceAvailable: z.boolean(),
   languages: z.array(z.string()),
   rotatingWords: z.array(z.string()),
-  heroVideo: z.string().trim().nullable().optional(),
   metaTitle: z.string().trim().nullable().optional(),
   metaDescription: z.string().trim().nullable().optional(),
-  ogImage: z.string().trim().nullable().optional(),
+  ogImageId: z.string().trim().nullable().optional(),
+  heroImageId: z.string().trim().nullable().optional(),
   isActive: z.boolean(),
 });
 

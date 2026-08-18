@@ -1,5 +1,10 @@
+import { Experience, GalleryImage } from '@/lib/generated/prisma/client';
 import { BaseQuery, RequestConfig } from '@/types/api';
 import { ExperienceFormValues } from '../schemas';
+
+export interface ExperienceWithAllRelations extends Experience {
+  companyLogo?: GalleryImage | null;
+}
 
 export type GetExperiencesRequest = RequestConfig<undefined, BaseQuery, undefined>;
 

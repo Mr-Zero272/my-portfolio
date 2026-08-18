@@ -15,10 +15,10 @@ export const toProfileFormValue = (profile: Profile): ProfileFormValues => {
     freelanceAvailable: profile.freelanceAvailable ?? true,
     languages: profile.languages ?? ['Vietnamese', 'English'],
     rotatingWords: profile.rotatingWords ?? ['Web', 'Software', 'Mainframe'],
-    heroVideo: profile.heroVideo ?? '',
     metaTitle: profile.metaTitle ?? '',
     metaDescription: profile.metaDescription ?? '',
-    ogImage: profile.ogImage ?? '',
+    ogImageId: profile.ogImageId ?? '',
+    heroImageId: profile.heroImageId ?? '',
     isActive: profile.isActive ?? true,
   };
 };

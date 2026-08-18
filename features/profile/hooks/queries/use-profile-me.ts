@@ -1,9 +1,9 @@
-import { Profile } from '@/lib/generated/prisma/client';
 import { useQuery, UseQueryOptions } from '@tanstack/react-query';
 import { profileApi, profileQueryKeys } from '../../services';
+import { ProfileWithAllRelations } from '../../types';
 
 type UseProfileMeOptions = Omit<
-  UseQueryOptions<Profile, Error, Profile, ReturnType<typeof profileQueryKeys.me>>,
+  UseQueryOptions<ProfileWithAllRelations, Error, ProfileWithAllRelations, ReturnType<typeof profileQueryKeys.me>>,
   'queryKey' | 'queryFn'
 >;
 
