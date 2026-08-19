@@ -1,7 +1,7 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
-import { useMobileMenuStore } from '@/stores/mobile-menu-store';
+import { useMobileMenuStore } from '@/stores/mobile-menu.store';
 import { SVGProps } from 'react';
 
 interface HamburgerMenuButtonProps {

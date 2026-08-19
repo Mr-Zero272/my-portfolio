@@ -2,7 +2,7 @@
 
 import { InputGroup, InputGroupAddon, InputGroupInput } from '@/components/ui/input-group';
 import { cn } from '@/lib/utils';
-import { useMobileMenuStore } from '@/stores/mobile-menu-store';
+import { useMobileMenuStore } from '@/stores/mobile-menu.store';
 import { Search } from 'lucide-react';
 import { motion } from 'motion/react';
 import Link from 'next/link';

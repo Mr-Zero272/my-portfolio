@@ -2,7 +2,7 @@
 
 import { SideNavSettings } from '@/components/layouts/settings';
 import { HeaderSettings } from '@/components/layouts/settings/header-settings';
-import { useMobileMenuStore } from '@/stores/mobile-menu-store';
+import { useMobileMenuStore } from '@/stores/mobile-menu.store';
 import { AnimatePresence, motion } from 'motion/react';
 import React from 'react';
 
