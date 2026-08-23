@@ -24,7 +24,7 @@ export default function RootLayout({
         {/* <CursorSetting /> */}
         <section className="relative flex w-full flex-col gap-5 overflow-y-auto md:ml-20">
           {/* <Header /> */}
-          <PageTransition>{children}</PageTransition>
+          <PageTransition hasFooter>{children}</PageTransition>
         </section>
         <BottomNavBar />
       </RootSidebarProvider>

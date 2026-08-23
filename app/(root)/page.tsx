@@ -57,7 +57,7 @@ export default async function Home() {
   };
 
   return (
-    <section className="container mx-auto flex h-dvh w-full py-4">
+    <section className="container mx-auto flex w-full pt-10 pb-10 sm:pt-8">
       <div className="px-4 sm:px-8 lg:px-12">
         {/* Asymmetric 8/4 Split */}
         <div className="grid items-center gap-8 lg:grid-cols-12">
