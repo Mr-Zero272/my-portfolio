@@ -11,7 +11,7 @@ import {
 import { PlusIcon, XIcon } from 'lucide-react';
 import { useCallback, useState } from 'react';
 import { Controller, ControllerRenderProps, useFormContext } from 'react-hook-form';
-import { ProfileFormValues } from '../../schemas';
+import { ProfileFormValues } from '../../data';
 
 export const RotatingWordsInput = () => {
   const { control } = useFormContext<ProfileFormValues>();

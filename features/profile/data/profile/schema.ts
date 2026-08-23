@@ -17,6 +17,7 @@ export const ProfileFormSchema = z.object({
   metaDescription: z.string().trim().nullable().optional(),
   ogImageId: z.string().trim().nullable().optional(),
   heroImageId: z.string().trim().nullable().optional(),
+  cvUrl: z.string().trim().nullable().optional(),
   isActive: z.boolean(),
 });
 

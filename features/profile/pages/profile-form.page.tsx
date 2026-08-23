@@ -2,11 +2,19 @@
 
 import { PageHeader } from '@/components/shared/page-header copy';
 import StateWrapper from '@/components/shared/state-wrapper';
+import { toast } from 'sonner';
 import { ProfileForm } from '../components';
 import { useProfileForm } from '../hooks';
 
 export const ProfileFormPage = () => {
-  const { serverError, isLoading, error, onSubmit, isSubmitting, initialData, originalData } = useProfileForm();
+  const { serverError, isLoading, error, onSubmit, isSubmitting, initialData, originalData } =
+    useProfileForm({
+      onSuccess: () => {
+        toast.success('Profile updated successfully.', {
+          description: 'Your profile information has been updated successfully.',
+        });
+      },
+    });
 
   return (
     <div className="max-w-2xl pb-20">

@@ -1,5 +1,10 @@
 # AGENTS.md
 
+## Principles for working with shadcn/ui components
+
+- When using the Button component, Icon components do not require size classNames or manual spacing utilities (such as `pr-2`), as the button itself automatically adjusts the SVG size and spacing via the `gap` property.
+- Prioritize using components from base-ui; radix ui is currently considered legacy and will be migrated later.
+
 ## API Query Building
 
 Every list GET endpoint **must** build its query with `buildListQuery` from `lib/api` (search / sort / filter / pagination). Never hand-roll `where`, `orderBy`, or pagination logic.

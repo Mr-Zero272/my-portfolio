@@ -1,5 +1,5 @@
 import { Profile } from '@/lib/generated/prisma/client';
-import { ProfileFormValues } from '../../schemas';
+import { ProfileFormValues } from './schema';
 
 export const toProfileFormValue = (profile: Profile): ProfileFormValues => {
   return {
@@ -19,6 +19,7 @@ export const toProfileFormValue = (profile: Profile): ProfileFormValues => {
     metaDescription: profile.metaDescription ?? '',
     ogImageId: profile.ogImageId ?? '',
     heroImageId: profile.heroImageId ?? '',
+    cvUrl: profile.cvUrl ?? '',
     isActive: profile.isActive ?? true,
   };
 };

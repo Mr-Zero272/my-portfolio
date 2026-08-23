@@ -1853,6 +1853,7 @@ export const ProfileScalarFieldEnum = {
   metaDescription: 'metaDescription',
   ogImageId: 'ogImageId',
   heroImageId: 'heroImageId',
+  cvUrl: 'cvUrl',
   isActive: 'isActive',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'

@@ -51,6 +51,7 @@ export type ProfileMinAggregateOutputType = {
   metaDescription: string | null
   ogImageId: string | null
   heroImageId: string | null
+  cvUrl: string | null
   isActive: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -73,6 +74,7 @@ export type ProfileMaxAggregateOutputType = {
   metaDescription: string | null
   ogImageId: string | null
   heroImageId: string | null
+  cvUrl: string | null
   isActive: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -97,6 +99,7 @@ export type ProfileCountAggregateOutputType = {
   metaDescription: number
   ogImageId: number
   heroImageId: number
+  cvUrl: number
   isActive: number
   createdAt: number
   updatedAt: number
@@ -129,6 +132,7 @@ export type ProfileMinAggregateInputType = {
   metaDescription?: true
   ogImageId?: true
   heroImageId?: true
+  cvUrl?: true
   isActive?: true
   createdAt?: true
   updatedAt?: true
@@ -151,6 +155,7 @@ export type ProfileMaxAggregateInputType = {
   metaDescription?: true
   ogImageId?: true
   heroImageId?: true
+  cvUrl?: true
   isActive?: true
   createdAt?: true
   updatedAt?: true
@@ -175,6 +180,7 @@ export type ProfileCountAggregateInputType = {
   metaDescription?: true
   ogImageId?: true
   heroImageId?: true
+  cvUrl?: true
   isActive?: true
   createdAt?: true
   updatedAt?: true
@@ -286,6 +292,7 @@ export type ProfileGroupByOutputType = {
   metaDescription: string | null
   ogImageId: string | null
   heroImageId: string | null
+  cvUrl: string | null
   isActive: boolean
   createdAt: Date
   updatedAt: Date
@@ -333,6 +340,7 @@ export type ProfileWhereInput = {
   metaDescription?: Prisma.StringNullableFilter<"Profile"> | string | null
   ogImageId?: Prisma.StringNullableFilter<"Profile"> | string | null
   heroImageId?: Prisma.StringNullableFilter<"Profile"> | string | null
+  cvUrl?: Prisma.StringNullableFilter<"Profile"> | string | null
   isActive?: Prisma.BoolFilter<"Profile"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Profile"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Profile"> | Date | string
@@ -360,6 +368,7 @@ export type ProfileOrderByWithRelationInput = {
   metaDescription?: Prisma.SortOrder
   ogImageId?: Prisma.SortOrder
   heroImageId?: Prisma.SortOrder
+  cvUrl?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -390,6 +399,7 @@ export type ProfileWhereUniqueInput = Prisma.AtLeast<{
   metaDescription?: Prisma.StringNullableFilter<"Profile"> | string | null
   ogImageId?: Prisma.StringNullableFilter<"Profile"> | string | null
   heroImageId?: Prisma.StringNullableFilter<"Profile"> | string | null
+  cvUrl?: Prisma.StringNullableFilter<"Profile"> | string | null
   isActive?: Prisma.BoolFilter<"Profile"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Profile"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Profile"> | Date | string
@@ -417,6 +427,7 @@ export type ProfileOrderByWithAggregationInput = {
   metaDescription?: Prisma.SortOrder
   ogImageId?: Prisma.SortOrder
   heroImageId?: Prisma.SortOrder
+  cvUrl?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -449,6 +460,7 @@ export type ProfileScalarWhereWithAggregatesInput = {
   metaDescription?: Prisma.StringNullableWithAggregatesFilter<"Profile"> | string | null
   ogImageId?: Prisma.StringNullableWithAggregatesFilter<"Profile"> | string | null
   heroImageId?: Prisma.StringNullableWithAggregatesFilter<"Profile"> | string | null
+  cvUrl?: Prisma.StringNullableWithAggregatesFilter<"Profile"> | string | null
   isActive?: Prisma.BoolWithAggregatesFilter<"Profile"> | boolean
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Profile"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Profile"> | Date | string
@@ -470,6 +482,7 @@ export type ProfileCreateInput = {
   rotatingWords?: Prisma.ProfileCreaterotatingWordsInput | string[]
   metaTitle?: string | null
   metaDescription?: string | null
+  cvUrl?: string | null
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -497,6 +510,7 @@ export type ProfileUncheckedCreateInput = {
   metaDescription?: string | null
   ogImageId?: string | null
   heroImageId?: string | null
+  cvUrl?: string | null
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -517,6 +531,7 @@ export type ProfileUpdateInput = {
   rotatingWords?: Prisma.ProfileUpdaterotatingWordsInput | string[]
   metaTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   metaDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cvUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -543,6 +558,7 @@ export type ProfileUncheckedUpdateInput = {
   metaDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ogImageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   heroImageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cvUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -567,6 +583,7 @@ export type ProfileCreateManyInput = {
   metaDescription?: string | null
   ogImageId?: string | null
   heroImageId?: string | null
+  cvUrl?: string | null
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -587,6 +604,7 @@ export type ProfileUpdateManyMutationInput = {
   rotatingWords?: Prisma.ProfileUpdaterotatingWordsInput | string[]
   metaTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   metaDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cvUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -610,6 +628,7 @@ export type ProfileUncheckedUpdateManyInput = {
   metaDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ogImageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   heroImageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cvUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -647,6 +666,7 @@ export type ProfileCountOrderByAggregateInput = {
   metaDescription?: Prisma.SortOrder
   ogImageId?: Prisma.SortOrder
   heroImageId?: Prisma.SortOrder
+  cvUrl?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -673,6 +693,7 @@ export type ProfileMaxOrderByAggregateInput = {
   metaDescription?: Prisma.SortOrder
   ogImageId?: Prisma.SortOrder
   heroImageId?: Prisma.SortOrder
+  cvUrl?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -695,6 +716,7 @@ export type ProfileMinOrderByAggregateInput = {
   metaDescription?: Prisma.SortOrder
   ogImageId?: Prisma.SortOrder
   heroImageId?: Prisma.SortOrder
+  cvUrl?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -873,6 +895,7 @@ export type ProfileCreateWithoutUserInput = {
   rotatingWords?: Prisma.ProfileCreaterotatingWordsInput | string[]
   metaTitle?: string | null
   metaDescription?: string | null
+  cvUrl?: string | null
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -898,6 +921,7 @@ export type ProfileUncheckedCreateWithoutUserInput = {
   metaDescription?: string | null
   ogImageId?: string | null
   heroImageId?: string | null
+  cvUrl?: string | null
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -934,6 +958,7 @@ export type ProfileUpdateWithoutUserInput = {
   rotatingWords?: Prisma.ProfileUpdaterotatingWordsInput | string[]
   metaTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   metaDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cvUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -958,6 +983,7 @@ export type ProfileUncheckedUpdateWithoutUserInput = {
   metaDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ogImageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   heroImageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cvUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -979,6 +1005,7 @@ export type ProfileCreateWithoutOgImageInput = {
   rotatingWords?: Prisma.ProfileCreaterotatingWordsInput | string[]
   metaTitle?: string | null
   metaDescription?: string | null
+  cvUrl?: string | null
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1004,6 +1031,7 @@ export type ProfileUncheckedCreateWithoutOgImageInput = {
   metaTitle?: string | null
   metaDescription?: string | null
   heroImageId?: string | null
+  cvUrl?: string | null
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1034,6 +1062,7 @@ export type ProfileCreateWithoutHeroImageInput = {
   rotatingWords?: Prisma.ProfileCreaterotatingWordsInput | string[]
   metaTitle?: string | null
   metaDescription?: string | null
+  cvUrl?: string | null
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1059,6 +1088,7 @@ export type ProfileUncheckedCreateWithoutHeroImageInput = {
   metaTitle?: string | null
   metaDescription?: string | null
   ogImageId?: string | null
+  cvUrl?: string | null
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1111,6 +1141,7 @@ export type ProfileScalarWhereInput = {
   metaDescription?: Prisma.StringNullableFilter<"Profile"> | string | null
   ogImageId?: Prisma.StringNullableFilter<"Profile"> | string | null
   heroImageId?: Prisma.StringNullableFilter<"Profile"> | string | null
+  cvUrl?: Prisma.StringNullableFilter<"Profile"> | string | null
   isActive?: Prisma.BoolFilter<"Profile"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Profile"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Profile"> | Date | string
@@ -1150,6 +1181,7 @@ export type ProfileCreateManyOgImageInput = {
   metaTitle?: string | null
   metaDescription?: string | null
   heroImageId?: string | null
+  cvUrl?: string | null
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1173,6 +1205,7 @@ export type ProfileCreateManyHeroImageInput = {
   metaTitle?: string | null
   metaDescription?: string | null
   ogImageId?: string | null
+  cvUrl?: string | null
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1193,6 +1226,7 @@ export type ProfileUpdateWithoutOgImageInput = {
   rotatingWords?: Prisma.ProfileUpdaterotatingWordsInput | string[]
   metaTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   metaDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cvUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1217,6 +1251,7 @@ export type ProfileUncheckedUpdateWithoutOgImageInput = {
   metaTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   metaDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   heroImageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cvUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1239,6 +1274,7 @@ export type ProfileUncheckedUpdateManyWithoutOgImageInput = {
   metaTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   metaDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   heroImageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cvUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1259,6 +1295,7 @@ export type ProfileUpdateWithoutHeroImageInput = {
   rotatingWords?: Prisma.ProfileUpdaterotatingWordsInput | string[]
   metaTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   metaDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cvUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1283,6 +1320,7 @@ export type ProfileUncheckedUpdateWithoutHeroImageInput = {
   metaTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   metaDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ogImageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cvUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1305,6 +1343,7 @@ export type ProfileUncheckedUpdateManyWithoutHeroImageInput = {
   metaTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   metaDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ogImageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cvUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1331,6 +1370,7 @@ export type ProfileSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   metaDescription?: boolean
   ogImageId?: boolean
   heroImageId?: boolean
+  cvUrl?: boolean
   isActive?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -1360,12 +1400,13 @@ export type ProfileSelectScalar = {
   metaDescription?: boolean
   ogImageId?: boolean
   heroImageId?: boolean
+  cvUrl?: boolean
   isActive?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type ProfileOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "name" | "phone" | "nationality" | "address" | "yoe" | "resumePath" | "tagline" | "bio" | "description" | "freelanceAvailable" | "languages" | "rotatingWords" | "metaTitle" | "metaDescription" | "ogImageId" | "heroImageId" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["profile"]>
+export type ProfileOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "name" | "phone" | "nationality" | "address" | "yoe" | "resumePath" | "tagline" | "bio" | "description" | "freelanceAvailable" | "languages" | "rotatingWords" | "metaTitle" | "metaDescription" | "ogImageId" | "heroImageId" | "cvUrl" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["profile"]>
 export type ProfileInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   ogImage?: boolean | Prisma.Profile$ogImageArgs<ExtArgs>
@@ -1398,6 +1439,7 @@ export type $ProfilePayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     metaDescription: string | null
     ogImageId: string | null
     heroImageId: string | null
+    cvUrl: string | null
     isActive: boolean
     createdAt: Date
     updatedAt: Date
@@ -1814,6 +1856,7 @@ export interface ProfileFieldRefs {
   readonly metaDescription: Prisma.FieldRef<"Profile", 'String'>
   readonly ogImageId: Prisma.FieldRef<"Profile", 'String'>
   readonly heroImageId: Prisma.FieldRef<"Profile", 'String'>
+  readonly cvUrl: Prisma.FieldRef<"Profile", 'String'>
   readonly isActive: Prisma.FieldRef<"Profile", 'Boolean'>
   readonly createdAt: Prisma.FieldRef<"Profile", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Profile", 'DateTime'>

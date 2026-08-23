@@ -1,6 +1,6 @@
 import { GalleryImage, Profile } from '@/lib/generated/prisma/client';
 import { RequestConfig } from '@/types/api';
-import { ProfileFormValues } from '../schemas';
+import { ProfileFormValues } from '../data';
 
 export interface ProfileWithAllRelations extends Profile {
   ogImage?: GalleryImage | null;

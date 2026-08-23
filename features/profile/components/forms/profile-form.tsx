@@ -1,6 +1,12 @@
 'use client';
 
-import { FormComboboxMulti, FormGalleryInput, FormInput, FormNumber, FormTextArea } from '@/components/forms';
+import {
+  FormComboboxMulti,
+  FormGalleryInput,
+  FormInput,
+  FormNumber,
+  FormTextArea,
+} from '@/components/forms';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { FieldGroup } from '@/components/ui/field';
@@ -12,7 +18,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { AlertCircleIcon, SaveIcon } from 'lucide-react';
 import { useId } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
-import { ProfileFormSchema, ProfileFormValues } from '../../schemas';
+import { ProfileFormSchema, ProfileFormValues } from '../../data';
 import { RotatingWordsInput } from './rotating-words-input';
 
 export const ProfileForm = ({
@@ -24,9 +30,12 @@ export const ProfileForm = ({
   isSubmitting,
   serverErrors,
   context,
-}: BaseFormProps<ProfileFormValues, {
-  heroImage?: GalleryImage
-}>) => {
+}: BaseFormProps<
+  ProfileFormValues,
+  {
+    heroImage?: GalleryImage;
+  }
+>) => {
   const id = useId();
   const formId = `profile-form-${id}`;
 
@@ -100,7 +109,6 @@ export const ProfileForm = ({
                 description="The languages that you can communicate in."
                 options={[
                   { value: 'english', label: 'English' },
-
                   { value: 'french', label: 'French' },
                   { value: 'spanish', label: 'Spanish' },
                   { value: 'german', label: 'German' },
@@ -115,7 +123,15 @@ export const ProfileForm = ({
                   { value: 'indonesian', label: 'Indonesian' },
                 ]}
               />
+
+              <FormInput
+                name="cvUrl"
+                label="CV URL"
+                placeholder="eg: https://example.com/cv"
+                description="Download CV link will be displayed in the contact section."
+              />
             </div>
+
             <FormGalleryInput
               name="heroImageId"
               label="Hero Image"

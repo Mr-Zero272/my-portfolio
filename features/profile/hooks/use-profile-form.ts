@@ -1,7 +1,6 @@
 import { handleError } from '@/utils';
 import { useCallback, useMemo, useState } from 'react';
-import { toProfileFormValue } from '../data';
-import { ProfileFormValues } from '../schemas';
+import { ProfileFormValues, toProfileFormValue } from '../data';
 import { useUpdateProfile } from './mutations';
 import { useProfileMe } from './queries';
 

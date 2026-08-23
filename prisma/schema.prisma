@@ -168,6 +168,7 @@ model Profile {
   ogImage            GalleryImage? @relation("ProfileOgImage", fields: [ogImageId], references: [id], onDelete: SetNull)
   heroImageId        String?
   heroImage          GalleryImage? @relation("ProfileHeroImage", fields: [heroImageId], references: [id], onDelete: SetNull)
+  cvUrl              String?
   isActive           Boolean  @default(true)
   createdAt          DateTime @default(now())
   updatedAt          DateTime @updatedAt

@@ -2,7 +2,7 @@ import { ApiErrorCode, throwApiError } from '@/lib/api';
 import { requireAdmin } from '@/lib/auth-guard';
 import type { Prisma } from '@/lib/generated/prisma/client';
 import { prisma } from '@/lib/prisma';
-import { ProfileFormValues } from '../schemas';
+import { ProfileFormValues } from '../data';
 
 const PROFILE_INCLUDE = {
   ogImage: true,
