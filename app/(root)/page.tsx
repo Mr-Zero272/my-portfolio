@@ -2,6 +2,7 @@ import { SlideUpText } from '@/components/animations/slide-up-text';
 import { TypingText } from '@/components/animations/typing-text';
 import { DiscordIcon, LinkedInIcon } from '@/components/icons';
 import GithubIcon from '@/components/icons/github';
+import { DownloadButton } from '@/components/shared/dowload-button';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
@@ -56,7 +57,7 @@ export default async function Home() {
   };
 
   return (
-    <section className="py-4">
+    <section className="container mx-auto flex h-dvh w-full py-4">
       <div className="px-4 sm:px-8 lg:px-12">
         {/* Asymmetric 8/4 Split */}
         <div className="grid items-center gap-8 lg:grid-cols-12">
@@ -83,7 +84,7 @@ export default async function Home() {
             />
             <SlideUpText
               split="words"
-              delay={2}
+              delay={1.5}
               className="mt-8 max-w-2xl text-xl text-slate-600 dark:text-neutral-400"
             >
               {display.bio}
@@ -103,15 +104,24 @@ export default async function Home() {
                 <ArrowRightIcon /> Hire me
               </Button>
               {display.cvUrl ? (
-                <Button
+                <DownloadButton
                   size="lg"
                   variant="outline"
-                  nativeButton={false}
-                  render={<a href={display.cvUrl} target="_blank" rel="noreferrer" />}
-                >
-                  <DownloadIcon /> Download CV
-                </Button>
-              ) : null}
+                  idleIcon={<DownloadIcon />}
+                  buttonLabel="Download CV"
+                  loadingText="Downloading..."
+                  successText="Success"
+                  url={display.cvUrl}
+                />
+              ) : // <Button
+              //   size="lg"
+              //   variant="outline"
+              //   nativeButton={false}
+              //   render={<a href={display.cvUrl} target="_blank" rel="noreferrer" />}
+              // >
+              //   <DownloadIcon /> Download CV
+              // </Button>
+              null}
             </div>
             <Separator className="max-w-2xl" />
             {/* Stats Row */}

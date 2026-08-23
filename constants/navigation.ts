@@ -1,7 +1,7 @@
 import {
   CogIcon,
   HeadphonesIcon,
-  LayoutGridIcon,
+  LayoutDashboardIcon,
   MessageCircleQuestionIcon,
   NotebookPenIcon,
   SendIcon,
@@ -12,7 +12,7 @@ import {
 export const rootNavigation = {
   main: [
     {
-      icon: LayoutGridIcon,
+      icon: LayoutDashboardIcon,
       href: '/',
       label: 'Home',
     },
