@@ -1,5 +1,7 @@
+export { DiscordIcon } from './discord';
 export * from './github';
 export * from './google';
 export { JPGIcon } from './jpg';
+export { LinkedInIcon } from './linked-in';
 export { PNGIcon } from './png';
 export { XIcon } from './x';

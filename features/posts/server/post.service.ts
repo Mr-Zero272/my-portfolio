@@ -1,11 +1,12 @@
+import { getMainUserId } from '@/features/site-settings/server/main-user';
 import {
-  ApiErrorCode,
-  FilterOperator,
-  buildListQuery,
-  parseBooleanParam,
-  parseEnumParam,
-  parseNumberParam,
-  throwApiError,
+    ApiErrorCode,
+    FilterOperator,
+    buildListQuery,
+    parseBooleanParam,
+    parseEnumParam,
+    parseNumberParam,
+    throwApiError,
 } from '@/lib/api';
 import type { Prisma } from '@/lib/generated/prisma/client';
 import { prisma } from '@/lib/prisma';
@@ -32,6 +33,26 @@ const POST_INCLUDE = {
     },
   },
   likedBy: true,
+} satisfies Prisma.PostInclude;
+
+const PUBLIC_POST_INCLUDE = {
+  featureImage: true,
+  authors: {
+    include: {
+      user: {
+        select: {
+          id: true,
+          name: true,
+          image: true,
+        },
+      },
+    },
+  },
+  tags: {
+    include: {
+      tag: true,
+    },
+  },
 } satisfies Prisma.PostInclude;
 
 const POST_SORTABLE_FIELDS = [
@@ -104,12 +125,76 @@ export async function getPosts(headers: Headers, searchParams: URLSearchParams) 
   };
 }
 
+export async function getPublicPosts(searchParams: URLSearchParams) {
+  const mainUserId = await getMainUserId();
+
+  const query = buildListQuery<Prisma.PostWhereInput>(searchParams, {
+    baseWhere: { status: 'Published' },
+    defaultSort: { createdAt: 'desc' },
+    filterFields: {
+      keyword: { field: 'keywords', operator: FilterOperator.HAS },
+      tagId: { field: 'tags.tagId', operator: FilterOperator.EQUALS },
+    },
+    searchFields: ['title', 'slug', 'excerpt'],
+    sortableFields: POST_SORTABLE_FIELDS,
+  });
+
+  if (!mainUserId) {
+    return {
+      pagination: query.pagination,
+      posts: [],
+      total: 0,
+    };
+  }
+
+  const where: Prisma.PostWhereInput = {
+    ...query.where,
+    authors: { some: { userId: mainUserId } },
+  };
+
+  const [posts, total] = await Promise.all([
+    prisma.post.findMany({
+      include: PUBLIC_POST_INCLUDE,
+      orderBy: query.orderBy,
+      skip: query.pagination.skip,
+      take: query.pagination.take,
+      where,
+    }),
+    prisma.post.count({ where }),
+  ]);
+
+  return {
+    pagination: query.pagination,
+    posts,
+    total,
+  };
+}
+
 export async function getPost(headers: Headers, id: string) {
   await requirePostManager(headers);
 
   const post = await prisma.post.findUnique({
     include: POST_INCLUDE,
     where: { id },
+  });
+
+  if (!post) {
+    throwApiError(ApiErrorCode.NOT_FOUND, { message: 'Post not found.' });
+  }
+
+  return post;
+}
+
+export async function getPublicPost(slug: string) {
+  const mainUserId = await getMainUserId();
+
+  const where: Prisma.PostWhereInput = mainUserId
+    ? { slug, status: 'Published', authors: { some: { userId: mainUserId } } }
+    : { slug: '__none__' };
+
+  const post = await prisma.post.findFirst({
+    include: PUBLIC_POST_INCLUDE,
+    where,
   });
 
   if (!post) {

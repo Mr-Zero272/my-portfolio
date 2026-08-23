@@ -1,3 +1,4 @@
+import { getMainUserId } from '@/features/site-settings/server/main-user';
 import { ApiErrorCode, throwApiError } from '@/lib/api';
 import { requireAdmin } from '@/lib/auth-guard';
 import type { Prisma } from '@/lib/generated/prisma/client';
@@ -10,6 +11,25 @@ const PROFILE_INCLUDE = {
 } satisfies Prisma.ProfileInclude;
 
 export const profileService = {
+  async getPublicProfile() {
+    const mainUserId = await getMainUserId();
+
+    if (!mainUserId) {
+      throwApiError(ApiErrorCode.NOT_FOUND, { message: 'Profile not found.' });
+    }
+
+    const profile = await prisma.profile.findFirst({
+      where: { userId: mainUserId, isActive: true },
+      include: PROFILE_INCLUDE,
+    });
+
+    if (!profile) {
+      throwApiError(ApiErrorCode.NOT_FOUND, { message: 'Profile not found.' });
+    }
+
+    return profile;
+  },
+
   async getMe(headers: Headers) {
     const { user } = await requireAdmin(headers);
 

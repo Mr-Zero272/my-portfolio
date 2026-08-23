@@ -17,18 +17,25 @@ export const RotatingWordsInput = () => {
   const { control } = useFormContext<ProfileFormValues>();
   const [word, setWord] = useState('');
 
+  const handleAddWord = useCallback(
+    (field: ControllerRenderProps<ProfileFormValues, 'rotatingWords'>) => {
+      field.onChange([...(field.value ?? []), word.trim()]);
+      setWord('');
+    },
+    [word],
+  );
+
   const handleKeyDown = useCallback(
     (
       e: React.KeyboardEvent<HTMLInputElement>,
       field: ControllerRenderProps<ProfileFormValues, 'rotatingWords'>,
     ) => {
-      if ((e.key === 'Comma' || e.key === 'Enter') && word.trim()) {
+      if ((e.key === 'Comma' || e.key === 'Enter')) {
         e.preventDefault();
-        field.onChange([...(field.value ?? []), word.trim()]);
-        setWord('');
+        handleAddWord(field);
       }
     },
-    [word],
+    [handleAddWord],
   );
 
   return (
@@ -54,7 +61,8 @@ export const RotatingWordsInput = () => {
                 )}
                 <InputGroupButton
                   type="button"
-                  onClick={() => field.onChange([...(field.value ?? []), word])}
+                  onClick={() => handleAddWord(field)}
+                  disabled={!word.trim()}
                 >
                   <PlusIcon />
                 </InputGroupButton>

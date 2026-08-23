@@ -1,3 +1,4 @@
+import { getMainUserId } from '@/features/site-settings/server/main-user';
 import { ApiErrorCode, buildListQuery, parseBooleanParam, throwApiError } from '@/lib/api';
 import { requireAdmin } from '@/lib/auth-guard';
 import type { Prisma } from '@/lib/generated/prisma/client';
@@ -35,6 +36,50 @@ export const experienceService = {
         include: EXPERIENCE_INCLUDE,
       }),
       prisma.experience.count({ where: query.where }),
+    ]);
+
+    return {
+      experiences,
+      pagination: query.pagination,
+      total,
+    };
+  },
+
+  async getPublicAll(searchParams: URLSearchParams) {
+    const mainUserId = await getMainUserId();
+
+    const query = buildListQuery<Prisma.ExperienceWhereInput>(searchParams, {
+      baseWhere: { isVisible: true },
+      defaultSort: { displayOrder: 'asc' },
+      filterFields: {
+        isCurrentEmployer: { parse: parseBooleanParam },
+      },
+      searchFields: EXPERIENCE_SEARCH_FIELDS,
+      sortableFields: EXPERIENCE_SORTABLE_FIELDS,
+    });
+
+    if (!mainUserId) {
+      return {
+        experiences: [],
+        pagination: query.pagination,
+        total: 0,
+      };
+    }
+
+    const where: Prisma.ExperienceWhereInput = {
+      ...query.where,
+      userId: mainUserId,
+    };
+
+    const [experiences, total] = await Promise.all([
+      prisma.experience.findMany({
+        include: EXPERIENCE_INCLUDE,
+        orderBy: query.orderBy,
+        skip: query.pagination.skip,
+        take: query.pagination.take,
+        where,
+      }),
+      prisma.experience.count({ where }),
     ]);
 
     return {

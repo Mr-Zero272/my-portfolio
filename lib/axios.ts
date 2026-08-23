@@ -1,7 +1,10 @@
+import { env } from '@/config/env';
 import axios from 'axios';
 
+const baseUrl = typeof window !== 'undefined' ? '/api' : `${env.SITE_URL}/api`;
+
 const axiosInstance = axios.create({
-  baseURL: `/api`,
+  baseURL: baseUrl,
   withCredentials: true, // proxy will handle all logic of token
   headers: {
     'Content-Type': 'application/json',

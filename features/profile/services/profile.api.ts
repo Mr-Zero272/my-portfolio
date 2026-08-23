@@ -7,6 +7,11 @@ export const profileApi = {
     return res.data?.data as ProfileWithAllRelations;
   },
 
+  getPublicProfile: async () => {
+    const res = await axiosInstance.get('/public/profile');
+    return res.data?.data as ProfileWithAllRelations;
+  },
+
   update: async (request: UpdateProfileRequest) => {
     const res = await axiosInstance.patch('/profile', request.body);
     return res.data?.data as ProfileWithAllRelations;

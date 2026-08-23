@@ -1,3 +1,4 @@
+import { getMainUserId } from '@/features/site-settings/server/main-user';
 import { ApiErrorCode, buildListQuery, parseBooleanParam, throwApiError } from '@/lib/api';
 import { requireAdmin } from '@/lib/auth-guard';
 import type { Prisma } from '@/lib/generated/prisma/client';
@@ -29,6 +30,46 @@ export const educationService = {
         where: query.where,
       }),
       prisma.education.count({ where: query.where }),
+    ]);
+
+    return {
+      educations,
+      pagination: query.pagination,
+      total,
+    };
+  },
+
+  async getPublicAll(searchParams: URLSearchParams) {
+    const mainUserId = await getMainUserId();
+
+    const query = buildListQuery<Prisma.EducationWhereInput>(searchParams, {
+      baseWhere: { isVisible: true },
+      defaultSort: { displayOrder: 'asc' },
+      searchFields: EDUCATION_SEARCH_FIELDS,
+      sortableFields: EDUCATION_SORTABLE_FIELDS,
+    });
+
+    if (!mainUserId) {
+      return {
+        educations: [],
+        pagination: query.pagination,
+        total: 0,
+      };
+    }
+
+    const where: Prisma.EducationWhereInput = {
+      ...query.where,
+      userId: mainUserId,
+    };
+
+    const [educations, total] = await Promise.all([
+      prisma.education.findMany({
+        orderBy: query.orderBy,
+        skip: query.pagination.skip,
+        take: query.pagination.take,
+        where,
+      }),
+      prisma.education.count({ where }),
     ]);
 
     return {

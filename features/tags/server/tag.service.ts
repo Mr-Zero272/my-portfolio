@@ -42,6 +42,43 @@ export const tagService = {
     };
   },
 
+  async getPublicAll(searchParams: URLSearchParams) {
+    const query = buildListQuery<Prisma.TagWhereInput>(searchParams, {
+      baseWhere: {
+        posts: { some: { post: { status: 'Published' } } },
+      },
+      searchFields: TAG_SEARCH_FIELDS,
+      sortableFields: TAG_SORTABLE_FIELDS,
+    });
+
+    const include: Prisma.TagInclude = {
+      _count: {
+        select: {
+          posts: {
+            where: { post: { status: 'Published' } },
+          },
+        },
+      },
+    };
+
+    const [tags, total] = await Promise.all([
+      prisma.tag.findMany({
+        include,
+        orderBy: query.orderBy,
+        skip: query.pagination.skip,
+        take: query.pagination.take,
+        where: query.where,
+      }),
+      prisma.tag.count({ where: query.where }),
+    ]);
+
+    return {
+      pagination: query.pagination,
+      tags,
+      total,
+    };
+  },
+
   async getBatch(headers: Headers, searchParams: URLSearchParams) {
     requireAdmin(headers);
 

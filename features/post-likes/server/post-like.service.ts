@@ -1,3 +1,4 @@
+import { getMainUserId } from '@/features/site-settings/server/main-user';
 import { ApiErrorCode, buildListQuery, throwApiError } from '@/lib/api';
 import { requireAdmin } from '@/lib/auth-guard';
 import type { Prisma } from '@/lib/generated/prisma/client';
@@ -101,6 +102,23 @@ export async function deletePostLike(headers: Headers, id: string) {
   await prisma.postLike.delete({ where: { id } });
 
   return { id };
+}
+
+export async function getPublicPostLikeCount(postId: string) {
+  const mainUserId = await getMainUserId();
+
+  const post = await prisma.post.findFirst({
+    select: { likes: true },
+    where: mainUserId
+      ? { id: postId, status: 'Published', authors: { some: { userId: mainUserId } } }
+      : { id: '__none__' },
+  });
+
+  if (!post) {
+    throwApiError(ApiErrorCode.NOT_FOUND, { message: 'Post not found.' });
+  }
+
+  return { likes: post.likes };
 }
 
 async function ensurePostLikeExists(id: string) {
