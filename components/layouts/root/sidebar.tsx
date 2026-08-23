@@ -1,22 +1,19 @@
 'use client';
-import { motion, useAnimationControls } from 'motion/react';
-import { useEffect, useMemo, useRef } from 'react';
-
 import AppLogo from '@/components/shared/logo';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { rootNavigation } from '@/constants/navigation';
 import { useRootSidebar } from '@/contexts/root-sidebar.context';
 import { cn } from '@/lib/utils';
-import { Gauge } from 'lucide-react';
+import { useClickOutside } from '@mantine/hooks';
+import { GaugeIcon } from 'lucide-react';
+import { motion, useAnimationControls } from 'motion/react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useOnClickOutside } from 'usehooks-ts';
+import { useEffect, useMemo } from 'react';
 
 export const RootSidebar = () => {
   const pathname = usePathname();
-  const sidebarRef = useRef<HTMLElement>(null!);
-
   const { isExpanded, isCollapsed, isHidden, isMobile, toggle, collapse } = useRootSidebar();
 
   const containerControls = useAnimationControls();
@@ -79,7 +76,7 @@ export const RootSidebar = () => {
     }
   };
 
-  useOnClickOutside(sidebarRef, handleClickOutside);
+  const sidebarRef = useClickOutside(handleClickOutside);
 
   return (
     <>
@@ -218,7 +215,7 @@ export const RootSidebar = () => {
           </ScrollArea>
           <div className="w-full p-3">
             <div className="cursor-pointer space-y-4 rounded-2xl bg-black p-4 transition-transform ease-in-out active:scale-95 dark:bg-white">
-              <Gauge className="size-6 text-white dark:text-black" />
+              <GaugeIcon className="size-6 text-white dark:text-black" />
               {isExpanded && (
                 <div>
                   <h3 className="font-poppins text-sm font-medium text-white dark:text-black">
@@ -263,7 +260,8 @@ const SidebarItem = ({
         className={cn(
           'flex w-full cursor-pointer place-items-center gap-3 overflow-clip rounded-md stroke-neutral-400 stroke-[0.75] p-1 text-clip text-neutral-400 transition-colors duration-100 hover:bg-[#f2f2f2] hover:stroke-black hover:text-black/80',
           {
-            'bg-primary hover:bg-primary text-white hover:text-white': active,
+            'bg-primary hover:bg-primary text-background hover:text-background [&_svg]:stroke-background':
+              active,
           },
         )}
         onClick={onClick}
@@ -285,9 +283,10 @@ const SidebarItem = ({
           <Link
             href={href}
             className={cn(
-              'flex size-11 cursor-pointer place-items-center items-center justify-center gap-3 overflow-clip rounded-full stroke-neutral-400 stroke-[0.75] p-1 text-clip text-neutral-400 transition-colors duration-100 hover:bg-[#f2f2f2] hover:stroke-black hover:text-black/80',
+              'flex size-11 cursor-pointer place-items-center items-center justify-center gap-3 overflow-clip rounded-full stroke-neutral-400 stroke-[0.75] p-1 text-clip text-neutral-400 transition-colors duration-100 hover:bg-[#f2f2f2] hover:stroke-black hover:text-black/80 [&_svg]:size-5',
               {
-                'bg-primary text-background hover:bg-primary hover:text-background': active,
+                'bg-primary text-background hover:bg-primary hover:text-background hover:[&_svg]:text-background hover:[&_svg]:stroke-background dark:[&_svg]:stroke-background':
+                  active,
               },
             )}
             onClick={onClick}
