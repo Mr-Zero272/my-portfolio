@@ -27,10 +27,14 @@ export type AggregateEducation = {
 }
 
 export type EducationAvgAggregateOutputType = {
+  gpa: number | null
+  gpaScale: number | null
   displayOrder: number | null
 }
 
 export type EducationSumAggregateOutputType = {
+  gpa: number | null
+  gpaScale: number | null
   displayOrder: number | null
 }
 
@@ -44,6 +48,8 @@ export type EducationMinAggregateOutputType = {
   endDate: Date | null
   description: string | null
   location: string | null
+  gpa: number | null
+  gpaScale: number | null
   displayOrder: number | null
   isVisible: boolean | null
   createdAt: Date | null
@@ -60,6 +66,8 @@ export type EducationMaxAggregateOutputType = {
   endDate: Date | null
   description: string | null
   location: string | null
+  gpa: number | null
+  gpaScale: number | null
   displayOrder: number | null
   isVisible: boolean | null
   createdAt: Date | null
@@ -76,6 +84,8 @@ export type EducationCountAggregateOutputType = {
   endDate: number
   description: number
   location: number
+  gpa: number
+  gpaScale: number
   displayOrder: number
   isVisible: number
   createdAt: number
@@ -85,10 +95,14 @@ export type EducationCountAggregateOutputType = {
 
 
 export type EducationAvgAggregateInputType = {
+  gpa?: true
+  gpaScale?: true
   displayOrder?: true
 }
 
 export type EducationSumAggregateInputType = {
+  gpa?: true
+  gpaScale?: true
   displayOrder?: true
 }
 
@@ -102,6 +116,8 @@ export type EducationMinAggregateInputType = {
   endDate?: true
   description?: true
   location?: true
+  gpa?: true
+  gpaScale?: true
   displayOrder?: true
   isVisible?: true
   createdAt?: true
@@ -118,6 +134,8 @@ export type EducationMaxAggregateInputType = {
   endDate?: true
   description?: true
   location?: true
+  gpa?: true
+  gpaScale?: true
   displayOrder?: true
   isVisible?: true
   createdAt?: true
@@ -134,6 +152,8 @@ export type EducationCountAggregateInputType = {
   endDate?: true
   description?: true
   location?: true
+  gpa?: true
+  gpaScale?: true
   displayOrder?: true
   isVisible?: true
   createdAt?: true
@@ -237,6 +257,8 @@ export type EducationGroupByOutputType = {
   endDate: Date | null
   description: string | null
   location: string | null
+  gpa: number | null
+  gpaScale: number | null
   displayOrder: number
   isVisible: boolean
   createdAt: Date
@@ -276,6 +298,8 @@ export type EducationWhereInput = {
   endDate?: Prisma.DateTimeNullableFilter<"Education"> | Date | string | null
   description?: Prisma.StringNullableFilter<"Education"> | string | null
   location?: Prisma.StringNullableFilter<"Education"> | string | null
+  gpa?: Prisma.FloatNullableFilter<"Education"> | number | null
+  gpaScale?: Prisma.IntNullableFilter<"Education"> | number | null
   displayOrder?: Prisma.IntFilter<"Education"> | number
   isVisible?: Prisma.BoolFilter<"Education"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Education"> | Date | string
@@ -293,6 +317,8 @@ export type EducationOrderByWithRelationInput = {
   endDate?: Prisma.SortOrder
   description?: Prisma.SortOrder
   location?: Prisma.SortOrder
+  gpa?: Prisma.SortOrder
+  gpaScale?: Prisma.SortOrder
   displayOrder?: Prisma.SortOrder
   isVisible?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -313,6 +339,8 @@ export type EducationWhereUniqueInput = Prisma.AtLeast<{
   endDate?: Prisma.DateTimeNullableFilter<"Education"> | Date | string | null
   description?: Prisma.StringNullableFilter<"Education"> | string | null
   location?: Prisma.StringNullableFilter<"Education"> | string | null
+  gpa?: Prisma.FloatNullableFilter<"Education"> | number | null
+  gpaScale?: Prisma.IntNullableFilter<"Education"> | number | null
   displayOrder?: Prisma.IntFilter<"Education"> | number
   isVisible?: Prisma.BoolFilter<"Education"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Education"> | Date | string
@@ -330,6 +358,8 @@ export type EducationOrderByWithAggregationInput = {
   endDate?: Prisma.SortOrder
   description?: Prisma.SortOrder
   location?: Prisma.SortOrder
+  gpa?: Prisma.SortOrder
+  gpaScale?: Prisma.SortOrder
   displayOrder?: Prisma.SortOrder
   isVisible?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -354,6 +384,8 @@ export type EducationScalarWhereWithAggregatesInput = {
   endDate?: Prisma.DateTimeNullableWithAggregatesFilter<"Education"> | Date | string | null
   description?: Prisma.StringNullableWithAggregatesFilter<"Education"> | string | null
   location?: Prisma.StringNullableWithAggregatesFilter<"Education"> | string | null
+  gpa?: Prisma.FloatNullableWithAggregatesFilter<"Education"> | number | null
+  gpaScale?: Prisma.IntNullableWithAggregatesFilter<"Education"> | number | null
   displayOrder?: Prisma.IntWithAggregatesFilter<"Education"> | number
   isVisible?: Prisma.BoolWithAggregatesFilter<"Education"> | boolean
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Education"> | Date | string
@@ -369,6 +401,8 @@ export type EducationCreateInput = {
   endDate?: Date | string | null
   description?: string | null
   location?: string | null
+  gpa?: number | null
+  gpaScale?: number | null
   displayOrder?: number
   isVisible?: boolean
   createdAt?: Date | string
@@ -386,6 +420,8 @@ export type EducationUncheckedCreateInput = {
   endDate?: Date | string | null
   description?: string | null
   location?: string | null
+  gpa?: number | null
+  gpaScale?: number | null
   displayOrder?: number
   isVisible?: boolean
   createdAt?: Date | string
@@ -400,6 +436,8 @@ export type EducationUpdateInput = {
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gpa?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  gpaScale?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   displayOrder?: Prisma.IntFieldUpdateOperationsInput | number
   isVisible?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -416,6 +454,8 @@ export type EducationUncheckedUpdateInput = {
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gpa?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  gpaScale?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   displayOrder?: Prisma.IntFieldUpdateOperationsInput | number
   isVisible?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -432,6 +472,8 @@ export type EducationCreateManyInput = {
   endDate?: Date | string | null
   description?: string | null
   location?: string | null
+  gpa?: number | null
+  gpaScale?: number | null
   displayOrder?: number
   isVisible?: boolean
   createdAt?: Date | string
@@ -446,6 +488,8 @@ export type EducationUpdateManyMutationInput = {
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gpa?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  gpaScale?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   displayOrder?: Prisma.IntFieldUpdateOperationsInput | number
   isVisible?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -461,6 +505,8 @@ export type EducationUncheckedUpdateManyInput = {
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gpa?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  gpaScale?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   displayOrder?: Prisma.IntFieldUpdateOperationsInput | number
   isVisible?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -487,6 +533,8 @@ export type EducationCountOrderByAggregateInput = {
   endDate?: Prisma.SortOrder
   description?: Prisma.SortOrder
   location?: Prisma.SortOrder
+  gpa?: Prisma.SortOrder
+  gpaScale?: Prisma.SortOrder
   displayOrder?: Prisma.SortOrder
   isVisible?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -494,6 +542,8 @@ export type EducationCountOrderByAggregateInput = {
 }
 
 export type EducationAvgOrderByAggregateInput = {
+  gpa?: Prisma.SortOrder
+  gpaScale?: Prisma.SortOrder
   displayOrder?: Prisma.SortOrder
 }
 
@@ -507,6 +557,8 @@ export type EducationMaxOrderByAggregateInput = {
   endDate?: Prisma.SortOrder
   description?: Prisma.SortOrder
   location?: Prisma.SortOrder
+  gpa?: Prisma.SortOrder
+  gpaScale?: Prisma.SortOrder
   displayOrder?: Prisma.SortOrder
   isVisible?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -523,6 +575,8 @@ export type EducationMinOrderByAggregateInput = {
   endDate?: Prisma.SortOrder
   description?: Prisma.SortOrder
   location?: Prisma.SortOrder
+  gpa?: Prisma.SortOrder
+  gpaScale?: Prisma.SortOrder
   displayOrder?: Prisma.SortOrder
   isVisible?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -530,6 +584,8 @@ export type EducationMinOrderByAggregateInput = {
 }
 
 export type EducationSumOrderByAggregateInput = {
+  gpa?: Prisma.SortOrder
+  gpaScale?: Prisma.SortOrder
   displayOrder?: Prisma.SortOrder
 }
 
@@ -575,6 +631,15 @@ export type EducationUncheckedUpdateManyWithoutUserNestedInput = {
   deleteMany?: Prisma.EducationScalarWhereInput | Prisma.EducationScalarWhereInput[]
 }
 
+export type NullableFloatFieldUpdateOperationsInput = {
+  set?: number | null
+  increment?: number
+  decrement?: number
+  multiply?: number
+  divide?: number
+  unset?: boolean
+}
+
 export type IntFieldUpdateOperationsInput = {
   set?: number
   increment?: number
@@ -592,6 +657,8 @@ export type EducationCreateWithoutUserInput = {
   endDate?: Date | string | null
   description?: string | null
   location?: string | null
+  gpa?: number | null
+  gpaScale?: number | null
   displayOrder?: number
   isVisible?: boolean
   createdAt?: Date | string
@@ -607,6 +674,8 @@ export type EducationUncheckedCreateWithoutUserInput = {
   endDate?: Date | string | null
   description?: string | null
   location?: string | null
+  gpa?: number | null
+  gpaScale?: number | null
   displayOrder?: number
   isVisible?: boolean
   createdAt?: Date | string
@@ -651,6 +720,8 @@ export type EducationScalarWhereInput = {
   endDate?: Prisma.DateTimeNullableFilter<"Education"> | Date | string | null
   description?: Prisma.StringNullableFilter<"Education"> | string | null
   location?: Prisma.StringNullableFilter<"Education"> | string | null
+  gpa?: Prisma.FloatNullableFilter<"Education"> | number | null
+  gpaScale?: Prisma.IntNullableFilter<"Education"> | number | null
   displayOrder?: Prisma.IntFilter<"Education"> | number
   isVisible?: Prisma.BoolFilter<"Education"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Education"> | Date | string
@@ -666,6 +737,8 @@ export type EducationCreateManyUserInput = {
   endDate?: Date | string | null
   description?: string | null
   location?: string | null
+  gpa?: number | null
+  gpaScale?: number | null
   displayOrder?: number
   isVisible?: boolean
   createdAt?: Date | string
@@ -680,6 +753,8 @@ export type EducationUpdateWithoutUserInput = {
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gpa?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  gpaScale?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   displayOrder?: Prisma.IntFieldUpdateOperationsInput | number
   isVisible?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -694,6 +769,8 @@ export type EducationUncheckedUpdateWithoutUserInput = {
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gpa?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  gpaScale?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   displayOrder?: Prisma.IntFieldUpdateOperationsInput | number
   isVisible?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -708,6 +785,8 @@ export type EducationUncheckedUpdateManyWithoutUserInput = {
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gpa?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  gpaScale?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   displayOrder?: Prisma.IntFieldUpdateOperationsInput | number
   isVisible?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -726,6 +805,8 @@ export type EducationSelect<ExtArgs extends runtime.Types.Extensions.InternalArg
   endDate?: boolean
   description?: boolean
   location?: boolean
+  gpa?: boolean
+  gpaScale?: boolean
   displayOrder?: boolean
   isVisible?: boolean
   createdAt?: boolean
@@ -745,13 +826,15 @@ export type EducationSelectScalar = {
   endDate?: boolean
   description?: boolean
   location?: boolean
+  gpa?: boolean
+  gpaScale?: boolean
   displayOrder?: boolean
   isVisible?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type EducationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "institution" | "degree" | "fieldOfStudy" | "startDate" | "endDate" | "description" | "location" | "displayOrder" | "isVisible" | "createdAt" | "updatedAt", ExtArgs["result"]["education"]>
+export type EducationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "institution" | "degree" | "fieldOfStudy" | "startDate" | "endDate" | "description" | "location" | "gpa" | "gpaScale" | "displayOrder" | "isVisible" | "createdAt" | "updatedAt", ExtArgs["result"]["education"]>
 export type EducationInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
@@ -771,6 +854,8 @@ export type $EducationPayload<ExtArgs extends runtime.Types.Extensions.InternalA
     endDate: Date | null
     description: string | null
     location: string | null
+    gpa: number | null
+    gpaScale: number | null
     displayOrder: number
     isVisible: boolean
     createdAt: Date
@@ -1177,6 +1262,8 @@ export interface EducationFieldRefs {
   readonly endDate: Prisma.FieldRef<"Education", 'DateTime'>
   readonly description: Prisma.FieldRef<"Education", 'String'>
   readonly location: Prisma.FieldRef<"Education", 'String'>
+  readonly gpa: Prisma.FieldRef<"Education", 'Float'>
+  readonly gpaScale: Prisma.FieldRef<"Education", 'Int'>
   readonly displayOrder: Prisma.FieldRef<"Education", 'Int'>
   readonly isVisible: Prisma.FieldRef<"Education", 'Boolean'>
   readonly createdAt: Prisma.FieldRef<"Education", 'DateTime'>

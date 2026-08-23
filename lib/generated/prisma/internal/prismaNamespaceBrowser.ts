@@ -171,6 +171,8 @@ export const EducationScalarFieldEnum = {
   endDate: 'endDate',
   description: 'description',
   location: 'location',
+  gpa: 'gpa',
+  gpaScale: 'gpaScale',
   displayOrder: 'displayOrder',
   isVisible: 'isVisible',
   createdAt: 'createdAt',

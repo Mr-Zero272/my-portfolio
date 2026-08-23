@@ -188,6 +188,8 @@ model Education {
   endDate      DateTime?
   description  String?
   location     String?
+  gpa          Float?
+  gpaScale     Int?
   displayOrder Int       @default(0)
   isVisible    Boolean   @default(true)
   createdAt    DateTime  @default(now())
