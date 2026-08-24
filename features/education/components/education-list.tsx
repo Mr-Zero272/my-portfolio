@@ -3,6 +3,7 @@ import StateWrapper from '@/components/shared/state-wrapper';
 import { Button } from '@/components/ui/button';
 import { Education } from '@/lib/generated/prisma/client';
 import { GraduationCapIcon, PlusIcon } from 'lucide-react';
+import { useMemo } from 'react';
 import { EducationCard, EducationCardSkeleton } from './education-card';
 
 type BaseProps = {
@@ -27,9 +28,17 @@ type Props = BaseProps & (EditProps | DefaultProps);
 export const EducationList = (props: Props) => {
   const { data, isLoading, error, mode = 'default' } = props;
   const { onCreate, onEdit, onDelete } = props as EditProps;
+
+  const displayEducations = useMemo(() => {
+    if (!data) return [];
+    return data
+      .filter((education) => education.isVisible)
+      .sort((a, b) => b.displayOrder - a.displayOrder);
+  }, [data]);
+
   return (
     <StateWrapper
-      data={data}
+      data={displayEducations}
       isLoading={isLoading}
       error={error}
       fallbackLoading={
