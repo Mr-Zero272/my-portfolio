@@ -1,16 +1,12 @@
 'use client';
 
-import { EducationList } from '@/features/education/components';
-import { useEducations } from '@/features/education/hooks';
 import { cn } from '@/lib/utils';
 import { parseAsString, useQueryState } from 'nuqs';
 import { useCallback } from 'react';
-import { AboutMeTabs, TabType } from '../components';
+import { AboutMeTabs, AboutTab, EducationTab, TabType } from '../components';
 
 export const AboutMePage = () => {
   const [activeTab, setActiveTab] = useQueryState('tab', parseAsString.withDefault('about'));
-
-  const { data, isLoading: isLoadingEducations, error: errorEducations } = useEducations();
 
   const handleChangeTab = useCallback(
     (tab: string) => {
@@ -46,22 +42,8 @@ export const AboutMePage = () => {
         </div>
       </article>
       <article className="flex-1">
-        {activeTab === 'about' && renderDevelopingTab()}
-        {activeTab === 'education' && (
-          <div className="mt-5">
-            <h1 className="text-2xl font-bold tracking-wider">Education</h1>
-            <p className="mb-7 text-gray-500">
-              Below are details of my university studies as well as information about the short
-              courses I attended.
-            </p>
-            <EducationList
-              data={data?.list ?? []}
-              isLoading={isLoadingEducations}
-              error={errorEducations}
-              mode="default"
-            />
-          </div>
-        )}
+        {activeTab === 'about' && <AboutTab />}
+        {activeTab === 'education' && <EducationTab />}
         {activeTab === 'skills' && renderDevelopingTab()}
         {activeTab === 'experiences' && renderDevelopingTab()}
       </article>

@@ -3,14 +3,22 @@ import { profileApi, profileQueryKeys } from '../../services';
 import { ProfileWithAllRelations } from '../../types';
 
 type UseProfileMeOptions = Omit<
-  UseQueryOptions<ProfileWithAllRelations, Error, ProfileWithAllRelations, ReturnType<typeof profileQueryKeys.me>>,
+  UseQueryOptions<
+    ProfileWithAllRelations,
+    Error,
+    ProfileWithAllRelations,
+    ReturnType<typeof profileQueryKeys.me | typeof profileQueryKeys.public>
+  >,
   'queryKey' | 'queryFn'
->;
+> & {
+  isPublic?: boolean;
+};
 
 export const useProfileMe = (options?: UseProfileMeOptions) => {
+  const isPublic = options?.isPublic ?? false;
   return useQuery({
-    queryKey: profileQueryKeys.me(),
-    queryFn: () => profileApi.getMe(),
+    queryKey: isPublic ? profileQueryKeys.public() : profileQueryKeys.me(),
+    queryFn: () => (isPublic ? profileApi.getPublicProfile() : profileApi.getMe()),
     ...options,
   });
 };
