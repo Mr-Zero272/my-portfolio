@@ -14,8 +14,8 @@ import {
   CalendarDaysIcon,
   Edit2Icon,
   GraduationCapIcon,
-  HashIcon,
   MapPinIcon,
+  MedalIcon,
   TrashIcon,
 } from 'lucide-react';
 import React from 'react';
@@ -83,8 +83,8 @@ const EducationCardContent = ({
     <Card>
       <CardHeader>
         <div className="flex items-center gap-2">
-          <div className="bg-muted flex size-10 items-center justify-center rounded-md">
-            <GraduationCapIcon className="size-4" />
+          <div className="bg-muted flex size-10 items-center justify-center rounded-lg">
+            <GraduationCapIcon className="size-5" />
           </div>
           <div className="">
             <CardTitle>{education.institution}</CardTitle>
@@ -97,7 +97,7 @@ const EducationCardContent = ({
         <div className="grid grid-cols-1 gap-1 sm:grid-cols-2">
           <div className="flex items-center gap-2">
             <CalendarDaysIcon className="size-4" />
-            <div className="text-muted-foreground text-sm">
+            <div className="text-sm">
               {formatDate(education.startDate, 'MMM yyyy')} -{' '}
               {education?.endDate ? formatDate(education.endDate, 'MMM yyyy') : 'Present'}
             </div>
@@ -105,21 +105,21 @@ const EducationCardContent = ({
           {education.location && (
             <div className="flex items-center gap-2">
               <MapPinIcon className="size-4" />
-              <div className="text-muted-foreground text-sm">{education.location}</div>
+              <div className="text-sm">{education.location}</div>
             </div>
           )}
           {education.gpa && (
             <div className="flex items-center gap-2">
-              <HashIcon className="size-4" />
-              <div className="text-muted-foreground text-sm">
-                GPA {education.gpa}/{education.gpaScale}
+              <MedalIcon className="size-4" />
+              <div className="text-sm">
+                GPA <span className="text-primary font-semibold">{education.gpa}</span>/
+                {education.gpaScale}
               </div>
             </div>
           )}
         </div>
         {education.description && (
           <div className="mt-2">
-            <div className="text-sm font-medium">Description</div>
             <p className="text-muted-foreground text-sm">{education.description}</p>
           </div>
         )}
