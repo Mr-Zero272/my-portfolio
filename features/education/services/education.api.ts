@@ -13,7 +13,7 @@ import {
 export const educationApi = {
   getAll: async (request?: GetEducationsRequest) => {
     const queryParams = request?.query ? normalizeQueryParams(request?.query) : undefined;
-    const res = await axiosInstance.get('/education', {
+    const res = await axiosInstance.get('/public/education', {
       params: queryParams,
     });
 

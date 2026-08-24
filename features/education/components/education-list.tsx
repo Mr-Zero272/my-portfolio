@@ -3,7 +3,7 @@ import StateWrapper from '@/components/shared/state-wrapper';
 import { Button } from '@/components/ui/button';
 import { Education } from '@/lib/generated/prisma/client';
 import { GraduationCapIcon, PlusIcon } from 'lucide-react';
-import { EducationCard } from './education-card';
+import { EducationCard, EducationCardSkeleton } from './education-card';
 
 type BaseProps = {
   data: Education[];
@@ -32,6 +32,13 @@ export const EducationList = (props: Props) => {
       data={data}
       isLoading={isLoading}
       error={error}
+      fallbackLoading={
+        <div className="space-y-2">
+          {Array.from({ length: 3 }).map((_, index) => (
+            <EducationCardSkeleton key={index} />
+          ))}
+        </div>
+      }
       fallbackEmpty={
         <StateUI
           icon={<GraduationCapIcon />}
@@ -47,6 +54,7 @@ export const EducationList = (props: Props) => {
           }
         />
       }
+      contentClassName="space-y-2"
     >
       {(educations) => {
         return educations.map((education) => {

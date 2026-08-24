@@ -94,7 +94,7 @@ const EducationCardContent = ({
         <CardAction>{actions}</CardAction>
       </CardHeader>
       <CardContent>
-        <div className="grid grid-cols-2 gap-1">
+        <div className="grid grid-cols-1 gap-1 sm:grid-cols-2">
           <div className="flex items-center gap-2">
             <CalendarDaysIcon className="size-4" />
             <div className="text-muted-foreground text-sm">
@@ -139,30 +139,32 @@ export const EducationCardSkeleton = () => {
         </div>
       </CardHeader>
       <CardContent>
-        <div className="flex items-center gap-2">
-          <Skeleton className="h-4 w-4" />
-          <div className="text-muted-foreground text-sm">
-            <Skeleton className="h-4 w-30" />
+        <div className="grid grid-cols-1 gap-1 sm:grid-cols-2">
+          <div className="flex items-center gap-2">
+            <Skeleton className="h-4 w-4" />
+            <div className="text-muted-foreground text-sm">
+              <Skeleton className="h-4 w-30" />
+            </div>
+          </div>
+          <div className="flex items-center gap-2">
+            <Skeleton className="h-4 w-4" />
+            <div className="text-muted-foreground text-sm">
+              <Skeleton className="h-4 w-30" />
+            </div>
+          </div>
+          <div className="flex items-center gap-2">
+            <Skeleton className="h-4 w-4" />
+            <div className="text-muted-foreground text-sm">
+              <Skeleton className="h-4 w-30" />
+            </div>
           </div>
         </div>
-        <div className="flex items-center gap-2">
-          <Skeleton className="h-4 w-4" />
-          <div className="text-muted-foreground text-sm">
-            <Skeleton className="h-4 w-30" />
-          </div>
-        </div>
-        <div className="flex items-center gap-2">
-          <Skeleton className="h-4 w-4" />
-          <div className="text-muted-foreground text-sm">
-            <Skeleton className="h-4 w-30" />
-          </div>
-        </div>
-        <div className="flex gap-2">
+        <div className="mt-2 space-y-2">
           <div className="text-sm font-medium">
             <Skeleton className="h-4 w-20" />
           </div>
           <div className="text-muted-foreground text-sm">
-            <Skeleton className="h-4 w-30" />
+            <Skeleton className="h-4 w-72" />
           </div>
         </div>
       </CardContent>
