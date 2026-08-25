@@ -120,6 +120,11 @@ export type Comment = Prisma.CommentModel
  */
 export type Project = Prisma.ProjectModel
 /**
+ * Model ProjectImage
+ * 
+ */
+export type ProjectImage = Prisma.ProjectImageModel
+/**
  * Model Skill
  * 
  */

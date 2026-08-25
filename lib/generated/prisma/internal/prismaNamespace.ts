@@ -404,6 +404,7 @@ export const ModelName = {
   PostLike: 'PostLike',
   Comment: 'Comment',
   Project: 'Project',
+  ProjectImage: 'ProjectImage',
   Skill: 'Skill',
   SocialLink: 'SocialLink',
   Tag: 'Tag',
@@ -423,7 +424,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "session" | "account" | "verification" | "profile" | "education" | "experience" | "galleryImage" | "post" | "postAuthor" | "postTag" | "postLike" | "comment" | "project" | "skill" | "socialLink" | "tag" | "siteSetting"
+    modelProps: "user" | "session" | "account" | "verification" | "profile" | "education" | "experience" | "galleryImage" | "post" | "postAuthor" | "postTag" | "postLike" | "comment" | "project" | "projectImage" | "skill" | "socialLink" | "tag" | "siteSetting"
     txIsolationLevel: never
   }
   model: {
@@ -1463,6 +1464,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    ProjectImage: {
+      payload: Prisma.$ProjectImagePayload<ExtArgs>
+      fields: Prisma.ProjectImageFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.ProjectImageFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProjectImagePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.ProjectImageFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProjectImagePayload>
+        }
+        findFirst: {
+          args: Prisma.ProjectImageFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProjectImagePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.ProjectImageFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProjectImagePayload>
+        }
+        findMany: {
+          args: Prisma.ProjectImageFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProjectImagePayload>[]
+        }
+        create: {
+          args: Prisma.ProjectImageCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProjectImagePayload>
+        }
+        createMany: {
+          args: Prisma.ProjectImageCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        delete: {
+          args: Prisma.ProjectImageDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProjectImagePayload>
+        }
+        update: {
+          args: Prisma.ProjectImageUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProjectImagePayload>
+        }
+        deleteMany: {
+          args: Prisma.ProjectImageDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.ProjectImageUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        upsert: {
+          args: Prisma.ProjectImageUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProjectImagePayload>
+        }
+        aggregate: {
+          args: Prisma.ProjectImageAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateProjectImage>
+        }
+        groupBy: {
+          args: Prisma.ProjectImageGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ProjectImageGroupByOutputType>[]
+        }
+        findRaw: {
+          args: Prisma.ProjectImageFindRawArgs<ExtArgs>
+          result: Prisma.JsonObject
+        }
+        aggregateRaw: {
+          args: Prisma.ProjectImageAggregateRawArgs<ExtArgs>
+          result: Prisma.JsonObject
+        }
+        count: {
+          args: Prisma.ProjectImageCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ProjectImageCountAggregateOutputType> | number
+        }
+      }
+    }
     Skill: {
       payload: Prisma.$SkillPayload<ExtArgs>
       fields: Prisma.SkillFieldRefs
@@ -1994,8 +2069,6 @@ export const ProjectScalarFieldEnum = {
   responsibilities: 'responsibilities',
   type: 'type',
   status: 'status',
-  images: 'images',
-  thumbnailImage: 'thumbnailImage',
   demoUrl: 'demoUrl',
   sourceCodeUrl: 'sourceCodeUrl',
   technologies: 'technologies',
@@ -2014,14 +2087,23 @@ export const ProjectScalarFieldEnum = {
 export type ProjectScalarFieldEnum = (typeof ProjectScalarFieldEnum)[keyof typeof ProjectScalarFieldEnum]
 
 
+export const ProjectImageScalarFieldEnum = {
+  id: 'id',
+  projectId: 'projectId',
+  imageId: 'imageId',
+  createdAt: 'createdAt'
+} as const
+
+export type ProjectImageScalarFieldEnum = (typeof ProjectImageScalarFieldEnum)[keyof typeof ProjectImageScalarFieldEnum]
+
+
 export const SkillScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
   name: 'name',
   proficiency: 'proficiency',
   category: 'category',
-  icon: 'icon',
-  iconColor: 'iconColor',
+  iconId: 'iconId',
   description: 'description',
   yearsOfExperience: 'yearsOfExperience',
   displayOrder: 'displayOrder',
@@ -2369,6 +2451,7 @@ export type GlobalOmitConfig = {
   postLike?: Prisma.PostLikeOmit
   comment?: Prisma.CommentOmit
   project?: Prisma.ProjectOmit
+  projectImage?: Prisma.ProjectImageOmit
   skill?: Prisma.SkillOmit
   socialLink?: Prisma.SocialLinkOmit
   tag?: Prisma.TagOmit

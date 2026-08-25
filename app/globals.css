@@ -101,7 +101,7 @@
 
   --pullcord-top: 0px; /* anchor offset from the top */
   --pullcord-right: 0px; /* distance from the right edge */
-  --pullcord-z: 5; /* wrapper z-index */
+  --pullcord-z: 100; /* wrapper z-index */
 }
 
 .dark {

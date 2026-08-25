@@ -1,3 +1,4 @@
+import { Prisma } from '@/lib/generated/prisma/client';
 import { ZodError } from 'zod';
 import { ApiErrorCode, AppError, isAppError } from './errors';
 
@@ -104,6 +105,18 @@ export function handleApiError(error: unknown) {
 
   if (error instanceof SyntaxError) {
     return apiError(new AppError(ApiErrorCode.BAD_REQUEST, { message: 'Malformed JSON body' }));
+  }
+
+  if (error instanceof Prisma.PrismaClientKnownRequestError) {
+    if (error.code === 'P2002') {
+      return apiError(
+        new AppError(ApiErrorCode.CONFLICT, { message: 'A record with this value already exists.' }),
+      );
+    }
+
+    if (error.code === 'P2025') {
+      return apiError(new AppError(ApiErrorCode.NOT_FOUND));
+    }
   }
 
   return apiError(new AppError(ApiErrorCode.INTERNAL_SERVER_ERROR));

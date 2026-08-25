@@ -236,6 +236,8 @@ model GalleryImage {
   profileOgImage       Profile[]  @relation("ProfileOgImage")
   profileHeroImage     Profile[]  @relation("ProfileHeroImage")
   experienceCompanyLogo Experience[] @relation("ExperienceCompanyLogo")
+  projectImages        ProjectImage[] @relation("ProjectImages")
+  skillIcons           Skill[]        @relation("SkillIcon")
 
   @@index([userCreated])
   @@map("gallery")
@@ -344,8 +346,7 @@ model Project {
   responsibilities String?
   type             ProjectType   @default(website)
   status           ProjectStatus @default(developing)
-  images           String[]      @default([])
-  thumbnailImage   String?
+  images           ProjectImage[]
   demoUrl          String?
   sourceCodeUrl    String?
   technologies     String[]      @default([])
@@ -367,6 +368,20 @@ model Project {
   @@map("project")
 }
 
+model ProjectImage {
+  id        String       @id @default(cuid()) @map("_id")
+  projectId String
+  project   Project      @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  imageId   String
+  image     GalleryImage @relation("ProjectImages", fields: [imageId], references: [id], onDelete: Cascade)
+  createdAt DateTime     @default(now())
+
+  @@unique([projectId, imageId])
+  @@index([projectId])
+  @@index([imageId])
+  @@map("projectImage")
+}
+
 model Skill {
   id                String           @id @default(cuid()) @map("_id")
   userId            String
@@ -374,8 +389,8 @@ model Skill {
   name              String
   proficiency       ProficiencyLevel
   category          SkillCategory
-  icon              String?
-  iconColor         String?
+  iconId            String?
+  icon              GalleryImage? @relation("SkillIcon", fields: [iconId], references: [id], onDelete: SetNull)
   description       String?
   yearsOfExperience Int?
   displayOrder      Int              @default(0)

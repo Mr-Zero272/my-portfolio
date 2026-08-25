@@ -63,6 +63,7 @@ export const ModelName = {
   PostLike: 'PostLike',
   Comment: 'Comment',
   Project: 'Project',
+  ProjectImage: 'ProjectImage',
   Skill: 'Skill',
   SocialLink: 'SocialLink',
   Tag: 'Tag',
@@ -293,8 +294,6 @@ export const ProjectScalarFieldEnum = {
   responsibilities: 'responsibilities',
   type: 'type',
   status: 'status',
-  images: 'images',
-  thumbnailImage: 'thumbnailImage',
   demoUrl: 'demoUrl',
   sourceCodeUrl: 'sourceCodeUrl',
   technologies: 'technologies',
@@ -313,14 +312,23 @@ export const ProjectScalarFieldEnum = {
 export type ProjectScalarFieldEnum = (typeof ProjectScalarFieldEnum)[keyof typeof ProjectScalarFieldEnum]
 
 
+export const ProjectImageScalarFieldEnum = {
+  id: 'id',
+  projectId: 'projectId',
+  imageId: 'imageId',
+  createdAt: 'createdAt'
+} as const
+
+export type ProjectImageScalarFieldEnum = (typeof ProjectImageScalarFieldEnum)[keyof typeof ProjectImageScalarFieldEnum]
+
+
 export const SkillScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
   name: 'name',
   proficiency: 'proficiency',
   category: 'category',
-  icon: 'icon',
-  iconColor: 'iconColor',
+  iconId: 'iconId',
   description: 'description',
   yearsOfExperience: 'yearsOfExperience',
   displayOrder: 'displayOrder',

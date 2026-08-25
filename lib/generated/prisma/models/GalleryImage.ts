@@ -253,6 +253,8 @@ export type GalleryImageWhereInput = {
   profileOgImage?: Prisma.ProfileListRelationFilter
   profileHeroImage?: Prisma.ProfileListRelationFilter
   experienceCompanyLogo?: Prisma.ExperienceListRelationFilter
+  projectImages?: Prisma.ProjectImageListRelationFilter
+  skillIcons?: Prisma.SkillListRelationFilter
 }
 
 export type GalleryImageOrderByWithRelationInput = {
@@ -270,6 +272,8 @@ export type GalleryImageOrderByWithRelationInput = {
   profileOgImage?: Prisma.ProfileOrderByRelationAggregateInput
   profileHeroImage?: Prisma.ProfileOrderByRelationAggregateInput
   experienceCompanyLogo?: Prisma.ExperienceOrderByRelationAggregateInput
+  projectImages?: Prisma.ProjectImageOrderByRelationAggregateInput
+  skillIcons?: Prisma.SkillOrderByRelationAggregateInput
 }
 
 export type GalleryImageWhereUniqueInput = Prisma.AtLeast<{
@@ -290,6 +294,8 @@ export type GalleryImageWhereUniqueInput = Prisma.AtLeast<{
   profileOgImage?: Prisma.ProfileListRelationFilter
   profileHeroImage?: Prisma.ProfileListRelationFilter
   experienceCompanyLogo?: Prisma.ExperienceListRelationFilter
+  projectImages?: Prisma.ProjectImageListRelationFilter
+  skillIcons?: Prisma.SkillListRelationFilter
 }, "id">
 
 export type GalleryImageOrderByWithAggregationInput = {
@@ -338,6 +344,8 @@ export type GalleryImageCreateInput = {
   profileOgImage?: Prisma.ProfileCreateNestedManyWithoutOgImageInput
   profileHeroImage?: Prisma.ProfileCreateNestedManyWithoutHeroImageInput
   experienceCompanyLogo?: Prisma.ExperienceCreateNestedManyWithoutCompanyLogoInput
+  projectImages?: Prisma.ProjectImageCreateNestedManyWithoutImageInput
+  skillIcons?: Prisma.SkillCreateNestedManyWithoutIconInput
 }
 
 export type GalleryImageUncheckedCreateInput = {
@@ -354,6 +362,8 @@ export type GalleryImageUncheckedCreateInput = {
   profileOgImage?: Prisma.ProfileUncheckedCreateNestedManyWithoutOgImageInput
   profileHeroImage?: Prisma.ProfileUncheckedCreateNestedManyWithoutHeroImageInput
   experienceCompanyLogo?: Prisma.ExperienceUncheckedCreateNestedManyWithoutCompanyLogoInput
+  projectImages?: Prisma.ProjectImageUncheckedCreateNestedManyWithoutImageInput
+  skillIcons?: Prisma.SkillUncheckedCreateNestedManyWithoutIconInput
 }
 
 export type GalleryImageUpdateInput = {
@@ -369,6 +379,8 @@ export type GalleryImageUpdateInput = {
   profileOgImage?: Prisma.ProfileUpdateManyWithoutOgImageNestedInput
   profileHeroImage?: Prisma.ProfileUpdateManyWithoutHeroImageNestedInput
   experienceCompanyLogo?: Prisma.ExperienceUpdateManyWithoutCompanyLogoNestedInput
+  projectImages?: Prisma.ProjectImageUpdateManyWithoutImageNestedInput
+  skillIcons?: Prisma.SkillUpdateManyWithoutIconNestedInput
 }
 
 export type GalleryImageUncheckedUpdateInput = {
@@ -384,6 +396,8 @@ export type GalleryImageUncheckedUpdateInput = {
   profileOgImage?: Prisma.ProfileUncheckedUpdateManyWithoutOgImageNestedInput
   profileHeroImage?: Prisma.ProfileUncheckedUpdateManyWithoutHeroImageNestedInput
   experienceCompanyLogo?: Prisma.ExperienceUncheckedUpdateManyWithoutCompanyLogoNestedInput
+  projectImages?: Prisma.ProjectImageUncheckedUpdateManyWithoutImageNestedInput
+  skillIcons?: Prisma.SkillUncheckedUpdateManyWithoutIconNestedInput
 }
 
 export type GalleryImageCreateManyInput = {
@@ -476,6 +490,11 @@ export type GalleryImageMinOrderByAggregateInput = {
 
 export type GalleryImageSumOrderByAggregateInput = {
   size?: Prisma.SortOrder
+}
+
+export type GalleryImageScalarRelationFilter = {
+  is?: Prisma.GalleryImageWhereInput
+  isNot?: Prisma.GalleryImageWhereInput
 }
 
 export type GalleryImageCreateNestedManyWithoutUserInput = {
@@ -584,6 +603,36 @@ export type GalleryImageUpdateOneWithoutPostsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.GalleryImageUpdateToOneWithWhereWithoutPostsInput, Prisma.GalleryImageUpdateWithoutPostsInput>, Prisma.GalleryImageUncheckedUpdateWithoutPostsInput>
 }
 
+export type GalleryImageCreateNestedOneWithoutProjectImagesInput = {
+  create?: Prisma.XOR<Prisma.GalleryImageCreateWithoutProjectImagesInput, Prisma.GalleryImageUncheckedCreateWithoutProjectImagesInput>
+  connectOrCreate?: Prisma.GalleryImageCreateOrConnectWithoutProjectImagesInput
+  connect?: Prisma.GalleryImageWhereUniqueInput
+}
+
+export type GalleryImageUpdateOneRequiredWithoutProjectImagesNestedInput = {
+  create?: Prisma.XOR<Prisma.GalleryImageCreateWithoutProjectImagesInput, Prisma.GalleryImageUncheckedCreateWithoutProjectImagesInput>
+  connectOrCreate?: Prisma.GalleryImageCreateOrConnectWithoutProjectImagesInput
+  upsert?: Prisma.GalleryImageUpsertWithoutProjectImagesInput
+  connect?: Prisma.GalleryImageWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.GalleryImageUpdateToOneWithWhereWithoutProjectImagesInput, Prisma.GalleryImageUpdateWithoutProjectImagesInput>, Prisma.GalleryImageUncheckedUpdateWithoutProjectImagesInput>
+}
+
+export type GalleryImageCreateNestedOneWithoutSkillIconsInput = {
+  create?: Prisma.XOR<Prisma.GalleryImageCreateWithoutSkillIconsInput, Prisma.GalleryImageUncheckedCreateWithoutSkillIconsInput>
+  connectOrCreate?: Prisma.GalleryImageCreateOrConnectWithoutSkillIconsInput
+  connect?: Prisma.GalleryImageWhereUniqueInput
+}
+
+export type GalleryImageUpdateOneWithoutSkillIconsNestedInput = {
+  create?: Prisma.XOR<Prisma.GalleryImageCreateWithoutSkillIconsInput, Prisma.GalleryImageUncheckedCreateWithoutSkillIconsInput>
+  connectOrCreate?: Prisma.GalleryImageCreateOrConnectWithoutSkillIconsInput
+  upsert?: Prisma.GalleryImageUpsertWithoutSkillIconsInput
+  disconnect?: boolean
+  delete?: Prisma.GalleryImageWhereInput | boolean
+  connect?: Prisma.GalleryImageWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.GalleryImageUpdateToOneWithWhereWithoutSkillIconsInput, Prisma.GalleryImageUpdateWithoutSkillIconsInput>, Prisma.GalleryImageUncheckedUpdateWithoutSkillIconsInput>
+}
+
 export type GalleryImageCreateWithoutUserInput = {
   id?: string
   url: string
@@ -597,6 +646,8 @@ export type GalleryImageCreateWithoutUserInput = {
   profileOgImage?: Prisma.ProfileCreateNestedManyWithoutOgImageInput
   profileHeroImage?: Prisma.ProfileCreateNestedManyWithoutHeroImageInput
   experienceCompanyLogo?: Prisma.ExperienceCreateNestedManyWithoutCompanyLogoInput
+  projectImages?: Prisma.ProjectImageCreateNestedManyWithoutImageInput
+  skillIcons?: Prisma.SkillCreateNestedManyWithoutIconInput
 }
 
 export type GalleryImageUncheckedCreateWithoutUserInput = {
@@ -612,6 +663,8 @@ export type GalleryImageUncheckedCreateWithoutUserInput = {
   profileOgImage?: Prisma.ProfileUncheckedCreateNestedManyWithoutOgImageInput
   profileHeroImage?: Prisma.ProfileUncheckedCreateNestedManyWithoutHeroImageInput
   experienceCompanyLogo?: Prisma.ExperienceUncheckedCreateNestedManyWithoutCompanyLogoInput
+  projectImages?: Prisma.ProjectImageUncheckedCreateNestedManyWithoutImageInput
+  skillIcons?: Prisma.SkillUncheckedCreateNestedManyWithoutIconInput
 }
 
 export type GalleryImageCreateOrConnectWithoutUserInput = {
@@ -667,6 +720,8 @@ export type GalleryImageCreateWithoutProfileOgImageInput = {
   posts?: Prisma.PostCreateNestedManyWithoutFeatureImageInput
   profileHeroImage?: Prisma.ProfileCreateNestedManyWithoutHeroImageInput
   experienceCompanyLogo?: Prisma.ExperienceCreateNestedManyWithoutCompanyLogoInput
+  projectImages?: Prisma.ProjectImageCreateNestedManyWithoutImageInput
+  skillIcons?: Prisma.SkillCreateNestedManyWithoutIconInput
 }
 
 export type GalleryImageUncheckedCreateWithoutProfileOgImageInput = {
@@ -682,6 +737,8 @@ export type GalleryImageUncheckedCreateWithoutProfileOgImageInput = {
   posts?: Prisma.PostUncheckedCreateNestedManyWithoutFeatureImageInput
   profileHeroImage?: Prisma.ProfileUncheckedCreateNestedManyWithoutHeroImageInput
   experienceCompanyLogo?: Prisma.ExperienceUncheckedCreateNestedManyWithoutCompanyLogoInput
+  projectImages?: Prisma.ProjectImageUncheckedCreateNestedManyWithoutImageInput
+  skillIcons?: Prisma.SkillUncheckedCreateNestedManyWithoutIconInput
 }
 
 export type GalleryImageCreateOrConnectWithoutProfileOgImageInput = {
@@ -702,6 +759,8 @@ export type GalleryImageCreateWithoutProfileHeroImageInput = {
   posts?: Prisma.PostCreateNestedManyWithoutFeatureImageInput
   profileOgImage?: Prisma.ProfileCreateNestedManyWithoutOgImageInput
   experienceCompanyLogo?: Prisma.ExperienceCreateNestedManyWithoutCompanyLogoInput
+  projectImages?: Prisma.ProjectImageCreateNestedManyWithoutImageInput
+  skillIcons?: Prisma.SkillCreateNestedManyWithoutIconInput
 }
 
 export type GalleryImageUncheckedCreateWithoutProfileHeroImageInput = {
@@ -717,6 +776,8 @@ export type GalleryImageUncheckedCreateWithoutProfileHeroImageInput = {
   posts?: Prisma.PostUncheckedCreateNestedManyWithoutFeatureImageInput
   profileOgImage?: Prisma.ProfileUncheckedCreateNestedManyWithoutOgImageInput
   experienceCompanyLogo?: Prisma.ExperienceUncheckedCreateNestedManyWithoutCompanyLogoInput
+  projectImages?: Prisma.ProjectImageUncheckedCreateNestedManyWithoutImageInput
+  skillIcons?: Prisma.SkillUncheckedCreateNestedManyWithoutIconInput
 }
 
 export type GalleryImageCreateOrConnectWithoutProfileHeroImageInput = {
@@ -747,6 +808,8 @@ export type GalleryImageUpdateWithoutProfileOgImageInput = {
   posts?: Prisma.PostUpdateManyWithoutFeatureImageNestedInput
   profileHeroImage?: Prisma.ProfileUpdateManyWithoutHeroImageNestedInput
   experienceCompanyLogo?: Prisma.ExperienceUpdateManyWithoutCompanyLogoNestedInput
+  projectImages?: Prisma.ProjectImageUpdateManyWithoutImageNestedInput
+  skillIcons?: Prisma.SkillUpdateManyWithoutIconNestedInput
 }
 
 export type GalleryImageUncheckedUpdateWithoutProfileOgImageInput = {
@@ -761,6 +824,8 @@ export type GalleryImageUncheckedUpdateWithoutProfileOgImageInput = {
   posts?: Prisma.PostUncheckedUpdateManyWithoutFeatureImageNestedInput
   profileHeroImage?: Prisma.ProfileUncheckedUpdateManyWithoutHeroImageNestedInput
   experienceCompanyLogo?: Prisma.ExperienceUncheckedUpdateManyWithoutCompanyLogoNestedInput
+  projectImages?: Prisma.ProjectImageUncheckedUpdateManyWithoutImageNestedInput
+  skillIcons?: Prisma.SkillUncheckedUpdateManyWithoutIconNestedInput
 }
 
 export type GalleryImageUpsertWithoutProfileHeroImageInput = {
@@ -786,6 +851,8 @@ export type GalleryImageUpdateWithoutProfileHeroImageInput = {
   posts?: Prisma.PostUpdateManyWithoutFeatureImageNestedInput
   profileOgImage?: Prisma.ProfileUpdateManyWithoutOgImageNestedInput
   experienceCompanyLogo?: Prisma.ExperienceUpdateManyWithoutCompanyLogoNestedInput
+  projectImages?: Prisma.ProjectImageUpdateManyWithoutImageNestedInput
+  skillIcons?: Prisma.SkillUpdateManyWithoutIconNestedInput
 }
 
 export type GalleryImageUncheckedUpdateWithoutProfileHeroImageInput = {
@@ -800,6 +867,8 @@ export type GalleryImageUncheckedUpdateWithoutProfileHeroImageInput = {
   posts?: Prisma.PostUncheckedUpdateManyWithoutFeatureImageNestedInput
   profileOgImage?: Prisma.ProfileUncheckedUpdateManyWithoutOgImageNestedInput
   experienceCompanyLogo?: Prisma.ExperienceUncheckedUpdateManyWithoutCompanyLogoNestedInput
+  projectImages?: Prisma.ProjectImageUncheckedUpdateManyWithoutImageNestedInput
+  skillIcons?: Prisma.SkillUncheckedUpdateManyWithoutIconNestedInput
 }
 
 export type GalleryImageCreateWithoutExperienceCompanyLogoInput = {
@@ -815,6 +884,8 @@ export type GalleryImageCreateWithoutExperienceCompanyLogoInput = {
   posts?: Prisma.PostCreateNestedManyWithoutFeatureImageInput
   profileOgImage?: Prisma.ProfileCreateNestedManyWithoutOgImageInput
   profileHeroImage?: Prisma.ProfileCreateNestedManyWithoutHeroImageInput
+  projectImages?: Prisma.ProjectImageCreateNestedManyWithoutImageInput
+  skillIcons?: Prisma.SkillCreateNestedManyWithoutIconInput
 }
 
 export type GalleryImageUncheckedCreateWithoutExperienceCompanyLogoInput = {
@@ -830,6 +901,8 @@ export type GalleryImageUncheckedCreateWithoutExperienceCompanyLogoInput = {
   posts?: Prisma.PostUncheckedCreateNestedManyWithoutFeatureImageInput
   profileOgImage?: Prisma.ProfileUncheckedCreateNestedManyWithoutOgImageInput
   profileHeroImage?: Prisma.ProfileUncheckedCreateNestedManyWithoutHeroImageInput
+  projectImages?: Prisma.ProjectImageUncheckedCreateNestedManyWithoutImageInput
+  skillIcons?: Prisma.SkillUncheckedCreateNestedManyWithoutIconInput
 }
 
 export type GalleryImageCreateOrConnectWithoutExperienceCompanyLogoInput = {
@@ -860,6 +933,8 @@ export type GalleryImageUpdateWithoutExperienceCompanyLogoInput = {
   posts?: Prisma.PostUpdateManyWithoutFeatureImageNestedInput
   profileOgImage?: Prisma.ProfileUpdateManyWithoutOgImageNestedInput
   profileHeroImage?: Prisma.ProfileUpdateManyWithoutHeroImageNestedInput
+  projectImages?: Prisma.ProjectImageUpdateManyWithoutImageNestedInput
+  skillIcons?: Prisma.SkillUpdateManyWithoutIconNestedInput
 }
 
 export type GalleryImageUncheckedUpdateWithoutExperienceCompanyLogoInput = {
@@ -874,6 +949,8 @@ export type GalleryImageUncheckedUpdateWithoutExperienceCompanyLogoInput = {
   posts?: Prisma.PostUncheckedUpdateManyWithoutFeatureImageNestedInput
   profileOgImage?: Prisma.ProfileUncheckedUpdateManyWithoutOgImageNestedInput
   profileHeroImage?: Prisma.ProfileUncheckedUpdateManyWithoutHeroImageNestedInput
+  projectImages?: Prisma.ProjectImageUncheckedUpdateManyWithoutImageNestedInput
+  skillIcons?: Prisma.SkillUncheckedUpdateManyWithoutIconNestedInput
 }
 
 export type GalleryImageCreateWithoutPostsInput = {
@@ -889,6 +966,8 @@ export type GalleryImageCreateWithoutPostsInput = {
   profileOgImage?: Prisma.ProfileCreateNestedManyWithoutOgImageInput
   profileHeroImage?: Prisma.ProfileCreateNestedManyWithoutHeroImageInput
   experienceCompanyLogo?: Prisma.ExperienceCreateNestedManyWithoutCompanyLogoInput
+  projectImages?: Prisma.ProjectImageCreateNestedManyWithoutImageInput
+  skillIcons?: Prisma.SkillCreateNestedManyWithoutIconInput
 }
 
 export type GalleryImageUncheckedCreateWithoutPostsInput = {
@@ -904,6 +983,8 @@ export type GalleryImageUncheckedCreateWithoutPostsInput = {
   profileOgImage?: Prisma.ProfileUncheckedCreateNestedManyWithoutOgImageInput
   profileHeroImage?: Prisma.ProfileUncheckedCreateNestedManyWithoutHeroImageInput
   experienceCompanyLogo?: Prisma.ExperienceUncheckedCreateNestedManyWithoutCompanyLogoInput
+  projectImages?: Prisma.ProjectImageUncheckedCreateNestedManyWithoutImageInput
+  skillIcons?: Prisma.SkillUncheckedCreateNestedManyWithoutIconInput
 }
 
 export type GalleryImageCreateOrConnectWithoutPostsInput = {
@@ -934,6 +1015,8 @@ export type GalleryImageUpdateWithoutPostsInput = {
   profileOgImage?: Prisma.ProfileUpdateManyWithoutOgImageNestedInput
   profileHeroImage?: Prisma.ProfileUpdateManyWithoutHeroImageNestedInput
   experienceCompanyLogo?: Prisma.ExperienceUpdateManyWithoutCompanyLogoNestedInput
+  projectImages?: Prisma.ProjectImageUpdateManyWithoutImageNestedInput
+  skillIcons?: Prisma.SkillUpdateManyWithoutIconNestedInput
 }
 
 export type GalleryImageUncheckedUpdateWithoutPostsInput = {
@@ -948,6 +1031,172 @@ export type GalleryImageUncheckedUpdateWithoutPostsInput = {
   profileOgImage?: Prisma.ProfileUncheckedUpdateManyWithoutOgImageNestedInput
   profileHeroImage?: Prisma.ProfileUncheckedUpdateManyWithoutHeroImageNestedInput
   experienceCompanyLogo?: Prisma.ExperienceUncheckedUpdateManyWithoutCompanyLogoNestedInput
+  projectImages?: Prisma.ProjectImageUncheckedUpdateManyWithoutImageNestedInput
+  skillIcons?: Prisma.SkillUncheckedUpdateManyWithoutIconNestedInput
+}
+
+export type GalleryImageCreateWithoutProjectImagesInput = {
+  id?: string
+  url: string
+  name: string
+  size: number
+  mimeType: string
+  caption?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  user: Prisma.UserCreateNestedOneWithoutGalleryImagesInput
+  posts?: Prisma.PostCreateNestedManyWithoutFeatureImageInput
+  profileOgImage?: Prisma.ProfileCreateNestedManyWithoutOgImageInput
+  profileHeroImage?: Prisma.ProfileCreateNestedManyWithoutHeroImageInput
+  experienceCompanyLogo?: Prisma.ExperienceCreateNestedManyWithoutCompanyLogoInput
+  skillIcons?: Prisma.SkillCreateNestedManyWithoutIconInput
+}
+
+export type GalleryImageUncheckedCreateWithoutProjectImagesInput = {
+  id?: string
+  url: string
+  name: string
+  size: number
+  mimeType: string
+  caption?: string | null
+  userCreated: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  posts?: Prisma.PostUncheckedCreateNestedManyWithoutFeatureImageInput
+  profileOgImage?: Prisma.ProfileUncheckedCreateNestedManyWithoutOgImageInput
+  profileHeroImage?: Prisma.ProfileUncheckedCreateNestedManyWithoutHeroImageInput
+  experienceCompanyLogo?: Prisma.ExperienceUncheckedCreateNestedManyWithoutCompanyLogoInput
+  skillIcons?: Prisma.SkillUncheckedCreateNestedManyWithoutIconInput
+}
+
+export type GalleryImageCreateOrConnectWithoutProjectImagesInput = {
+  where: Prisma.GalleryImageWhereUniqueInput
+  create: Prisma.XOR<Prisma.GalleryImageCreateWithoutProjectImagesInput, Prisma.GalleryImageUncheckedCreateWithoutProjectImagesInput>
+}
+
+export type GalleryImageUpsertWithoutProjectImagesInput = {
+  update: Prisma.XOR<Prisma.GalleryImageUpdateWithoutProjectImagesInput, Prisma.GalleryImageUncheckedUpdateWithoutProjectImagesInput>
+  create: Prisma.XOR<Prisma.GalleryImageCreateWithoutProjectImagesInput, Prisma.GalleryImageUncheckedCreateWithoutProjectImagesInput>
+  where?: Prisma.GalleryImageWhereInput
+}
+
+export type GalleryImageUpdateToOneWithWhereWithoutProjectImagesInput = {
+  where?: Prisma.GalleryImageWhereInput
+  data: Prisma.XOR<Prisma.GalleryImageUpdateWithoutProjectImagesInput, Prisma.GalleryImageUncheckedUpdateWithoutProjectImagesInput>
+}
+
+export type GalleryImageUpdateWithoutProjectImagesInput = {
+  url?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  size?: Prisma.IntFieldUpdateOperationsInput | number
+  mimeType?: Prisma.StringFieldUpdateOperationsInput | string
+  caption?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  user?: Prisma.UserUpdateOneRequiredWithoutGalleryImagesNestedInput
+  posts?: Prisma.PostUpdateManyWithoutFeatureImageNestedInput
+  profileOgImage?: Prisma.ProfileUpdateManyWithoutOgImageNestedInput
+  profileHeroImage?: Prisma.ProfileUpdateManyWithoutHeroImageNestedInput
+  experienceCompanyLogo?: Prisma.ExperienceUpdateManyWithoutCompanyLogoNestedInput
+  skillIcons?: Prisma.SkillUpdateManyWithoutIconNestedInput
+}
+
+export type GalleryImageUncheckedUpdateWithoutProjectImagesInput = {
+  url?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  size?: Prisma.IntFieldUpdateOperationsInput | number
+  mimeType?: Prisma.StringFieldUpdateOperationsInput | string
+  caption?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  userCreated?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  posts?: Prisma.PostUncheckedUpdateManyWithoutFeatureImageNestedInput
+  profileOgImage?: Prisma.ProfileUncheckedUpdateManyWithoutOgImageNestedInput
+  profileHeroImage?: Prisma.ProfileUncheckedUpdateManyWithoutHeroImageNestedInput
+  experienceCompanyLogo?: Prisma.ExperienceUncheckedUpdateManyWithoutCompanyLogoNestedInput
+  skillIcons?: Prisma.SkillUncheckedUpdateManyWithoutIconNestedInput
+}
+
+export type GalleryImageCreateWithoutSkillIconsInput = {
+  id?: string
+  url: string
+  name: string
+  size: number
+  mimeType: string
+  caption?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  user: Prisma.UserCreateNestedOneWithoutGalleryImagesInput
+  posts?: Prisma.PostCreateNestedManyWithoutFeatureImageInput
+  profileOgImage?: Prisma.ProfileCreateNestedManyWithoutOgImageInput
+  profileHeroImage?: Prisma.ProfileCreateNestedManyWithoutHeroImageInput
+  experienceCompanyLogo?: Prisma.ExperienceCreateNestedManyWithoutCompanyLogoInput
+  projectImages?: Prisma.ProjectImageCreateNestedManyWithoutImageInput
+}
+
+export type GalleryImageUncheckedCreateWithoutSkillIconsInput = {
+  id?: string
+  url: string
+  name: string
+  size: number
+  mimeType: string
+  caption?: string | null
+  userCreated: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  posts?: Prisma.PostUncheckedCreateNestedManyWithoutFeatureImageInput
+  profileOgImage?: Prisma.ProfileUncheckedCreateNestedManyWithoutOgImageInput
+  profileHeroImage?: Prisma.ProfileUncheckedCreateNestedManyWithoutHeroImageInput
+  experienceCompanyLogo?: Prisma.ExperienceUncheckedCreateNestedManyWithoutCompanyLogoInput
+  projectImages?: Prisma.ProjectImageUncheckedCreateNestedManyWithoutImageInput
+}
+
+export type GalleryImageCreateOrConnectWithoutSkillIconsInput = {
+  where: Prisma.GalleryImageWhereUniqueInput
+  create: Prisma.XOR<Prisma.GalleryImageCreateWithoutSkillIconsInput, Prisma.GalleryImageUncheckedCreateWithoutSkillIconsInput>
+}
+
+export type GalleryImageUpsertWithoutSkillIconsInput = {
+  update: Prisma.XOR<Prisma.GalleryImageUpdateWithoutSkillIconsInput, Prisma.GalleryImageUncheckedUpdateWithoutSkillIconsInput>
+  create: Prisma.XOR<Prisma.GalleryImageCreateWithoutSkillIconsInput, Prisma.GalleryImageUncheckedCreateWithoutSkillIconsInput>
+  where?: Prisma.GalleryImageWhereInput
+}
+
+export type GalleryImageUpdateToOneWithWhereWithoutSkillIconsInput = {
+  where?: Prisma.GalleryImageWhereInput
+  data: Prisma.XOR<Prisma.GalleryImageUpdateWithoutSkillIconsInput, Prisma.GalleryImageUncheckedUpdateWithoutSkillIconsInput>
+}
+
+export type GalleryImageUpdateWithoutSkillIconsInput = {
+  url?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  size?: Prisma.IntFieldUpdateOperationsInput | number
+  mimeType?: Prisma.StringFieldUpdateOperationsInput | string
+  caption?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  user?: Prisma.UserUpdateOneRequiredWithoutGalleryImagesNestedInput
+  posts?: Prisma.PostUpdateManyWithoutFeatureImageNestedInput
+  profileOgImage?: Prisma.ProfileUpdateManyWithoutOgImageNestedInput
+  profileHeroImage?: Prisma.ProfileUpdateManyWithoutHeroImageNestedInput
+  experienceCompanyLogo?: Prisma.ExperienceUpdateManyWithoutCompanyLogoNestedInput
+  projectImages?: Prisma.ProjectImageUpdateManyWithoutImageNestedInput
+}
+
+export type GalleryImageUncheckedUpdateWithoutSkillIconsInput = {
+  url?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  size?: Prisma.IntFieldUpdateOperationsInput | number
+  mimeType?: Prisma.StringFieldUpdateOperationsInput | string
+  caption?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  userCreated?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  posts?: Prisma.PostUncheckedUpdateManyWithoutFeatureImageNestedInput
+  profileOgImage?: Prisma.ProfileUncheckedUpdateManyWithoutOgImageNestedInput
+  profileHeroImage?: Prisma.ProfileUncheckedUpdateManyWithoutHeroImageNestedInput
+  experienceCompanyLogo?: Prisma.ExperienceUncheckedUpdateManyWithoutCompanyLogoNestedInput
+  projectImages?: Prisma.ProjectImageUncheckedUpdateManyWithoutImageNestedInput
 }
 
 export type GalleryImageCreateManyUserInput = {
@@ -973,6 +1222,8 @@ export type GalleryImageUpdateWithoutUserInput = {
   profileOgImage?: Prisma.ProfileUpdateManyWithoutOgImageNestedInput
   profileHeroImage?: Prisma.ProfileUpdateManyWithoutHeroImageNestedInput
   experienceCompanyLogo?: Prisma.ExperienceUpdateManyWithoutCompanyLogoNestedInput
+  projectImages?: Prisma.ProjectImageUpdateManyWithoutImageNestedInput
+  skillIcons?: Prisma.SkillUpdateManyWithoutIconNestedInput
 }
 
 export type GalleryImageUncheckedUpdateWithoutUserInput = {
@@ -987,6 +1238,8 @@ export type GalleryImageUncheckedUpdateWithoutUserInput = {
   profileOgImage?: Prisma.ProfileUncheckedUpdateManyWithoutOgImageNestedInput
   profileHeroImage?: Prisma.ProfileUncheckedUpdateManyWithoutHeroImageNestedInput
   experienceCompanyLogo?: Prisma.ExperienceUncheckedUpdateManyWithoutCompanyLogoNestedInput
+  projectImages?: Prisma.ProjectImageUncheckedUpdateManyWithoutImageNestedInput
+  skillIcons?: Prisma.SkillUncheckedUpdateManyWithoutIconNestedInput
 }
 
 export type GalleryImageUncheckedUpdateManyWithoutUserInput = {
@@ -1009,6 +1262,8 @@ export type GalleryImageCountOutputType = {
   profileOgImage: number
   profileHeroImage: number
   experienceCompanyLogo: number
+  projectImages: number
+  skillIcons: number
 }
 
 export type GalleryImageCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1016,6 +1271,8 @@ export type GalleryImageCountOutputTypeSelect<ExtArgs extends runtime.Types.Exte
   profileOgImage?: boolean | GalleryImageCountOutputTypeCountProfileOgImageArgs
   profileHeroImage?: boolean | GalleryImageCountOutputTypeCountProfileHeroImageArgs
   experienceCompanyLogo?: boolean | GalleryImageCountOutputTypeCountExperienceCompanyLogoArgs
+  projectImages?: boolean | GalleryImageCountOutputTypeCountProjectImagesArgs
+  skillIcons?: boolean | GalleryImageCountOutputTypeCountSkillIconsArgs
 }
 
 /**
@@ -1056,6 +1313,20 @@ export type GalleryImageCountOutputTypeCountExperienceCompanyLogoArgs<ExtArgs ex
   where?: Prisma.ExperienceWhereInput
 }
 
+/**
+ * GalleryImageCountOutputType without action
+ */
+export type GalleryImageCountOutputTypeCountProjectImagesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ProjectImageWhereInput
+}
+
+/**
+ * GalleryImageCountOutputType without action
+ */
+export type GalleryImageCountOutputTypeCountSkillIconsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.SkillWhereInput
+}
+
 
 export type GalleryImageSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1072,6 +1343,8 @@ export type GalleryImageSelect<ExtArgs extends runtime.Types.Extensions.Internal
   profileOgImage?: boolean | Prisma.GalleryImage$profileOgImageArgs<ExtArgs>
   profileHeroImage?: boolean | Prisma.GalleryImage$profileHeroImageArgs<ExtArgs>
   experienceCompanyLogo?: boolean | Prisma.GalleryImage$experienceCompanyLogoArgs<ExtArgs>
+  projectImages?: boolean | Prisma.GalleryImage$projectImagesArgs<ExtArgs>
+  skillIcons?: boolean | Prisma.GalleryImage$skillIconsArgs<ExtArgs>
   _count?: boolean | Prisma.GalleryImageCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["galleryImage"]>
 
@@ -1096,6 +1369,8 @@ export type GalleryImageInclude<ExtArgs extends runtime.Types.Extensions.Interna
   profileOgImage?: boolean | Prisma.GalleryImage$profileOgImageArgs<ExtArgs>
   profileHeroImage?: boolean | Prisma.GalleryImage$profileHeroImageArgs<ExtArgs>
   experienceCompanyLogo?: boolean | Prisma.GalleryImage$experienceCompanyLogoArgs<ExtArgs>
+  projectImages?: boolean | Prisma.GalleryImage$projectImagesArgs<ExtArgs>
+  skillIcons?: boolean | Prisma.GalleryImage$skillIconsArgs<ExtArgs>
   _count?: boolean | Prisma.GalleryImageCountOutputTypeDefaultArgs<ExtArgs>
 }
 
@@ -1107,6 +1382,8 @@ export type $GalleryImagePayload<ExtArgs extends runtime.Types.Extensions.Intern
     profileOgImage: Prisma.$ProfilePayload<ExtArgs>[]
     profileHeroImage: Prisma.$ProfilePayload<ExtArgs>[]
     experienceCompanyLogo: Prisma.$ExperiencePayload<ExtArgs>[]
+    projectImages: Prisma.$ProjectImagePayload<ExtArgs>[]
+    skillIcons: Prisma.$SkillPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1486,6 +1763,8 @@ export interface Prisma__GalleryImageClient<T, Null = never, ExtArgs extends run
   profileOgImage<T extends Prisma.GalleryImage$profileOgImageArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.GalleryImage$profileOgImageArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ProfilePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   profileHeroImage<T extends Prisma.GalleryImage$profileHeroImageArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.GalleryImage$profileHeroImageArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ProfilePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   experienceCompanyLogo<T extends Prisma.GalleryImage$experienceCompanyLogoArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.GalleryImage$experienceCompanyLogoArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ExperiencePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  projectImages<T extends Prisma.GalleryImage$projectImagesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.GalleryImage$projectImagesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ProjectImagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  skillIcons<T extends Prisma.GalleryImage$skillIconsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.GalleryImage$skillIconsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SkillPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1987,6 +2266,54 @@ export type GalleryImage$experienceCompanyLogoArgs<ExtArgs extends runtime.Types
   take?: number
   skip?: number
   distinct?: Prisma.ExperienceScalarFieldEnum | Prisma.ExperienceScalarFieldEnum[]
+}
+
+/**
+ * GalleryImage.projectImages
+ */
+export type GalleryImage$projectImagesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ProjectImage
+   */
+  select?: Prisma.ProjectImageSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the ProjectImage
+   */
+  omit?: Prisma.ProjectImageOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ProjectImageInclude<ExtArgs> | null
+  where?: Prisma.ProjectImageWhereInput
+  orderBy?: Prisma.ProjectImageOrderByWithRelationInput | Prisma.ProjectImageOrderByWithRelationInput[]
+  cursor?: Prisma.ProjectImageWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ProjectImageScalarFieldEnum | Prisma.ProjectImageScalarFieldEnum[]
+}
+
+/**
+ * GalleryImage.skillIcons
+ */
+export type GalleryImage$skillIconsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Skill
+   */
+  select?: Prisma.SkillSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Skill
+   */
+  omit?: Prisma.SkillOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.SkillInclude<ExtArgs> | null
+  where?: Prisma.SkillWhereInput
+  orderBy?: Prisma.SkillOrderByWithRelationInput | Prisma.SkillOrderByWithRelationInput[]
+  cursor?: Prisma.SkillWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.SkillScalarFieldEnum | Prisma.SkillScalarFieldEnum[]
 }
 
 /**
