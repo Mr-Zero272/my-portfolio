@@ -1,0 +1,92 @@
+import StateWrapper from '@/components/shared/state-wrapper';
+import { FormInputSkeleton } from '@/components/skeletons';
+import { Button } from '@/components/ui/button';
+import {
+  ResponsiveDialog,
+  ResponsiveDialogContent,
+  ResponsiveDialogDescription,
+  ResponsiveDialogFooter,
+  ResponsiveDialogHeader,
+  ResponsiveDialogTitle,
+} from '@/components/ui/responsive-dialog';
+import { Spinner } from '@/components/ui/spinner';
+import { GalleryImage } from '@/lib/generated/prisma/client';
+import { BaseFormProps } from '@/types/form';
+import { BriefcaseBusinessIcon } from 'lucide-react';
+import { ExperienceFormValues } from '../../data';
+import { ExperienceForm } from './experience-form';
+
+interface ExperienceFormDialogProps extends BaseFormProps<
+  ExperienceFormValues,
+  { companyLogo?: GalleryImage }
+> {
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
+  isLoading?: boolean;
+  error?: unknown;
+}
+
+export const ExperienceFormDialog = ({
+  open,
+  onOpenChange,
+  isLoading,
+  error,
+  isEditMode,
+  ...props
+}: ExperienceFormDialogProps) => {
+  return (
+    <ResponsiveDialog open={open} onOpenChange={onOpenChange}>
+      <ResponsiveDialogContent className="flex flex-col p-0 sm:max-h-[90vh] sm:max-w-2xl">
+        <ResponsiveDialogHeader className="sm:px-4 sm:pt-4">
+          <ResponsiveDialogTitle>
+            {isEditMode ? 'Edit Experience' : 'Create Experience'}
+          </ResponsiveDialogTitle>
+          <ResponsiveDialogDescription>
+            {isEditMode ? 'Update the experience details' : 'Add a new experience to the list'}
+          </ResponsiveDialogDescription>
+        </ResponsiveDialogHeader>
+
+        <StateWrapper
+          data="experience-form-data"
+          isLoading={isLoading ?? false}
+          error={error}
+          fallbackLoading={
+            <div className="flex flex-1 flex-col space-y-4 overflow-hidden sm:px-4 sm:pb-4">
+              <FormInputSkeleton />
+              <FormInputSkeleton />
+              <FormInputSkeleton />
+              <FormInputSkeleton />
+              <FormInputSkeleton />
+              <FormInputSkeleton />
+            </div>
+          }
+          className="flex flex-1 flex-col overflow-hidden"
+          contentClassName="flex flex-1 flex-col overflow-hidden sm:px-4"
+        >
+          {() => (
+            <ExperienceForm
+              {...props}
+              isEditMode={isEditMode}
+              renderSubmitPart={({ isSubmitting, formId }) => (
+                <ResponsiveDialogFooter className="sm:mx-0 sm:mb-0">
+                  <Button type="button" variant="outline" onClick={() => onOpenChange?.(false)}>
+                    Cancel
+                  </Button>
+                  <Button type="submit" form={formId} disabled={isSubmitting}>
+                    {isSubmitting ? <Spinner /> : <BriefcaseBusinessIcon />}
+                    {isSubmitting
+                      ? 'Saving...'
+                      : isEditMode
+                        ? 'Update Experience'
+                        : 'Add Experience'}
+                  </Button>
+                </ResponsiveDialogFooter>
+              )}
+              className="md:-mx-4"
+            />
+          )}
+        </StateWrapper>
+      </ResponsiveDialogContent>
+    </ResponsiveDialog>
+  );
+};

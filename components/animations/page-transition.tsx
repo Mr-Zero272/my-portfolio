@@ -22,8 +22,8 @@ export const PageTransition = ({
 
   if (!isTransitionPageEnabled) {
     return (
-      <div className={cn('w-full bg-transparent pt-16', className)}>
-        <div className="site-container mx-auto">{children}</div>
+      <div className={cn('flex size-full flex-1 flex-col bg-transparent pt-16', className)}>
+        <div className="container mx-auto size-full flex-1">{children}</div>
         {!hasFooter && <RootFooter />}
       </div>
     );
@@ -31,10 +31,14 @@ export const PageTransition = ({
 
   return (
     <div
-      className={cn('bg-background w-full pt-16', className, {
-        'overflow-hidden': isAnimating,
-        'overflow-y-auto': !isAnimating,
-      })}
+      className={cn(
+        'bg-background relative flex size-full flex-1 flex-col pt-16',
+        className,
+        // {
+        //   '': isAnimating,
+        //   'overflow-y-auto': !isAnimating,
+        // },
+      )}
     >
       <PageTransitionAnimation />
       <motion.div
@@ -45,8 +49,9 @@ export const PageTransition = ({
         transition={{ duration: 0.5, when: 'afterChildren', delay: 1.5 }}
         onAnimationStart={() => setIsAnimating(true)}
         onAnimationComplete={() => setIsAnimating(false)}
+        className="flex size-full flex-1 flex-col"
       >
-        <div className="site-container mx-auto">{children}</div>
+        <div className="container mx-auto flex size-full min-h-0 flex-1 flex-col">{children}</div>
         {hasFooter && <RootFooter />}
       </motion.div>
     </div>

@@ -10,7 +10,7 @@ import {
   Link2Icon,
   MoreHorizontalIcon,
   RefreshCwIcon,
-  TrashIcon,
+  Trash2Icon,
   UploadIcon,
 } from 'lucide-react';
 import { Suspense, useCallback, useEffect, useMemo, useRef, useState } from 'react';
@@ -195,7 +195,7 @@ export const GalleryImageListPageContent = () => {
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem variant="destructive" onClick={() => setDeleteImage(image)}>
-                <TrashIcon />
+                <Trash2Icon />
                 Delete
               </DropdownMenuItem>
             </DropdownMenuGroup>
@@ -208,7 +208,7 @@ export const GalleryImageListPageContent = () => {
 
   return (
     <div>
-      <PageHeader title="Galleries" subTitle="Manage your gallery images" />
+      <PageHeader title="Galleries" description="Manage your gallery images" />
 
       <div className="flex flex-col gap-4">
         <AttachmentFilterToolbar
@@ -378,7 +378,7 @@ export const GalleryImageListPage = () => {
     <Suspense
       fallback={
         <div className="flex flex-col gap-4">
-          <PageHeader title="Galleries" subTitle="Manage your gallery images" />
+          <PageHeader title="Galleries" description="Manage your gallery images" />
           <GalleryMasonrySkeleton />
         </div>
       }

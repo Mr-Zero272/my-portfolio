@@ -1,9 +1,22 @@
 import { getMainUserId } from '@/features/site-settings/server/main-user';
 import { ApiErrorCode, buildListQuery, parseBooleanParam, throwApiError } from '@/lib/api';
 import { requireAdmin } from '@/lib/auth-guard';
-import type { Prisma } from '@/lib/generated/prisma/client';
+import { ExperiencePositionIconType, type Prisma } from '@/lib/generated/prisma/client';
 import { prisma } from '@/lib/prisma';
-import { ExperienceFormValues } from '../schemas';
+import { ExperienceFormValues } from '../data';
+
+function mapPositions(positions: ExperienceFormValues['positions']) {
+  return positions.map((pos) => ({
+    title: pos.title,
+    employmentType: pos.employmentType ?? undefined,
+    location: pos.location ?? undefined,
+    startDate: new Date(pos.startDate),
+    endDate: pos.endDate ? new Date(pos.endDate) : undefined,
+    description: pos.description ?? undefined,
+    icon: (pos.icon as ExperiencePositionIconType | null) ?? ExperiencePositionIconType.business,
+    skills: pos.skills ?? [],
+  }));
+}
 
 const EXPERIENCE_SORTABLE_FIELDS = ['displayOrder', 'companyName', 'createdAt'] as const;
 const EXPERIENCE_SEARCH_FIELDS = ['companyName'] as const;
@@ -109,7 +122,13 @@ export const experienceService = {
 
     const experience = await prisma.experience.create({
       data: {
-        ...input,
+        companyName: input.companyName,
+        companyLogoId: input.companyLogoId ?? undefined,
+        companyWebsite: input.companyWebsite ?? undefined,
+        isCurrentEmployer: input.isCurrentEmployer,
+        displayOrder: input.displayOrder,
+        isVisible: input.isVisible,
+        positions: mapPositions(input.positions),
         userId: user.id,
       },
       include: EXPERIENCE_INCLUDE,
@@ -123,8 +142,13 @@ export const experienceService = {
 
     await ensureExperienceExists(id, user.id);
 
+    const { positions, ...restInput } = input;
+
     const experience = await prisma.experience.update({
-      data: input,
+      data: {
+        ...restInput,
+        ...(positions !== undefined && { positions: mapPositions(positions) }),
+      },
       where: { id },
       include: EXPERIENCE_INCLUDE,
     });

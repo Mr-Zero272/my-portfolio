@@ -2,18 +2,18 @@ import axiosInstance from '@/lib/axios';
 import { ListResponse } from '@/types/api';
 import { normalizeQueryParams } from '@/utils/search-query';
 import {
-    CreateExperienceRequest,
-    DeleteExperienceRequest,
-    ExperienceWithAllRelations,
-    GetExperienceRequest,
-    GetExperiencesRequest,
-    UpdateExperienceRequest,
+  CreateExperienceRequest,
+  DeleteExperienceRequest,
+  ExperienceWithAllRelations,
+  GetExperienceRequest,
+  GetExperiencesRequest,
+  UpdateExperienceRequest,
 } from '../types';
 
 export const experienceApi = {
   getAll: async (request?: GetExperiencesRequest) => {
     const queryParams = request?.query ? normalizeQueryParams(request?.query) : undefined;
-    const res = await axiosInstance.get('/experience', {
+    const res = await axiosInstance.get('/public/experience', {
       params: queryParams,
     });
 

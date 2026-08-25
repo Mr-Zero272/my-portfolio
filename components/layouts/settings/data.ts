@@ -41,8 +41,8 @@ export const sideNavSettingsItems: SideNavSettingsGroup[] = [
         icon: Laptop,
       },
       {
-        title: 'Experience',
-        url: '/settings/experience',
+        title: 'Experiences',
+        url: '/settings/experiences',
         icon: BriefcaseBusiness,
       },
       {

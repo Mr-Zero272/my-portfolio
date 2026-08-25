@@ -43,10 +43,10 @@ function parseISO(iso: string | undefined): Date | undefined {
 export function DatePicker({
   value,
   onChange,
-  placeholder = 'dd/MM/yyyy',
+  placeholder = 'MM/dd/yyyy',
   disabled = false,
   disabledDate = undefined,
-  displayFormat = 'dd/MM/yyyy',
+  displayFormat = 'MM/dd/yyyy',
   className,
   ...props
 }: DatePickerProps & React.ComponentPropsWithoutRef<'button'>) {

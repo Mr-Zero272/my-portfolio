@@ -46,7 +46,7 @@ export const AboutMeTabs = ({
   );
 };
 
-export const AboutMeTab = ({
+const AboutMeTab = ({
   label,
   value,
   active = false,

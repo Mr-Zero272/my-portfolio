@@ -1,7 +1,7 @@
 'use client';
 
 import ConfirmDialog from '@/components/shared/confirm-dialog';
-import { PageHeader } from '@/components/shared/page-header copy';
+import { PageHeader } from '@/components/shared/page-header';
 import { Button } from '@/components/ui/button';
 import { useActionState } from '@/hooks/use-action-state';
 import { useFormActionState } from '@/hooks/use-form-actions-state';

@@ -18,11 +18,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <main className="relative flex w-full">
+    <main className="relative flex w-full flex-1">
       <RootSidebarProvider>
         <RootSidebar />
         {/* <CursorSetting /> */}
-        <section className="relative flex w-full flex-col gap-5 overflow-y-auto md:ml-20">
+        <section className="relative flex w-full flex-1 flex-col gap-5 md:ml-20">
           {/* <Header /> */}
           <PageTransition hasFooter>{children}</PageTransition>
         </section>

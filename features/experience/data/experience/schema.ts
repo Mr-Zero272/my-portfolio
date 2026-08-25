@@ -1,26 +1,36 @@
 import { z } from 'zod';
-
-export const ExperiencePositionIconTypeEnum = z.enum(['code', 'design', 'business', 'education']);
+import { ExperiencePositionIconTypeEnum } from '../../constants';
 
 export const ExperiencePositionSchema = z.object({
   title: z.string().trim().min(1, "Position title can't be empty."),
   employmentType: z.string().trim().nullable().optional(),
   location: z.string().trim().nullable().optional(),
-  startDate: z.coerce.date({ message: 'Start date is required.' }),
-  endDate: z.coerce.date().nullable().optional(),
+  startDate: z.string(),
+  endDate: z.string().nullable().optional(),
   description: z.string().trim().nullable().optional(),
-  icon: ExperiencePositionIconTypeEnum.default('business'),
-  skills: z.array(z.string()).default([]),
+  icon: z.enum(ExperiencePositionIconTypeEnum).nullable().optional(),
+  skills: z.array(z.string()),
 });
 
 export const ExperienceFormSchema = z.object({
   companyName: z.string().trim().min(1, "Company name can't be empty."),
   companyLogoId: z.string().trim().nullable().optional(),
-  isCurrentEmployer: z.boolean().default(false),
-  positions: z.array(ExperiencePositionSchema).default([]),
-  displayOrder: z.number().int().default(0),
-  isVisible: z.boolean().default(true),
+  companyWebsite: z.string().trim().nullable().optional(),
+  isCurrentEmployer: z.boolean(),
+  positions: z.array(ExperiencePositionSchema),
+  displayOrder: z.number(),
+  isVisible: z.boolean(),
 });
 
 export type ExperiencePositionValues = z.infer<typeof ExperiencePositionSchema>;
 export type ExperienceFormValues = z.infer<typeof ExperienceFormSchema>;
+
+export const DEFAULT_EXPERIENCE_FORM_VALUES: ExperienceFormValues = {
+  companyName: '',
+  companyLogoId: null,
+  companyWebsite: null,
+  isCurrentEmployer: false,
+  positions: [],
+  displayOrder: 0,
+  isVisible: true,
+};

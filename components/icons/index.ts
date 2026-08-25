@@ -1,3 +1,4 @@
+export { ChevronsUpDownIcon, type ChevronsUpDownIconHandle } from './chevrons-up-down-icon';
 export { DiscordIcon } from './discord';
 export * from './github';
 export * from './google';

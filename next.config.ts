@@ -29,6 +29,10 @@ const nextConfig: NextConfig = {
         protocol: 'https',
         hostname: 'x102zaupes.ufs.sh',
       },
+      {
+        protocol: 'https',
+        hostname: 'pub-3ebcc65a5f5143ddaf45e9b0d1aecd3e.r2.dev',
+      },
     ],
   },
 };

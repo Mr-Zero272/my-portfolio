@@ -1,6 +1,6 @@
 'use client';
 
-import { PageHeader } from '@/components/shared/page-header copy';
+import { PageHeader } from '@/components/shared/page-header';
 import StateWrapper from '@/components/shared/state-wrapper';
 import { toast } from 'sonner';
 import { ProfileForm } from '../components';

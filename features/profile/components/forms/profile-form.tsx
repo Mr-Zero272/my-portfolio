@@ -5,6 +5,7 @@ import {
   FormGalleryInput,
   FormInput,
   FormNumber,
+  FormTagsInput,
   FormTextArea,
 } from '@/components/forms';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
@@ -19,7 +20,7 @@ import { AlertCircleIcon, SaveIcon } from 'lucide-react';
 import { useId } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { ProfileFormSchema, ProfileFormValues } from '../../data';
-import { RotatingWordsInput } from './rotating-words-input';
+
 
 export const ProfileForm = ({
   initialData,
@@ -100,7 +101,12 @@ export const ProfileForm = ({
               placeholder="eg: I am a full stack developer"
               description="A longer, more detailed description. Recommended 210 characters."
             />
-            <RotatingWordsInput />
+            <FormTagsInput
+              name="rotatingWords"
+              label="Rotate words"
+              placeholder="eg: Full Stack Developer"
+              description="The text will rotate in the hero section. Add a few words or a short phrase to be displayed as rotating text."
+            />
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               <FormComboboxMulti
                 name="languages"

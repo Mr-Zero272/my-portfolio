@@ -1,4 +1,4 @@
-import { tagService } from "@/features/tags";
+import { tagService } from "@/features/tags/server";
 import { apiPaginated, withApiErrorHandling } from "@/lib/api";
 
 export const GET = withApiErrorHandling(async (request: Request) => {

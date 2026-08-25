@@ -3,7 +3,7 @@ import { ApiErrorCode, buildListQuery, parseBooleanParam, throwApiError } from '
 import { requireAdmin } from '@/lib/auth-guard';
 import type { Prisma } from '@/lib/generated/prisma/client';
 import { prisma } from '@/lib/prisma';
-import { EducationFormValues } from '../schemas';
+import { EducationFormValues } from '../data';
 
 const EDUCATION_SORTABLE_FIELDS = ['displayOrder', 'startDate', 'endDate', 'institution', 'createdAt'] as const;
 const EDUCATION_SEARCH_FIELDS = ['institution', 'degree', 'fieldOfStudy', 'location'] as const;

@@ -187,6 +187,7 @@ export const ExperienceScalarFieldEnum = {
   userId: 'userId',
   companyName: 'companyName',
   companyLogoId: 'companyLogoId',
+  companyWebsite: 'companyWebsite',
   isCurrentEmployer: 'isCurrentEmployer',
   displayOrder: 'displayOrder',
   isVisible: 'isVisible',

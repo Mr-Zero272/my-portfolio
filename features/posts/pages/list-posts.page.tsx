@@ -1,6 +1,6 @@
 'use client';
 
-import { PageHeader } from '@/components/shared/page-header copy';
+import { PageHeader } from '@/components/shared/page-header';
 import { ActionItem } from '@/components/shared/responsive-actions';
 import { buttonVariants } from '@/components/ui/button';
 import { appPath } from '@/constants/path';

@@ -207,6 +207,7 @@ model Experience {
   companyName       String
   companyLogoId     String?
   companyLogo       GalleryImage? @relation("ExperienceCompanyLogo", fields: [companyLogoId], references: [id], onDelete: SetNull)
+  companyWebsite    String?
   isCurrentEmployer Boolean              @default(false)
   positions         ExperiencePosition[]
   displayOrder      Int                  @default(0)

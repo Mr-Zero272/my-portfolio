@@ -16,7 +16,7 @@ import {
   GraduationCapIcon,
   MapPinIcon,
   MedalIcon,
-  TrashIcon,
+  Trash2Icon,
 } from 'lucide-react';
 import React from 'react';
 
@@ -61,7 +61,7 @@ export const EducationCard = (props: EducationCardProps) => {
               size="icon-sm"
               onClick={() => onDelete(education)}
             >
-              <TrashIcon />
+              <Trash2Icon />
             </ButtonWithTooltip>
           </div>
         }
