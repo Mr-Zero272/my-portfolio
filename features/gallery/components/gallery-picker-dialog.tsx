@@ -74,11 +74,14 @@ export interface GalleryPickerDialogProps {
   onOpenChange: (open: boolean) => void;
   /**
    * Called when the user confirms selection.
-   * Receives the full `GalleryImage` object.
+   * Single mode: receives the full `GalleryImage` object.
+   * Multiple mode: receives an array of `GalleryImage`.
    */
-  onSelect: (image: GalleryImage) => void;
+  onSelect: (images: GalleryImage | GalleryImage[]) => void;
   /** Dialog heading (default: "Select Image") */
   title?: string;
+  /** Multi-select mode: pick several images at once, confirm returns `GalleryImage[]`. */
+  multiple?: boolean;
 }
 
 // ─── Component ───────────────────────────────────────────────────────────────
@@ -88,9 +91,14 @@ export function GalleryPickerDialog({
   onOpenChange,
   onSelect,
   title = 'Select Image',
+  multiple = false,
 }: GalleryPickerDialogProps) {
   // ── Local filter state (non-URL) ──────────────────────────────────────────
   const { params, onPatchParams, request, reset } = useGalleryLocalFilterParams();
+
+  // ── Selection state ───────────────────────────────────────────────────────
+  const [pendingImage, setPendingImage] = useState<GalleryImage | null>(null);
+  const [selectedImages, setSelectedImages] = useState<GalleryImage[]>([]);
 
   // Reset filters whenever the dialog opens
   const prevOpen = useRef(open);
@@ -99,6 +107,7 @@ export function GalleryPickerDialog({
     if (open && !prevOpen.current) {
       reset();
       setPendingImage(null);
+      setSelectedImages([]);
     }
     prevOpen.current = open;
   }, [open, reset]);
@@ -124,20 +133,31 @@ export function GalleryPickerDialog({
   }, [entry?.isIntersecting, hasNextPage, isFetchingNextPage, fetchNextPage]);
 
   // ── Selection ─────────────────────────────────────────────────────────────
-  const [pendingImage, setPendingImage] = useState<GalleryImage | null>(null);
-
   const handleToggle = useCallback(
     (image: GalleryImage) => {
-      setPendingImage((prev) => (prev?.id === image.id ? null : image));
+      if (multiple) {
+        setSelectedImages((prev) =>
+          prev.some((item) => item.id === image.id)
+            ? prev.filter((item) => item.id !== image.id)
+            : [...prev, image],
+        );
+      } else {
+        setPendingImage((prev) => (prev?.id === image.id ? null : image));
+      }
     },
-    [setPendingImage],
+    [multiple, setPendingImage, setSelectedImages],
   );
 
   const handleConfirm = useCallback(() => {
-    if (!pendingImage) return;
-    onSelect(pendingImage);
+    if (multiple) {
+      if (selectedImages.length === 0) return;
+      onSelect(selectedImages);
+    } else {
+      if (!pendingImage) return;
+      onSelect(pendingImage);
+    }
     onOpenChange(false);
-  }, [pendingImage, onSelect, onOpenChange]);
+  }, [multiple, pendingImage, selectedImages, onSelect, onOpenChange]);
 
   const handleCancel = useCallback(() => {
     onOpenChange(false);
@@ -253,7 +273,9 @@ export function GalleryPickerDialog({
             >
               <Masonry>
                 {images.map((image) => {
-                  const isSelected = pendingImage?.id === image.id;
+                  const isSelected = multiple
+                    ? selectedImages.some((item) => item.id === image.id)
+                    : pendingImage?.id === image.id;
                   return (
                     <div className="relative" key={image.id}>
                       <ImageCard
@@ -297,7 +319,20 @@ export function GalleryPickerDialog({
           <div className="flex w-full items-center justify-between gap-3">
             {/* Selected preview */}
             <div className="flex min-w-0 flex-1 items-center gap-2">
-              {pendingImage ? (
+              {multiple ? (
+                selectedImages.length > 0 ? (
+                  <>
+                    <div className="bg-primary/10 text-primary flex h-6 w-6 shrink-0 items-center justify-center rounded-full">
+                      <CheckIcon className="size-3.5" />
+                    </div>
+                    <span className="text-muted-foreground max-w-xs truncate text-sm">
+                      {selectedImages.length} image{selectedImages.length !== 1 ? 's' : ''} selected
+                    </span>
+                  </>
+                ) : (
+                  <span className="text-muted-foreground text-sm">No image selected</span>
+                )
+              ) : pendingImage ? (
                 <>
                   <div className="bg-primary/10 text-primary flex h-6 w-6 shrink-0 items-center justify-center rounded-full">
                     <CheckIcon className="size-3.5" />
@@ -315,8 +350,12 @@ export function GalleryPickerDialog({
               <Button variant="outline" onClick={handleCancel}>
                 Cancel
               </Button>
-              <Button id="gallery-picker-confirm" onClick={handleConfirm} disabled={!pendingImage}>
-                Select image
+              <Button
+                id="gallery-picker-confirm"
+                onClick={handleConfirm}
+                disabled={multiple ? selectedImages.length === 0 : !pendingImage}
+              >
+                {multiple ? 'Add images' : 'Select image'}
               </Button>
             </div>
           </div>

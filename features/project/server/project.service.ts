@@ -23,6 +23,13 @@ const PROJECT_SEARCH_FIELDS = ['name', 'slug'] as const;
 
 const PROJECT_INCLUDE = {
   images: { include: { image: true } },
+  user: { select: { id: true, name: true, email: true, image: true } },
+} satisfies Prisma.ProjectInclude;
+
+/** Public variant — owner user WITHOUT email (privacy, mirrors PUBLIC_POST_INCLUDE). */
+const PUBLIC_PROJECT_INCLUDE = {
+  images: { include: { image: true } },
+  user: { select: { id: true, name: true, image: true } },
 } satisfies Prisma.ProjectInclude;
 
 /** Collapses the join rows (`images: ProjectImage[]`) into a plain `GalleryImage[]`. */
@@ -117,7 +124,7 @@ export const projectService = {
 
     const [projects, total] = await Promise.all([
       prisma.project.findMany({
-        include: PROJECT_INCLUDE,
+        include: PUBLIC_PROJECT_INCLUDE,
         orderBy: query.orderBy,
         skip: query.pagination.skip,
         take: query.pagination.take,

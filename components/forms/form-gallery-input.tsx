@@ -141,7 +141,7 @@ function GalleryInputContent({
   pickerTitle,
   deleteOnRemove,
   disabled,
-skipCompression
+  skipCompression
 }: {
   onChange: (value: string | string[]) => void;
   multiple: boolean;
@@ -150,7 +150,7 @@ skipCompression
   accept: string;
   pickerTitle?: string;
   deleteOnRemove: boolean;
-    disabled?: boolean;
+  disabled?: boolean;
   skipCompression?: boolean
 }) {
   const { mutate: deleteGallery } = useDeleteGallery();
@@ -248,9 +248,9 @@ skipCompression
     (file: File) => {
       if (!canAdd) return;
       const previewUrl = createBlobPreview(file);
-      const taskId = uploadManager.enqueue(file, {
-        skipCompression: skipCompression,
-      });
+      const taskId = skipCompression
+        ? uploadManager.enqueue(file, { skipCompression: true })
+        : uploadManager.enqueue(file);
       const newItem: GalleryItem = {
         key: taskId,
         previewUrl,
@@ -268,24 +268,45 @@ skipCompression
   );
 
   const pickFromGallery = useCallback(
-    (image: GalleryImage) => {
+    (imageOrImages: GalleryImage | GalleryImage[]) => {
       if (!canAdd) return;
+
+      // Multiple mode: append all picked images (dedupe by id, respect maxFiles)
+      if (multiple) {
+        const picked = Array.isArray(imageOrImages) ? imageOrImages : [imageOrImages];
+        const existingIds = new Set(
+          items.map((item) => item.galleryImage?.id).filter((id): id is string => Boolean(id)),
+        );
+        const availableSlots = maxFiles ? Math.max(maxFiles - items.length, 0) : picked.length;
+        const added: GalleryItem[] = picked
+          .filter((image) => !existingIds.has(image.id))
+          .slice(0, availableSlots)
+          .map((image) => ({
+            key: image.id,
+            previewUrl: image.url,
+            galleryImage: image,
+            pickedFromGallery: true,
+          }));
+
+        if (added.length === 0) return;
+        const next = [...items, ...added];
+        setItems(next);
+        writeValue(next);
+        return;
+      }
+
+      // Single mode: replace the current image
+      const image = Array.isArray(imageOrImages) ? imageOrImages[0] : imageOrImages;
+      if (!image) return;
       const newItem: GalleryItem = {
         key: image.id,
         previewUrl: image.url,
         galleryImage: image,
         pickedFromGallery: true,
       };
-
-      if (multiple) {
-        const next = [...items, newItem];
-        setItems(next);
-        writeValue(next);
-      } else {
-        replaceWith(items[0], [newItem]);
-      }
+      replaceWith(items[0], [newItem]);
     },
-    [canAdd, items, multiple, replaceWith, writeValue],
+    [canAdd, items, maxFiles, multiple, replaceWith, writeValue],
   );
 
   const removeItem = useCallback(
@@ -357,6 +378,7 @@ skipCompression
         onOpenChange={setGalleryPickerOpen}
         onSelect={pickFromGallery}
         title={pickerTitle ?? 'Pick image'}
+        multiple={multiple}
       />
     </>
   );

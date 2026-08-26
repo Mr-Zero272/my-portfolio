@@ -39,30 +39,41 @@ vi.mock('@/features/gallery/components/gallery-picker-dialog', () => ({
     open,
     onOpenChange,
     onSelect,
+    multiple,
   }: {
     open: boolean;
     onOpenChange: (open: boolean) => void;
-    onSelect: (image: GalleryImage) => void;
-  }) =>
-    open ? (
+    onSelect: (images: GalleryImage | GalleryImage[]) => void;
+    multiple?: boolean;
+  }) => {
+    if (!open) return null;
+    const image = (id: string): GalleryImage =>
+      ({ id, url: `https://cdn/${id}.png`, name: id }) as GalleryImage;
+
+    return (
       <div data-testid="gallery-picker">
-        <button
-          type="button"
-          onClick={() =>
-            onSelect({
-              id: 'picked-1',
-              url: 'https://cdn/picked-1.png',
-              name: 'Picked One',
-            } as GalleryImage)
-          }
-        >
+        <button type="button" onClick={() => onSelect(image('picked-1'))}>
           pick-picked-1
         </button>
+        {multiple ? (
+          <>
+            <button type="button" onClick={() => onSelect([image('picked-2'), image('picked-3')])}>
+              pick-two
+            </button>
+            <button
+              type="button"
+              onClick={() => onSelect([image('existing-1'), image('picked-2')])}
+            >
+              pick-dup
+            </button>
+          </>
+        ) : null}
         <button type="button" onClick={() => onOpenChange(false)}>
           close
         </button>
       </div>
-    ) : null,
+    );
+  },
 }));
 
 // ─── Fixtures / helpers ─────────────────────────────────────────────────────
@@ -313,5 +324,48 @@ describe('FormGalleryInput — multiple mode', () => {
     expect(screen.getByText('1/1')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /upload image/i })).toBeDisabled();
     expect(screen.getByRole('button', { name: /pick from gallery/i })).toBeDisabled();
+  });
+
+  it('appends all images from a multi-select batch', async () => {
+    const { getValues } = renderField(
+      { imageId: [] },
+      <FormGalleryInput name="imageId" multiple />,
+    );
+
+    await screen.getByRole('button', { name: /pick from gallery/i }).click();
+    expect(screen.getByTestId('gallery-picker')).toBeInTheDocument();
+
+    await screen.getByRole('button', { name: 'pick-two' }).click();
+
+    expect(getValues('imageId')).toEqual(['picked-2', 'picked-3']);
+    expect(screen.getAllByRole('img')).toHaveLength(2);
+  });
+
+  it('dedupes already-selected images when picking a batch', async () => {
+    const { getValues } = renderField(
+      { imageId: ['existing-1'] },
+      <FormGalleryInput name="imageId" multiple existing={[existingImage]} />,
+    );
+
+    await screen.getByRole('button', { name: /pick from gallery/i }).click();
+    await screen.getByRole('button', { name: 'pick-dup' }).click();
+
+    // existing-1 already present → skipped; picked-2 appended
+    expect(getValues('imageId')).toEqual(['existing-1', 'picked-2']);
+    expect(screen.getAllByRole('img')).toHaveLength(2);
+  });
+
+  it('only appends up to the remaining maxFiles slots in a batch', async () => {
+    const { getValues } = renderField(
+      { imageId: ['existing-1'] },
+      <FormGalleryInput name="imageId" multiple maxFiles={2} existing={[existingImage]} />,
+    );
+
+    await screen.getByRole('button', { name: /pick from gallery/i }).click();
+    await screen.getByRole('button', { name: 'pick-two' }).click();
+
+    // only 1 slot left → only picked-2 is added
+    expect(getValues('imageId')).toEqual(['existing-1', 'picked-2']);
+    expect(screen.getAllByRole('img')).toHaveLength(2);
   });
 });

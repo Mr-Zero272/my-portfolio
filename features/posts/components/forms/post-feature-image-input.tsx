@@ -68,7 +68,10 @@ export const PostFeatureImageInput = ({
   };
 
   // ── Gallery picker ────────────────────────────────────────────────────────
-  const handlePickFromGallery = (image: GalleryImage) => {
+  const handlePickFromGallery = (imageOrImages: GalleryImage | GalleryImage[]) => {
+    const image = Array.isArray(imageOrImages) ? imageOrImages[0] : imageOrImages;
+    if (!image) return;
+
     // Cancel any in-progress upload
     if (task) uploadManager.cancel(task.id);
     revokeBlobPreview();
