@@ -1,6 +1,7 @@
 'use client';
 
 import GithubIcon from '@/components/icons/github';
+import CustomFallbackAvatar from '@/components/shared/custom-fallback-avatar';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -54,9 +55,11 @@ export function ProjectCard({ project, mode = 'public', renderActions }: Project
   return (
     <Card className="flex h-full flex-col">
       <CardHeader className="flex items-center gap-3">
-        <Avatar size="sm">
+        <Avatar>
           {project.user?.image ? <AvatarImage src={project.user.image} alt={ownerName} /> : null}
-          <AvatarFallback>{getInitials(ownerName)}</AvatarFallback>
+          <AvatarFallback>
+            <CustomFallbackAvatar name={ownerName} />
+          </AvatarFallback>
         </Avatar>
         <div className="min-w-0 flex-1">
           <CardTitle className="truncate">{project.name}</CardTitle>
@@ -94,7 +97,7 @@ export function ProjectCard({ project, mode = 'public', renderActions }: Project
             ) : null}
           </Carousel>
         ) : (
-          <div className="flex aspect-video items-center justify-center rounded-lg border bg-muted/40">
+          <div className="bg-muted/40 flex aspect-video items-center justify-center rounded-lg border">
             <ImageIcon className="text-muted-foreground size-8" />
           </div>
         )}

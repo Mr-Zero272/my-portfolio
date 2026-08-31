@@ -32,12 +32,18 @@ export const ListProjects = ({
       fallbackEmpty={
         <StateUI
           title="No Projects"
-          description="Add your first project to get started"
+          description={
+            mode === 'private'
+              ? 'Add your first project to get started'
+              : "It's empty here, check back later for more"
+          }
           actions={
-            <Button onClick={onCreateNew}>
-              <PlusIcon />
-              Add first project
-            </Button>
+            mode === 'private' ? (
+              <Button onClick={onCreateNew}>
+                <PlusIcon />
+                Add first project
+              </Button>
+            ) : undefined
           }
         />
       }

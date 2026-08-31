@@ -29,11 +29,7 @@ import { useDeleteProject, useProjectForm, useProjects } from '../hooks';
 import { ProjectWithAllRelations } from '../types';
 
 export const ListProjectPage = () => {
-  const {
-    data: projectsData,
-    isLoading: projectsLoading,
-    error: projectsError,
-  } = useProjects();
+  const { data: projectsData, isLoading: projectsLoading, error: projectsError } = useProjects();
 
   const formAction = useFormActionState<ProjectWithAllRelations>();
   const deleteAction = useActionState<ProjectWithAllRelations>();
@@ -101,7 +97,7 @@ export const ListProjectPage = () => {
   }, [formAction]);
 
   return (
-    <div className="pb-20">
+    <div className="max-w-5xl pb-20">
       <PageHeader
         title="Projects"
         description="Manage your projects. Add, edit, or delete your work."
