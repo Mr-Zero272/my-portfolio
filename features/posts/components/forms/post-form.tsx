@@ -120,7 +120,6 @@ const PostFormContent = ({
                   <div>
                     <PostFeatureImageInput featureImageFile={context.featureImage} />
                     <TitleFormInput />
-                    {/* FIXME: thí component is not stable yet and have some error fix it later */}
                     <PostEditorInput />
                   </div>
                 </div>

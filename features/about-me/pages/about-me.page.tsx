@@ -4,7 +4,14 @@ import { Spinner } from '@/components/ui/spinner';
 import { cn } from '@/lib/utils';
 import { parseAsString, useQueryState } from 'nuqs';
 import { Suspense, useCallback } from 'react';
-import { AboutMeTabs, AboutTab, EducationTab, ExperienceTab, TabType } from '../components';
+import {
+  AboutMeTabs,
+  AboutTab,
+  EducationTab,
+  ExperienceTab,
+  SkillTab,
+  TabType,
+} from '../components';
 
 export const AboutMePage = () => {
   return (
@@ -23,14 +30,6 @@ const AboutMePageContent = () => {
     },
     [setActiveTab],
   );
-
-  const renderDevelopingTab = () => {
-    return (
-      <div>
-        <h1>Developing...</h1>
-      </div>
-    );
-  };
 
   return (
     <>
@@ -54,7 +53,7 @@ const AboutMePageContent = () => {
         <article className="flex-1">
           {activeTab === 'about' && <AboutTab />}
           {activeTab === 'education' && <EducationTab />}
-          {activeTab === 'skills' && renderDevelopingTab()}
+          {activeTab === 'skills' && <SkillTab />}
           {activeTab === 'experiences' && <ExperienceTab />}
         </article>
       </section>

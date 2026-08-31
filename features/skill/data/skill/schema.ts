@@ -24,3 +24,15 @@ export const DEFAULT_SKILL_FORM_VALUES: SkillFormValues = {
   displayOrder: 0,
   isVisible: true,
 };
+
+export const BulkSortItemSchema = z.object({
+  id: z.string(),
+  displayOrder: z.number().int(),
+});
+
+export const BulkSortSkillsSchema = z.object({
+  items: z.array(BulkSortItemSchema),
+});
+
+export type BulkSortSkillsInput = z.infer<typeof BulkSortSkillsSchema>;
+
