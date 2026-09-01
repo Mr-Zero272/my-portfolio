@@ -26,6 +26,18 @@ export const postApi = {
     } as ListResponse<PostWithAllRelations>;
   },
 
+  getAllPublic: async (request?: GetPostsRequest) => {
+    const queryParams = request?.query ? normalizeQueryParams(request?.query) : undefined;
+    const res = await axiosInstance.get('/public/posts', {
+      params: queryParams,
+    });
+
+    return {
+      list: res.data?.data,
+      meta: res.data?.meta,
+    } as ListResponse<PostWithAllRelations>;
+  },
+
   getById: async (request: GetPostRequest) => {
     const res = await axiosInstance.get(`/posts/${request.path?.id}`);
 

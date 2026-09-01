@@ -3,6 +3,16 @@ import { TagFormValues } from '../schemas';
 
 export type GetTagsRequest = RequestConfig<undefined, BaseQuery, undefined>;
 
+export type GetTagsWithMostPostsRequest = RequestConfig<undefined, BaseQuery, undefined>;
+
+/** Shape returned by the public "tags with most posts" endpoint. */
+export interface TagWithPostCount {
+  id: string;
+  name: string;
+  slug: string;
+  postCount: number;
+}
+
 export type GetTagsBatchRequest = RequestConfig<undefined, { ids: string[], page?: number, limit?: number }, undefined>;
 
 export type GetTagRequest = RequestConfig<{ id: string }, undefined, undefined>;

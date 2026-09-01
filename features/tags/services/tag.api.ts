@@ -3,12 +3,14 @@ import { Tag } from '@/lib/generated/prisma/client';
 import { ListResponse } from '@/types/api';
 import { normalizeQueryParams } from '@/utils/search-query';
 import {
-  CreateTagRequest,
-  DeleteTagRequest,
-  GetTagRequest,
-  GetTagsBatchRequest,
-  GetTagsRequest,
-  UpdateTagRequest,
+    CreateTagRequest,
+    DeleteTagRequest,
+    GetTagRequest,
+    GetTagsBatchRequest,
+    GetTagsRequest,
+    GetTagsWithMostPostsRequest,
+    TagWithPostCount,
+    UpdateTagRequest,
 } from '../types';
 
 export const tagApi = {
@@ -22,6 +24,18 @@ export const tagApi = {
       list: res.data?.data,
       meta: res.data?.meta,
     } as ListResponse<Tag>;
+  },
+
+  getTagsWithMostPosts: async (request?: GetTagsWithMostPostsRequest) => {
+    const queryParams = request?.query ? normalizeQueryParams(request?.query) : undefined;
+    const res = await axiosInstance.get('/public/tags/most-posts', {
+      params: queryParams,
+    });
+
+    return {
+      list: res.data?.data,
+      meta: res.data?.meta,
+    } as ListResponse<TagWithPostCount>;
   },
 
   getBatch: async (request?: GetTagsBatchRequest) => {

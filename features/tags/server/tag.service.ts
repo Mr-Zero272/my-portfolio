@@ -16,6 +16,53 @@ const TAG_SORTABLE_FIELDS = ['createdAt', 'updatedAt', 'name', 'slug'] as const;
 const TAG_SEARCH_FIELDS = ['name', 'slug'] as const;
 
 export const tagService = {
+  // Public — sorted by the number of published posts (descending).
+  // Returns a flat list of `{ id, name, slug, postCount }` for the blog "Browse by Tag" section.
+  async getTagsWithMostPosts(searchParams: URLSearchParams) {
+    const query = buildListQuery<Prisma.TagWhereInput>(searchParams, {
+      baseWhere: {
+        posts: { some: { post: { status: 'Published' } } },
+      },
+      defaultLimit: 50,
+      maxLimit: 100,
+    });
+
+    const include: Prisma.TagInclude = {
+      _count: {
+        select: {
+          posts: {
+            where: { post: { status: 'Published' } },
+          },
+        },
+      },
+    };
+
+    const [tags, total] = await Promise.all([
+      prisma.tag.findMany({
+        include,
+        skip: query.pagination.skip,
+        take: query.pagination.take,
+        where: query.where,
+      }),
+      prisma.tag.count({ where: query.where }),
+    ]);
+
+    const sortedTags = tags
+      .map((tag) => ({
+        id: tag.id,
+        name: tag.name,
+        slug: tag.slug,
+        postCount: tag._count.posts,
+      }))
+      .sort((a, b) => b.postCount - a.postCount);
+
+    return {
+      pagination: query.pagination,
+      tags: sortedTags,
+      total,
+    };
+  },
+
   async getAll(headers: Headers, searchParams: URLSearchParams) {
     await requireAdmin(headers);
 
@@ -83,14 +130,14 @@ export const tagService = {
     requireAdmin(headers);
 
     const ids = searchParams.getAll('ids');
-    const tags = await  prisma.tag.findMany({
-        include: TAG_INCLUDE,
-        where: { id: { in: ids } },
-      })
+    const tags = await prisma.tag.findMany({
+      include: TAG_INCLUDE,
+      where: { id: { in: ids } },
+    });
 
     return {
       tags,
-    }
+    };
   },
 
   async getById(headers: Headers, id: string) {

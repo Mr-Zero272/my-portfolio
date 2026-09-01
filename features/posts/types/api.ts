@@ -45,6 +45,6 @@ export type GenerateExcerptRequest = RequestConfig<
 
 export type CreatePostRequest = RequestConfig<undefined, undefined, PostFormValues>;
 
-export type UpdatePostRequest = RequestConfig<{ id: string }, undefined, PostFormValues>;
+export type UpdatePostRequest = RequestConfig<{ id: string }, undefined, Partial<PostFormValues>>;
 
 export type DeletePostRequest = RequestConfig<{ id: string }, undefined, undefined>;

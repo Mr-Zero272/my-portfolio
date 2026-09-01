@@ -5,7 +5,7 @@ import picomatch from 'picomatch';
 import { auth } from './lib/auth';
 
 const authPaths = ['/api/auth/**', '/auth/**'];
-const publicPaths = ['/', '/about-me', '/projects', '/contact', '/favorite', '/blog/**'];
+const publicPaths = ['/', '/about-me', '/projects', '/contact', '/favorite', '/blogs/**'];
 const apiPathsHandledByRoute = ['/api/site-setting/**'];
 const guardedPagePaths = ['/admin/**', '/onboarding', '/dashboard/**', '/settings/**'];
 

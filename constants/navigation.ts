@@ -38,8 +38,8 @@ export const rootNavigation = {
     },
     {
       icon: NotebookPenIcon,
-      href: '/blog',
-      label: 'Blog',
+      href: '/blogs',
+      label: 'Blogs',
     },
   ],
   secondary: [

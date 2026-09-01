@@ -4,29 +4,32 @@ import { PageHeader } from '@/components/shared/page-header';
 import { ActionItem } from '@/components/shared/responsive-actions';
 import { buttonVariants } from '@/components/ui/button';
 import { appPath } from '@/constants/path';
-import { useFormState } from '@/hooks/use-form-state';
 import { Post } from '@/lib/generated/prisma/client';
-import { EditIcon, PlusIcon } from 'lucide-react';
+import { EditIcon, PlusIcon, SendIcon } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'nextjs-toploader/app';
-import { Suspense, useMemo } from 'react';
+import { Suspense, useCallback, useMemo } from 'react';
+import { toast } from 'sonner';
 import { PostTable, PostTableSkeleton } from '../components';
-import { usePosts, usePostTableParams } from '../hooks';
+import { toPostFormValue } from '../data';
+import { usePosts, usePostTableParams, useUpdatePost } from '../hooks';
 
 export const ListPostsPageContent = () => {
   const router = useRouter();
-  // form
-  const formState = useFormState<Post>();
-
-  // const handleSuccess = useCallback(() => {
-  //   formState.close();
-  // }, [formState]);
-
-  // const { serverError, isEditMode, isLoading, error, initialData, onSubmit, isSubmitting } =
-  //   usePostForm({ id: formState.cachedPayload?.id, onSuccess: handleSuccess });
-
-  //  table
+  const { mutateAsync: updatePost, isPending: isPendingUpdate } = useUpdatePost();
   const getPostsRequest = usePostTableParams();
+
+  const handlePublishToggle = useCallback(async (post: Post) => {
+    try {
+      await updatePost({
+        path: { id: post.id },
+        body: { ...toPostFormValue(post), status: post.status === 'Published' ? 'Draft' : 'Published' },
+      });
+      toast.success(`Post ${post.status === 'Published' ? 'unpublished' : 'published'} successfully!`);
+    } catch (error) {
+      console.error(error);
+    }
+  }, [updatePost]);
 
   const {
     data: posts,
@@ -43,9 +46,19 @@ export const ListPostsPageContent = () => {
         onClick: (post) => router.push(appPath.admin.post.edit(post.id)),
         tooltip: 'Edit',
         icon: <EditIcon />,
+        group: 'main',
       },
+      {
+        key: 'publish-toggle',
+        label: 'Publish/Unpublish',
+        onClick: (post) => handlePublishToggle(post),
+        tooltip: 'Publish/Unpublish',
+        loading: isPendingUpdate,
+        icon: <SendIcon />,
+        group: 'main',
+      }
     ],
-    [router],
+    [router, handlePublishToggle, isPendingUpdate],
   );
 
   // const optimisticDeletePost = useOptimisticDeletePost();

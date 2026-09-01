@@ -5,8 +5,9 @@ import { Button } from '@/components/ui/button';
 import { formatDateTime } from '@/lib/format';
 import { Post } from '@/lib/generated/prisma/client';
 import { ColumnDef } from '@tanstack/react-table';
-import { CheckIcon, ClockIcon, TentIcon } from 'lucide-react';
+import { AlarmClockIcon, TentIcon } from 'lucide-react';
 import { useMemo } from 'react';
+import { getPostStatusConfig } from '../../constants';
 
 type UsePostColumnsProps = {
   onRowClick?: (post: Post) => void;
@@ -39,15 +40,17 @@ export const usePostColumns = ({ onRowClick, actions }: UsePostColumnsProps) => 
         enableSorting: true,
       },
       {
-        id: 'published',
-        accessorKey: 'published',
+        id: 'status',
+        accessorKey: 'status',
         header: ({ column }) => <DataTableColumnHeader column={column} label="Published" />,
         cell: ({ row }) => {
-          const value = row.getValue('published') as boolean | undefined | null;
+          const value = row.getValue('status');
+          const config = getPostStatusConfig(value as string);
+          const Icon = config?.icon ?? AlarmClockIcon;
           return (
-            <Badge variant={value ? 'default' : 'outline'}>
-              {value ? <CheckIcon /> : <ClockIcon />}
-              {value ? 'Published' : 'Draft'}
+            <Badge variant={value === 'Published' ? 'default' : 'outline'} className="capitalize">
+              <Icon />
+              {config?.label as string ?? value ?? '--'}
             </Badge>
           );
         },
