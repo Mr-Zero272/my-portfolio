@@ -1,5 +1,6 @@
 'use client';
 
+import CustomFallbackAvatar from '@/components/shared/custom-fallback-avatar';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import {
@@ -91,7 +92,7 @@ export function NavUser() {
             <Avatar className="h-8 w-8 rounded-lg">
               <AvatarImage src={user?.image || ''} alt={user?.name} />
               <AvatarFallback className="rounded-lg">
-                {user?.name?.charAt(0).toUpperCase()}
+                <CustomFallbackAvatar name={user?.name ?? 'User'} className="rounded-lg" />
               </AvatarFallback>
             </Avatar>
             <div className="grid flex-1 text-left text-sm leading-tight">
@@ -112,7 +113,7 @@ export function NavUser() {
                   <Avatar className="h-8 w-8 rounded-lg">
                     <AvatarImage src={user?.image || ''} alt={user?.name} />
                     <AvatarFallback className="rounded-lg">
-                      {user?.name?.charAt(0).toUpperCase()}
+                      <CustomFallbackAvatar name={user?.name ?? 'User'} className="rounded-lg" />
                     </AvatarFallback>
                   </Avatar>
                   <div className="grid flex-1 text-left text-sm leading-tight">
