@@ -15,7 +15,7 @@ import { ListItemNode, ListNode } from '@lexical/list';
 import { MarkNode } from '@lexical/mark';
 import { OverflowNode } from '@lexical/overflow';
 import { HorizontalRuleNode } from '@lexical/react/LexicalHorizontalRuleNode';
-import { HeadingNode, QuoteNode } from '@lexical/rich-text';
+import { QuoteNode } from '@lexical/rich-text';
 import { TableCellNode, TableNode, TableRowNode } from '@lexical/table';
 
 import { CollapsibleContainerNode } from '../plugins/CollapsiblePlugin/CollapsibleContainerNode';
@@ -25,6 +25,7 @@ import { AutocompleteNode } from './AutocompleteNode';
 import { DateTimeNode } from './DateTimeNode/DateTimeNode';
 import { EmojiNode } from './EmojiNode';
 import { ExcalidrawNode } from './ExcalidrawNode';
+import { HeadingNode } from './HeadingNode';
 import { ImageNode } from './ImageNode';
 import { KeywordNode } from './KeywordNode';
 import { LayoutContainerNode } from './LayoutContainerNode';
@@ -36,6 +37,7 @@ import { SpecialTextNode } from './SpecialTextNode';
 import { StickyNode } from './StickyNode';
 
 const PlaygroundNodes: Array<Klass<LexicalNode>> = [
+  // Custom HeadingNode có thêm `id` (slug từ text) cho TOC.
   HeadingNode,
   ListNode,
   ListItemNode,

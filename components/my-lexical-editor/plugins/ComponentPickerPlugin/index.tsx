@@ -21,7 +21,7 @@ import {
   MenuOption,
   useBasicTypeaheadTriggerMatch,
 } from '@lexical/react/LexicalTypeaheadMenuPlugin';
-import { $createHeadingNode, $createQuoteNode } from '@lexical/rich-text';
+import { $createQuoteNode } from '@lexical/rich-text';
 import { $setBlocksType } from '@lexical/selection';
 import { INSERT_TABLE_COMMAND } from '@lexical/table';
 import {
@@ -61,6 +61,7 @@ import { createPortal } from 'react-dom';
 import { ScrollArea } from '@/components/ui/scroll-area';
 
 import useModal from '../../hooks/useModal';
+import { $createHeadingNode } from '../../nodes/HeadingNode';
 import { INSERT_COLLAPSIBLE_COMMAND } from '../CollapsiblePlugin';
 import { INSERT_DATETIME_COMMAND } from '../DateTimePlugin';
 // import { INSERT_EXCALIDRAW_COMMAND } from '../ExcalidrawPlugin';
@@ -117,9 +118,8 @@ export function ComponentPickerMenuItem({
     <li
       key={option.key}
       tabIndex={-1}
-      className={`flex cursor-pointer items-center gap-2 px-3 py-2 text-sm transition-colors ${
-        isSelected ? 'bg-accent text-accent-foreground' : 'hover:bg-muted'
-      }`}
+      className={`flex cursor-pointer items-center gap-2 px-3 py-2 text-sm transition-colors ${isSelected ? 'bg-accent text-accent-foreground' : 'hover:bg-muted'
+        }`}
       // ref={option.setRefElement}
       role="option"
       aria-selected={isSelected}
@@ -410,24 +410,24 @@ export default function ComponentPickerMenuPlugin(): JSX.Element {
         ) =>
           anchorElementRef.current && options.length
             ? createPortal(
-                <div className="w-65 overflow-hidden rounded-lg border bg-white shadow-md dark:bg-zinc-900">
-                  <ScrollArea className="max-h-72 overflow-y-auto">
-                    <ul>
-                      {options.map((option, i) => (
-                        <ComponentPickerMenuItem
-                          index={i}
-                          isSelected={selectedIndex === i}
-                          onClick={() => selectOptionAndCleanUp(option)}
-                          onMouseEnter={() => setHighlightedIndex(i)}
-                          key={option.key}
-                          option={option}
-                        />
-                      ))}
-                    </ul>
-                  </ScrollArea>
-                </div>,
-                anchorElementRef.current,
-              )
+              <div className="w-65 overflow-hidden rounded-lg border bg-white shadow-md dark:bg-zinc-900">
+                <ScrollArea className="max-h-72 overflow-y-auto">
+                  <ul>
+                    {options.map((option, i) => (
+                      <ComponentPickerMenuItem
+                        index={i}
+                        isSelected={selectedIndex === i}
+                        onClick={() => selectOptionAndCleanUp(option)}
+                        onMouseEnter={() => setHighlightedIndex(i)}
+                        key={option.key}
+                        option={option}
+                      />
+                    ))}
+                  </ul>
+                </ScrollArea>
+              </div>,
+              anchorElementRef.current,
+            )
             : null
         }
       />

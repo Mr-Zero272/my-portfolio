@@ -23,6 +23,7 @@ import ComponentPickerPlugin from './plugins/ComponentPickerPlugin';
 import DateTimePlugin from './plugins/DateTimePlugin';
 import DraggableBlockPlugin from './plugins/draggable-block-plugin';
 import FloatingTextFormatToolbarPlugin from './plugins/FloatingTextFormatToolbarPlugin';
+import { HeadingNodeIdPlugin } from './plugins/HeadingNodeIdPlugin';
 import { ImagesExtension } from './plugins/ImagesExtension';
 import PlaygroundEditorTheme from './themes/PlaygroundEditorTheme';
 // import './themes/PlaygroundEditorTheme.css';
@@ -128,6 +129,7 @@ function GhostLikeEditorInner({
   return (
     <div className="editor-container">
       <ComponentPickerPlugin />
+      <HeadingNodeIdPlugin />
       <TablePlugin />
       <CollapsiblePlugin />
       <ImagesPlugin />
