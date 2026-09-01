@@ -1,15 +1,16 @@
 import { getMainUserId } from '@/features/site-settings/server/main-user';
 import {
-    ApiErrorCode,
-    FilterOperator,
-    buildListQuery,
-    parseBooleanParam,
-    parseEnumParam,
-    parseNumberParam,
-    throwApiError,
+  ApiErrorCode,
+  FilterOperator,
+  buildListQuery,
+  parseBooleanParam,
+  parseEnumParam,
+  parseNumberParam,
+  throwApiError,
 } from '@/lib/api';
 import type { Prisma } from '@/lib/generated/prisma/client';
 import { prisma } from '@/lib/prisma';
+import { isCuid } from '@/utils/id';
 import type { PostFormValues } from '../schemas/post.schema';
 import { requirePostManager } from './post-auth';
 
@@ -172,10 +173,13 @@ export async function getPublicPosts(searchParams: URLSearchParams) {
 
 export async function getPost(headers: Headers, id: string) {
   await requirePostManager(headers);
+  const isId = isCuid(id);
+
+  const where = isId ? { id } : { slug: id };
 
   const post = await prisma.post.findUnique({
     include: POST_INCLUDE,
-    where: { id },
+    where,
   });
 
   if (!post) {

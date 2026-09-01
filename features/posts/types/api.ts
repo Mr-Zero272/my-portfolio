@@ -13,7 +13,7 @@ import { PostFormValues } from '../schemas';
 export interface PostWithAllRelations extends Post {
   featureImage?: GalleryImage;
   tags?: (PostTag & { tag: Tag })[];
-  authors?: (PostAuthor & { author: User })[];
+  authors?: (PostAuthor & { user: User })[];
 }
 
 export type GetPostsRequest = RequestConfig<

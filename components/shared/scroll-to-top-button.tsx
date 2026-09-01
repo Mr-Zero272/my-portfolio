@@ -1,10 +1,10 @@
 'use client';
 
 import { useLayoutState } from '@/stores';
-import { useEventListener } from '@mantine/hooks';
 import { ChevronUp } from 'lucide-react';
 import { AnimatePresence, motion } from 'motion/react';
 import { useCallback, useState } from 'react';
+import { useEventListener } from 'usehooks-ts';
 
 const ScrollToTopButton = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -50,3 +50,4 @@ const ScrollToTopButton = () => {
 };
 
 export { ScrollToTopButton };
+
