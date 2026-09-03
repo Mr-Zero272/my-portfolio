@@ -2,11 +2,11 @@ import {
   CogIcon,
   HeadphonesIcon,
   LayoutDashboardIcon,
-  MessageCircleQuestionIcon,
   NotebookPenIcon,
   SendIcon,
+  SquareTerminalIcon,
   TelescopeIcon,
-  UserIcon,
+  UserIcon
 } from 'lucide-react';
 
 export const rootNavigation = {
@@ -44,9 +44,9 @@ export const rootNavigation = {
   ],
   secondary: [
     {
-      icon: MessageCircleQuestionIcon,
-      href: '/help-supports',
-      label: 'Help & Supports',
+      icon: SquareTerminalIcon,
+      href: '/changelog',
+      label: 'Changelog',
     },
     {
       icon: CogIcon,

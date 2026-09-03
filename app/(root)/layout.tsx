@@ -1,5 +1,6 @@
 import { PageTransition } from '@/components/animations/page-transition';
 import { BottomNavBar } from '@/components/layouts/root/bottom-nav-bar';
+import { RootHeader } from '@/components/layouts/root/header';
 import { RootSidebar } from '@/components/layouts/root/sidebar';
 import { RootSidebarProvider } from '@/contexts/root-sidebar.context';
 import { Viewport } from 'next';
@@ -23,7 +24,7 @@ export default function RootLayout({
         <RootSidebar />
         {/* <CursorSetting /> */}
         <section className="relative flex w-full flex-1 flex-col gap-5 md:ml-20">
-          {/* <Header /> */}
+          <RootHeader />
           <PageTransition hasFooter>{children}</PageTransition>
         </section>
         <BottomNavBar />

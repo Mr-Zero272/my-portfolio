@@ -1,12 +1,13 @@
 'use client';
 import AppLogo from '@/components/shared/logo';
+import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { rootNavigation } from '@/constants/navigation';
 import { useRootSidebar } from '@/contexts/root-sidebar.context';
 import { cn } from '@/lib/utils';
 import { useClickOutside } from '@mantine/hooks';
-import { GaugeIcon } from 'lucide-react';
+import { GaugeIcon, SidebarIcon } from 'lucide-react';
 import { motion, useAnimationControls } from 'motion/react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -250,7 +251,7 @@ const SidebarItem = ({
   isCollapsed = false,
   isHidden = false,
   active = false,
-  onClick = () => {},
+  onClick = () => { },
   icon,
 }: SidebarItemProps) => {
   if (!isCollapsed && !isHidden) {
@@ -307,3 +308,13 @@ const SidebarItem = ({
     </Tooltip>
   );
 };
+
+export const RootSidebarToggle = () => {
+  const { toggle } = useRootSidebar();
+
+  return (
+    <Button variant="ghost" size="icon" onClick={toggle} className="p-0">
+      <SidebarIcon />
+    </Button>
+  );
+}
