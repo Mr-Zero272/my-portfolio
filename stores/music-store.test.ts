@@ -3,21 +3,32 @@ import { useMusicStore } from '@/stores/music-store';
 import type { Howl } from 'howler';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-// Avoid real audio instantiation in jsdom: only initializeTrack uses `new Howl`,
-// which none of these tests exercise.
-vi.mock('howler', () => ({
-  default: class HowlMock {
-    play() {}
-    pause() {}
-    stop() {}
-    unload() {}
-    seek() {}
-    volume() {}
-    duration() {
-      return 0;
-    }
-  },
+// Keep real audio out of jsdom. `new Howl` is only created by the playback
+// actions; instances are recorded so tests can assert start/switch behaviour.
+const howlerState = vi.hoisted(() => ({
+  instances: [] as Array<{
+    play: ReturnType<typeof vi.fn>;
+    unload: ReturnType<typeof vi.fn>;
+  }>,
 }));
+
+vi.mock('howler', () => {
+  class HowlMock {
+    play = vi.fn();
+    pause = vi.fn();
+    stop = vi.fn();
+    unload = vi.fn();
+    seek = vi.fn();
+    volume = vi.fn();
+    duration = () => 0;
+
+    constructor() {
+      howlerState.instances.push(this);
+    }
+  }
+  // The store imports `Howl` as a named export; expose the class under both.
+  return { default: HowlMock, Howl: HowlMock };
+});
 
 const revokeSpy = vi.spyOn(URL, 'revokeObjectURL');
 
@@ -57,6 +68,7 @@ function makeSound() {
 beforeEach(() => {
   resetStore();
   revokeSpy.mockClear();
+  howlerState.instances.length = 0;
 });
 
 describe('addTracks', () => {
@@ -224,5 +236,73 @@ describe('clearPlaylist', () => {
     expect(revokeSpy).toHaveBeenCalledWith(b.url);
     expect(revokeSpy).toHaveBeenCalledWith(b.metadata.cover);
     expect(sound.unload).toHaveBeenCalledTimes(1);
+  });
+});
+
+describe('playback', () => {
+  it('play() creates a Howl for the current track and starts it after an import', () => {
+    const a = makeTrack('A');
+    useMusicStore.getState().addTracks([a]); // selects index 0, but no sound yet
+
+    useMusicStore.getState().play();
+
+    const state = useMusicStore.getState();
+    expect(howlerState.instances).toHaveLength(1);
+    expect(state.soundRef).toBe(howlerState.instances[0]);
+    expect(state.currentTrackSrcRef).toBe(a.url);
+    expect(howlerState.instances[0].play).toHaveBeenCalledTimes(1);
+  });
+
+  it('play() falls back to the first track when no index is selected', () => {
+    useMusicStore.setState({ tracks: [makeTrack('A')], currentTrackIndex: -1 });
+
+    useMusicStore.getState().play();
+
+    const state = useMusicStore.getState();
+    expect(state.currentTrackIndex).toBe(0);
+    expect(howlerState.instances).toHaveLength(1);
+  });
+
+  it('setTrack() selects and starts playing the chosen track', () => {
+    const [a, b] = [makeTrack('A'), makeTrack('B')];
+    useMusicStore.getState().addTracks([a, b]);
+
+    useMusicStore.getState().setTrack(1);
+
+    const state = useMusicStore.getState();
+    expect(state.currentTrackIndex).toBe(1);
+    expect(howlerState.instances).toHaveLength(1);
+    expect(state.soundRef).toBe(howlerState.instances[0]);
+    expect(state.currentTrackSrcRef).toBe(b.url);
+    expect(howlerState.instances[0].play).toHaveBeenCalledTimes(1);
+  });
+
+  it('play() resumes an existing paused sound instead of recreating it', () => {
+    useMusicStore.getState().addTracks([makeTrack('A')]);
+    useMusicStore.getState().play(); // creates the first sound
+    useMusicStore.getState().pause();
+
+    useMusicStore.getState().play();
+
+    expect(howlerState.instances).toHaveLength(1); // same sound reused
+    expect(howlerState.instances[0].play).toHaveBeenCalledTimes(2);
+  });
+
+  it('nextTrack() while playing swaps to the next track sound', () => {
+    const [a, b] = [makeTrack('A'), makeTrack('B')];
+    useMusicStore.getState().addTracks([a, b]);
+    useMusicStore.getState().play(); // A starts
+    useMusicStore.setState({ isPlaying: true }); // simulate howler onplay
+    const firstInstance = howlerState.instances[0];
+
+    useMusicStore.getState().nextTrack();
+
+    const state = useMusicStore.getState();
+    expect(state.currentTrackIndex).toBe(1);
+    expect(howlerState.instances).toHaveLength(2); // new sound for B
+    expect(firstInstance.unload).toHaveBeenCalledTimes(1);
+    expect(state.soundRef).toBe(howlerState.instances[1]);
+    expect(state.currentTrackSrcRef).toBe(b.url);
+    expect(howlerState.instances[1].play).toHaveBeenCalledTimes(1);
   });
 });

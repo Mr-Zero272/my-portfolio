@@ -20,19 +20,19 @@ import type {
   SerializedLexicalNode,
   Spread,
 } from 'lexical';
-import type {JSX} from 'react';
+import type { JSX } from 'react';
 
 import {
   buildEditorFromExtensions,
   NestedEditorExtension,
 } from '@lexical/extension';
-import {HashtagExtension} from '@lexical/hashtag';
-import {HistoryExtension} from '@lexical/history';
-import {$generateHtmlFromNodes, $generateNodesFromDOM} from '@lexical/html';
-import {LinkExtension} from '@lexical/link';
-import {ReactExtension} from '@lexical/react/ReactExtension';
-import {ReactProviderExtension} from '@lexical/react/ReactProviderExtension';
-import {RichTextExtension} from '@lexical/rich-text';
+import { HashtagExtension } from '@lexical/hashtag';
+import { HistoryExtension } from '@lexical/history';
+import { $generateHtmlFromNodes, $generateNodesFromDOM } from '@lexical/html';
+import { LinkExtension } from '@lexical/link';
+import { ReactExtension } from '@lexical/react/ReactExtension';
+import { ReactProviderExtension } from '@lexical/react/ReactProviderExtension';
+import { RichTextExtension } from '@lexical/rich-text';
 import {
   $applyNodeReplacement,
   $createRangeSelection,
@@ -50,11 +50,11 @@ import {
 } from 'lexical';
 import * as React from 'react';
 
-import {EmojisExtension} from '../plugins/EmojisExtension';
+import { EmojisExtension } from '../plugins/EmojisExtension';
 import MentionsPlugin from '../plugins/MentionsPlugin';
 import ContentEditable from '../ui/ContentEditable';
-import {EmojiNode} from './EmojiNode';
-import {KeywordsExtension} from './KeywordNode';
+import { EmojiNode } from './EmojiNode';
+import { KeywordsExtension } from './KeywordNode';
 
 const ImageComponent = React.lazy(() => import('./ImageComponent'));
 
@@ -78,7 +78,7 @@ const CaptionEditorExtension = defineExtension({
           className="ImageNode__contentEditable"
         />
       ),
-      decorators: [<MentionsPlugin />],
+      decorators: [<MentionsPlugin key="mentions" />],
     }),
   ],
   name: '@lexical/playground/ImageNodeCaption',
@@ -113,15 +113,15 @@ function $convertImageElement(domNode: Node): null | DOMConversionOutput {
   if (!src || src.startsWith('file:///') || isGoogleDocCheckboxImg(img)) {
     return null;
   }
-  const {alt: altText, width, height} = img;
-  const node = $createImageNode({altText, height, src, width});
-  return {node};
+  const { alt: altText, width, height } = img;
+  const node = $createImageNode({ altText, height, src, width });
+  return { node };
 }
 
 export function $isCaptionEditorEmpty(): boolean {
   // Search the document for any non-element node
   // to determine if it's empty or not
-  for (const {origin} of $extendCaretToRange(
+  for (const { origin } of $extendCaretToRange(
     $getChildCaret($getRoot(), 'next'),
   )) {
     if (!$isElementNode(origin)) {
@@ -174,7 +174,7 @@ export class ImageNode extends DecoratorNode<JSX.Element> {
   }
 
   static importJSON(serializedNode: SerializedImageNode): ImageNode {
-    const {altText, height, width, maxWidth, src, showCaption} = serializedNode;
+    const { altText, height, width, maxWidth, src, showCaption } = serializedNode;
     return $createImageNode({
       altText,
       height,
@@ -187,7 +187,7 @@ export class ImageNode extends DecoratorNode<JSX.Element> {
 
   updateFromJSON(serializedNode: LexicalUpdateJSON<SerializedImageNode>): this {
     const node = super.updateFromJSON(serializedNode);
-    const {caption} = serializedNode;
+    const { caption } = serializedNode;
 
     const nestedEditor = node.__caption;
     const editorState = nestedEditor.parseEditorState(caption.editorState);
@@ -235,17 +235,17 @@ export class ImageNode extends DecoratorNode<JSX.Element> {
         figureElement.appendChild(imgElement);
         figureElement.appendChild(figcaptionElement);
 
-        return {element: figureElement};
+        return { element: figureElement };
       }
     }
 
-    return {element: imgElement};
+    return { element: imgElement };
   }
 
   static importDOM(): DOMConversionMap | null {
     return {
       figcaption: () => ({
-        conversion: () => ({node: null}),
+        conversion: () => ({ node: null }),
         priority: 0,
       }),
       figure: () => ({
@@ -264,7 +264,7 @@ export class ImageNode extends DecoratorNode<JSX.Element> {
                       );
                       $setSelection(null);
                     },
-                    {tag: SKIP_DOM_SELECTION_TAG},
+                    { tag: SKIP_DOM_SELECTION_TAG },
                   );
                 }
               }

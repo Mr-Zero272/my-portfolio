@@ -3,6 +3,7 @@
 import { useCurrentTrack, useIsPlaying } from '@/stores/music-store';
 import { Music2, Play } from 'lucide-react';
 import { useState } from 'react';
+import { PlayerControl } from '../components';
 import { ImportSongsTab } from '../components/import-songs-tab';
 import { TrackListTab } from '../components/track-list-tab';
 
@@ -13,9 +14,9 @@ export const MusicPlayerPage = () => {
 
   return (
     <div className="w-full">
-      <div className="mx-auto flex w-full max-w-3xl flex-col gap-6 pb-24">
-        <NowPlayingCard />
-        <section className="rounded-2xl border bg-card p-4 sm:p-5">
+      <div className="flex flex-col items-center gap-4 p-1 md:gap-10 md:p-5 lg:flex-row">
+        <PlayerControl />
+        <section className="w-full flex-1">
           {view === 'add' ? (
             <ImportSongsTab onBack={() => setView('list')} />
           ) : (
@@ -33,14 +34,14 @@ function NowPlayingCard() {
 
   if (!track) {
     return (
-      <div className="flex items-center gap-x-4 rounded-2xl border bg-card p-4 sm:p-5">
-        <div className="flex size-16 shrink-0 items-center justify-center rounded-xl bg-muted text-muted-foreground">
+      <div className="bg-card flex items-center gap-x-4 rounded-2xl border p-4 sm:p-5">
+        <div className="bg-muted text-muted-foreground flex size-16 shrink-0 items-center justify-center rounded-xl">
           <Music2 className="size-7" />
         </div>
         <div>
-          <p className="text-xs uppercase tracking-wide text-muted-foreground">Now playing</p>
+          <p className="text-muted-foreground text-xs tracking-wide uppercase">Now playing</p>
           <p className="text-lg font-semibold">No song selected</p>
-          <p className="text-sm text-muted-foreground">
+          <p className="text-muted-foreground text-sm">
             Import some audio files below to get started.
           </p>
         </div>
@@ -49,28 +50,28 @@ function NowPlayingCard() {
   }
 
   return (
-    <div className="flex items-center gap-x-4 rounded-2xl border bg-card p-4 sm:p-5">
+    <div className="bg-card flex items-center gap-x-4 rounded-2xl border p-4 sm:p-5">
       {/* Cover art or fallback */}
-      <div className="relative size-16 shrink-0 overflow-hidden rounded-xl bg-muted">
+      <div className="bg-muted relative size-16 shrink-0 overflow-hidden rounded-xl">
         {track.metadata.cover ? (
           // eslint-disable-next-line @next/next/no-img-element -- blob object URL from embedded art
           <img src={track.metadata.cover} alt="" className="size-full object-cover" />
         ) : (
-          <span className="flex size-full items-center justify-center text-muted-foreground">
+          <span className="text-muted-foreground flex size-full items-center justify-center">
             <Music2 className="size-6" />
           </span>
         )}
       </div>
       <div className="min-w-0 flex-1">
-        <p className="text-xs uppercase tracking-wide text-muted-foreground">
+        <p className="text-muted-foreground text-xs tracking-wide uppercase">
           {isPlaying ? 'Playing' : 'Selected'}
         </p>
         <p className="truncate text-lg font-semibold">{track.metadata.title}</p>
-        <p className="truncate text-sm text-muted-foreground">
+        <p className="text-muted-foreground truncate text-sm">
           {track.metadata.artist ?? 'Unknown artist'}
         </p>
       </div>
-      {isPlaying && <Play className="size-5 shrink-0 fill-foreground text-foreground" />}
+      {isPlaying && <Play className="fill-foreground text-foreground size-5 shrink-0" />}
     </div>
   );
 }

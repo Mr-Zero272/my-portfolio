@@ -6,7 +6,7 @@ import { readTrackInfo, titleFromFileName } from '@/features/music-player/utils/
 import { cn } from '@/lib/utils';
 import { useMusicStore } from '@/stores/music-store';
 import { ChevronLeft, CloudUpload } from 'lucide-react';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { toast } from 'sonner';
 import { PendingTrack, PendingTrackItem } from './pending-track-item';
@@ -26,6 +26,8 @@ type ImportSongsTabProps = {
 
 export const ImportSongsTab = ({ onBack }: ImportSongsTabProps) => {
   const addTracks = useMusicStore((state) => state.addTracks);
+  const play = useMusicStore((state) => state.play);
+  const isPlaying = useMusicStore((state) => state.isPlaying);
   const [pending, setPending] = useState<PendingTrack[]>([]);
 
   // Track the latest pending list in a ref so the unmount cleanup can revoke
@@ -44,7 +46,7 @@ export const ImportSongsTab = ({ onBack }: ImportSongsTabProps) => {
     };
   }, []);
 
-  const handleFiles = (files: File[]) => {
+  const handleFiles = useCallback((files: File[]) => {
     if (files.length === 0) return;
 
     const entries: PendingTrack[] = files.map((file) => ({
@@ -76,7 +78,7 @@ export const ImportSongsTab = ({ onBack }: ImportSongsTabProps) => {
           );
         });
     }
-  };
+  }, []);
 
   const { getRootProps, getInputProps, isDragActive, open } = useDropzone({
     multiple: true,
@@ -102,18 +104,18 @@ export const ImportSongsTab = ({ onBack }: ImportSongsTabProps) => {
     },
   });
 
-  const handleRemove = (id: string) => {
+  const handleRemove = useCallback((id: string) => {
     const item = pending.find((p) => p.id === id);
     if (item) {
       revokePending(item);
     }
     setPending((prev) => prev.filter((p) => p.id !== id));
-  };
+  }, [pending]);
 
   const readyCount = pending.filter((p) => p.status === 'ready').length;
   const hasParsing = pending.some((p) => p.status === 'parsing');
 
-  const handleCommit = () => {
+  const handleCommit = useCallback(() => {
     if (readyCount === 0 || hasParsing) return;
     const tracks: Track[] = pending
       .filter((p) => p.status === 'ready')
@@ -129,7 +131,10 @@ export const ImportSongsTab = ({ onBack }: ImportSongsTabProps) => {
     setPending([]);
     addTracks(tracks);
     onBack();
-  };
+    if (tracks.length > 0 && !isPlaying) {
+      play();
+    }
+  }, [addTracks, hasParsing, onBack, pending, play, readyCount, isPlaying]);
 
   return (
     <div>
