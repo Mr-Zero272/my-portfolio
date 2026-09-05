@@ -5,10 +5,11 @@
   "packageManager": "pnpm@10.11.0",
   "pnpm": {
     "onlyBuiltDependencies": [
+      "@google/genai",
       "@prisma/client",
       "@prisma/engines",
-      "prisma",
       "msgpackr-extract",
+      "prisma",
       "protobufjs",
       "unrs-resolver"
     ]
