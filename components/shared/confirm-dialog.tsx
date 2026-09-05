@@ -1,18 +1,11 @@
 'use client';
 
-import { Button } from '@/components/ui/button';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { cn } from '@/lib/utils';
 import { useState } from 'react';
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogMedia, AlertDialogTitle } from '../ui/alert-dialog';
+import { Spinner } from '../ui/spinner';
 
 // ─── Types ──────────────────────────────────────────────────────────────────
 
@@ -27,8 +20,13 @@ interface ConfirmDialogBaseProps {
   variant?: Variant;
   title: string;
   description: React.ReactNode;
+  cancelIcon?: React.ReactNode;
   cancelLabel?: string;
+  confirmIcon?: React.ReactNode;
   confirmLabel?: string;
+
+  size?: 'default' | 'sm';
+  isLoading?: boolean;
   /** Called when user confirms. Can be async — button will show loading state */
   onConfirm: () => void | Promise<void>;
 }
@@ -65,8 +63,12 @@ function ConfirmDialog(props: ConfirmDialogProps) {
     variant = 'default',
     title,
     description,
+    cancelIcon,
     cancelLabel = 'Cancel',
+    confirmIcon,
     confirmLabel = 'Confirm',
+    size = 'default',
+    isLoading,
     onConfirm,
   } = props;
 
@@ -74,17 +76,19 @@ function ConfirmDialog(props: ConfirmDialogProps) {
   const requireTextLabel = 'requireTextLabel' in props ? props.requireTextLabel : undefined;
 
   const [inputValue, setInputValue] = useState('');
-  const [loading, setLoading] = useState(false);
+  const [localLoading, setLocalLoading] = useState(false);
+
+  const loading = isLoading || localLoading;
 
   const isTextMatched = !requireText || inputValue === requireText;
 
   async function handleConfirm() {
     if (!isTextMatched) return;
-    setLoading(true);
     try {
+      setLocalLoading(true);
       await onConfirm();
     } finally {
-      setLoading(false);
+      setLocalLoading(false);
       setInputValue('');
       onOpenChange(false);
     }
@@ -96,28 +100,28 @@ function ConfirmDialog(props: ConfirmDialogProps) {
   }
 
   return (
-    <Dialog open={open} onOpenChange={handleOpenChange}>
-      <DialogContent className="sm:max-w-md">
-        <DialogHeader>
+    <AlertDialog open={open} onOpenChange={handleOpenChange}>
+      <AlertDialogContent className="sm:max-w-md" size={size}>
+        <AlertDialogHeader>
           {icon && (
-            <div
+            <AlertDialogMedia
               className={cn(
-                'mb-3 flex h-10 w-10 items-center justify-center rounded-lg text-lg',
+                '',
                 iconBadgeClass[variant],
               )}
             >
               {icon}
-            </div>
+            </AlertDialogMedia>
           )}
-          <DialogTitle>{title}</DialogTitle>
-          <DialogDescription render={<div className="text-muted-foreground text-sm" />}>
+          <AlertDialogTitle>{title}</AlertDialogTitle>
+          <AlertDialogDescription>
             {description}
-          </DialogDescription>
-        </DialogHeader>
+          </AlertDialogDescription>
+        </AlertDialogHeader>
 
         {requireText && (
           <div className="flex flex-col gap-2">
-            <Label className="text-muted-foreground text-sm">
+            <Label htmlFor="require-text" className="text-muted-foreground text-sm">
               {requireTextLabel ?? (
                 <>
                   Type{' '}
@@ -129,15 +133,16 @@ function ConfirmDialog(props: ConfirmDialogProps) {
               )}
             </Label>
             <Input
+              id='require-text'
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
               placeholder={requireText}
               className={cn(
                 'font-mono text-sm',
                 inputValue.length > 0 &&
-                  (isTextMatched
-                    ? 'border-emerald-500 focus-visible:ring-emerald-500/20'
-                    : 'border-destructive focus-visible:ring-destructive/20'),
+                (isTextMatched
+                  ? 'border-emerald-500 focus-visible:ring-emerald-500/20'
+                  : 'border-destructive focus-visible:ring-destructive/20'),
               )}
               autoComplete="off"
               spellCheck={false}
@@ -148,20 +153,22 @@ function ConfirmDialog(props: ConfirmDialogProps) {
           </div>
         )}
 
-        <DialogFooter className="gap-2 sm:gap-2">
-          <Button variant="outline" onClick={() => handleOpenChange(false)} disabled={loading}>
+        <AlertDialogFooter>
+          <AlertDialogCancel variant="outline" disabled={loading}>
+            {cancelIcon}
             {cancelLabel}
-          </Button>
-          <Button
+          </AlertDialogCancel>
+          <AlertDialogAction
             variant={confirmButtonVariant[variant]}
             onClick={handleConfirm}
             disabled={!isTextMatched || loading}
           >
+            {confirmIcon && loading ? <Spinner /> : confirmIcon}
             {loading ? 'Please wait...' : confirmLabel}
-          </Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+          </AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
   );
 }
 
