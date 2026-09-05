@@ -1,10 +1,10 @@
 'use client';
 
 import ConfirmDialog from '@/components/shared/confirm-dialog';
+import { mergeProps, useRender } from '@base-ui/react';
 import { LogOutIcon } from 'lucide-react';
 import * as React from 'react';
 import { useSignout } from '../hooks';
-import { mergeProps, useRender } from '@base-ui/react';
 
 type LogoutButtonProps = useRender.ComponentProps<'button'>;
 
@@ -38,7 +38,7 @@ export function LogoutButton({ render, ...props }: LogoutButtonProps) {
         open={open}
         onOpenChange={setOpen}
         title="Logout"
-        description="Are you sure you want to logout?"
+        description="Sign out of your account? Be sure to sign back in before continuing."
         onConfirm={handleSignOut}
         cancelLabel="Cancel"
         confirmLabel="Logout"

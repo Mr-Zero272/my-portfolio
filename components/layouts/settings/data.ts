@@ -1,13 +1,14 @@
 import {
-  BriefcaseBusiness,
-  CodeXmlIcon,
-  Eye,
-  FileCodeIcon,
-  Globe,
-  GraduationCap,
-  Laptop,
-  LucideIcon,
-  UserIcon,
+    BriefcaseBusiness,
+    CodeXmlIcon,
+    Eye,
+    FileCodeIcon,
+    Globe,
+    GraduationCap,
+    Laptop,
+    LucideIcon,
+    UserCog,
+    UserIcon,
 } from 'lucide-react';
 
 export interface SideNavSettingsItem {
@@ -29,6 +30,11 @@ export const sideNavSettingsItems: SideNavSettingsGroup[] = [
         title: 'Profile',
         url: '/settings/profile',
         icon: UserIcon,
+      },
+      {
+        title: 'Account',
+        url: '/settings/account',
+        icon: UserCog,
       },
       {
         title: 'Appearance',

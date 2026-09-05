@@ -101,14 +101,14 @@ function ConfirmDialog(props: ConfirmDialogProps) {
 
   return (
     <AlertDialog open={open} onOpenChange={handleOpenChange}>
-      <AlertDialogContent className="sm:max-w-md" size={size}>
+      <AlertDialogContent size={size}>
         <AlertDialogHeader>
           {icon && (
             <AlertDialogMedia
-              className={cn(
-                '',
-                iconBadgeClass[variant],
-              )}
+            // className={cn(
+            //   '',
+            //   iconBadgeClass[variant],
+            // )}
             >
               {icon}
             </AlertDialogMedia>

@@ -29,8 +29,8 @@ export const HeaderSettings = () => {
             </Tooltip>
             <Separator orientation="vertical" className="data-[orientation=vertical]:h-5" />
           </div>
-          <AppLogo className="size-6" />
-          <Link href="/piti/dashboard" className="flex items-center gap-2">
+          <Link href="/dashboard" className="flex items-center gap-2">
+            <AppLogo className="size-6" />
             <span className="font-medium">
               Settings<span className="text-primary">.</span>
             </span>

@@ -1,4 +1,7 @@
+export * from './account-info-form';
 export * from './auth-header';
+export * from './connected-accounts-card';
+export * from './email-verification-card';
 export * from './forgot-password-form';
 export * from './reset-password-form';
 export * from './sign-in-form';
