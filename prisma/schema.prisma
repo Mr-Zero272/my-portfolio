@@ -118,6 +118,7 @@ model Account {
   id                    String    @id @map("_id")
   accountId             String
   providerId            String
+  issuer                String
   userId                String
   user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   accessToken           String?
@@ -131,6 +132,7 @@ model Account {
   updatedAt             DateTime  @updatedAt
 
   @@index([userId])
+  @@unique([issuer, accountId])
   @@map("account")
 }
 

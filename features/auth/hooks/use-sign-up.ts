@@ -12,7 +12,7 @@ import { signUpSchema, type SignUpFormData } from '../schemas';
 
 export const useSignUp = () => {
   const [showPassword, setShowPassword] = useState(false);
-  const [callBackUrl] = useQueryState('callbackUrl', { defaultValue: '/admin/dashboard' });
+  const [callBackUrl] = useQueryState('callbackUrl', { defaultValue: '/dashboard' });
 
   const form = useForm<SignUpFormData>({
     resolver: zodResolver(signUpSchema),

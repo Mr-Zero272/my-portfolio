@@ -50,7 +50,7 @@
     "@tanstack/react-table": "^8.21.3",
     "@uploadthing/react": "^7.3.3",
     "axios": "^1.16.1",
-    "better-auth": "^1.6.11",
+    "better-auth": "^1.7.2",
     "browser-image-compression": "^2.0.2",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",

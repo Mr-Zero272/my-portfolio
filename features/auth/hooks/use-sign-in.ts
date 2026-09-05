@@ -14,7 +14,7 @@ import { signInSchema, type SignInFormData } from '../schemas';
 export const useSignIn = () => {
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
-  const [callBackUrl] = useQueryState('callbackUrl', { defaultValue: '/admin/dashboard' });
+  const [callBackUrl] = useQueryState('callbackUrl', { defaultValue: '/dashboard' });
 
   const form = useForm<SignInFormData>({
     resolver: zodResolver(signInSchema),

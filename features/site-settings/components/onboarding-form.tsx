@@ -31,7 +31,7 @@ export function OnboardingForm() {
   const handleSubmit = async (data: SiteSettingOnboardingInput) => {
     try {
       await createOnboardingSettings(data);
-      router.replace('/admin/dashboard');
+      router.replace('/dashboard');
       router.refresh();
     } catch (error) {
       handleError({ error });
