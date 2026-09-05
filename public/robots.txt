@@ -1,0 +1,9 @@
+# *
+User-agent: *
+Allow: /
+
+# Host
+Host: https://pitithuong.vercel.app/
+
+# Sitemaps
+Sitemap: https://pitithuong.vercel.app/sitemap.xml

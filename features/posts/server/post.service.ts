@@ -171,6 +171,14 @@ export async function getPublicPosts(searchParams: URLSearchParams) {
   };
 }
 
+export async function getPostSlugs() {
+  return prisma.post.findMany({
+    select: {
+      slug: true,
+    },
+  });
+}
+
 export async function getPost(headers: Headers, id: string) {
   await requirePostManager(headers);
   const isId = isCuid(id);

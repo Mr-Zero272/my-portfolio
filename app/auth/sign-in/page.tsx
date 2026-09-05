@@ -1,4 +1,4 @@
-import { SignInScreen } from '@/features/auth/screens/sign-in.screen';
+import { SignInForm } from '@/features/auth/components';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -7,5 +7,5 @@ export const metadata: Metadata = {
 };
 
 export default function SignInPage() {
-  return <SignInScreen />;
+  return <SignInForm />;
 }

@@ -1,10 +1,10 @@
 import AppLogo from '@/components/shared/logo';
 import Image from 'next/image';
 import Link from 'next/link';
+import type { ReactNode } from 'react';
 import { Suspense } from 'react';
-import { SignUpForm } from '../components';
 
-export const SignUpScreen = () => {
+export const AuthShell = ({ children }: { children: ReactNode }) => {
   return (
     <div className="grid min-h-svh lg:grid-cols-2">
       <div className="flex flex-col gap-4 p-6 md:p-10">
@@ -15,9 +15,7 @@ export const SignUpScreen = () => {
         </div>
         <div className="flex flex-1 items-center justify-center">
           <div className="w-full max-w-xs">
-            <Suspense fallback={null}>
-              <SignUpForm />
-            </Suspense>
+            <Suspense fallback={null}>{children}</Suspense>
           </div>
         </div>
       </div>
@@ -26,8 +24,8 @@ export const SignUpScreen = () => {
           src="/images/music/music-bg-4.jpg"
           alt="Image"
           className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
-          width={800}
-          height={600}
+          width={1200}
+          height={800}
           priority
         />
       </div>

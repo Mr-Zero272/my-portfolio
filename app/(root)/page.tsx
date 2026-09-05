@@ -33,7 +33,7 @@ export default async function Home() {
 
   let profile: ProfileWithAllRelations | null = null;
   try {
-    profile = await queryClient.fetchQuery({
+    profile = await queryClient.query({
       queryKey: profileQueryKeys.public(),
       queryFn: () => profileApi.getPublicProfile(),
       staleTime: 60 * 60 * 1000,
@@ -114,14 +114,14 @@ export default async function Home() {
                   url={display.cvUrl}
                 />
               ) : // <Button
-              //   size="lg"
-              //   variant="outline"
-              //   nativeButton={false}
-              //   render={<a href={display.cvUrl} target="_blank" rel="noreferrer" />}
-              // >
-              //   <DownloadIcon /> Download CV
-              // </Button>
-              null}
+                //   size="lg"
+                //   variant="outline"
+                //   nativeButton={false}
+                //   render={<a href={display.cvUrl} target="_blank" rel="noreferrer" />}
+                // >
+                //   <DownloadIcon /> Download CV
+                // </Button>
+                null}
             </div>
             <Separator className="max-w-2xl" />
             {/* Stats Row */}

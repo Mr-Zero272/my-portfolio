@@ -147,9 +147,9 @@ model Verification {
 }
 
 model Profile {
-  id                 String   @id @default(cuid()) @map("_id")
+  id                 String        @id @default(cuid()) @map("_id")
   userId             String
-  user               User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user               User          @relation(fields: [userId], references: [id], onDelete: Cascade)
   name               String
   phone              String?
   nationality        String?
@@ -159,9 +159,9 @@ model Profile {
   tagline            String?
   bio                String?
   description        String?
-  freelanceAvailable Boolean  @default(true)
-  languages          String[] @default(["Vietnamese", "English"])
-  rotatingWords      String[] @default(["Web", "Software", "Mainframe"])
+  freelanceAvailable Boolean       @default(true)
+  languages          String[]      @default(["Vietnamese", "English"])
+  rotatingWords      String[]      @default(["Web", "Software", "Mainframe"])
   metaTitle          String?
   metaDescription    String?
   ogImageId          String?
@@ -169,9 +169,9 @@ model Profile {
   heroImageId        String?
   heroImage          GalleryImage? @relation("ProfileHeroImage", fields: [heroImageId], references: [id], onDelete: SetNull)
   cvUrl              String?
-  isActive           Boolean  @default(true)
-  createdAt          DateTime @default(now())
-  updatedAt          DateTime @updatedAt
+  isActive           Boolean       @default(true)
+  createdAt          DateTime      @default(now())
+  updatedAt          DateTime      @updatedAt
 
   @@unique([userId])
   @@map("profile")
@@ -206,7 +206,7 @@ model Experience {
   user              User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
   companyName       String
   companyLogoId     String?
-  companyLogo       GalleryImage? @relation("ExperienceCompanyLogo", fields: [companyLogoId], references: [id], onDelete: SetNull)
+  companyLogo       GalleryImage?        @relation("ExperienceCompanyLogo", fields: [companyLogoId], references: [id], onDelete: SetNull)
   companyWebsite    String?
   isCurrentEmployer Boolean              @default(false)
   positions         ExperiencePosition[]
@@ -229,15 +229,15 @@ model GalleryImage {
   caption     String?
   userCreated String
   user        User     @relation(fields: [userCreated], references: [id], onDelete: Cascade)
-  createdAt            DateTime @default(now())
-  updatedAt            DateTime @updatedAt
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
-  posts                Post[]
-  profileOgImage       Profile[]  @relation("ProfileOgImage")
-  profileHeroImage     Profile[]  @relation("ProfileHeroImage")
-  experienceCompanyLogo Experience[] @relation("ExperienceCompanyLogo")
-  projectImages        ProjectImage[] @relation("ProjectImages")
-  skillIcons           Skill[]        @relation("SkillIcon")
+  posts                 Post[]
+  profileOgImage        Profile[]      @relation("ProfileOgImage")
+  profileHeroImage      Profile[]      @relation("ProfileHeroImage")
+  experienceCompanyLogo Experience[]   @relation("ExperienceCompanyLogo")
+  projectImages         ProjectImage[] @relation("ProjectImages")
+  skillIcons            Skill[]        @relation("SkillIcon")
 
   @@index([userCreated])
   @@map("gallery")
@@ -262,9 +262,9 @@ model Post {
   xMetaTitle       String?
   xMetaDescription String?
   xMetaImage       String?
-  status           PostStatus @default(Draft)
-  createdAt        DateTime @default(now())
-  updatedAt        DateTime @updatedAt
+  status           PostStatus    @default(Draft)
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
 
   authors  PostAuthor[]
   tags     PostTag[]
@@ -337,29 +337,29 @@ model Comment {
 }
 
 model Project {
-  id               String        @id @default(cuid()) @map("_id")
+  id               String         @id @default(cuid()) @map("_id")
   userId           String
-  user             User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user             User           @relation(fields: [userId], references: [id], onDelete: Cascade)
   name             String
   slug             String
   description      String
   responsibilities String?
-  type             ProjectType   @default(website)
-  status           ProjectStatus @default(developing)
+  type             ProjectType    @default(website)
+  status           ProjectStatus  @default(developing)
   images           ProjectImage[]
   demoUrl          String?
   sourceCodeUrl    String?
-  technologies     String[]      @default([])
-  databases        String[]      @default([])
+  technologies     String[]       @default([])
+  databases        String[]       @default([])
   startDate        DateTime?
   endDate          DateTime?
-  isFeatured       Boolean       @default(false)
-  displayOrder     Int           @default(0)
-  isVisible        Boolean       @default(true)
+  isFeatured       Boolean        @default(false)
+  displayOrder     Int            @default(0)
+  isVisible        Boolean        @default(true)
   metaTitle        String?
   metaDescription  String?
-  createdAt        DateTime      @default(now())
-  updatedAt        DateTime      @updatedAt
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
 
   @@unique([slug])
   @@index([userId, displayOrder])
@@ -390,7 +390,7 @@ model Skill {
   proficiency       ProficiencyLevel
   category          SkillCategory
   iconId            String?
-  icon              GalleryImage? @relation("SkillIcon", fields: [iconId], references: [id], onDelete: SetNull)
+  icon              GalleryImage?    @relation("SkillIcon", fields: [iconId], references: [id], onDelete: SetNull)
   description       String?
   yearsOfExperience Int?
   displayOrder      Int              @default(0)
