@@ -64,8 +64,42 @@ export const useMusicStore = create<MusicState>((set, get) => {
     return tracks[currentTrackIndex]?.url ?? null;
   };
 
+  // Howler only emits `onseek` when `seek(value)` is called explicitly, so a
+  // live position must be polled while the sound is playing; otherwise `progress`
+  // stays frozen at 0 and the UI would show a stuck 0:00.
+  let progressTimer: ReturnType<typeof setInterval> | null = null;
+
+  const stopProgressTicker = () => {
+    if (progressTimer) {
+      clearInterval(progressTimer);
+      progressTimer = null;
+    }
+  };
+
+  const startProgressTicker = () => {
+    // Called from `onplay`, which can fire repeatedly (play/pause/play, track
+    // switching, on-end auto-advance). Clearing first guarantees a single poller.
+    stopProgressTicker();
+    progressTimer = setInterval(() => {
+      const sound = get().soundRef;
+      if (!sound) return;
+
+      // `html5` sounds may only report duration after playback actually starts;
+      // refresh it lazily in case `onload` fired before it was available.
+      const { duration } = get();
+      if (duration <= 0) {
+        const realDuration = sound.duration();
+        if (realDuration > 0) set({ duration: realDuration });
+      }
+
+      const seek = sound.seek();
+      if (typeof seek === 'number') set({ progress: seek });
+    }, 500);
+  };
+
   const unloadSound = () => {
     const { soundRef } = get();
+    stopProgressTicker();
     soundRef?.unload();
     set({ soundRef: null, currentTrackSrcRef: null });
   };
@@ -88,10 +122,20 @@ export const useMusicStore = create<MusicState>((set, get) => {
       src: [src],
       html5: true,
       volume,
-      onplay: () => set({ isPlaying: true }),
-      onpause: () => set({ isPlaying: false }),
-      onstop: () => set({ isPlaying: false, progress: 0 }),
+      onplay: () => {
+        set({ isPlaying: true });
+        startProgressTicker();
+      },
+      onpause: () => {
+        set({ isPlaying: false });
+        stopProgressTicker();
+      },
+      onstop: () => {
+        set({ isPlaying: false, progress: 0 });
+        stopProgressTicker();
+      },
       onend: () => {
+        stopProgressTicker();
         set({ isPlaying: false, progress: 0 });
         const { repeat, tracks } = get();
         if (repeat || tracks.length <= 1) {

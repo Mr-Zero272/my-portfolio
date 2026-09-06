@@ -37,10 +37,6 @@ const PlayerControl = () => {
 
   const currentProgress = isSeeking ? localProgress : progress;
 
-  console.log({
-    progress
-  })
-
   useEffect(() => {
     if (!sleepTimerTarget) {
       return;

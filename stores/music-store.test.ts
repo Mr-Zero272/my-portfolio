@@ -9,6 +9,9 @@ const howlerState = vi.hoisted(() => ({
   instances: [] as Array<{
     play: ReturnType<typeof vi.fn>;
     unload: ReturnType<typeof vi.fn>;
+    seek: ReturnType<typeof vi.fn>;
+    duration: ReturnType<typeof vi.fn>;
+    _events: Record<string, Array<() => void>>;
   }>,
 }));
 
@@ -20,10 +23,18 @@ vi.mock('howler', () => {
     unload = vi.fn();
     seek = vi.fn();
     volume = vi.fn();
-    duration = () => 0;
+    duration = vi.fn(() => 0);
+    // Handlers passed in the Howl options (onplay/onpause/...) are recorded so
+    // tests can simulate Howler firing them (real playback never runs in jsdom).
+    _events: Record<string, Array<() => void>> = {};
 
-    constructor() {
+    constructor(options: Record<string, unknown> = {}) {
       howlerState.instances.push(this);
+      for (const [name, handler] of Object.entries(options)) {
+        if (typeof handler === 'function') {
+          (this._events[name] ??= []).push(handler as () => void);
+        }
+      }
     }
   }
   // The store imports `Howl` as a named export; expose the class under both.
@@ -304,5 +315,82 @@ describe('playback', () => {
     expect(state.soundRef).toBe(howlerState.instances[1]);
     expect(state.currentTrackSrcRef).toBe(b.url);
     expect(howlerState.instances[1].play).toHaveBeenCalledTimes(1);
+  });
+});
+
+// Howler only reports position through explicit seek events, so the store polls
+// sound.seek() on a timer while playing. These tests drive that poller with fake
+// timers and the event handlers captured by the Howl mock.
+describe('progress ticker', () => {
+  // Stop the store's poller before the test ends to avoid a dangling interval
+  // that would keep the real event loop alive after `useRealTimers()`.
+  const pauseSound = (sound: (typeof howlerState)['instances'][number]) => {
+    sound._events.onpause?.[0]();
+  };
+
+  it('polls seek() while playing and keeps progress in sync', () => {
+    vi.useFakeTimers();
+    try {
+      const a = makeTrack('A');
+      useMusicStore.getState().addTracks([a]);
+      useMusicStore.getState().play(); // creates the Howl instance
+
+      const sound = howlerState.instances[0];
+      sound._events.onplay?.[0](); // simulate howler onplay
+
+      sound.seek.mockReturnValue(12.5);
+      vi.advanceTimersByTime(500);
+      expect(useMusicStore.getState().progress).toBe(12.5);
+
+      sound.seek.mockReturnValue(30);
+      vi.advanceTimersByTime(1500);
+      expect(useMusicStore.getState().progress).toBe(30);
+    } finally {
+      pauseSound(howlerState.instances[0]);
+      vi.useRealTimers();
+    }
+  });
+
+  it('refreshes duration lazily when it is not reported yet', () => {
+    vi.useFakeTimers();
+    try {
+      const a = makeTrack('A');
+      useMusicStore.getState().addTracks([a]);
+      useMusicStore.getState().play();
+
+      const sound = howlerState.instances[0];
+      sound._events.onplay?.[0]();
+
+      expect(useMusicStore.getState().duration).toBe(0);
+      sound.duration.mockReturnValue(180);
+      vi.advanceTimersByTime(500);
+      expect(useMusicStore.getState().duration).toBe(180);
+    } finally {
+      pauseSound(howlerState.instances[0]);
+      vi.useRealTimers();
+    }
+  });
+
+  it('stops polling once playback is paused', () => {
+    vi.useFakeTimers();
+    try {
+      const a = makeTrack('A');
+      useMusicStore.getState().addTracks([a]);
+      useMusicStore.getState().play();
+
+      const sound = howlerState.instances[0];
+      sound._events.onplay?.[0]();
+
+      sound.seek.mockReturnValue(12.5);
+      vi.advanceTimersByTime(500);
+      expect(useMusicStore.getState().progress).toBe(12.5);
+
+      sound._events.onpause?.[0](); // paused -> poller stops
+      sound.seek.mockReturnValue(60);
+      vi.advanceTimersByTime(2000);
+      expect(useMusicStore.getState().progress).toBe(12.5);
+    } finally {
+      vi.useRealTimers();
+    }
   });
 });
