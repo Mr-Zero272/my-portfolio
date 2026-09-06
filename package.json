@@ -17,7 +17,7 @@
   "scripts": {
     "dev": "portless pitithuong.dev next dev",
     "build": "prisma generate && next build",
-    "start": "next start",
+    "start": "portless pitithuong.dev next start",
     "lint": "eslint",
     "test": "vitest run",
     "test:watch": "vitest"
