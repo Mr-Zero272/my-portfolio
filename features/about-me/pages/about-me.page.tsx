@@ -1,7 +1,11 @@
 'use client';
 
 import { Spinner } from '@/components/ui/spinner';
+import type { ExperienceWithAllRelations } from '@/features/experience/types';
+import type { ProfileWithAllRelations } from '@/features/profile/types';
+import type { SkillWithAllRelations } from '@/features/skill/types';
 import { cn } from '@/lib/utils';
+import type { Education } from '@prisma/client';
 import { parseAsString, useQueryState } from 'nuqs';
 import { Suspense, useCallback } from 'react';
 import {
@@ -13,15 +17,36 @@ import {
   TabType,
 } from '../components';
 
-export const AboutMePage = () => {
+/**
+ * Data is fetched server-side (public API, ISR) in `app/(root)/about-me/page.tsx`
+ * and passed down as props — the tabs no longer fetch on the client.
+ */
+export type AboutMePageProps = {
+  profile: ProfileWithAllRelations | null;
+  educations: Education[];
+  skills: SkillWithAllRelations[];
+  experiences: ExperienceWithAllRelations[];
+};
+
+export const AboutMePage = ({ profile, educations, skills, experiences }: AboutMePageProps) => {
   return (
     <Suspense fallback={<Spinner />}>
-      <AboutMePageContent />
+      <AboutMePageContent
+        profile={profile}
+        educations={educations}
+        skills={skills}
+        experiences={experiences}
+      />
     </Suspense>
   );
 };
 
-const AboutMePageContent = () => {
+const AboutMePageContent = ({
+  profile,
+  educations,
+  skills,
+  experiences,
+}: AboutMePageProps) => {
   const [activeTab, setActiveTab] = useQueryState('tab', parseAsString.withDefault('about'));
 
   const handleChangeTab = useCallback(
@@ -51,10 +76,10 @@ const AboutMePageContent = () => {
           </div>
         </article>
         <article className="flex-1">
-          {activeTab === 'about' && <AboutTab />}
-          {activeTab === 'education' && <EducationTab />}
-          {activeTab === 'skills' && <SkillTab />}
-          {activeTab === 'experiences' && <ExperienceTab />}
+          {activeTab === 'about' && <AboutTab profile={profile} />}
+          {activeTab === 'education' && <EducationTab educations={educations} />}
+          {activeTab === 'skills' && <SkillTab skills={skills} />}
+          {activeTab === 'experiences' && <ExperienceTab experiences={experiences} />}
         </article>
       </section>
     </>

@@ -1,10 +1,16 @@
 'use client';
 
 import { ListSkills } from '@/features/skill';
-import { useSkills } from '@/features/skill/hooks';
+import type { SkillWithAllRelations } from '@/features/skill/types';
 
-export const SkillTab = () => {
-  const { data, isLoading, error } = useSkills();
+type SkillTabProps = {
+  skills: SkillWithAllRelations[];
+};
+
+/**
+ * Skills grid. Data is fetched server-side (public API) and passed as props.
+ */
+export const SkillTab = ({ skills }: SkillTabProps) => {
   return (
     <div className="mt-5">
       <h1 className="text-2xl font-bold tracking-wider">Skills</h1>
@@ -12,7 +18,7 @@ export const SkillTab = () => {
         Here are some of my technical skills, including programming languages, frameworks, tools,
         and other technologies I have worked with.
       </p>
-      <ListSkills skills={data?.list ?? []} isLoading={isLoading} error={error} mode="public" />
+      <ListSkills skills={skills} isLoading={false} mode="public" />
     </div>
   );
 };

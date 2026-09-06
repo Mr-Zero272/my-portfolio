@@ -1,21 +1,23 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
-import { Skeleton } from '@/components/ui/skeleton';
 import { useInfinitePosts } from '@/features/posts/hooks/queries';
-import { useTagsWithMostPosts } from '@/features/tags/hooks/queries';
+import type { PostWithAllRelations } from '@/features/posts/types';
+import type { TagWithPostCount } from '@/features/tags/types';
+import type { ListResponse } from '@/types/api';
 import { Loader2 } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import PostCard, { PostCardSkeleton } from './post-card';
 
-export const ListPostByTag = () => {
-  const [tag, setTag] = useState<string>();
+type ListPostByTagProps = {
+  /** Tags fetched server-side (public API) — shown instantly, no extra request. */
+  tags: TagWithPostCount[];
+  /** First "All" page fetched server-side — seeds the infinite list for an instant first paint. */
+  initialPosts: ListResponse<PostWithAllRelations> | null;
+};
 
-  const {
-    data: tagsWithPosts,
-    isLoading,
-    isError,
-  } = useTagsWithMostPosts();
+export const ListPostByTag = ({ tags, initialPosts }: ListPostByTagProps) => {
+  const [tag, setTag] = useState<string>();
 
   const {
     data: postsByTag,
@@ -23,23 +25,25 @@ export const ListPostByTag = () => {
     hasNextPage,
     isFetchingNextPage,
     isLoading: isLoadingPostsByTag,
-  } = useInfinitePosts({
-    query: {
-      limit: 8,
-      filters: { tagId: tag },
+  } = useInfinitePosts(
+    {
+      query: {
+        limit: 8,
+        filters: { tagId: tag },
+      },
     },
-  });
+    {
+      // Seed the default "All" list with the server-fetched first page.
+      initialPage: tag === undefined ? initialPosts ?? undefined : undefined,
+    },
+  );
 
   const posts = useMemo(
     () => postsByTag?.pages.flatMap((page) => page.list) ?? [],
     [postsByTag],
   );
 
-  if (isError) {
-    throw new Error('Error loading tags');
-  }
-
-  const tags = tagsWithPosts?.list ?? [];
+  const isEmpty = !isLoadingPostsByTag && posts.length === 0;
 
   return (
     <div className="space-y-10 md:px-5">
@@ -49,39 +53,31 @@ export const ListPostByTag = () => {
       </div>
       {/* Tags */}
       <div className="flex flex-wrap items-center justify-center gap-2 md:gap-5">
-        {isLoading &&
-          Array.from({ length: 5 }).map((_, index) => (
-            <Skeleton key={index} className="h-10 w-24 rounded-full" />
-          ))}
-        {!isLoading && (
-          <>
-            <Button
-              variant={!tag ? 'default' : 'outline'}
-              className="rounded-full"
-              size="lg"
-              onClick={() => setTag(undefined)}
-            >
-              All
-            </Button>
-            {tags.map((t) => (
-              <Button
-                key={t.id}
-                variant={t.id === tag ? 'default' : 'outline'}
-                className="rounded-full"
-                size="lg"
-                onClick={() => setTag(t.id)}
-              >
-                {t.name} ({t.postCount})
-              </Button>
-            ))}
-          </>
-        )}
+        <Button
+          variant={!tag ? 'default' : 'outline'}
+          className="rounded-full"
+          size="lg"
+          onClick={() => setTag(undefined)}
+        >
+          All
+        </Button>
+        {tags.map((t) => (
+          <Button
+            key={t.id}
+            variant={t.id === tag ? 'default' : 'outline'}
+            className="rounded-full"
+            size="lg"
+            onClick={() => setTag(t.id)}
+          >
+            {t.name} ({t.postCount})
+          </Button>
+        ))}
       </div>
 
       {/* List post */}
       <div className="space-y-5">
         <div className="grid grid-cols-1 md:grid-cols-2 md:gap-5 lg:grid-cols-3 xl:grid-cols-4">
-          {(isLoadingPostsByTag || isLoading) && (
+          {isLoadingPostsByTag && posts.length === 0 && (
             <>
               {Array.from({ length: 4 }).map((_, index) => (
                 <PostCardSkeleton key={index} variant="vertical" />
@@ -91,6 +87,11 @@ export const ListPostByTag = () => {
           {posts.map((post) => (
             <PostCard variant="vertical" key={post.id} post={post} isHasHoverEffect />
           ))}
+          {isEmpty && (
+            <p className="col-span-full py-10 text-center text-muted-foreground">
+              No posts found for this tag.
+            </p>
+          )}
         </div>
 
         {hasNextPage && (
@@ -98,15 +99,11 @@ export const ListPostByTag = () => {
             <Button
               variant="outline"
               onClick={() => fetchNextPage()}
-              className="border-primary dark:text-muted-foreground text-primary hover:text-primary rounded-full"
+              className="border-primary text-primary hover:text-primary dark:text-muted-foreground rounded-full"
               disabled={!hasNextPage || isFetchingNextPage}
             >
               {isFetchingNextPage && <Loader2 className="h-4 w-4 animate-spin" />}
-              {isFetchingNextPage
-                ? 'Loading more'
-                : hasNextPage
-                  ? 'Load more'
-                  : 'Nothing more to load'}
+              {isFetchingNextPage ? 'Loading more' : 'Load more'}
             </Button>
           </div>
         )}

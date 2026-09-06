@@ -1,11 +1,16 @@
 'use client';
 
 import { EducationList } from '@/features/education/components';
-import { useEducations } from '@/features/education/hooks';
+import type { Education } from '@prisma/client';
 
-export const EducationTab = () => {
-  const { data, isLoading: isLoadingEducations, error: errorEducations } = useEducations();
+type EducationTabProps = {
+  educations: Education[];
+};
 
+/**
+ * Education list. Data is fetched server-side (public API) and passed as props.
+ */
+export const EducationTab = ({ educations }: EducationTabProps) => {
   return (
     <div className="mt-5">
       <h1 className="text-2xl font-bold tracking-wider">Education</h1>
@@ -13,12 +18,7 @@ export const EducationTab = () => {
         Below are details of my university studies as well as information about the short courses I
         attended.
       </p>
-      <EducationList
-        data={data?.list ?? []}
-        isLoading={isLoadingEducations}
-        error={errorEducations}
-        mode="default"
-      />
+      <EducationList data={educations} isLoading={false} error={null} mode="default" />
     </div>
   );
 };

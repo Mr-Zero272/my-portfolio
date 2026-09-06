@@ -1,10 +1,16 @@
 'use client';
 
-import { ListWorkExperience, useExperiences } from '@/features/experience';
+import { ListWorkExperience } from '@/features/experience';
+import type { ExperienceWithAllRelations } from '@/features/experience/types';
 
-export const ExperienceTab = () => {
-  const { data, isLoading: isLoadingExperiences, error: errorExperiences } = useExperiences();
+type ExperienceTabProps = {
+  experiences: ExperienceWithAllRelations[];
+};
 
+/**
+ * Experience list. Data is fetched server-side (public API) and passed as props.
+ */
+export const ExperienceTab = ({ experiences }: ExperienceTabProps) => {
   return (
     <div className="mt-5">
       <h1 className="text-2xl font-bold tracking-wider">Experience</h1>
@@ -12,12 +18,7 @@ export const ExperienceTab = () => {
         Below are details of my university studies as well as information about the short courses I
         attended.
       </p>
-      <ListWorkExperience
-        experiences={data?.list ?? []}
-        isLoading={isLoadingExperiences}
-        error={errorExperiences}
-        mode="public"
-      />
+      <ListWorkExperience experiences={experiences} mode="public" />
     </div>
   );
 };

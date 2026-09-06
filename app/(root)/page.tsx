@@ -6,11 +6,15 @@ import { DownloadButton } from '@/components/shared/dowload-button';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
-import { profileApi, profileQueryKeys, type ProfileWithAllRelations } from '@/features/profile';
-import { getBrowserQueryClient } from '@/lib/query-client';
+import { env } from '@/config/env';
+import type { ProfileWithAllRelations } from '@/features/profile';
+import { publicGet } from '@/lib/server-fetch';
 import { ArrowRightIcon, BriefcaseBusinessIcon, DownloadIcon, MapPinIcon } from 'lucide-react';
+import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
+
+const SITE_URL = env.SITE_URL ?? 'https://pitithuong.vercel.app';
 
 const FALLBACK_ROTATING_WORDS = [
   'Web Developer',
@@ -28,20 +32,50 @@ const FALLBACK_PROFILE = {
   heroImageUrl: '/images/profile-new.png',
 } as const;
 
-export default async function Home() {
-  const queryClient = await getBrowserQueryClient();
+export const metadata: Metadata = {
+  title: 'Thuong Phan Thanh — Full Stack Developer',
+  description:
+    'Hi, I\'m Thuong Phan Thanh. I\'m a Full Stack Developer working with Next.js, React and modern web technologies. Explore my projects, blogs and experience.',
+  keywords: [
+    'Thuong Phan Thanh',
+    'Full Stack Developer',
+    'Next.js',
+    'React',
+    'Web Developer',
+    'portfolio',
+    'frontend developer',
+  ],
+  alternates: {
+    canonical: `${SITE_URL}/`,
+  },
+  openGraph: {
+    title: 'Thuong Phan Thanh — Full Stack Developer',
+    description:
+      'Hi, I\'m Thuong Phan Thanh. I\'m a Full Stack Developer working with Next.js, React and modern web technologies.',
+    url: `${SITE_URL}/`,
+    siteName: 'Thuong Phan Thanh Portfolio',
+    type: 'website',
+    images: [
+      {
+        url: `${SITE_URL}/images/projects/portfolio/my-portfolio-h-1.png`,
+        width: 1200,
+        height: 630,
+        alt: 'Thuong Phan Thanh - Full Stack Developer',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Thuong Phan Thanh — Full Stack Developer',
+    description:
+      'Hi, I\'m Thuong Phan Thanh. I\'m a Full Stack Developer working with Next.js, React and modern web technologies.',
+    images: [`${SITE_URL}/images/projects/portfolio/my-portfolio-h-1.png`],
+  },
+};
 
-  let profile: ProfileWithAllRelations | null = null;
-  try {
-    profile = await queryClient.query({
-      queryKey: profileQueryKeys.public(),
-      queryFn: () => profileApi.getPublicProfile(),
-      staleTime: 60 * 60 * 1000,
-      gcTime: 60 * 60 * 1000,
-    });
-  } catch {
-    profile = null;
-  }
+export default async function Home() {
+  // Server-fetched via the public API and ISR-cached for 1 hour.
+  const profile = await publicGet<ProfileWithAllRelations>('profile');
 
   const display = {
     name: profile?.name ?? FALLBACK_PROFILE.name,
