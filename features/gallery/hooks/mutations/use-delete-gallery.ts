@@ -1,6 +1,6 @@
 'use client';
 
-import { GalleryImage } from '@/lib/generated/prisma/client';
+import { GalleryImage } from '@prisma/client';
 import { useMutation, UseMutationOptions, useQueryClient } from '@tanstack/react-query';
 import type { ApiError } from 'next/dist/server/api-utils';
 import { galleryApi, galleryQueryKeys } from '../../services';

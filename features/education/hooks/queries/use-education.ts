@@ -1,4 +1,4 @@
-import { Education } from '@/lib/generated/prisma/client';
+import { Education } from '@prisma/client';
 import { useQuery, UseQueryOptions } from '@tanstack/react-query';
 import { educationApi, educationQueryKeys } from '../../services';
 import { GetEducationRequest } from '../../types';

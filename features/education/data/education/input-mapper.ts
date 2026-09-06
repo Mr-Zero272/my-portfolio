@@ -1,4 +1,4 @@
-import { Education } from '@/lib/generated/prisma/client';
+import { Education } from '@prisma/client';
 import { EducationFormValues } from './schema';
 
 export const toEducationFormValue = (values: Education): EducationFormValues => {

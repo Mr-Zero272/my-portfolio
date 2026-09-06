@@ -1,4 +1,4 @@
-import { Prisma } from '@/lib/generated/prisma/client';
+import { Prisma } from '@prisma/client';
 import { ZodError } from 'zod';
 import { ApiErrorCode, AppError, isAppError } from './errors';
 

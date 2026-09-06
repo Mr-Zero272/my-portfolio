@@ -1,4 +1,4 @@
-import { Tag } from '@/lib/generated/prisma/client';
+import { Tag } from '@prisma/client';
 import { useQuery, UseQueryOptions } from '@tanstack/react-query';
 import { tagApi, tagQueryKeys } from '../../services';
 import { GetTagRequest } from '../../types';

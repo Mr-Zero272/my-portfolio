@@ -1,6 +1,6 @@
-import type { GalleryImage } from '@/lib/generated/prisma/client';
 import type { UploadTask } from '@/lib/upload/types';
 import { useUploadStore } from '@/stores/upload';
+import type { GalleryImage } from '@prisma/client';
 import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import type { ReactNode } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';

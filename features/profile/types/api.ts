@@ -1,5 +1,5 @@
-import { GalleryImage, Profile } from '@/lib/generated/prisma/client';
 import { RequestConfig } from '@/types/api';
+import { GalleryImage, Profile } from '@prisma/client';
 import { ProfileFormValues } from '../data';
 
 export interface ProfileWithAllRelations extends Profile {

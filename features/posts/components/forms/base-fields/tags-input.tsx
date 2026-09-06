@@ -9,10 +9,10 @@ import { Kbd } from '@/components/ui/kbd';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { useCreateTag, useTags } from '@/features/tags/hooks';
-import { Tag } from '@/lib/generated/prisma/client';
 import { slugify } from '@/lib/slug';
 import { handleError } from '@/utils';
 import { useDebouncedValue } from '@mantine/hooks';
+import { Tag } from '@prisma/client';
 import { PlusIcon, XIcon } from 'lucide-react';
 import React, { useRef, useState } from 'react';
 import {

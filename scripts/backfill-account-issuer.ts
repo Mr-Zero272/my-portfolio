@@ -10,7 +10,7 @@
  *
  * Idempotent: accounts that already have the correct issuer are left untouched.
  */
-import { PrismaClient } from '../lib/generated/prisma/client';
+import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 

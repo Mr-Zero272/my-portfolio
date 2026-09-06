@@ -1,16 +1,16 @@
 import { getMainUserId } from '@/features/site-settings/server/main-user';
 import {
-  ApiErrorCode,
-  FilterOperator,
-  buildListQuery,
-  parseBooleanParam,
-  parseEnumParam,
-  parseNumberParam,
-  throwApiError,
+    ApiErrorCode,
+    FilterOperator,
+    buildListQuery,
+    parseBooleanParam,
+    parseEnumParam,
+    parseNumberParam,
+    throwApiError,
 } from '@/lib/api';
-import type { Prisma } from '@/lib/generated/prisma/client';
 import { prisma } from '@/lib/prisma';
 import { isCuid } from '@/utils/id';
+import type { Prisma } from '@prisma/client';
 import type { PostFormValues } from '../schemas/post.schema';
 import { requirePostManager } from './post-auth';
 

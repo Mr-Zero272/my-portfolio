@@ -9,10 +9,9 @@ import {
 } from '@/components/ui/responsive-dialog';
 import { SidebarInset, SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
 import { Spinner } from '@/components/ui/spinner';
-import { GalleryImage, Tag } from '@/lib/generated/prisma/client';
-import { PostStatus } from '@/lib/generated/prisma/enums';
 import { BaseFormProps } from '@/types/form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { GalleryImage, PostStatus, Tag } from '@prisma/client';
 import { ArrowLeftIcon } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useCallback, useId, useState } from 'react';

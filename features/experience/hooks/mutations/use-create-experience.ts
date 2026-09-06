@@ -1,5 +1,5 @@
+import { Experience } from '@prisma/client';
 import { useMutation, UseMutationOptions, useQueryClient } from '@tanstack/react-query';
-import { Experience } from '../../../../lib/generated/prisma/client';
 import { experienceApi, experienceQueryKeys } from '../../services';
 import { CreateExperienceRequest } from '../../types';
 

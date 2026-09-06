@@ -11,10 +11,10 @@ import {
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { FieldGroup } from '@/components/ui/field';
-import { GalleryImage } from '@/lib/generated/prisma/client';
 import { cn } from '@/lib/utils';
 import { BaseFormProps } from '@/types/form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { GalleryImage } from '@prisma/client';
 import { AlertCircleIcon } from 'lucide-react';
 import { useId } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';

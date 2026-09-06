@@ -1,7 +1,7 @@
 import axiosInstance from '@/lib/axios';
-import { Tag } from '@/lib/generated/prisma/client';
 import { ListResponse } from '@/types/api';
 import { normalizeQueryParams } from '@/utils/search-query';
+import { Tag } from '@prisma/client';
 import {
     CreateTagRequest,
     DeleteTagRequest,

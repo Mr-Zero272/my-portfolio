@@ -3,7 +3,7 @@ import { ActionItem, ResponsiveActions } from '@/components/shared/responsive-ac
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { formatDateTime } from '@/lib/format';
-import { Post } from '@/lib/generated/prisma/client';
+import { Post } from '@prisma/client';
 import { ColumnDef } from '@tanstack/react-table';
 import { AlarmClockIcon, TentIcon } from 'lucide-react';
 import { useMemo } from 'react';

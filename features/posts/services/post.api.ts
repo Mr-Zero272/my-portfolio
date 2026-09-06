@@ -1,16 +1,16 @@
 import axiosInstance from '@/lib/axios';
-import { Post } from '@/lib/generated/prisma/client';
 import { ListResponse } from '@/types/api';
 import { normalizeQueryParams } from '@/utils/search-query';
+import { Post } from '@prisma/client';
 import {
-  CreatePostRequest,
-  DeletePostRequest,
-  GenerateExcerptRequest,
-  GenerateKeywordsRequest,
-  GetPostRequest,
-  GetPostsRequest,
-  PostWithAllRelations,
-  UpdatePostRequest,
+    CreatePostRequest,
+    DeletePostRequest,
+    GenerateExcerptRequest,
+    GenerateKeywordsRequest,
+    GetPostRequest,
+    GetPostsRequest,
+    PostWithAllRelations,
+    UpdatePostRequest,
 } from '../types';
 
 export const postApi = {

@@ -1,8 +1,8 @@
 import { getMainUserId } from '@/features/site-settings/server/main-user';
 import { ApiErrorCode, buildListQuery, parseBooleanParam, throwApiError } from '@/lib/api';
 import { requireAdmin } from '@/lib/auth-guard';
-import { type Prisma } from '@/lib/generated/prisma/client';
 import { prisma } from '@/lib/prisma';
+import { type Prisma } from '@prisma/client';
 import { SocialLinkFormValues } from '../data';
 
 const SOCIAL_LINK_SORTABLE_FIELDS = ['displayOrder', 'createdAt', 'platform'] as const;

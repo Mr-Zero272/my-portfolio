@@ -10,8 +10,8 @@ import {
   ResponsiveDialogTitle,
 } from '@/components/ui/responsive-dialog';
 import { Spinner } from '@/components/ui/spinner';
-import { GalleryImage } from '@/lib/generated/prisma/client';
 import { BaseFormProps } from '@/types/form';
+import { GalleryImage } from '@prisma/client';
 import { BriefcaseBusinessIcon } from 'lucide-react';
 import { ExperienceFormValues } from '../../data';
 import { ExperienceForm } from './experience-form';

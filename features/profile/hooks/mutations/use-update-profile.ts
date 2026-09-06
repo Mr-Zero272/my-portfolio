@@ -1,4 +1,4 @@
-import { Profile } from '@/lib/generated/prisma/client';
+import { Profile } from '@prisma/client';
 import { useMutation, UseMutationOptions, useQueryClient } from '@tanstack/react-query';
 import { ApiError } from 'next/dist/server/api-utils';
 import { profileApi, profileQueryKeys } from '../../services';

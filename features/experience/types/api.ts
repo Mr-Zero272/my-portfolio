@@ -1,5 +1,5 @@
-import { Experience, GalleryImage } from '@/lib/generated/prisma/client';
 import { BaseQuery, RequestConfig } from '@/types/api';
+import { Experience, GalleryImage } from '@prisma/client';
 import { ExperienceFormValues } from '../data';
 
 export interface ExperienceWithAllRelations extends Experience {

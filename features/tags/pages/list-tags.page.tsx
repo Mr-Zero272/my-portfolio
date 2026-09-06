@@ -5,7 +5,7 @@ import { ActionItem } from '@/components/shared/responsive-actions';
 import { Button } from '@/components/ui/button';
 import { useFormState } from '@/hooks/use-form-state';
 import { useTableActionsWithOptimisticDelete } from '@/hooks/use-table-actions-with-optimistic-delete';
-import { Tag } from '@/lib/generated/prisma/client';
+import { Tag } from '@prisma/client';
 import { EditIcon, PlusIcon } from 'lucide-react';
 import { Suspense, useCallback, useMemo } from 'react';
 import { TagFormDialog, TagTable, TagTableSkeleton } from '../components';

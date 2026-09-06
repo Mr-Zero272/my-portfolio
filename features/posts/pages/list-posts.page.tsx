@@ -4,7 +4,7 @@ import { PageHeader } from '@/components/shared/page-header';
 import { ActionItem } from '@/components/shared/responsive-actions';
 import { buttonVariants } from '@/components/ui/button';
 import { appPath } from '@/constants/path';
-import { Post } from '@/lib/generated/prisma/client';
+import { Post } from '@prisma/client';
 import { EditIcon, PlusIcon, SendIcon } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'nextjs-toploader/app';

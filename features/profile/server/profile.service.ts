@@ -1,8 +1,8 @@
 import { getMainUserId } from '@/features/site-settings/server/main-user';
 import { ApiErrorCode, throwApiError } from '@/lib/api';
 import { requireAdmin } from '@/lib/auth-guard';
-import type { Prisma } from '@/lib/generated/prisma/client';
 import { prisma } from '@/lib/prisma';
+import type { Prisma } from '@prisma/client';
 import { ProfileFormValues } from '../data';
 
 const PROFILE_INCLUDE = {

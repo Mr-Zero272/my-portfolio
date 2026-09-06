@@ -14,10 +14,10 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { InputGroup, InputGroupAddon, InputGroupInput } from '@/components/ui/input-group';
 import { Spinner } from '@/components/ui/spinner';
-import { GalleryImage } from '@/lib/generated/prisma/client';
 import { cn } from '@/lib/utils';
 import { SortOrder } from '@/types/api';
 import { useIntersection } from '@mantine/hooks';
+import { GalleryImage } from '@prisma/client';
 import {
   CheckIcon,
   ImageIcon,

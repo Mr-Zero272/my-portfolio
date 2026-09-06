@@ -1,5 +1,5 @@
-import { GalleryImage, Project } from '@/lib/generated/prisma/client';
 import { BaseQuery, RequestConfig } from '@/types/api';
+import { GalleryImage, Project } from '@prisma/client';
 import { ProjectFormValues } from '../data';
 
 /** Owner user as serialized by the service (admin includes email; public omits it). */

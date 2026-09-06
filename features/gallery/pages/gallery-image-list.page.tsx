@@ -32,9 +32,9 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Spinner } from '@/components/ui/spinner';
 import { useDownloadFile } from '@/hooks/use-download-file';
-import { GalleryImage } from '@/lib/generated/prisma/client';
 import { uploadManager } from '@/lib/upload';
 import { useUploadStore } from '@/stores/upload';
+import { GalleryImage } from '@prisma/client';
 
 import { UploadFromUrlDialog } from '@/components/shared/upload-from-url-dialog';
 import { ButtonGroup } from '@/components/ui/button-group';

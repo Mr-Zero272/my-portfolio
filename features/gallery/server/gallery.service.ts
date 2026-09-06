@@ -1,20 +1,20 @@
 import { ApiErrorCode, buildListQuery, FilterOperator, throwApiError } from '@/lib/api';
 import { requireAdmin } from '@/lib/auth-guard';
-import type { Prisma } from '@/lib/generated/prisma/client';
 import { generateId } from '@/lib/id';
 import { prisma } from '@/lib/prisma';
 import {
-  checkObjectExists,
-  deleteObjectFromR2,
-  extractKeyFromR2Url,
-  generatePresignedPutUrl,
-  getR2PublicUrl,
+    checkObjectExists,
+    deleteObjectFromR2,
+    extractKeyFromR2Url,
+    generatePresignedPutUrl,
+    getR2PublicUrl,
 } from '@/lib/r2';
+import type { Prisma } from '@prisma/client';
 import axios from 'axios';
 import type {
-  ConfirmUploadInput,
-  GetPresignedUrlInput,
-  UploadFromUrlInput,
+    ConfirmUploadInput,
+    GetPresignedUrlInput,
+    UploadFromUrlInput,
 } from '../schemas/gallery.schema';
 
 const GALLERY_SORTABLE_FIELDS = ['createdAt', 'updatedAt', 'name', 'size'] as const;

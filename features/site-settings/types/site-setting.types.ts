@@ -1,4 +1,4 @@
-import type { Prisma, SiteSetting } from '@/lib/generated/prisma/client';
+import type { Prisma, SiteSetting } from '@prisma/client';
 
 export type SafeSiteSetting = Omit<SiteSetting, 'githubAccessToken' | 'jsonLd'> & {
   jsonLd: Prisma.JsonValue | null;

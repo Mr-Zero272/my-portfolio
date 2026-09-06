@@ -7,14 +7,14 @@ import {
     throwApiError,
 } from '@/lib/api';
 import { requireAdmin } from '@/lib/auth-guard';
+import { prisma } from '@/lib/prisma';
+import { slugify } from '@/lib/slug';
 import {
     GalleryImage,
     ProjectStatus,
     ProjectType,
     type Prisma,
-} from '@/lib/generated/prisma/client';
-import { prisma } from '@/lib/prisma';
-import { slugify } from '@/lib/slug';
+} from '@prisma/client';
 import { ProjectStatusEnum, ProjectTypeEnum } from '../constants';
 import { ProjectFormValues } from '../data';
 

@@ -15,7 +15,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
 import { Spinner } from '@/components/ui/spinner';
 import { formatDateTime, formatFileSize } from '@/lib/format';
-import { GalleryImage } from '@/lib/generated/prisma/client';
+import { GalleryImage } from '@prisma/client';
 import { DownloadIcon, ExternalLinkIcon, XIcon } from 'lucide-react';
 import Image from 'next/image';
 import { ReactNode, useMemo } from 'react';

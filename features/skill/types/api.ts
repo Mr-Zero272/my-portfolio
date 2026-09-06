@@ -1,5 +1,5 @@
-import { GalleryImage, Skill } from '@/lib/generated/prisma/client';
 import { BaseQuery, RequestConfig } from '@/types/api';
+import { GalleryImage, Skill } from '@prisma/client';
 import { BulkSortSkillsInput, SkillFormValues } from '../data';
 
 export interface SkillWithAllRelations extends Skill {

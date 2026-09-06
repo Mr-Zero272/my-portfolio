@@ -2,7 +2,7 @@ import { DataTableColumnHeader } from '@/components/data-table/data-table-column
 import { ActionItem, ResponsiveActions } from '@/components/shared/responsive-actions';
 import { Button } from '@/components/ui/button';
 import { formatDateTime } from '@/lib/format';
-import { Tag } from '@/lib/generated/prisma/client';
+import { Tag } from '@prisma/client';
 import { ColumnDef } from '@tanstack/react-table';
 import { TentIcon } from 'lucide-react';
 import { useMemo } from 'react';

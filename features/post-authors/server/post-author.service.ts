@@ -1,7 +1,7 @@
 import { ApiErrorCode, buildListQuery, throwApiError } from '@/lib/api';
 import { requireAdmin } from '@/lib/auth-guard';
-import type { Prisma } from '@/lib/generated/prisma/client';
 import { prisma } from '@/lib/prisma';
+import type { Prisma } from '@prisma/client';
 import type { PostAuthorCreateInput, PostAuthorUpdateInput } from '../schemas/post-author.schema';
 
 const POST_AUTHOR_INCLUDE = {

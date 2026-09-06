@@ -1,4 +1,4 @@
-import { GalleryImage } from '@/lib/generated/prisma/client';
+import { GalleryImage } from '@prisma/client';
 import { useQuery, UseQueryOptions } from '@tanstack/react-query';
 import { galleryApi, galleryQueryKeys } from '../../services';
 import { GetGalleryImageRequest } from '../../types';

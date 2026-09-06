@@ -1,4 +1,4 @@
-import { GalleryImage, Post, PostTag } from '@/lib/generated/prisma/client';
+import { GalleryImage, Post, PostTag } from '@prisma/client';
 import { PostFormValues } from '../../schemas';
 
 export const toPostFormValue = (

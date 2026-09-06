@@ -1,4 +1,4 @@
-import { Profile } from '@/lib/generated/prisma/client';
+import { Profile } from '@prisma/client';
 import { ProfileFormValues } from './schema';
 
 export const toProfileFormValue = (profile: Profile): ProfileFormValues => {

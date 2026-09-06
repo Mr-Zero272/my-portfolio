@@ -1,4 +1,4 @@
-import { Skill } from '@/lib/generated/prisma/client';
+import { Skill } from '@prisma/client';
 import { useMutation, UseMutationOptions, useQueryClient } from '@tanstack/react-query';
 import { skillApi, skillQueryKeys } from '../../services';
 import { CreateSkillRequest } from '../../types';

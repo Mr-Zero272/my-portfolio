@@ -9,7 +9,7 @@ import {
 } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { formatDate } from '@/lib/format';
-import { Education } from '@/lib/generated/prisma/client';
+import { Education } from '@prisma/client';
 import {
   CalendarDaysIcon,
   Edit2Icon,

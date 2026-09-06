@@ -1,8 +1,8 @@
 import { getMainUserId } from '@/features/site-settings/server/main-user';
 import { ApiErrorCode, buildListQuery, parseBooleanParam, throwApiError } from '@/lib/api';
 import { requireAdmin } from '@/lib/auth-guard';
-import { ExperiencePositionIconType, type Prisma } from '@/lib/generated/prisma/client';
 import { prisma } from '@/lib/prisma';
+import { ExperiencePositionIconType, type Prisma } from '@prisma/client';
 import { ExperienceFormValues } from '../data';
 
 function mapPositions(positions: ExperienceFormValues['positions']) {

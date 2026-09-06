@@ -1,4 +1,4 @@
-import { PostStatus } from '@/lib/generated/prisma/enums';
+import { PostStatus } from '@prisma/client';
 import { z } from 'zod';
 
 const optionalString = z.string().optional();

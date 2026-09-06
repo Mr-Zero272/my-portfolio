@@ -1,4 +1,4 @@
-import { Experience } from '@/lib/generated/prisma/client';
+import { Experience } from '@prisma/client';
 import { parseToExperiencePositionIconType } from '../../constants';
 import { ExperienceFormValues } from './schema';
 

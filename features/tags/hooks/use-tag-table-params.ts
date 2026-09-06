@@ -1,6 +1,6 @@
-import { Tag } from '@/lib/generated/prisma/client';
-import { SortOrder } from '@/lib/generated/prisma/internal/prismaNamespace';
 import { getSortingStateParser } from '@/lib/parsers';
+import { SortOrder } from '@/types/api';
+import { Tag } from '@prisma/client';
 import { parseAsInteger, parseAsString, useQueryStates } from 'nuqs';
 import { useMemo } from 'react';
 import { GetTagsRequest } from '../types';

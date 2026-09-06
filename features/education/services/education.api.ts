@@ -1,13 +1,13 @@
 import axiosInstance from '@/lib/axios';
-import { Education } from '@/lib/generated/prisma/client';
 import { ListResponse } from '@/types/api';
 import { normalizeQueryParams } from '@/utils/search-query';
+import { Education } from '@prisma/client';
 import {
-  CreateEducationRequest,
-  DeleteEducationRequest,
-  GetEducationRequest,
-  GetEducationsRequest,
-  UpdateEducationRequest,
+    CreateEducationRequest,
+    DeleteEducationRequest,
+    GetEducationRequest,
+    GetEducationsRequest,
+    UpdateEducationRequest,
 } from '../types';
 
 export const educationApi = {

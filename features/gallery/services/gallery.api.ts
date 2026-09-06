@@ -1,12 +1,12 @@
 import { DeleteTagRequest } from '@/features/tags/types';
 import axiosInstance from '@/lib/axios';
-import { GalleryImage } from '@/lib/generated/prisma/client';
 import { ListResponse } from '@/types/api';
 import { normalizeQueryParams } from '@/utils/search-query';
+import { GalleryImage } from '@prisma/client';
 import {
-  GetGalleryImageRequest,
-  GetGalleryImagesRequest,
-  UploadGalleryImageFromUrlInputRequest,
+    GetGalleryImageRequest,
+    GetGalleryImagesRequest,
+    UploadGalleryImageFromUrlInputRequest,
 } from '../types';
 
 export const galleryApi = {

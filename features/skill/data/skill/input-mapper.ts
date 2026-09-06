@@ -1,9 +1,9 @@
-import { Skill } from '@/lib/generated/prisma/client';
+import { Skill } from '@prisma/client';
 import {
-  parseToProficiencyLevel,
-  parseToSkillCategory,
-  ProficiencyLevelEnum,
-  SkillCategoryEnum,
+    parseToProficiencyLevel,
+    parseToSkillCategory,
+    ProficiencyLevelEnum,
+    SkillCategoryEnum,
 } from '../../constants';
 import { SkillFormValues } from './schema';
 

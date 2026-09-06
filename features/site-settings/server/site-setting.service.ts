@@ -1,7 +1,7 @@
 import { ApiErrorCode, throwApiError } from '@/lib/api';
 import { requireAdmin } from '@/lib/auth-guard';
-import type { Prisma, SiteSetting } from '@/lib/generated/prisma/client';
 import { prisma } from '@/lib/prisma';
+import type { Prisma, SiteSetting } from '@prisma/client';
 import type {
     SiteSettingOnboardingInput,
     SiteSettingUpdateInput,

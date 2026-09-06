@@ -7,8 +7,8 @@ import {
     throwApiError,
 } from '@/lib/api';
 import { requireAdmin } from '@/lib/auth-guard';
-import { ProficiencyLevel, SkillCategory, type Prisma } from '@/lib/generated/prisma/client';
 import { prisma } from '@/lib/prisma';
+import { ProficiencyLevel, SkillCategory, type Prisma } from '@prisma/client';
 import { ProficiencyLevelEnum, SkillCategoryEnum } from '../constants';
 import { SkillFormValues } from '../data';
 

@@ -1,13 +1,13 @@
-import {
-  GalleryImage,
-  Post,
-  PostAuthor,
-  PostStatus,
-  PostTag,
-  Tag,
-  User,
-} from '@/lib/generated/prisma/client';
 import { BaseQuery, RequestConfig } from '@/types/api';
+import {
+    GalleryImage,
+    Post,
+    PostAuthor,
+    PostStatus,
+    PostTag,
+    Tag,
+    User,
+} from '@prisma/client';
 import { PostFormValues } from '../schemas';
 
 export interface PostWithAllRelations extends Post {

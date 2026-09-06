@@ -1,7 +1,7 @@
 'use client';
 
 import { useOptimisticDelete } from '@/hooks/use-optimistic-delete';
-import { Tag } from '@/lib/generated/prisma/client';
+import { Tag } from '@prisma/client';
 import { tagApi } from '../services';
 
 export const useOptimisticDeleteTag = () => {
