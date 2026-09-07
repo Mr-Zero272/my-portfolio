@@ -1,13 +1,15 @@
 'use client';
 
+import { MOBILE_BREAKPOINT } from '@/constants/breakpoints';
 import { useLayoutState } from '@/stores';
-import { useWindowEvent } from '@mantine/hooks';
+import { useMediaQuery, useWindowEvent } from '@mantine/hooks';
 import { ChevronUp } from 'lucide-react';
 import { AnimatePresence, motion } from 'motion/react';
 import { useCallback, useState } from 'react';
 
 const ScrollToTopButton = () => {
   const [isVisible, setIsVisible] = useState(false);
+  const isMobile = useMediaQuery(MOBILE_BREAKPOINT);
   const isBottomNavOpen = useLayoutState((state) => state.isBottomNavOpen);
 
   const toggleVisibility = useCallback(() => {
@@ -35,7 +37,7 @@ const ScrollToTopButton = () => {
           onClick={scrollToTop}
           className="bg-primary hover:bg-primary/80 focus:ring-primary/50 dark:bg-primary fixed right-5 bottom-5 z-50 flex size-9 items-center justify-center rounded-full text-white shadow-lg focus:ring-2 focus:ring-offset-2 focus:outline-none md:right-16 md:bottom-10 md:size-12 dark:ring-offset-gray-900"
           initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: isBottomNavOpen ? 0 : -65 }}
+          animate={{ opacity: 1, y: !isMobile ? 0 : isBottomNavOpen ? 0 : -65 }}
           exit={{ opacity: 0, y: 20 }}
           transition={{ duration: 0.2 }}
           aria-label="Scroll to top"
