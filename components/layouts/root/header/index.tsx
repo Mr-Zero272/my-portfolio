@@ -20,7 +20,10 @@ const RootHeader = () => {
   const isPlaying = useIsPlaying();
   const pathname = usePathname();
   const router = useRouter();
-  const isInBlogDetailPage = useMemo(() => picomatch.isMatch(pathname || '', '/blog/*'), [pathname]);
+  const isInBlogDetailPage = useMemo(
+    () => picomatch.isMatch(pathname || '', '/blog/*'),
+    [pathname],
+  );
 
   // get sidebar state to calculate header position
   const { isCollapsed, isExpanded, isHidden } = useRootSidebar();
@@ -44,6 +47,10 @@ const RootHeader = () => {
       }}
     >
       <HeaderIsland.Root>
+        <span className="sm:hidden">
+          <RootSidebarToggle />
+        </span>
+
         <Link
           href="/"
           aria-label="Home"
@@ -53,9 +60,6 @@ const RootHeader = () => {
         </Link>
 
         {/* Sidebar toggle is mobile-only (hidden from the `sm` breakpoint up). */}
-        <span className="sm:hidden">
-          <RootSidebarToggle />
-        </span>
 
         <ThemeToggleButton />
 
@@ -64,7 +68,7 @@ const RootHeader = () => {
           {isPlaying && (
             <span
               aria-hidden
-              className="bg-primary absolute -top-0.5 -right-0.5 size-2 animate-pulse rounded-full ring-2 ring-background"
+              className="bg-primary ring-background absolute -top-0.5 -right-0.5 size-2 animate-pulse rounded-full ring-2"
             />
           )}
         </HeaderIsland.Item>
@@ -89,4 +93,3 @@ const RootHeader = () => {
 };
 
 export { RootHeader };
-
