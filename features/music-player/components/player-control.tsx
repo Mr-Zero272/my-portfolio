@@ -87,6 +87,17 @@ const PlayerControl = () => {
 
   useWindowEvent('keydown', handleSpaceKeyPress);
 
+  // update meta title
+  useEffect(() => {
+    if (currentTrack) {
+      let title = currentTrack.metadata.title;
+      if (currentTrack.metadata.artist) {
+        title += ` - ${currentTrack.metadata.artist}`;
+      }
+      document.title = title;
+    }
+  }, [currentTrack]);
+
   return (
     <article className="mb-10 w-full flex-1 space-y-10 xl:mb-0">
       <div className="z-0 flex items-center justify-center">
