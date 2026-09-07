@@ -34,19 +34,16 @@ export const ListPostByTag = ({ tags, initialPosts }: ListPostByTagProps) => {
     },
     {
       // Seed the default "All" list with the server-fetched first page.
-      initialPage: tag === undefined ? initialPosts ?? undefined : undefined,
+      initialPage: tag === undefined ? (initialPosts ?? undefined) : undefined,
     },
   );
 
-  const posts = useMemo(
-    () => postsByTag?.pages.flatMap((page) => page.list) ?? [],
-    [postsByTag],
-  );
+  const posts = useMemo(() => postsByTag?.pages.flatMap((page) => page.list) ?? [], [postsByTag]);
 
   const isEmpty = !isLoadingPostsByTag && posts.length === 0;
 
   return (
-    <div className="space-y-10 md:px-5">
+    <div className="space-y-10 px-4 md:px-5">
       <div className="flex flex-col items-center justify-center gap-1">
         <h2 className="text-2xl font-bold">Browse by Tag</h2>
         <p className="text-muted-foreground">Select a tag to see more related posts</p>
@@ -88,7 +85,7 @@ export const ListPostByTag = ({ tags, initialPosts }: ListPostByTagProps) => {
             <PostCard variant="vertical" key={post.id} post={post} isHasHoverEffect />
           ))}
           {isEmpty && (
-            <p className="col-span-full py-10 text-center text-muted-foreground">
+            <p className="text-muted-foreground col-span-full py-10 text-center">
               No posts found for this tag.
             </p>
           )}
