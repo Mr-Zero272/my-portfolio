@@ -1,8 +1,8 @@
 'use client';
 
+import { useMediaQuery } from '@mantine/hooks';
 import { usePathname } from 'next/navigation';
 import { Fragment, useMemo, useState } from 'react';
-import { useMediaQuery } from 'usehooks-ts';
 import {
   Breadcrumb,
   BreadcrumbEllipsis,

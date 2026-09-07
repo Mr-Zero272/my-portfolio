@@ -4,11 +4,11 @@ import { rootNavigation } from '@/constants/navigation';
 import { useRootSidebar } from '@/contexts/root-sidebar.context';
 import { cn } from '@/lib/utils';
 import { useLayoutState } from '@/stores';
+import { useWindowEvent } from '@mantine/hooks';
 import { AnimatePresence, motion } from 'motion/react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { useEventListener } from 'usehooks-ts';
 
 export const BottomNavBar = () => {
   const lastScrollY = useRef(0);
@@ -33,7 +33,7 @@ export const BottomNavBar = () => {
     }
   }, [isExpanded, isMobile, setBottomNavOpen]);
 
-  useEventListener('scroll', onScroll);
+  useWindowEvent('scroll', onScroll);
 
   const finalDirection = isExpanded && isMobile ? 'down' : direction;
 

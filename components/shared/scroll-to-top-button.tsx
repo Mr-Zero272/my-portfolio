@@ -1,10 +1,10 @@
 'use client';
 
 import { useLayoutState } from '@/stores';
+import { useWindowEvent } from '@mantine/hooks';
 import { ChevronUp } from 'lucide-react';
 import { AnimatePresence, motion } from 'motion/react';
 import { useCallback, useState } from 'react';
-import { useEventListener } from 'usehooks-ts';
 
 const ScrollToTopButton = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -19,7 +19,7 @@ const ScrollToTopButton = () => {
     }
   }, [setIsVisible]);
 
-  useEventListener('scroll', toggleVisibility);
+  useWindowEvent('scroll', toggleVisibility);
 
   const scrollToTop = useCallback(() => {
     window.scrollTo({
@@ -33,7 +33,7 @@ const ScrollToTopButton = () => {
       {isVisible && (
         <motion.button
           onClick={scrollToTop}
-          className="fixed right-5 bottom-5 z-50 flex size-9 items-center justify-center rounded-full bg-primary text-white shadow-lg hover:bg-primary/80 focus:ring-2 focus:ring-primary/50 focus:ring-offset-2 focus:outline-none md:right-16 md:bottom-10 md:size-12 dark:bg-primary dark:ring-offset-gray-900"
+          className="bg-primary hover:bg-primary/80 focus:ring-primary/50 dark:bg-primary fixed right-5 bottom-5 z-50 flex size-9 items-center justify-center rounded-full text-white shadow-lg focus:ring-2 focus:ring-offset-2 focus:outline-none md:right-16 md:bottom-10 md:size-12 dark:ring-offset-gray-900"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: isBottomNavOpen ? 0 : -65 }}
           exit={{ opacity: 0, y: 20 }}
@@ -50,4 +50,3 @@ const ScrollToTopButton = () => {
 };
 
 export { ScrollToTopButton };
-

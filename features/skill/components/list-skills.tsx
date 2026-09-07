@@ -9,9 +9,9 @@ import {
   SortableItem,
   SortableItemHandle,
 } from '@/components/ui/sortable';
+import { useDebouncedCallback } from '@mantine/hooks';
 import { GripVerticalIcon, PlusIcon } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
-import { useDebounceCallback } from 'usehooks-ts';
 import { useBulkSortSkills } from '../hooks/mutations';
 import { SkillWithAllRelations } from '../types';
 import { SkillCard } from './skill-card';
@@ -48,7 +48,7 @@ export const ListSkills = ({
   }, [initialSortedSkills]);
 
   // 500ms debounced bulk sort callback
-  const debouncedBulkSort = useDebounceCallback((newSkills: SkillWithAllRelations[]) => {
+  const debouncedBulkSort = useDebouncedCallback((newSkills: SkillWithAllRelations[]) => {
     const items = newSkills.map((skill, index) => ({
       id: skill.id,
       displayOrder: index,

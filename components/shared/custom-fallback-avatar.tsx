@@ -1,8 +1,8 @@
 'use client';
 
 import { cn } from '@/lib/utils';
+import { useMounted } from '@mantine/hooks';
 import { useCallback, useEffect, useRef } from 'react';
-import { useIsMounted } from 'usehooks-ts';
 
 // --- Hash utilities ---
 
@@ -319,7 +319,7 @@ export default function CustomFallbackAvatar({
   const renderFailedRef = useRef(false);
   const sizeRef = useRef(size);
 
-  const isMounted = useIsMounted();
+  const isMounted = useMounted();
 
   const getUniforms = useCallback(() => {
     if (!uniformsRef.current) {
@@ -337,7 +337,7 @@ export default function CustomFallbackAvatar({
 
   // Resize + render chính
   useEffect(() => {
-    if (!isMounted()) return;
+    if (!isMounted) return;
 
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -369,7 +369,7 @@ export default function CustomFallbackAvatar({
 
   // Hover animation
   useEffect(() => {
-    if (!animated || !isMounted() || renderFailedRef.current) return;
+    if (!animated || !isMounted || renderFailedRef.current) return;
 
     const canvas = canvasRef.current;
     if (!canvas) return;

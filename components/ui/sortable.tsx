@@ -1,9 +1,12 @@
 'use client';
 
+import { useComposedRefs } from '@/lib/compose-refs';
+import { cn } from '@/lib/utils';
 import {
   type Announcements,
   closestCenter,
   closestCorners,
+  defaultDropAnimationSideEffects,
   DndContext,
   type DndContextProps,
   type DragEndEvent,
@@ -12,7 +15,6 @@ import {
   DragOverlay,
   type DragStartEvent,
   type DropAnimation,
-  defaultDropAnimationSideEffects,
   KeyboardSensor,
   MouseSensor,
   type ScreenReaderInstructions,
@@ -36,12 +38,10 @@ import {
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
+import { useMounted } from '@mantine/hooks';
 import { Slot } from '@radix-ui/react-slot';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import { useComposedRefs } from '@/lib/compose-refs';
-import { cn } from '@/lib/utils';
-import { useIsMounted } from 'usehooks-ts';
 
 const orientationConfig = {
   vertical: {
@@ -497,9 +497,9 @@ function SortableOverlay(props: SortableOverlayProps) {
 
   const context = useSortableContext(OVERLAY_NAME);
 
-  const isMouted = useIsMounted();
+  const isMounted = useMounted();
 
-  const container = containerProp ?? (isMouted() ? globalThis.document?.body : null);
+  const container = containerProp ?? (isMounted ? globalThis.document?.body : null);
 
   if (!container) return null;
 
@@ -523,15 +523,15 @@ function SortableOverlay(props: SortableOverlayProps) {
 }
 
 export {
+  SortableContent as Content,
+  SortableItem as Item,
+  SortableItemHandle as ItemHandle,
+  SortableOverlay as Overlay,
+  //
+  SortableRoot as Root,
   SortableRoot as Sortable,
   SortableContent,
   SortableItem,
   SortableItemHandle,
   SortableOverlay,
-  //
-  SortableRoot as Root,
-  SortableContent as Content,
-  SortableItem as Item,
-  SortableItemHandle as ItemHandle,
-  SortableOverlay as Overlay,
 };

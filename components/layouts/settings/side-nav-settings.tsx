@@ -3,12 +3,12 @@
 import { InputGroup, InputGroupAddon, InputGroupInput } from '@/components/ui/input-group';
 import { cn } from '@/lib/utils';
 import { useMobileMenuStore } from '@/stores/mobile-menu.store';
+import { useDebouncedValue } from '@mantine/hooks';
 import { Search } from 'lucide-react';
 import { motion } from 'motion/react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
-import { useDebounceValue } from 'usehooks-ts';
 import { sideNavSettingsItems } from './data';
 
 interface SideNavSettingsProps {
@@ -19,7 +19,7 @@ export const SideNavSettings = ({ className }: SideNavSettingsProps) => {
   const pathname = usePathname();
   const { closeMenu } = useMobileMenuStore();
   const [searchTerm, setSearchTerm] = useState('');
-  const [debouncedSearchTerm] = useDebounceValue(searchTerm, 300);
+  const [debouncedSearchTerm] = useDebouncedValue(searchTerm, 300);
   const [hoveredItem, setHoveredItem] = useState<string | null>(null);
 
   const filteredSettingsItems = sideNavSettingsItems
