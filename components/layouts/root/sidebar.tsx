@@ -11,7 +11,7 @@ import { GaugeIcon, SidebarIcon } from 'lucide-react';
 import { motion, useAnimationControls } from 'motion/react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useEffect, useMemo } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 
 export const RootSidebar = () => {
   const pathname = usePathname();
@@ -63,21 +63,12 @@ export const RootSidebar = () => {
     }
   }, [containerControls, svgControls, isHidden, isExpanded, isCollapsed]);
 
-  // Click outside để đóng sidebar trên mobile
-  const handleClickOutside = () => {
-    if (isExpanded) {
-      collapse();
-    }
-  };
-
   // Handle route navigation trên mobile
-  const handleRoutePage = () => {
-    if (isMobile && isExpanded) {
-      collapse();
-    }
-  };
+  const handleRoutePage = useCallback(() => {
+    collapse();
+  }, [collapse]);
 
-  const sidebarRef = useClickOutside(handleClickOutside);
+  const sidebarRef = useClickOutside(collapse);
 
   return (
     <>
@@ -251,10 +242,10 @@ const SidebarItem = ({
   isCollapsed = false,
   isHidden = false,
   active = false,
-  onClick = () => { },
+  onClick = () => {},
   icon,
 }: SidebarItemProps) => {
-  if (!isCollapsed && !isHidden) {
+  if (!isCollapsed) {
     return (
       <Link
         href={href}
@@ -317,4 +308,4 @@ export const RootSidebarToggle = () => {
       <SidebarIcon />
     </Button>
   );
-}
+};

@@ -13,7 +13,7 @@ export const MusicPlayerPage = () => {
   const [view, setView] = useState<View>('list');
 
   return (
-    <div className="w-full">
+    <div className="w-full px-4 sm:px-8">
       <div className="flex flex-col items-center gap-4 p-1 md:gap-10 md:p-5 lg:flex-row">
         <PlayerControl />
         <section className="w-full flex-1">

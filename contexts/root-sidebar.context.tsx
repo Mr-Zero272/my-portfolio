@@ -35,26 +35,31 @@ const RootSidebarContext = createContext<SidebarContextType>({
 
 export const RootSidebarProvider = ({ children }: Props) => {
   const [desktopState, setDesktopState] = useState<SidebarState>('collapsed');
+  const [mobileState, setMobileState] = useState<SidebarState>('hidden');
   const isMobile = useMediaQuery(MOBILE_BREAKPOINT);
 
   // Auto set state based on screen size
-  const state = isMobile ? 'hidden' : desktopState;
+  const state = isMobile ? mobileState : desktopState;
 
   const toggle = useCallback(() => {
     if (isMobile) {
-      setDesktopState((prev) => (prev === 'hidden' ? 'expanded' : 'hidden'));
+      setMobileState((prev) => (prev === 'hidden' ? 'expanded' : 'hidden'));
     } else {
       setDesktopState((prev) => (prev === 'collapsed' ? 'expanded' : 'collapsed'));
     }
   }, [isMobile]);
 
   const expand = useCallback(() => {
-    setDesktopState('expanded');
-  }, []);
+    if (isMobile) {
+      setMobileState('expanded');
+    } else {
+      setDesktopState('expanded');
+    }
+  }, [isMobile]);
 
   const collapse = useCallback(() => {
     if (isMobile) {
-      setDesktopState('hidden');
+      setMobileState('hidden');
     } else {
       setDesktopState('collapsed');
     }
