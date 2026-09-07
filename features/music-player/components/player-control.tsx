@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button';
 import { useCurrentTrack, useMusicControls, useMusicFlags } from '@/stores/music-store';
 import { formatSecondsToTime } from '@/utils/format';
 import { SliderRootChangeEventDetails, SliderRootCommitEventDetails } from '@base-ui/react';
+import { useWindowEvent } from '@mantine/hooks';
 // import { SleepTimerDialog } from './sleep-timer-button';
 
 const PlayerControl = () => {
@@ -73,6 +74,18 @@ const PlayerControl = () => {
     },
     [seek],
   );
+
+  const handleSpaceKeyPress = useCallback(
+    (e: KeyboardEvent) => {
+      if (e.code === 'Space') {
+        e.preventDefault();
+        handlePlayButtonClick();
+      }
+    },
+    [handlePlayButtonClick],
+  );
+
+  useWindowEvent('keydown', handleSpaceKeyPress);
 
   return (
     <article className="mb-10 w-full flex-1 space-y-10 xl:mb-0">
