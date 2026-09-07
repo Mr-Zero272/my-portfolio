@@ -6,29 +6,16 @@ import { useCallback, useEffect, useState } from 'react';
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import {
-  useCurrentTrack,
-  useMusicControls,
-  useMusicFlags,
-} from '@/stores/music-store';
+import { useCurrentTrack, useMusicControls, useMusicFlags } from '@/stores/music-store';
 import { formatSecondsToTime } from '@/utils/format';
 import { SliderRootChangeEventDetails, SliderRootCommitEventDetails } from '@base-ui/react';
 // import { SleepTimerDialog } from './sleep-timer-button';
 
 const PlayerControl = () => {
   const { track: currentTrack } = useCurrentTrack();
-  const {
-    play,
-    pause,
-    nextTrack,
-    previousTrack,
-    seek,
-    shuffle,
-    toggleRepeat,
-    checkSleepTimer,
-  } = useMusicControls();
-  const { isPlaying, isShuffle, repeat, duration, progress, sleepTimerTarget } =
-    useMusicFlags();
+  const { play, pause, nextTrack, previousTrack, seek, shuffle, toggleRepeat, checkSleepTimer } =
+    useMusicControls();
+  const { isPlaying, isShuffle, repeat, duration, progress, sleepTimerTarget } = useMusicFlags();
 
   // Local state for slider to avoid lag
   const [localProgress, setLocalProgress] = useState(progress);
@@ -73,19 +60,15 @@ const PlayerControl = () => {
 
   const handleSliderChange = useCallback(
     (value: number | readonly number[], _eventDetails: SliderRootChangeEventDetails) => {
-      if (Array.isArray(value)) {
-        setIsSeeking(true);
-        setLocalProgress(value[0]);
-      }
+      setIsSeeking(true);
+      setLocalProgress(Array.isArray(value) ? value[0] : value);
     },
     [],
   );
 
   const handleSliderCommit = useCallback(
     (value: number | readonly number[], _eventDetails: SliderRootCommitEventDetails) => {
-      if (Array.isArray(value)) {
-        seek(value[0]);
-      }
+      seek(Array.isArray(value) ? value[0] : value);
       setIsSeeking(false);
     },
     [seek],
@@ -130,7 +113,7 @@ const PlayerControl = () => {
       <div className="flex items-center justify-center gap-x-4">
         <p className="w-10">{formatSecondsToTime(Math.round(currentProgress))}</p>
         <Slider
-          value={[currentProgress]}
+          value={currentProgress}
           max={duration}
           className="w-[60%]"
           onValueChange={handleSliderChange}
@@ -180,4 +163,3 @@ const PlayerControl = () => {
 };
 
 export { PlayerControl };
-
