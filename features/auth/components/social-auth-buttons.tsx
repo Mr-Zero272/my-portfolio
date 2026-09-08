@@ -1,7 +1,6 @@
 'use client';
 
-import { GoogleIcon } from '@/components/icons';
-import GithubIcon from '@/components/icons/github';
+import { GithubIcon, GoogleIcon } from '@/components/icons';
 import { Button } from '@/components/ui/button';
 
 export type SocialProvider = 'google' | 'github';

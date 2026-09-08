@@ -1,16 +1,15 @@
-import { LinkedInIcon, XIcon } from '@/components/icons';
-import GithubIcon from '@/components/icons/github';
+import { GithubIcon, LinkedInIcon, XIcon } from '@/components/icons';
 import { createEnumOptionsHelper } from '@/lib/options';
 import {
-    AtSignIcon,
-    GlobeIcon,
-    LayersIcon,
-    LinkIcon,
-    LucideIcon,
-    MailIcon,
-    PlayIcon,
-    Share2Icon,
-    ThumbsUpIcon,
+  AtSignIcon,
+  GlobeIcon,
+  LayersIcon,
+  LinkIcon,
+  LucideIcon,
+  MailIcon,
+  PlayIcon,
+  Share2Icon,
+  ThumbsUpIcon,
 } from 'lucide-react';
 import React, { SVGProps } from 'react';
 
@@ -46,7 +45,7 @@ export const SOCIAL_LINK_PLATFORM_CONFIG = {
   SocialLinkPlatform,
   {
     label: string;
-    icon: LucideIcon | React.ComponentType<SVGProps<SVGSVGElement>>;
+    icon: LucideIcon | React.ComponentType<SVGProps<SVGSVGElement>> | React.ComponentType<any>;
   }
 >;
 

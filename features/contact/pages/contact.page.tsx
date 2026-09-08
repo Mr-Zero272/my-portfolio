@@ -1,5 +1,4 @@
-import { LinkedInIcon, YouTubeIcon } from '@/components/icons';
-import GithubIcon from '@/components/icons/github';
+import { GithubIcon, LinkedInIcon, YouTubeIcon } from '@/components/icons';
 import { MailIcon, MapPinIcon, PhoneCallIcon } from 'lucide-react';
 import Link from 'next/link';
 import { ContactForm } from '../components';

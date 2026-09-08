@@ -1,6 +1,7 @@
 'use client';
 
-import GithubIcon from '@/components/icons/github';
+import { GithubIcon } from '@/components/icons';
+import { ButtonWithAnimatedIcon } from '@/components/shared/button-with-animated-icon';
 import CustomFallbackAvatar from '@/components/shared/custom-fallback-avatar';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
@@ -143,14 +144,15 @@ export function ProjectCard({ project, mode = 'public', renderActions }: Project
           </Button>
         ) : null}
         {project.sourceCodeUrl ? (
-          <Button
+          <ButtonWithAnimatedIcon
             variant="outline"
             size="sm"
             nativeButton={false}
             render={<a href={project.sourceCodeUrl} target="_blank" rel="noopener noreferrer" />}
+            icon={<GithubIcon />}
           >
-            <GithubIcon /> GitHub
-          </Button>
+            GitHub
+          </ButtonWithAnimatedIcon>
         ) : null}
       </CardFooter>
     </Card>
