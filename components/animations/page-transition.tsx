@@ -31,7 +31,7 @@ export const PageTransition = ({
 
   return (
     <div
-      className={cn('w-full bg-background pt-16', className, {
+      className={cn('bg-background w-full flex-1 pt-16', className, {
         'overflow-hidden': isAnimating,
         'overflow-y-auto': !isAnimating,
       })}
@@ -45,8 +45,9 @@ export const PageTransition = ({
         transition={{ duration: 0.5, when: 'afterChildren', delay: 1.5 }}
         onAnimationStart={() => setIsAnimating(true)}
         onAnimationComplete={() => setIsAnimating(false)}
+        className="flex h-full flex-col"
       >
-        <div className="site-container mx-auto">{children}</div>
+        <div className="site-container mx-auto w-full flex-1">{children}</div>
         {hasFooter && <RootFooter />}
       </motion.div>
     </div>

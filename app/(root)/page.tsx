@@ -4,7 +4,7 @@ import { DiscordIcon, LinkedInIcon } from '@/components/icons';
 import GithubIcon from '@/components/icons/github';
 import { DownloadButton } from '@/components/shared/dowload-button';
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
+import { buttonVariants } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { env } from '@/config/env';
 import type { ProfileWithAllRelations } from '@/features/profile';
@@ -35,7 +35,7 @@ const FALLBACK_PROFILE = {
 export const metadata: Metadata = {
   title: 'Thuong Phan Thanh — Full Stack Developer',
   description:
-    'Hi, I\'m Thuong Phan Thanh. I\'m a Full Stack Developer working with Next.js, React and modern web technologies. Explore my projects, blogs and experience.',
+    "Hi, I'm Thuong Phan Thanh. I'm a Full Stack Developer working with Next.js, React and modern web technologies. Explore my projects, blogs and experience.",
   keywords: [
     'Thuong Phan Thanh',
     'Full Stack Developer',
@@ -51,7 +51,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Thuong Phan Thanh — Full Stack Developer',
     description:
-      'Hi, I\'m Thuong Phan Thanh. I\'m a Full Stack Developer working with Next.js, React and modern web technologies.',
+      "Hi, I'm Thuong Phan Thanh. I'm a Full Stack Developer working with Next.js, React and modern web technologies.",
     url: `${SITE_URL}/`,
     siteName: 'Thuong Phan Thanh Portfolio',
     type: 'website',
@@ -68,7 +68,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Thuong Phan Thanh — Full Stack Developer',
     description:
-      'Hi, I\'m Thuong Phan Thanh. I\'m a Full Stack Developer working with Next.js, React and modern web technologies.',
+      "Hi, I'm Thuong Phan Thanh. I'm a Full Stack Developer working with Next.js, React and modern web technologies.",
     images: [`${SITE_URL}/images/projects/portfolio/my-portfolio-h-1.png`],
   },
 };
@@ -134,9 +134,12 @@ export default async function Home() {
               ) : null}
             </div>
             <div className="flex flex-wrap gap-4">
-              <Button size="lg">
+              <Link
+                href="/contact?source=hire-me"
+                className={buttonVariants({ size: 'lg' })}
+              >
                 <ArrowRightIcon /> Hire me
-              </Button>
+              </Link>
               {display.cvUrl ? (
                 <DownloadButton
                   size="lg"
@@ -146,6 +149,7 @@ export default async function Home() {
                   loadingText="Downloading..."
                   successText="Success"
                   url={display.cvUrl}
+                  fileName="phan_thanh_thuong_cv.pdf"
                 />
               ) : // <Button
                 //   size="lg"
