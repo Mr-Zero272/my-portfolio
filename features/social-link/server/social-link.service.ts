@@ -139,6 +139,21 @@ export const socialLinkService = {
 
     return { id };
   },
+
+  async bulkSort(headers: Headers, items: Array<{ id: string; displayOrder: number }>) {
+    const { user } = await requireAdmin(headers);
+
+    await prisma.$transaction(
+      items.map((item) =>
+        prisma.socialLink.updateMany({
+          where: { id: item.id, userId: user.id },
+          data: { displayOrder: item.displayOrder },
+        }),
+      ),
+    );
+
+    return { success: true };
+  },
 };
 
 async function ensureSocialLinkExists(id: string, userId: string) {

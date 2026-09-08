@@ -1,5 +1,6 @@
 import { GithubIcon, LinkedInIcon, XIcon } from '@/components/icons';
 import { createEnumOptionsHelper } from '@/lib/options';
+import { AnimatedIconProps } from '@/types/animated-icon';
 import {
   AtSignIcon,
   GlobeIcon,
@@ -45,7 +46,10 @@ export const SOCIAL_LINK_PLATFORM_CONFIG = {
   SocialLinkPlatform,
   {
     label: string;
-    icon: LucideIcon | React.ComponentType<SVGProps<SVGSVGElement>> | React.ComponentType<any>;
+    icon:
+      | LucideIcon
+      | React.ComponentType<SVGProps<SVGSVGElement>>
+      | React.ComponentType<AnimatedIconProps>;
   }
 >;
 

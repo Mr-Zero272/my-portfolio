@@ -1,7 +1,6 @@
 'use client';
 
 import { GithubIcon } from '@/components/icons';
-import { ButtonWithAnimatedIcon } from '@/components/shared/button-with-animated-icon';
 import CustomFallbackAvatar from '@/components/shared/custom-fallback-avatar';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
@@ -21,6 +20,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from '@/components/ui/carousel';
+import { useAnimatedIcon } from '@/hooks/use-animated-icon';
 import { CalendarDaysIcon, ExternalLinkIcon, ImageIcon } from 'lucide-react';
 import Image from 'next/image';
 import { getProjectStatusLabel, getProjectTypeLabel } from '../../constants';
@@ -32,14 +32,14 @@ interface ProjectCardProps {
   renderActions?: (project: ProjectWithAllRelations) => React.ReactNode;
 }
 
-function getInitials(name: string): string {
-  return name
-    .split(/\s+/)
-    .filter(Boolean)
-    .slice(0, 2)
-    .map((part) => part[0]?.toUpperCase() ?? '')
-    .join('');
-}
+// function getInitials(name: string): string {
+//   return name
+//     .split(/\s+/)
+//     .filter(Boolean)
+//     .slice(0, 2)
+//     .map((part) => part[0]?.toUpperCase() ?? '')
+//     .join('');
+// }
 
 function TagChip({ label }: { label: string }) {
   return (
@@ -52,6 +52,11 @@ function TagChip({ label }: { label: string }) {
 export function ProjectCard({ project, mode = 'public', renderActions }: ProjectCardProps) {
   const ownerName = project.user?.name ?? 'Project Owner';
   const ownerSubtitle = project.user?.email ?? project.user?.name ?? 'Portfolio owner';
+  const {
+    iconRef: githubIconRef,
+    onMouseEnter: githubOnMouseEnter,
+    onMouseLeave: githubOnMouseLeave,
+  } = useAnimatedIcon();
 
   return (
     <Card className="flex h-full flex-col">
@@ -144,15 +149,17 @@ export function ProjectCard({ project, mode = 'public', renderActions }: Project
           </Button>
         ) : null}
         {project.sourceCodeUrl ? (
-          <ButtonWithAnimatedIcon
+          <Button
             variant="outline"
             size="sm"
             nativeButton={false}
             render={<a href={project.sourceCodeUrl} target="_blank" rel="noopener noreferrer" />}
-            icon={<GithubIcon />}
+            onMouseEnter={githubOnMouseEnter}
+            onMouseLeave={githubOnMouseLeave}
           >
+            <GithubIcon ref={githubIconRef} />
             GitHub
-          </ButtonWithAnimatedIcon>
+          </Button>
         ) : null}
       </CardFooter>
     </Card>

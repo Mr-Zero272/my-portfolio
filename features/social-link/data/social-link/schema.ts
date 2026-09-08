@@ -18,3 +18,15 @@ export const DEFAULT_SOCIAL_LINK_FORM_VALUES: SocialLinkFormValues = {
   isActive: true,
   displayOrder: 0,
 };
+
+export const BulkSortItemSchema = z.object({
+  id: z.string(),
+  displayOrder: z.number().int(),
+});
+
+export const BulkSortSocialLinksSchema = z.object({
+  items: z.array(BulkSortItemSchema),
+});
+
+export type BulkSortSocialLinksInput = z.infer<typeof BulkSortSocialLinksSchema>;
+

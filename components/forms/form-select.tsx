@@ -1,6 +1,6 @@
 'use client';
 
-import { ReactNode } from 'react';
+import { ReactNode, SVGProps } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 
 import {
@@ -13,6 +13,7 @@ import {
 } from '@/components/ui/select';
 import { BaseInputProps } from '@/types/form';
 
+import { AnimatedIconProps } from '@/types/animated-icon';
 import { LucideIcon } from 'lucide-react';
 import { Field, FieldDescription, FieldError, FieldLabel } from '../ui/field';
 
@@ -20,7 +21,10 @@ export interface FormSelectOption {
   value: string;
   label: ReactNode;
   disabled?: boolean;
-  icon?: LucideIcon;
+  icon?:
+    | LucideIcon
+    | React.ComponentType<SVGProps<SVGSVGElement>>
+    | React.ComponentType<AnimatedIconProps>;
 }
 
 interface FormSelectProps extends BaseInputProps {
