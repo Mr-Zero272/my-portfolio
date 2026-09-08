@@ -67,7 +67,7 @@ export const GalleryImageDetailDrawer = ({
 
   return (
     <Drawer
-      direction={isMobile ? 'bottom' : 'right'}
+      swipeDirection={isMobile ? 'down' : 'right'}
       open={Boolean(image)}
       onOpenChange={onOpenChange}
     >
@@ -81,10 +81,11 @@ export const GalleryImageDetailDrawer = ({
                 {image ? formatDateTime(image.createdAt) : 'Loading…'}
               </DrawerDescription>
             </div>
-            <DrawerClose asChild className="hidden sm:block">
-              <Button variant="ghost" size="icon" className="size-8">
-                <XIcon />
-              </Button>
+            <DrawerClose
+              render={<Button variant="ghost" size="icon" className="size-8" />}
+              className="hidden sm:block"
+            >
+              <XIcon />
             </DrawerClose>
           </div>
         </DrawerHeader>
