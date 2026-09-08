@@ -1,7 +1,6 @@
 import { SlideUpText } from '@/components/animations/slide-up-text';
 import { TypingText } from '@/components/animations/typing-text';
-import { DiscordIcon, LinkedInIcon } from '@/components/icons';
-import GithubIcon from '@/components/icons/github';
+import { DiscordIcon, GithubIcon, LinkedInIcon } from '@/components/icons';
 import { DownloadButton } from '@/components/shared/dowload-button';
 import { Badge } from '@/components/ui/badge';
 import { buttonVariants } from '@/components/ui/button';
@@ -134,10 +133,7 @@ export default async function Home() {
               ) : null}
             </div>
             <div className="flex flex-wrap gap-4">
-              <Link
-                href="/contact?source=hire-me"
-                className={buttonVariants({ size: 'lg' })}
-              >
+              <Link href="/contact?source=hire-me" className={buttonVariants({ size: 'lg' })}>
                 <ArrowRightIcon /> Hire me
               </Link>
               {display.cvUrl ? (
@@ -152,14 +148,14 @@ export default async function Home() {
                   fileName="phan_thanh_thuong_cv.pdf"
                 />
               ) : // <Button
-                //   size="lg"
-                //   variant="outline"
-                //   nativeButton={false}
-                //   render={<a href={display.cvUrl} target="_blank" rel="noreferrer" />}
-                // >
-                //   <DownloadIcon /> Download CV
-                // </Button>
-                null}
+              //   size="lg"
+              //   variant="outline"
+              //   nativeButton={false}
+              //   render={<a href={display.cvUrl} target="_blank" rel="noreferrer" />}
+              // >
+              //   <DownloadIcon /> Download CV
+              // </Button>
+              null}
             </div>
             <Separator className="max-w-2xl" />
             {/* Stats Row */}

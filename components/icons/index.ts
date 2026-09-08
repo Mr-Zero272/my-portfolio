@@ -1,10 +1,11 @@
 export { AudioLinesAnimatedIcon } from './audio-lines-animated';
 export { ChevronsUpDownIcon, type ChevronsUpDownIconHandle } from './chevrons-up-down-icon';
+export { Dashboard02Icon, type Dashboard02IconHandle } from './dashboard';
 export { DiscordIcon } from './discord';
-export * from './github';
+export { GithubIcon, type GithubIconHandle } from './github';
 export * from './google';
 export { JPGIcon } from './jpg';
 export { LinkedInIcon } from './linked-in';
 export { PNGIcon } from './png';
-export { XIcon } from './x';
+export { NewTwitterIcon as XIcon, type NewTwitterIconHandle } from './x';
 export { YouTubeIcon } from './youtube';

@@ -1,14 +1,140 @@
-import { SVGProps } from 'react';
+'use client';
 
-function GithubIcon(props: SVGProps<SVGSVGElement>) {
-  return (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 25" width="1em" height="1em" {...props}>
-      <path
-        fill="currentColor"
-        d="M12.301 0h.093c2.242 0 4.34.613 6.137 1.68l-.055-.031a12.35 12.35 0 0 1 4.449 4.422l.031.058a12.2 12.2 0 0 1 1.654 6.166c0 5.406-3.483 10-8.327 11.658l-.087.026a.72.72 0 0 1-.642-.113l.002.001a.62.62 0 0 1-.208-.466v-.014v.001l.008-1.226q.008-1.178.008-2.154a2.84 2.84 0 0 0-.833-2.274a11 11 0 0 0 1.718-.305l-.076.017a6.5 6.5 0 0 0 1.537-.642l-.031.017a4.5 4.5 0 0 0 1.292-1.058l.006-.007a4.9 4.9 0 0 0 .84-1.645l.009-.035a7.9 7.9 0 0 0 .329-2.281l-.001-.136v.007l.001-.072a4.73 4.73 0 0 0-1.269-3.23l.003.003c.168-.44.265-.948.265-1.479a4.25 4.25 0 0 0-.404-1.814l.011.026a2.1 2.1 0 0 0-1.31.181l.012-.005a8.6 8.6 0 0 0-1.512.726l.038-.022l-.609.384c-.922-.264-1.981-.416-3.075-.416s-2.153.152-3.157.436l.081-.02q-.256-.176-.681-.433a9 9 0 0 0-1.272-.595l-.066-.022A2.17 2.17 0 0 0 5.837 5.1l.013-.002a4.2 4.2 0 0 0-.393 1.788c0 .531.097 1.04.275 1.509l-.01-.029a4.72 4.72 0 0 0-1.265 3.303v-.004l-.001.13c0 .809.12 1.591.344 2.327l-.015-.057c.189.643.476 1.202.85 1.693l-.009-.013a4.4 4.4 0 0 0 1.267 1.062l.022.011c.432.252.933.465 1.46.614l.046.011c.466.125 1.024.227 1.595.284l.046.004c-.431.428-.718 1-.784 1.638l-.001.012a3 3 0 0 1-.699.236l-.021.004c-.256.051-.549.08-.85.08h-.066h.003a1.9 1.9 0 0 1-1.055-.348l.006.004a2.84 2.84 0 0 1-.881-.986l-.007-.015a2.6 2.6 0 0 0-.768-.827l-.009-.006a2.3 2.3 0 0 0-.776-.38l-.016-.004l-.32-.048a1.05 1.05 0 0 0-.471.074l.007-.003q-.128.072-.08.184q.058.128.145.225l-.001-.001q.092.108.205.19l.003.002l.112.08c.283.148.516.354.693.603l.004.006c.191.237.359.505.494.792l.01.024l.16.368c.135.402.38.738.7.981l.005.004c.3.234.662.402 1.057.478l.016.002c.33.064.714.104 1.106.112h.007q.069.002.15.002q.392 0 .767-.062l-.027.004l.368-.064q0 .609.008 1.418t.008.873v.014c0 .185-.08.351-.208.466h-.001a.72.72 0 0 1-.645.111l.005.001C3.486 22.286.006 17.692.006 12.285c0-2.268.612-4.393 1.681-6.219l-.032.058a12.35 12.35 0 0 1 4.422-4.449l.058-.031a11.9 11.9 0 0 1 6.073-1.645h.098h-.005zm-7.64 17.666q.048-.112-.112-.192q-.16-.048-.208.032q-.048.112.112.192q.144.096.208-.032m.497.545q.112-.08-.032-.256q-.16-.144-.256-.048q-.112.08.032.256q.159.157.256.047zm.48.72q.144-.112 0-.304q-.128-.208-.272-.096q-.144.08 0 .288t.272.112m.672.673q.128-.128-.064-.304q-.192-.192-.32-.048q-.144.128.064.304q.192.192.32.044zm.913.4q.048-.176-.208-.256q-.24-.064-.304.112t.208.24q.24.097.304-.096m1.009.08q0-.208-.272-.176q-.256 0-.256.176q0 .208.272.176q.256.001.256-.175zm.929-.16q-.032-.176-.288-.144q-.256.048-.224.24t.288.128t.225-.224z"
-      ></path>
-    </svg>
-  );
+import { cn } from '@/lib/utils';
+import type { Variants } from 'motion/react';
+import { LazyMotion, domMin, m, useAnimation, useReducedMotion } from 'motion/react';
+import { forwardRef, useCallback, useImperativeHandle, useRef, type HTMLAttributes } from 'react';
+export interface GithubIconHandle {
+  startAnimation: () => void;
+  stopAnimation: () => void;
 }
 
-export default GithubIcon;
+interface GithubIconProps extends Omit<
+  HTMLAttributes<HTMLDivElement>,
+  | 'color'
+  | 'onDrag'
+  | 'onDragStart'
+  | 'onDragEnd'
+  | 'onAnimationStart'
+  | 'onAnimationEnd'
+  | 'onAnimationIteration'
+> {
+  size?: number;
+  duration?: number;
+  isAnimated?: boolean;
+  color?: string;
+}
+
+const GithubIcon = forwardRef<GithubIconHandle, GithubIconProps>(
+  (
+    {
+      onMouseEnter,
+      onMouseLeave,
+      className,
+      size = 24,
+      duration = 1,
+      isAnimated = true,
+      color,
+      ...props
+    },
+    ref,
+  ) => {
+    const controls = useAnimation();
+    const reduced = useReducedMotion();
+    const isControlled = useRef(false);
+
+    useImperativeHandle(ref, () => {
+      isControlled.current = true;
+      return {
+        startAnimation: () => (reduced ? controls.start('normal') : controls.start('animate')),
+        stopAnimation: () => controls.start('normal'),
+      };
+    });
+
+    const handleEnter = useCallback(
+      (e?: React.MouseEvent<HTMLDivElement>) => {
+        if (!isAnimated || reduced) return;
+        if (!isControlled.current) controls.start('animate');
+        else if (e) onMouseEnter?.(e);
+      },
+      [controls, reduced, isAnimated, onMouseEnter],
+    );
+
+    const handleLeave = useCallback(
+      (e?: React.MouseEvent<HTMLDivElement>) => {
+        if (!isControlled.current) controls.start('normal');
+        else if (e) onMouseLeave?.(e);
+      },
+      [controls, onMouseLeave],
+    );
+
+    const containerVariants: Variants = {
+      normal: {
+        scale: 1,
+        y: 0,
+        opacity: 1,
+      },
+      animate: {
+        scale: [1, 1.06, 1],
+        y: [0, -2, 0],
+        opacity: [1, 0.9, 1],
+        transition: {
+          duration: 0.6 * duration,
+          ease: 'easeInOut',
+        },
+      },
+    };
+
+    const pathVariants: Variants = {
+      normal: {
+        pathLength: 1,
+        opacity: 1,
+      },
+      animate: {
+        pathLength: [0.6, 1],
+        opacity: [0.5, 1],
+        transition: {
+          duration: 0.8 * duration,
+          ease: 'easeInOut',
+        },
+      },
+    };
+
+    return (
+      <LazyMotion features={domMin} strict>
+        <m.div
+          className={cn('inline-flex items-center justify-center', className)}
+          onMouseEnter={handleEnter}
+          onMouseLeave={handleLeave}
+          {...props}
+          style={{ color, ...props.style }}
+        >
+          <m.svg
+            xmlns="http://www.w3.org/2000/svg"
+            width={size}
+            height={size}
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            initial="normal"
+            animate={controls}
+            variants={containerVariants}
+            style={{ transformOrigin: 'center' }}
+          >
+            <m.path d="M10 20.5675C6.57143 21.7248 3.71429 20.5675 2 17" variants={pathVariants} />
+            <m.path
+              d="M10 22V18.7579C10 18.1596 10.1839 17.6396 10.4804 17.1699C10.6838 16.8476 10.5445 16.3904 10.1771 16.2894C7.13394 15.4528 5 14.1077 5 9.64606C5 8.48611 5.38005 7.39556 6.04811 6.4464C6.21437 6.21018 6.29749 6.09208 6.31748 5.9851C6.33746 5.87813 6.30272 5.73852 6.23322 5.45932C5.95038 4.32292 5.96871 3.11619 6.39322 2.02823C6.39322 2.02823 7.27042 1.74242 9.26698 2.98969C9.72282 3.27447 9.95075 3.41686 10.1515 3.44871C10.3522 3.48056 10.6206 3.41384 11.1573 3.28041C11.8913 3.09795 12.6476 3 13.5 3C14.3524 3 15.1087 3.09795 15.8427 3.28041C16.3794 3.41384 16.6478 3.48056 16.8485 3.44871C17.0493 3.41686 17.2772 3.27447 17.733 2.98969C19.7296 1.74242 20.6068 2.02823 20.6068 2.02823C21.0313 3.11619 21.0496 4.32292 20.7668 5.45932C20.6973 5.73852 20.6625 5.87813 20.6825 5.9851C20.7025 6.09207 20.7856 6.21019 20.9519 6.4464C21.6199 7.39556 22 8.48611 22 9.64606C22 14.1077 19.8661 15.4528 16.8229 16.2894C16.4555 16.3904 16.3162 16.8476 16.5196 17.1699C16.8161 17.6396 17 18.1596 17 18.7579V22"
+              variants={pathVariants}
+            />
+          </m.svg>
+        </m.div>
+      </LazyMotion>
+    );
+  },
+);
+
+GithubIcon.displayName = 'GithubIcon';
+export { GithubIcon };

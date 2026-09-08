@@ -10,7 +10,7 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import picomatch from 'picomatch';
 import { useMemo } from 'react';
-import { RootSidebarToggle } from '../sidebar';
+import { RootSidebarToggle } from '../root-sidebar';
 import { HeaderIsland } from './header-island';
 import { MusicPanel } from './music-panel';
 import { ThemeToggleButton } from './theme-toggle-button';

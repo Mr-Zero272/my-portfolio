@@ -1,11 +1,136 @@
-import { SVGProps } from 'react';
+'use client';
 
-export const XIcon = (props: SVGProps<SVGSVGElement>) => (
-  <svg width="1em" height="1em" viewBox="0 0 16 16" {...props}>
-    <path d="M0 0h16v16H0z" fill="none" />
-    <path
-      fill="currentColor"
-      d="M9.237 7.004l4.84-5.505H12.93L8.727 6.28 5.371 1.5H1.5l5.075 7.228L1.5 14.499h1.147l4.437-5.047 3.545 5.047H14.5zM7.666 8.791l-.514-.72L3.06 2.344h1.762l3.302 4.622.514.72 4.292 6.007h-1.761z"
-    />
-  </svg>
+import { cn } from '@/lib/utils';
+import type { Variants } from 'motion/react';
+import { LazyMotion, domMin, m, useAnimation, useReducedMotion } from 'motion/react';
+import { forwardRef, useCallback, useImperativeHandle, useRef, type HTMLAttributes } from 'react';
+export interface NewTwitterIconHandle {
+  startAnimation: () => void;
+  stopAnimation: () => void;
+}
+
+interface NewTwitterIconProps extends Omit<
+  HTMLAttributes<HTMLDivElement>,
+  | 'color'
+  | 'onDrag'
+  | 'onDragStart'
+  | 'onDragEnd'
+  | 'onAnimationStart'
+  | 'onAnimationEnd'
+  | 'onAnimationIteration'
+> {
+  size?: number;
+  duration?: number;
+  isAnimated?: boolean;
+  color?: string;
+}
+
+const NewTwitterIcon = forwardRef<NewTwitterIconHandle, NewTwitterIconProps>(
+  (
+    {
+      onMouseEnter,
+      onMouseLeave,
+      className,
+      size = 24,
+      duration = 1,
+      isAnimated = true,
+      color,
+      ...props
+    },
+    ref,
+  ) => {
+    const controls = useAnimation();
+    const reduced = useReducedMotion();
+    const isControlled = useRef(false);
+
+    useImperativeHandle(ref, () => {
+      isControlled.current = true;
+      return {
+        startAnimation: () => (reduced ? controls.start('normal') : controls.start('animate')),
+        stopAnimation: () => controls.start('normal'),
+      };
+    });
+
+    const handleEnter = useCallback(
+      (e?: React.MouseEvent<HTMLDivElement>) => {
+        if (!isAnimated || reduced) return;
+        if (!isControlled.current) controls.start('animate');
+        else if (e) onMouseEnter?.(e);
+      },
+      [controls, reduced, isAnimated, onMouseEnter],
+    );
+
+    const handleLeave = useCallback(
+      (e?: React.MouseEvent<HTMLDivElement>) => {
+        if (!isControlled.current) controls.start('normal');
+        else if (e) onMouseLeave?.(e);
+      },
+      [controls, onMouseLeave],
+    );
+
+    const containerVariants: Variants = {
+      normal: {
+        scale: 1,
+        rotate: 0,
+      },
+      animate: {
+        scale: [1, 1.04, 1],
+        rotate: [0, 2, -2, 0],
+        transition: {
+          duration: 0.6 * duration,
+          ease: 'easeInOut',
+        },
+      },
+    };
+
+    const pathVariants: Variants = {
+      normal: {
+        pathLength: 1,
+        opacity: 1,
+      },
+      animate: {
+        pathLength: [0, 1],
+        opacity: [0.4, 1],
+        transition: {
+          duration: 0.8 * duration,
+          ease: 'easeInOut',
+        },
+      },
+    };
+
+    return (
+      <LazyMotion features={domMin} strict>
+        <m.div
+          className={cn('inline-flex items-center justify-center', className)}
+          onMouseEnter={handleEnter}
+          onMouseLeave={handleLeave}
+          {...props}
+          style={{ color, ...props.style }}
+        >
+          <m.svg
+            xmlns="http://www.w3.org/2000/svg"
+            width={size}
+            height={size}
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            initial="normal"
+            animate={controls}
+            variants={containerVariants}
+          >
+            <m.path
+              d="M3 21L10.5484 13.4516M21 3L13.4516 10.5484M13.4516 10.5484L8 3H3L10.5484 13.4516M13.4516 10.5484L21 21H16L10.5484 13.4516"
+              variants={pathVariants}
+            />
+          </m.svg>
+        </m.div>
+      </LazyMotion>
+    );
+  },
 );
+
+NewTwitterIcon.displayName = 'NewTwitterIcon';
+export { NewTwitterIcon };

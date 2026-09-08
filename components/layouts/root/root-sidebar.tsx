@@ -1,4 +1,6 @@
 'use client';
+
+import { ButtonWithAnimatedIcon } from '@/components/shared/button-with-animated-icon';
 import AppLogo from '@/components/shared/logo';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -6,6 +8,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip
 import { rootNavigation } from '@/constants/navigation';
 import { useRootSidebar } from '@/contexts/root-sidebar.context';
 import { cn } from '@/lib/utils';
+import { AnimatedIconHandle } from '@/types/animated-icon';
 import { useClickOutside } from '@mantine/hooks';
 import { GaugeIcon, SidebarIcon } from 'lucide-react';
 import { motion, useAnimationControls } from 'motion/react';
@@ -233,7 +236,7 @@ interface SidebarItemProps {
   isHidden?: boolean;
   active?: boolean;
   onClick?: () => void;
-  icon?: React.ReactNode;
+  icon: React.ReactElement;
 }
 
 const SidebarItem = ({
@@ -247,24 +250,28 @@ const SidebarItem = ({
 }: SidebarItemProps) => {
   if (!isCollapsed) {
     return (
-      <Link
-        href={href}
-        className={cn(
-          'flex w-full cursor-pointer place-items-center gap-3 overflow-clip rounded-md stroke-neutral-400 stroke-[0.75] p-1 text-clip text-neutral-400 transition-colors duration-100 hover:bg-[#f2f2f2] hover:stroke-black hover:text-black/80',
-          {
-            'bg-primary hover:bg-primary text-background hover:text-background [&_svg]:stroke-background':
-              active,
-          },
-        )}
-        onClick={onClick}
+      <ButtonWithAnimatedIcon
+        render={
+          <Link
+            href={href}
+            className={cn(
+              'flex w-full cursor-pointer place-items-center gap-3 overflow-clip rounded-md stroke-neutral-400 stroke-[0.75] p-1 text-clip text-neutral-400 transition-colors duration-100 hover:bg-[#f2f2f2] hover:stroke-black hover:text-black/80',
+              {
+                'bg-primary hover:bg-primary text-background hover:text-background [&_svg]:stroke-background':
+                  active,
+              },
+            )}
+            onClick={onClick}
+          />
+        }
+        icon={icon as React.ReactElement<{ ref?: React.Ref<AnimatedIconHandle> }>}
       >
-        {icon}
         {!isCollapsed && (
           <p className="font-poppins overflow-clip tracking-wide whitespace-nowrap text-inherit">
             {name}
           </p>
         )}
-      </Link>
+      </ButtonWithAnimatedIcon>
     );
   }
 

@@ -1,18 +1,18 @@
+import { Dashboard02Icon } from '@/components/icons';
 import {
   CogIcon,
   HeadphonesIcon,
-  LayoutDashboardIcon,
   NotebookPenIcon,
   SendIcon,
   SquareTerminalIcon,
   TelescopeIcon,
-  UserIcon
+  UserIcon,
 } from 'lucide-react';
 
 export const rootNavigation = {
   main: [
     {
-      icon: LayoutDashboardIcon,
+      icon: Dashboard02Icon,
       href: '/',
       label: 'Home',
     },

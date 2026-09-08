@@ -4,12 +4,12 @@ import { cn } from '@/lib/utils';
 import type { Variants } from 'motion/react';
 import { LazyMotion, domMin, m, useAnimation, useReducedMotion } from 'motion/react';
 import { forwardRef, useCallback, useImperativeHandle, useRef, type HTMLAttributes } from 'react';
-export interface DiscordIconHandle {
+export interface FacebookIconHandle {
   startAnimation: () => void;
   stopAnimation: () => void;
 }
 
-interface DiscordIconProps extends Omit<
+interface FacebookIconProps extends Omit<
   HTMLAttributes<HTMLDivElement>,
   | 'color'
   | 'onDrag'
@@ -25,7 +25,7 @@ interface DiscordIconProps extends Omit<
   color?: string;
 }
 
-const DiscordIcon = forwardRef<DiscordIconHandle, DiscordIconProps>(
+const FacebookIcon = forwardRef<FacebookIconHandle, FacebookIconProps>(
   (
     {
       onMouseEnter,
@@ -74,25 +74,27 @@ const DiscordIcon = forwardRef<DiscordIconHandle, DiscordIconProps>(
         y: 0,
       },
       animate: {
-        scale: [1, 1.04, 1],
-        y: [0, 1.2, 0],
+        scale: [1, 1.035, 1],
+        y: [0, -1, 0],
         transition: {
-          duration: 0.6 * duration,
+          duration: 0.8 * duration,
           ease: 'easeInOut',
         },
       },
     };
 
-    const eyeVariants: Variants = {
+    const logoVariants: Variants = {
       normal: {
-        scaleY: 1,
+        pathLength: 1,
+        opacity: 1,
       },
       animate: {
-        scaleY: [1, 0.1, 1],
+        pathLength: [0, 1],
+        opacity: [0.4, 1],
         transition: {
-          duration: 0.4 * duration,
+          duration: 0.9 * duration,
           ease: 'easeInOut',
-          times: [0, 0.5, 1],
+          delay: 0.1,
         },
       },
     };
@@ -113,26 +115,20 @@ const DiscordIcon = forwardRef<DiscordIconHandle, DiscordIconProps>(
             fill="none"
             stroke="currentColor"
             strokeWidth="2"
-            strokeLinecap="round"
             strokeLinejoin="round"
             initial="normal"
             animate={controls}
             variants={containerVariants}
           >
-            <path d="M15.5008 17.75L16.7942 19.5205C16.9156 19.7127 17.1489 19.7985 17.3619 19.7224C18.1657 19.4353 20.158 18.6572 21.7984 17.4725C21.9263 17.3801 22.0002 17.2261 21.9992 17.0673C21.9992 8.25 19.5008 5.75 19.5008 5.75C19.5008 5.75 17.5008 4.60213 15.3547 4.25602C15.1436 4.22196 14.9368 4.33509 14.8429 4.52891L14.3979 5.44677C14.3979 5.44677 13.2853 5.21397 12 5.21397C10.7147 5.21397 9.6021 5.44677 9.6021 5.44677L9.15711 4.52891C9.06314 4.33509 8.85644 4.22196 8.64529 4.25602C6.50079 4.60187 4.50079 5.75 4.50079 5.75C4.50079 5.75 2.0008 8.25 2.0008 17.0673C1.9998 17.2261 2.07365 17.3801 2.20159 17.4725C3.84196 18.6572 5.8343 19.4353 6.63806 19.7224C6.85105 19.7985 7.08437 19.7127 7.20582 19.5205L8.50079 17.75" />
-
-            <path d="M17.5008 16.75C17.5008 16.75 15.2057 18.25 12.0008 18.25C8.79587 18.25 6.50079 16.75 6.50079 16.75" />
-
             <m.path
-              d="M17.2508 12.25C17.2508 13.3546 16.4673 14.25 15.5008 14.25C14.5343 14.25 13.7508 13.3546 13.7508 12.25C13.7508 11.1454 14.5343 10.25 15.5008 10.25C16.4673 10.25 17.2508 11.1454 17.2508 12.25Z"
-              variants={eyeVariants}
-              style={{ transformOrigin: 'center' }}
-            />
-
-            <m.path
-              d="M10.2508 12.25C10.2508 13.3546 9.46729 14.25 8.50079 14.25C7.5343 14.25 6.75079 13.3546 6.75079 12.25C6.75079 11.1454 7.5343 10.25 8.50079 10.25C9.46729 10.25 10.2508 11.1454 10.2508 12.25Z"
-              variants={eyeVariants}
-              style={{ transformOrigin: 'center' }}
+              fillRule="evenodd"
+              clipRule="evenodd"
+              d="M6.18182 10.3333C5.20406 10.3333 5 10.5252 5 11.4444V13.1111C5 14.0304 5.20406 14.2222 6.18182 14.2222H8.54545V20.8889C8.54545 21.8081 8.74951 22 9.72727 22H12.0909C13.0687 22 13.2727 21.8081 13.2727 20.8889V14.2222H15.9267C16.6683 14.2222 16.8594 14.0867 17.0631 13.4164L17.5696 11.7497C17.9185 10.6014 17.7035 10.3333 16.4332 10.3333H13.2727V7.55556C13.2727 6.94191 13.8018 6.44444 14.4545 6.44444H17.8182C18.7959 6.44444 19 6.25259 19 5.33333V3.11111C19 2.19185 18.7959 2 17.8182 2H14.4545C11.191 2 8.54545 4.48731 8.54545 7.55556V10.3333H6.18182Z"
+              variants={logoVariants}
+              style={{
+                transformBox: 'fill-box',
+                transformOrigin: 'center',
+              }}
             />
           </m.svg>
         </m.div>
@@ -141,5 +137,5 @@ const DiscordIcon = forwardRef<DiscordIconHandle, DiscordIconProps>(
   },
 );
 
-DiscordIcon.displayName = 'DiscordIcon';
-export { DiscordIcon };
+FacebookIcon.displayName = 'FacebookIcon';
+export { FacebookIcon };

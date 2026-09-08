@@ -1,7 +1,7 @@
 import { PageTransition } from '@/components/animations/page-transition';
 import { BottomNavBar } from '@/components/layouts/root/bottom-nav-bar';
-import { RootHeader } from '@/components/layouts/root/header';
-import { RootSidebar } from '@/components/layouts/root/sidebar';
+import { RootHeader } from '@/components/layouts/root/root-header';
+import { RootSidebar } from '@/components/layouts/root/root-sidebar';
 import { RootSidebarProvider } from '@/contexts/root-sidebar.context';
 import { Viewport } from 'next';
 

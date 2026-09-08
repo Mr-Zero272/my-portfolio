@@ -5,7 +5,7 @@ import { useSettingsStore } from '@/stores/setting.store';
 import { AnimatePresence, motion } from 'motion/react';
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
-import { RootFooter } from '../layouts/root/footer';
+import { RootFooter } from '../layouts/root/root-footer';
 
 export const PageTransition = ({
   children,
