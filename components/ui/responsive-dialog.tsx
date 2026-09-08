@@ -23,7 +23,6 @@ import {
   DrawerTrigger,
 } from '@/components/ui/drawer';
 import { useIsMobile } from '@/hooks/use-mobile';
-import { mergeProps, useRender } from '@base-ui/react';
 
 // ─── Context ─────────────────────────────────────────────────────────────────
 
@@ -50,7 +49,7 @@ type ResponsiveDialogProps = {
   dialogProps?: Omit<React.ComponentProps<typeof Dialog>, 'open' | 'onOpenChange' | 'children'>;
   drawerProps?: Omit<
     React.ComponentProps<typeof Drawer>,
-    'open' | 'onOpenChange' | 'children' | 'fadeFromIndex'
+    'open' | 'onOpenChange' | 'children' | 'showSwipeHandle'
   >;
 };
 
@@ -66,7 +65,7 @@ function ResponsiveDialog({
   return (
     <ResponsiveDialogContext.Provider value={{ isMobile }}>
       {isMobile ? (
-        <Drawer open={open} onOpenChange={onOpenChange} {...drawerProps}>
+        <Drawer showSwipeHandle open={open} onOpenChange={onOpenChange} {...drawerProps}>
           {children}
         </Drawer>
       ) : (
@@ -98,17 +97,17 @@ function ResponsiveDialogTrigger({
 }: ResponsiveDialogTriggerProps) {
   const { isMobile } = useResponsiveDialog();
 
-  const mergedElement = useRender({
-    defaultTagName: 'button', // or whatever default you want
-    render,
-    props: mergeProps({ className }, children ? { children } : {}),
-    // Note: children passed directly to useRender might need different handling
-  });
+  // const mergedElement = useRender({
+  //   defaultTagName: 'button', // or whatever default you want
+  //   render,
+  //   props: mergeProps({ className }, children ? { children } : {}),
+  //   // Note: children passed directly to useRender might need different handling
+  // });
 
   if (isMobile) {
     return (
-      <DrawerTrigger className={className} asChild {...drawerProps}>
-        {render ? mergedElement : children}
+      <DrawerTrigger className={className} render={render} {...drawerProps}>
+        {children}
       </DrawerTrigger>
     );
   }

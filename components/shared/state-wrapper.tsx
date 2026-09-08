@@ -4,6 +4,7 @@ import React from 'react';
 
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
+import { getErrorMessage } from '@/utils';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -110,16 +111,18 @@ function DefaultError({
       </div>
 
       <div className="space-y-1">
-        <p className="text-foreground text-base font-medium">{message ?? 'Đã có lỗi xảy ra'}</p>
+        <p className="text-foreground text-base font-medium">
+          {message ?? 'Some thing went wrong!'}
+        </p>
         <p className="text-muted-foreground max-w-xs text-sm">
-          {description ?? 'Không thể tải dữ liệu. Vui lòng thử lại sau.'}
+          {description ?? 'Something went wrong! Please try again later.'}
         </p>
       </div>
 
       {refetch && (
         <Button variant="outline" size="sm" onClick={refetch}>
           <RefreshCw />
-          Thử lại
+          Retry
         </Button>
       )}
     </StateContainer>
@@ -153,7 +156,7 @@ function DefaultEmpty({
       {refetch && (
         <Button variant="outline" size="sm" onClick={refetch}>
           <RefreshCw />
-          Tải lại
+          Retry
         </Button>
       )}
     </StateContainer>
@@ -194,6 +197,7 @@ const StateWrapper = <T,>({
     (data === undefined || (checkEmpty ? checkEmpty(data as T) : defaultCheckEmpty(data as T)));
 
   const activeKey = isLoading ? 'loading' : error ? 'error' : isEmpty ? 'empty' : 'content';
+  const errorMessageFromError = getErrorMessage(error);
 
   return (
     <div className={cn('w-full', className)}>
@@ -210,7 +214,7 @@ const StateWrapper = <T,>({
           <motion.div key="error" className="flex-1" {...fadeUp} transition={transition}>
             {fallbackError ?? (
               <DefaultError
-                message={errorMessage}
+                message={errorMessage ?? errorMessageFromError}
                 description={errorDescription}
                 refetch={refetch}
               />

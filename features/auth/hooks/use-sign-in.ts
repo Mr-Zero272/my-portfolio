@@ -11,14 +11,20 @@ import { toast } from 'sonner';
 import type { SocialProvider } from '../components/social-auth-buttons';
 import { signInSchema, type SignInFormData } from '../schemas';
 
-export const useSignIn = () => {
+type UseSignInProps = {
+  defaultValues?: SignInFormData;
+  onSuccess?: () => void;
+};
+
+export const useSignIn = (props?: UseSignInProps) => {
+  const { defaultValues, onSuccess } = props ?? {};
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const [callBackUrl] = useQueryState('callbackUrl', { defaultValue: '/dashboard' });
 
   const form = useForm<SignInFormData>({
     resolver: zodResolver(signInSchema),
-    defaultValues: {
+    defaultValues: defaultValues ?? {
       email: '',
       password: '',
     },
@@ -29,7 +35,7 @@ export const useSignIn = () => {
       {
         email: data.email,
         password: data.password,
-        callbackURL: callBackUrl,
+        callbackURL: onSuccess ? undefined : callBackUrl,
       },
       {
         onError: (ctx) => {
@@ -38,7 +44,9 @@ export const useSignIn = () => {
             message: ctx.error.message,
           });
         },
-        onSuccess: () => {},
+        onSuccess: () => {
+          onSuccess?.();
+        },
       },
     );
   });

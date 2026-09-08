@@ -14,7 +14,7 @@ export const HeaderSettings = () => {
 
   return (
     <div className="bg-background/80 sticky top-0 z-50 h-12 backdrop-blur-sm">
-      <div className="flex size-full h-12 w-full max-w-[96rem] items-center justify-between px-4">
+      <div className="flex size-full h-12 w-full max-w-[96rem] items-center justify-between pr-8 pl-4 sm:px-4">
         <div className="flex items-center gap-2">
           <div className="flex items-center gap-2 md:hidden">
             <Tooltip>

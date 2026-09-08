@@ -50,7 +50,7 @@ const SettingsLayout = ({ children }: SettingsLayoutProps) => {
 
         <div className="flex flex-1 flex-col">
           <div className="flex flex-1 flex-col">
-            <div className="pt-6">{children}</div>
+            <div className="px-4 pt-6">{children}</div>
           </div>
         </div>
       </div>
