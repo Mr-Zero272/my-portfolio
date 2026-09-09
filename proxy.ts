@@ -5,9 +5,17 @@ import picomatch from 'picomatch';
 import { auth } from './lib/auth';
 
 const authPaths = ['/api/auth/**', '/auth/**'];
-const publicPaths = ['/', '/about-me', '/projects', '/contact', '/favorite', '/blogs/**'];
+const publicPaths = [
+  '/',
+  '/about-me',
+  '/projects',
+  '/contact',
+  '/favorite',
+  '/blogs/**',
+  '/settings',
+];
 const apiPathsHandledByRoute = ['/api/site-setting/**'];
-const guardedPagePaths = ['/admin/**', '/onboarding', '/dashboard/**', '/settings/**'];
+const guardedPagePaths = ['/admin/**', '/onboarding', '/dashboard/**', '/app-settings/**'];
 
 function redirectToSignIn(request: NextRequest) {
   const url = new URL('/auth/sign-in', request.url);

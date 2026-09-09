@@ -3,14 +3,14 @@ import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
 
-const geistSans = Geist({
-  variable: '--font-geist-sans',
+const geist = Geist({
   subsets: ['latin'],
+  variable: '--font-geist',
 });
 
 const geistMono = Geist_Mono({
-  variable: '--font-geist-mono',
   subsets: ['latin'],
+  variable: '--font-geist-mono',
 });
 
 export const metadata: Metadata = {
@@ -24,8 +24,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${geistSans.variable} ${geistMono.variable} h-dvh antialiased`}>
-      <body className="min-h-dvh flex flex-col">
+    <html lang="en" className={`${geist.variable} ${geistMono.variable} h-dvh antialiased`}>
+      <body className="flex min-h-dvh flex-col">
         <AppProvider>{children}</AppProvider>
       </body>
     </html>
