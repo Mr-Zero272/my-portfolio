@@ -24,7 +24,7 @@ export function BlogDetailPage({ post }: PostPreviewFeatureProps) {
   const publishDate = post.createdAt || post.updatedAt;
   const timeAgo = formatRelativeTime(publishDate, 'N/A');
 
-  console.log({ post })
+  console.log({ post });
 
   const firstAuthor = post.authors?.[0];
 
@@ -35,7 +35,7 @@ export function BlogDetailPage({ post }: PostPreviewFeatureProps) {
   );
 
   return (
-    <div className="relative min-h-screen bg-background flex-1 px-4">
+    <div className="bg-background relative min-h-screen flex-1 px-4">
       {/* TOC minimap — floating cạnh trái, ẩn trên mobile */}
       <div className="pointer-events-none fixed inset-y-0 right-0 z-30 hidden lg:flex">
         <div className="pointer-events-auto my-auto">
@@ -57,7 +57,9 @@ export function BlogDetailPage({ post }: PostPreviewFeatureProps) {
           <h1 className="mb-4 text-4xl leading-tight font-bold">{post.title}</h1>
 
           {/* Excerpt */}
-          {post.excerpt && <p className="mb-6 text-xl leading-relaxed text-muted-foreground">{post.excerpt}</p>}
+          {post.excerpt && (
+            <p className="text-muted-foreground mb-6 text-xl leading-relaxed">{post.excerpt}</p>
+          )}
 
           {/* Read button */}
           {/* <ReadPost content={post.content || ''} showProgress={true} showEstimatedTime={true} className="mb-4" /> */}
@@ -66,14 +68,17 @@ export function BlogDetailPage({ post }: PostPreviewFeatureProps) {
 
           <div className="mb-6 flex items-center gap-4">
             <Avatar className="size-8 md:size-12">
-              <AvatarImage src={firstAuthor?.user?.image ?? undefined} alt={firstAuthor?.user?.name || 'Anonymous'} />
+              <AvatarImage
+                src={firstAuthor?.user?.image ?? undefined}
+                alt={firstAuthor?.user?.name || 'Anonymous'}
+              />
               <AvatarFallback>
                 <CustomFallbackAvatar name={firstAuthor?.user?.name || 'Anonymous'} size={32} />
               </AvatarFallback>
             </Avatar>
             <div>
               <p className="font-semibold">{firstAuthor?.user?.name ?? 'Anonymous author'}</p>
-              <p className="text-sm text-muted-foreground">
+              <p className="text-muted-foreground text-sm">
                 {timeAgo} • {Math.ceil((post.content?.length || 0) / 1000)} min read
               </p>
             </div>
@@ -104,18 +109,23 @@ export function BlogDetailPage({ post }: PostPreviewFeatureProps) {
         {post.featureImage && (
           <div className="mb-8">
             <div className="relative aspect-video w-full overflow-hidden rounded-lg">
-              <Image src={post.featureImage?.url ?? undefined} alt={post.title} fill className="object-cover" priority />
+              <Image
+                src={post.featureImage?.url ?? undefined}
+                alt={post.title}
+                fill
+                className="object-cover"
+                priority
+              />
             </div>
-            {post.imageCaption && <p className="mt-2 text-center text-sm text-gray-500 italic">{post.imageCaption}</p>}
+            {post.imageCaption && (
+              <p className="mt-2 text-center text-sm text-gray-500 italic">{post.imageCaption}</p>
+            )}
           </div>
         )}
 
         {/* Content */}
-        <article className="prose prose-lg mb-8 max-w-none prose-gray dark:prose-invert">
-          <div
-            // className="prose-headings:font-bold prose-headings:text-gray-900 dark:prose-headings:text-gray-100 prose-p:text-lg prose-p:leading-relaxed prose-p:text-gray-700 dark:prose-p:text-gray-300 prose-a:text-blue-600 prose-a:no-underline hover:prose-a:underline dark:prose-a:text-blue-400 prose-blockquote:border-l-4 prose-blockquote:border-gray-300 prose-blockquote:pl-6 prose-blockquote:italic dark:prose-blockquote:border-gray-600 prose-strong:font-semibold prose-strong:text-gray-900 dark:prose-strong:text-gray-100 prose-ol:list-decimal prose-ul:list-disc prose-li:leading-relaxed prose-li:text-gray-700 dark:prose-li:text-gray-300 prose-img:rounded-lg prose-img:shadow-sm prose-hr:my-8 prose-hr:border-gray-200 dark:prose-hr:border-gray-700 [&_:not(pre)>code]:rounded [&_:not(pre)>code]:bg-gray-100 [&_:not(pre)>code]:px-1.5 [&_:not(pre)>code]:py-0.5 [&_:not(pre)>code]:font-mono [&_:not(pre)>code]:text-[0.875em] [&_:not(pre)>code]:text-rose-500 [&_:not(pre)>code]:dark:bg-gray-800 [&_:not(pre)>code]:dark:text-rose-400 [&_pre]:my-6 [&_pre]:overflow-x-auto [&_pre]:rounded-xl [&_pre]:border [&_pre]:border-gray-700/50 [&_pre]:bg-[#0d1117] [&_pre]:p-5 [&_pre]:shadow-lg [&_pre_code]:bg-transparent [&_pre_code]:p-0 [&_pre_code]:font-mono [&_pre_code]:text-sm [&_pre_code]:leading-relaxed [&_pre_code]:text-[#e6edf3] [&_table]:my-6 [&_table]:w-full [&_table]:border-collapse [&_table]:overflow-hidden [&_table]:rounded-xl [&_table]:text-sm [&_table]:shadow-sm [&_td]:border-b [&_td]:border-gray-100 [&_td]:px-4 [&_td]:py-0 [&_td]:text-gray-700 [&_td]:dark:border-gray-800 [&_td]:dark:text-gray-300 [&_td_code]:rounded [&_td_code]:bg-gray-100 [&_td_code]:px-1.5 [&_td_code]:py-0.5 [&_td_code]:font-mono [&_td_code]:text-xs [&_td_code]:text-rose-500 [&_td_code]:dark:bg-gray-800 [&_td_code]:dark:text-rose-400 [&_th]:border-b [&_th]:border-gray-200 [&_th]:bg-gray-100 [&_th]:px-4 [&_th]:py-0 [&_th]:text-left [&_th]:font-semibold [&_th]:text-gray-700 [&_th]:dark:border-gray-700 [&_th]:dark:bg-gray-800 [&_th]:dark:text-gray-200 [&_tr:last-child_td]:border-b-0 [&_tr:nth-child(even)_td]:bg-gray-50 [&_tr:nth-child(even)_td]:dark:bg-gray-900/30"
-            dangerouslySetInnerHTML={{ __html: articleHtml }}
-          />
+        <article className="typeset typeset-docs">
+          <div dangerouslySetInnerHTML={{ __html: articleHtml }} />
         </article>
 
         {/* Post Tags */}

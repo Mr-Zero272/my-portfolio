@@ -13,7 +13,7 @@ type UseSendVerificationEmailOptions = Omit<
 >;
 
 /** After verifying, better-auth redirects here and the page shows a toast. */
-export const VERIFY_EMAIL_CALLBACK_URL = '/settings/account?emailVerified=1';
+export const VERIFY_EMAIL_CALLBACK_URL = '/app-settings/account?emailVerified=1';
 
 /** Sends the better-auth email verification link to the current user's email. */
 export const useSendVerificationEmail = (options?: UseSendVerificationEmailOptions) =>

@@ -1,14 +1,14 @@
 import {
-    BriefcaseBusiness,
-    CodeXmlIcon,
-    Eye,
-    FileCodeIcon,
-    Globe,
-    GraduationCap,
-    Laptop,
-    LucideIcon,
-    UserCog,
-    UserIcon,
+  BriefcaseBusiness,
+  CodeXmlIcon,
+  Eye,
+  FileCodeIcon,
+  Globe,
+  GraduationCap,
+  Laptop,
+  LucideIcon,
+  UserCog,
+  UserIcon,
 } from 'lucide-react';
 
 export interface SideNavSettingsItem {
@@ -28,47 +28,47 @@ export const sideNavSettingsItems: SideNavSettingsGroup[] = [
     items: [
       {
         title: 'Profile',
-        url: '/settings/profile',
+        url: '/app-settings/profile',
         icon: UserIcon,
       },
       {
         title: 'Account',
-        url: '/settings/account',
+        url: '/app-settings/account',
         icon: UserCog,
       },
       {
         title: 'Appearance',
-        url: '/settings/appearance',
+        url: '/app-settings/appearance',
         icon: Eye,
       },
       {
         title: 'Session',
-        url: '/settings/session',
+        url: '/app-settings/session',
         icon: Laptop,
       },
       {
         title: 'Experiences',
-        url: '/settings/experiences',
+        url: '/app-settings/experiences',
         icon: BriefcaseBusiness,
       },
       {
         title: 'Projects',
-        url: '/settings/projects',
+        url: '/app-settings/projects',
         icon: FileCodeIcon,
       },
       {
         title: 'Educations',
-        url: '/settings/educations',
+        url: '/app-settings/educations',
         icon: GraduationCap,
       },
       {
         title: 'Skills',
-        url: '/settings/skills',
+        url: '/app-settings/skills',
         icon: CodeXmlIcon,
       },
       {
         title: 'Social Links',
-        url: '/settings/social-links',
+        url: '/app-settings/social-links',
         icon: Globe,
       },
     ],
