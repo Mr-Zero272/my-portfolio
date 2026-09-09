@@ -1,9 +1,13 @@
-import { GithubIcon, LinkedInIcon, YouTubeIcon } from '@/components/icons';
+import { getSocialLinkPlatformConfig } from '@/features/social-link';
+import { publicGet } from '@/lib/server-fetch';
+import { SocialLink } from '@prisma/client';
 import { MailIcon, MapPinIcon, PhoneCallIcon } from 'lucide-react';
 import Link from 'next/link';
 import { ContactForm } from '../components';
 
-export const ContactPage = () => {
+export const ContactPage = async () => {
+  const socialLinks = await publicGet<SocialLink[]>('social-links');
+
   return (
     <section className="flex flex-col gap-5 lg:flex-row lg:gap-10">
       <article className="relative flex-1 p-5 lg:p-10">
@@ -75,21 +79,17 @@ export const ContactPage = () => {
           <div className="h-0.5 w-20 bg-black dark:bg-white"></div>
           <p className="text-xl font-bold">Follow me</p>
           <ul className="flex items-center">
-            <li className="group p-2">
-              <Link href="https://www.linkedin.com/in/mr-zero272/">
-                <LinkedInIcon className="size-6 group-hover:text-blue-700" />
-              </Link>
-            </li>
-            <li className="p-2">
-              <Link href="https://github.com/Mr-Zero272/">
-                <GithubIcon className="size-6" />
-              </Link>
-            </li>
-            <li className="group p-2">
-              <Link href="https://www.youtube.com/@MoonCoder-o3v">
-                <YouTubeIcon className="size-6 group-hover:text-red-500" />
-              </Link>
-            </li>
+            {socialLinks?.map((socialLink) => {
+              const config = getSocialLinkPlatformConfig(socialLink.platform);
+              if (!config) return null;
+              return (
+                <li key={socialLink.id} className="group p-2">
+                  <Link href={socialLink.url} rel="noopener noreferrer" target="_blank">
+                    <config.icon className="size-6" />
+                  </Link>
+                </li>
+              );
+            })}
           </ul>
         </div>
       </article>

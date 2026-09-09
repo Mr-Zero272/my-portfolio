@@ -13,6 +13,7 @@ import { appPath } from '@/constants/path';
 import { SidebarGroup } from '@/types';
 import {
   BookOpenIcon,
+  GlobeIcon,
   ImagesIcon,
   LineSquiggleIcon,
   PenLineIcon,
@@ -31,6 +32,11 @@ const sidebarGroups: SidebarGroup[] = [
         title: 'Quick post',
         url: appPath.admin.post.new,
         icon: <LineSquiggleIcon />,
+      },
+      {
+        title: 'Main site',
+        url: appPath.admin.mainSite,
+        icon: <GlobeIcon />,
       },
     ],
   },

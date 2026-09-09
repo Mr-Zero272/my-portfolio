@@ -1,13 +1,14 @@
 import { SlideUpText } from '@/components/animations/slide-up-text';
 import { TypingText } from '@/components/animations/typing-text';
-import { DiscordIcon, GithubIcon, LinkedInIcon } from '@/components/icons';
 import { DownloadButton } from '@/components/shared/dowload-button';
 import { Badge } from '@/components/ui/badge';
 import { buttonVariants } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { env } from '@/config/env';
 import type { ProfileWithAllRelations } from '@/features/profile';
+import { getSocialLinkPlatformConfig } from '@/features/social-link';
 import { publicGet } from '@/lib/server-fetch';
+import { SocialLink } from '@prisma/client';
 import { ArrowRightIcon, BriefcaseBusinessIcon, DownloadIcon, MapPinIcon } from 'lucide-react';
 import type { Metadata } from 'next';
 import Image from 'next/image';
@@ -74,7 +75,10 @@ export const metadata: Metadata = {
 
 export default async function Home() {
   // Server-fetched via the public API and ISR-cached for 1 hour.
-  const profile = await publicGet<ProfileWithAllRelations>('profile');
+  const [profile, socialLinks] = await Promise.all([
+    publicGet<ProfileWithAllRelations>('profile'),
+    publicGet<SocialLink[]>('social-links'),
+  ]);
 
   const display = {
     name: profile?.name ?? FALLBACK_PROFILE.name,
@@ -147,32 +151,32 @@ export default async function Home() {
                   url={display.cvUrl}
                   fileName="phan_thanh_thuong_cv.pdf"
                 />
-              ) : // <Button
-              //   size="lg"
-              //   variant="outline"
-              //   nativeButton={false}
-              //   render={<a href={display.cvUrl} target="_blank" rel="noreferrer" />}
-              // >
-              //   <DownloadIcon /> Download CV
-              // </Button>
-              null}
+              ) : null}
             </div>
             <Separator className="max-w-2xl" />
             {/* Stats Row */}
-            <div className="flex flex-wrap gap-4">
-              <span className="text-sm font-medium">Follow me:</span>
-              <div className="flex items-center gap-4">
-                <Link href="#">
-                  <GithubIcon className="h-4 w-4" />
-                </Link>
-                <Link href="#">
-                  <DiscordIcon className="h-4 w-4" />
-                </Link>
-                <Link href="#">
-                  <LinkedInIcon className="h-4 w-4" />
-                </Link>
+            {socialLinks && socialLinks?.length > 0 && (
+              <div className="flex flex-wrap items-center gap-4">
+                <span className="text-sm font-medium">Follow me:</span>
+                <div className="flex items-center gap-4">
+                  {socialLinks?.map((sl) => {
+                    const config = getSocialLinkPlatformConfig(sl.platform);
+                    if (!config) return null;
+                    return (
+                      <Link
+                        key={sl.id}
+                        href={sl.url}
+                        rel="noopener noreferrer"
+                        target="_blank"
+                        className={buttonVariants({ size: 'icon', variant: 'ghost' })}
+                      >
+                        <config.icon />
+                      </Link>
+                    );
+                  })}
+                </div>
               </div>
-            </div>
+            )}
           </div>
           {/* Image Side */}
           <div className="lg:col-span-4">

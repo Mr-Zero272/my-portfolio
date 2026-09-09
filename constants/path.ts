@@ -1,5 +1,6 @@
 export const appPath = {
   admin: {
+    mainSite: '/',
     post: {
       list: '/dashboard/posts',
       new: '/posts/new',
