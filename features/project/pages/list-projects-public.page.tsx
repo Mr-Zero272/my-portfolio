@@ -2,11 +2,9 @@
 
 import { Badge } from '@/components/ui/badge';
 import { ListProjects } from '../components';
-import { useProjects } from '../hooks';
+import { ProjectWithAllRelations } from '../types';
 
-export const ListProjectsPublicPage = () => {
-  const { data: projectsData, isLoading: projectsLoading, error: projectsError } = useProjects();
-
+export const ListProjectsPublicPage = ({ projects }: { projects: ProjectWithAllRelations[] }) => {
   return (
     <div className="px-4 pb-20 sm:px-8">
       <div className="container mx-auto flex flex-col items-center gap-16 lg:px-16">
@@ -23,12 +21,7 @@ export const ListProjectsPublicPage = () => {
           </p>
         </div>
       </div>
-      <ListProjects
-        projects={projectsData?.list ?? []}
-        isLoading={projectsLoading}
-        error={projectsError}
-        mode="public"
-      />
+      <ListProjects projects={projects ?? []} isLoading={false} error={undefined} mode="public" />
     </div>
   );
 };

@@ -1,4 +1,5 @@
-import { ListProjectsPublicPage } from '@/features/project';
+import { ListProjectsPublicPage, ProjectWithAllRelations } from '@/features/project';
+import { publicGet } from '@/lib/server-fetch';
 import { Metadata } from 'next';
 import { env } from 'process';
 
@@ -41,12 +42,15 @@ export const metadata: Metadata = {
     title: 'Projects by Phan Thanh Thuong | Front End Developer',
     description:
       'Browse my web development projects including React, Next.js, Angular, and Java Spring applications. See live demos, source code, and technical implementations.',
-    images: [`${env.NEXT_PUBLIC_SITE_URL}/api/og/photo?brand=pitithuong&lable=projects&title=Phan%20Thanh%20Thuong%20Projects&logo=${env.NEXT_PUBLIC_SITE_URL}/logo.svg`],
+    images: [
+      `${env.NEXT_PUBLIC_SITE_URL}/api/og/photo?brand=pitithuong&lable=projects&title=Phan%20Thanh%20Thuong%20Projects&logo=${env.NEXT_PUBLIC_SITE_URL}/logo.svg`,
+    ],
   },
 };
 
-const ProjectPage = () => {
-  return <ListProjectsPublicPage />;
+const ProjectPage = async () => {
+  const projects = await publicGet<ProjectWithAllRelations[]>('projects?limit=100');
+  return <ListProjectsPublicPage projects={projects ?? []} />;
 };
 
 export default ProjectPage;
