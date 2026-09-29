@@ -74,6 +74,7 @@ export const SignInForm = () => {
               <div className="flex items-center justify-between">
                 <FieldLabel htmlFor="password">Password</FieldLabel>
                 <button
+                  tabIndex={-1}
                   type="button"
                   onClick={handleForgotPassword}
                   className={buttonVariants({ size: 'sm', variant: 'link' })}
