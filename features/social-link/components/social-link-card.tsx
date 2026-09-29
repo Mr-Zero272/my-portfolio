@@ -31,16 +31,16 @@ export const SocialLinkCard = ({
   const IconComponent = platformConfig.icon;
 
   return (
-    <Card className="transition-transform hover:-translate-y-1">
+    <Card className="transition-transform hover:-translate-y-1 gap-0">
       <CardHeader>
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-3 flex-1 overflow-hidden">
           {dragHandle && mode === 'private' && <div className="-mt-4 -ml-2">{dragHandle}</div>}
           <div className="bg-accent/50 text-foreground flex size-10 items-center justify-center rounded-md border p-2">
             <IconComponent className="size-5" />
           </div>
-          <div className="min-w-0 flex-1">
+          <div className="min-w-0 flex-1 overflow-hidden">
             <CardTitle className="truncate">{platformConfig.label}</CardTitle>
-            <CardDescription className="truncate">
+            <CardDescription className="truncate wrap-anywhere overflow-hidden">
               {socialLink.username ? `@${socialLink.username}` : socialLink.url}
             </CardDescription>
           </div>
